@@ -1,0 +1,2329 @@
+{
+    "RE,TC": {
+        "name": "RE,TC",
+        "pre": [
+            "x",
+            "RE"
+        ],
+        "post": [
+            "x",
+            "TC"
+        ],
+        "connect_models": {
+            "RE,TC,GABA_A": {
+                "name": "RE,TC,GABA_A",
+                "property_map": {
+                    "radius": 0.11,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 6e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "GABA_A"
+                }
+            },
+            "RE,TC,GABA_B": {
+                "name": "RE,TC,GABA_B",
+                "property_map": {
+                    "radius": 0.11,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 2.5e-06,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "GABA_B"
+                }
+            }
+        }
+    },
+    "RE,RE": {
+        "name": "RE,RE",
+        "pre": [
+            "x",
+            "RE"
+        ],
+        "post": [
+            "x",
+            "RE"
+        ],
+        "connect_models": {
+            "RE,RE,GABA_A": {
+                "name": "RE,RE,GABA_A",
+                "property_map": {
+                    "radius": 0.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0001,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "GABA_A"
+                }
+            }
+        }
+    },
+    "REa,TCa": {
+        "name": "REa,TCa",
+        "pre": [
+            "x",
+            "REa"
+        ],
+        "post": [
+            "x",
+            "TCa"
+        ],
+        "connect_models": {
+            "REa,TCa,GABA_A": {
+                "name": "REa,TCa,GABA_A",
+                "property_map": {
+                    "radius": 0.11,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 6e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "GABA_A"
+                }
+            },
+            "REa,TCa,GABA_B": {
+                "name": "REa,TCa,GABA_B",
+                "property_map": {
+                    "radius": 0.11,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 2.5e-06,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "GABA_B"
+                }
+            }
+        }
+    },
+    "REa,REa": {
+        "name": "REa,REa",
+        "pre": [
+            "x",
+            "REa"
+        ],
+        "post": [
+            "x",
+            "REa"
+        ],
+        "connect_models": {
+            "REa,REa,GABA_A": {
+                "name": "REa,REa,GABA_A",
+                "property_map": {
+                    "radius": 0.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0001,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "GABA_A"
+                }
+            }
+        }
+    },
+    "TC,RE": {
+        "name": "TC,RE",
+        "pre": [
+            "x",
+            "TC"
+        ],
+        "post": [
+            "x",
+            "RE"
+        ],
+        "connect_models": {
+            "TC,RE,AMPA": {
+                "name": "TC,RE,AMPA",
+                "property_map": {
+                    "radius": 0.11,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 6e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPA"
+                }
+            }
+        }
+    },
+    "TCa,REa": {
+        "name": "TCa,REa",
+        "pre": [
+            "x",
+            "TCa"
+        ],
+        "post": [
+            "x",
+            "REa"
+        ],
+        "connect_models": {
+            "TCa,REa,AMPA": {
+                "name": "TCa,REa,AMPA",
+                "property_map": {
+                    "radius": 0.11,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 6e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPA"
+                }
+            }
+        }
+    },
+    "TC,CX3": {
+        "name": "TC,CX3",
+        "pre": [
+            "x",
+            "TC"
+        ],
+        "post": [
+            "x",
+            "CX3"
+        ],
+        "connect_models": {
+            "TC,CX3,AMPAMap_D1": {
+                "name": "TC,CX3,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.0117,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 3e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TC,CX4": {
+        "name": "TC,CX4",
+        "pre": [
+            "x",
+            "TC"
+        ],
+        "post": [
+            "x",
+            "CX4"
+        ],
+        "connect_models": {
+            "TC,CX4,AMPAMap_D1": {
+                "name": "TC,CX4,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.0117,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 3e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TC,CX6": {
+        "name": "TC,CX6",
+        "pre": [
+            "x",
+            "TC"
+        ],
+        "post": [
+            "x",
+            "CX6"
+        ],
+        "connect_models": {
+            "TC,CX6,AMPAMap_D1": {
+                "name": "TC,CX6,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.0117,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 3e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TC,IN3": {
+        "name": "TC,IN3",
+        "pre": [
+            "x",
+            "TC"
+        ],
+        "post": [
+            "x",
+            "IN3"
+        ],
+        "connect_models": {
+            "TC,IN3,AMPAMap_D1": {
+                "name": "TC,IN3,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.0132,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1.5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TC,IN4": {
+        "name": "TC,IN4",
+        "pre": [
+            "x",
+            "TC"
+        ],
+        "post": [
+            "x",
+            "IN4"
+        ],
+        "connect_models": {
+            "TC,IN4,AMPAMap_D1": {
+                "name": "TC,IN4,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.0132,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1.5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TC,IN6": {
+        "name": "TC,IN6",
+        "pre": [
+            "x",
+            "TC"
+        ],
+        "post": [
+            "x",
+            "IN6"
+        ],
+        "connect_models": {
+            "TC,IN6,AMPAMap_D1": {
+                "name": "TC,IN6,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.0132,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1.5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TCa,CX": {
+        "name": "TCa,CX",
+        "pre": [
+            "x",
+            "TCa"
+        ],
+        "post": [
+            "x",
+            "CX"
+        ],
+        "connect_models": {
+            "TCa,CX,AMPAMap_D1": {
+                "name": "TCa,CX,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.045,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 4.5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TCa,CX3": {
+        "name": "TCa,CX3",
+        "pre": [
+            "x",
+            "TCa"
+        ],
+        "post": [
+            "x",
+            "CX3"
+        ],
+        "connect_models": {
+            "TCa,CX3,AMPAMap_D1": {
+                "name": "TCa,CX3,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.045,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 4.5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TCa,CX5a": {
+        "name": "TCa,CX5a",
+        "pre": [
+            "x",
+            "TCa"
+        ],
+        "post": [
+            "x",
+            "CX5a"
+        ],
+        "connect_models": {
+            "TCa,CX5a,AMPAMap_D1": {
+                "name": "TCa,CX5a,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.045,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 4.5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TCa,CX5b": {
+        "name": "TCa,CX5b",
+        "pre": [
+            "x",
+            "TCa"
+        ],
+        "post": [
+            "x",
+            "CX5b"
+        ],
+        "connect_models": {
+            "TCa,CX5b,AMPAMap_D1": {
+                "name": "TCa,CX5b,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.045,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 4.5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TCa,CX6": {
+        "name": "TCa,CX6",
+        "pre": [
+            "x",
+            "TCa"
+        ],
+        "post": [
+            "x",
+            "CX6"
+        ],
+        "connect_models": {
+            "TCa,CX6,AMPAMap_D1": {
+                "name": "TCa,CX6,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.045,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 4.5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TCa,IN": {
+        "name": "TCa,IN",
+        "pre": [
+            "x",
+            "TCa"
+        ],
+        "post": [
+            "x",
+            "IN"
+        ],
+        "connect_models": {
+            "TCa,IN,AMPAMap_D1": {
+                "name": "TCa,IN,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.079,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 2e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TCa,IN3": {
+        "name": "TCa,IN3",
+        "pre": [
+            "x",
+            "TCa"
+        ],
+        "post": [
+            "x",
+            "IN3"
+        ],
+        "connect_models": {
+            "TCa,IN3,AMPAMap_D1": {
+                "name": "TCa,IN3,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.079,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 2e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TCa,IN5a": {
+        "name": "TCa,IN5a",
+        "pre": [
+            "x",
+            "TCa"
+        ],
+        "post": [
+            "x",
+            "IN5a"
+        ],
+        "connect_models": {
+            "TCa,IN5a,AMPAMap_D1": {
+                "name": "TCa,IN5a,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.079,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 2e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TCa,IN5b": {
+        "name": "TCa,IN5b",
+        "pre": [
+            "x",
+            "TCa"
+        ],
+        "post": [
+            "x",
+            "IN5b"
+        ],
+        "connect_models": {
+            "TCa,IN5b,AMPAMap_D1": {
+                "name": "TCa,IN5b,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.079,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 2e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "TCa,IN6": {
+        "name": "TCa,IN6",
+        "pre": [
+            "x",
+            "TCa"
+        ],
+        "post": [
+            "x",
+            "IN6"
+        ],
+        "connect_models": {
+            "TCa,IN6,AMPAMap_D1": {
+                "name": "TCa,IN6,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.079,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 2e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPAMap_D1"
+                }
+            }
+        }
+    },
+    "CX,CX": {
+        "name": "CX,CX",
+        "pre": [
+            "x",
+            "CX"
+        ],
+        "post": [
+            "x",
+            "CX"
+        ],
+        "connect_models": {
+            "CX,CX,AMPAMap_D1": {
+                "name": "CX,CX,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX,CX,NMDAMap_D1": {
+                "name": "CX,CX,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX,CX3": {
+        "name": "CX,CX3",
+        "pre": [
+            "x",
+            "CX"
+        ],
+        "post": [
+            "x",
+            "CX3"
+        ],
+        "connect_models": {
+            "CX,CX3,AMPAMap_D1": {
+                "name": "CX,CX3,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX,CX3,NMDAMap_D1": {
+                "name": "CX,CX3,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX,CX5a": {
+        "name": "CX,CX5a",
+        "pre": [
+            "x",
+            "CX"
+        ],
+        "post": [
+            "x",
+            "CX5a"
+        ],
+        "connect_models": {
+            "CX,CX5a,AMPAMap_D1": {
+                "name": "CX,CX5a,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX,CX5a,NMDAMap_D1": {
+                "name": "CX,CX5a,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX,CX5b": {
+        "name": "CX,CX5b",
+        "pre": [
+            "x",
+            "CX"
+        ],
+        "post": [
+            "x",
+            "CX5b"
+        ],
+        "connect_models": {
+            "CX,CX5b,AMPAMap_D1": {
+                "name": "CX,CX5b,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX,CX5b,NMDAMap_D1": {
+                "name": "CX,CX5b,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX,IN": {
+        "name": "CX,IN",
+        "pre": [
+            "x",
+            "CX"
+        ],
+        "post": [
+            "x",
+            "IN"
+        ],
+        "connect_models": {
+            "CX,IN,AMPAMap_D1": {
+                "name": "CX,IN,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.0136,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.00063,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX,IN,NMDAMap_D1": {
+                "name": "CX,IN,NMDAMap_D1",
+                "property_map": {
+                    "radius": 0.0136,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-07,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX3,CX": {
+        "name": "CX3,CX",
+        "pre": [
+            "x",
+            "CX3"
+        ],
+        "post": [
+            "x",
+            "CX"
+        ],
+        "connect_models": {
+            "CX3,CX,AMPAMap_D1": {
+                "name": "CX3,CX,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX3,CX,NMDAMap_D1": {
+                "name": "CX3,CX,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX3,CX3": {
+        "name": "CX3,CX3",
+        "pre": [
+            "x",
+            "CX3"
+        ],
+        "post": [
+            "x",
+            "CX3"
+        ],
+        "connect_models": {
+            "CX3,CX3,AMPAMap_D1": {
+                "name": "CX3,CX3,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX3,CX3,NMDAMap_D1": {
+                "name": "CX3,CX3,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX3,CX4": {
+        "name": "CX3,CX4",
+        "pre": [
+            "x",
+            "CX3"
+        ],
+        "post": [
+            "x",
+            "CX4"
+        ],
+        "connect_models": {
+            "CX3,CX4,AMPAMap_D1": {
+                "name": "CX3,CX4,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX3,CX4,NMDAMap_D1": {
+                "name": "CX3,CX4,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX3,CX5a": {
+        "name": "CX3,CX5a",
+        "pre": [
+            "x",
+            "CX3"
+        ],
+        "post": [
+            "x",
+            "CX5a"
+        ],
+        "connect_models": {
+            "CX3,CX5a,AMPAMap_D1": {
+                "name": "CX3,CX5a,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX3,CX5a,NMDAMap_D1": {
+                "name": "CX3,CX5a,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX3,CX5b": {
+        "name": "CX3,CX5b",
+        "pre": [
+            "x",
+            "CX3"
+        ],
+        "post": [
+            "x",
+            "CX5b"
+        ],
+        "connect_models": {
+            "CX3,CX5b,AMPAMap_D1": {
+                "name": "CX3,CX5b,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX3,CX5b,NMDAMap_D1": {
+                "name": "CX3,CX5b,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX3,IN3": {
+        "name": "CX3,IN3",
+        "pre": [
+            "x",
+            "CX3"
+        ],
+        "post": [
+            "x",
+            "IN3"
+        ],
+        "connect_models": {
+            "CX3,IN3,AMPAMap_D1": {
+                "name": "CX3,IN3,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.0136,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.00063,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX3,IN3,NMDAMap_D1": {
+                "name": "CX3,IN3,NMDAMap_D1",
+                "property_map": {
+                    "radius": 0.0136,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-07,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX4,CX": {
+        "name": "CX4,CX",
+        "pre": [
+            "x",
+            "CX4"
+        ],
+        "post": [
+            "x",
+            "CX"
+        ],
+        "connect_models": {
+            "CX4,CX,AMPAMap_D1": {
+                "name": "CX4,CX,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX4,CX,NMDAMap_D1": {
+                "name": "CX4,CX,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX4,CX3": {
+        "name": "CX4,CX3",
+        "pre": [
+            "x",
+            "CX4"
+        ],
+        "post": [
+            "x",
+            "CX3"
+        ],
+        "connect_models": {
+            "CX4,CX3,AMPAMap_D1": {
+                "name": "CX4,CX3,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX4,CX3,NMDAMap_D1": {
+                "name": "CX4,CX3,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX4,CX4": {
+        "name": "CX4,CX4",
+        "pre": [
+            "x",
+            "CX4"
+        ],
+        "post": [
+            "x",
+            "CX4"
+        ],
+        "connect_models": {
+            "CX4,CX4,AMPAMap_D1": {
+                "name": "CX4,CX4,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX4,CX4,NMDAMap_D1": {
+                "name": "CX4,CX4,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX4,CX5a": {
+        "name": "CX4,CX5a",
+        "pre": [
+            "x",
+            "CX4"
+        ],
+        "post": [
+            "x",
+            "CX5a"
+        ],
+        "connect_models": {
+            "CX4,CX5a,AMPAMap_D1": {
+                "name": "CX4,CX5a,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX4,CX5a,NMDAMap_D1": {
+                "name": "CX4,CX5a,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX4,CX5b": {
+        "name": "CX4,CX5b",
+        "pre": [
+            "x",
+            "CX4"
+        ],
+        "post": [
+            "x",
+            "CX5b"
+        ],
+        "connect_models": {
+            "CX4,CX5b,AMPAMap_D1": {
+                "name": "CX4,CX5b,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX4,CX5b,NMDAMap_D1": {
+                "name": "CX4,CX5b,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX4,CX6": {
+        "name": "CX4,CX6",
+        "pre": [
+            "x",
+            "CX4"
+        ],
+        "post": [
+            "x",
+            "CX6"
+        ],
+        "connect_models": {
+            "CX4,CX6,AMPAMap_D1": {
+                "name": "CX4,CX6,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX4,CX6,NMDAMap_D1": {
+                "name": "CX4,CX6,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX4,IN4": {
+        "name": "CX4,IN4",
+        "pre": [
+            "x",
+            "CX4"
+        ],
+        "post": [
+            "x",
+            "IN4"
+        ],
+        "connect_models": {
+            "CX4,IN4,AMPAMap_D1": {
+                "name": "CX4,IN4,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.0136,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.00063,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX4,IN4,NMDAMap_D1": {
+                "name": "CX4,IN4,NMDAMap_D1",
+                "property_map": {
+                    "radius": 0.0136,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-07,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX5a,CX": {
+        "name": "CX5a,CX",
+        "pre": [
+            "x",
+            "CX5a"
+        ],
+        "post": [
+            "x",
+            "CX"
+        ],
+        "connect_models": {
+            "CX5a,CX,AMPAMap_D1": {
+                "name": "CX5a,CX,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX5a,CX,NMDAMap_D1": {
+                "name": "CX5a,CX,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX5a,CX3": {
+        "name": "CX5a,CX3",
+        "pre": [
+            "x",
+            "CX5a"
+        ],
+        "post": [
+            "x",
+            "CX3"
+        ],
+        "connect_models": {
+            "CX5a,CX3,AMPAMap_D1": {
+                "name": "CX5a,CX3,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX5a,CX3,NMDAMap_D1": {
+                "name": "CX5a,CX3,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX5a,CX4": {
+        "name": "CX5a,CX4",
+        "pre": [
+            "x",
+            "CX5a"
+        ],
+        "post": [
+            "x",
+            "CX4"
+        ],
+        "connect_models": {
+            "CX5a,CX4,AMPAMap_D1": {
+                "name": "CX5a,CX4,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX5a,CX4,NMDAMap_D1": {
+                "name": "CX5a,CX4,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX5a,CX5a": {
+        "name": "CX5a,CX5a",
+        "pre": [
+            "x",
+            "CX5a"
+        ],
+        "post": [
+            "x",
+            "CX5a"
+        ],
+        "connect_models": {
+            "CX5a,CX5a,AMPAMap_D1": {
+                "name": "CX5a,CX5a,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX5a,CX5a,NMDAMap_D1": {
+                "name": "CX5a,CX5a,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX5a,CX5b": {
+        "name": "CX5a,CX5b",
+        "pre": [
+            "x",
+            "CX5a"
+        ],
+        "post": [
+            "x",
+            "CX5b"
+        ],
+        "connect_models": {
+            "CX5a,CX5b,AMPAMap_D1": {
+                "name": "CX5a,CX5b,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX5a,CX5b,NMDAMap_D1": {
+                "name": "CX5a,CX5b,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX5a,IN5a": {
+        "name": "CX5a,IN5a",
+        "pre": [
+            "x",
+            "CX5a"
+        ],
+        "post": [
+            "x",
+            "IN5a"
+        ],
+        "connect_models": {
+            "CX5a,IN5a,AMPAMap_D1": {
+                "name": "CX5a,IN5a,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.0136,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.00063,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX5a,IN5a,NMDAMap_D1": {
+                "name": "CX5a,IN5a,NMDAMap_D1",
+                "property_map": {
+                    "radius": 0.0136,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-07,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX5b,CX": {
+        "name": "CX5b,CX",
+        "pre": [
+            "x",
+            "CX5b"
+        ],
+        "post": [
+            "x",
+            "CX"
+        ],
+        "connect_models": {
+            "CX5b,CX,AMPAMap_D1": {
+                "name": "CX5b,CX,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX5b,CX,NMDAMap_D1": {
+                "name": "CX5b,CX,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX5b,CX3": {
+        "name": "CX5b,CX3",
+        "pre": [
+            "x",
+            "CX5b"
+        ],
+        "post": [
+            "x",
+            "CX3"
+        ],
+        "connect_models": {
+            "CX5b,CX3,AMPAMap_D1": {
+                "name": "CX5b,CX3,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX5b,CX3,NMDAMap_D1": {
+                "name": "CX5b,CX3,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX5b,CX5b": {
+        "name": "CX5b,CX5b",
+        "pre": [
+            "x",
+            "CX5b"
+        ],
+        "post": [
+            "x",
+            "CX5b"
+        ],
+        "connect_models": {
+            "CX5b,CX5b,AMPAMap_D1": {
+                "name": "CX5b,CX5b,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX5b,CX5b,NMDAMap_D1": {
+                "name": "CX5b,CX5b,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX5b,CX6": {
+        "name": "CX5b,CX6",
+        "pre": [
+            "x",
+            "CX5b"
+        ],
+        "post": [
+            "x",
+            "CX6"
+        ],
+        "connect_models": {
+            "CX5b,CX6,AMPAMap_D1": {
+                "name": "CX5b,CX6,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX5b,CX6,NMDAMap_D1": {
+                "name": "CX5b,CX6,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX5b,IN5b": {
+        "name": "CX5b,IN5b",
+        "pre": [
+            "x",
+            "CX5b"
+        ],
+        "post": [
+            "x",
+            "IN5b"
+        ],
+        "connect_models": {
+            "CX5b,IN5b,AMPAMap_D1": {
+                "name": "CX5b,IN5b,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.0136,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.00063,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX5b,IN5b,NMDAMap_D1": {
+                "name": "CX5b,IN5b,NMDAMap_D1",
+                "property_map": {
+                    "radius": 0.0136,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-07,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX5b,TCa": {
+        "name": "CX5b,TCa",
+        "pre": [
+            "x",
+            "CX5b"
+        ],
+        "post": [
+            "x",
+            "TCa"
+        ],
+        "connect_models": {
+            "CX5b,TCa,AMPA": {
+                "name": "CX5b,TCa,AMPA",
+                "property_map": {
+                    "radius": 0.0575,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 0.5,
+                    "distribution": "fixed",
+                    "strength": 8e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPA"
+                }
+            }
+        }
+    },
+    "CX5b,REa": {
+        "name": "CX5b,REa",
+        "pre": [
+            "x",
+            "CX5b"
+        ],
+        "post": [
+            "x",
+            "REa"
+        ],
+        "connect_models": {
+            "CX5b,REa,AMPA": {
+                "name": "CX5b,REa,AMPA",
+                "property_map": {
+                    "radius": 0.0575,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 0.5,
+                    "distribution": "fixed",
+                    "strength": 0.00016,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPA"
+                }
+            }
+        }
+    },
+    "CX6,CX": {
+        "name": "CX6,CX",
+        "pre": [
+            "x",
+            "CX6"
+        ],
+        "post": [
+            "x",
+            "CX"
+        ],
+        "connect_models": {
+            "CX6,CX,AMPAMap_D1": {
+                "name": "CX6,CX,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX6,CX,NMDAMap_D1": {
+                "name": "CX6,CX,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX6,CX3": {
+        "name": "CX6,CX3",
+        "pre": [
+            "x",
+            "CX6"
+        ],
+        "post": [
+            "x",
+            "CX3"
+        ],
+        "connect_models": {
+            "CX6,CX3,AMPAMap_D1": {
+                "name": "CX6,CX3,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX6,CX3,NMDAMap_D1": {
+                "name": "CX6,CX3,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX6,CX4": {
+        "name": "CX6,CX4",
+        "pre": [
+            "x",
+            "CX6"
+        ],
+        "post": [
+            "x",
+            "CX4"
+        ],
+        "connect_models": {
+            "CX6,CX4,AMPAMap_D1": {
+                "name": "CX6,CX4,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX6,CX4,NMDAMap_D1": {
+                "name": "CX6,CX4,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX6,CX5b": {
+        "name": "CX6,CX5b",
+        "pre": [
+            "x",
+            "CX6"
+        ],
+        "post": [
+            "x",
+            "CX5b"
+        ],
+        "connect_models": {
+            "CX6,CX5b,AMPAMap_D1": {
+                "name": "CX6,CX5b,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX6,CX5b,NMDAMap_D1": {
+                "name": "CX6,CX5b,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX6,CX6": {
+        "name": "CX6,CX6",
+        "pre": [
+            "x",
+            "CX6"
+        ],
+        "post": [
+            "x",
+            "CX6"
+        ],
+        "connect_models": {
+            "CX6,CX6,AMPAMap_D1": {
+                "name": "CX6,CX6,AMPAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.0002,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX6,CX6,NMDAMap_D1": {
+                "name": "CX6,CX6,NMDAMap_D1",
+                "property_map": {
+                    "radius": 10.1,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-08,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX6,IN6": {
+        "name": "CX6,IN6",
+        "pre": [
+            "x",
+            "CX6"
+        ],
+        "post": [
+            "x",
+            "IN6"
+        ],
+        "connect_models": {
+            "CX6,IN6,AMPAMap_D1": {
+                "name": "CX6,IN6,AMPAMap_D1",
+                "property_map": {
+                    "radius": 0.0136,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.00063,
+                    "mini_s": 1.6e-06,
+                    "mini_f": 500.0,
+                    "name": "AMPAMap_D1"
+                }
+            },
+            "CX6,IN6,NMDAMap_D1": {
+                "name": "CX6,IN6,NMDAMap_D1",
+                "property_map": {
+                    "radius": 0.0136,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 1e-07,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "NMDAMap_D1"
+                }
+            }
+        }
+    },
+    "CX6,TC": {
+        "name": "CX6,TC",
+        "pre": [
+            "x",
+            "CX6"
+        ],
+        "post": [
+            "x",
+            "TC"
+        ],
+        "connect_models": {
+            "CX6,TC,AMPA": {
+                "name": "CX6,TC,AMPA",
+                "property_map": {
+                    "radius": 0.0143,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 8e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPA"
+                }
+            }
+        }
+    },
+    "CX6,RE": {
+        "name": "CX6,RE",
+        "pre": [
+            "x",
+            "CX6"
+        ],
+        "post": [
+            "x",
+            "RE"
+        ],
+        "connect_models": {
+            "CX6,RE,AMPA": {
+                "name": "CX6,RE,AMPA",
+                "property_map": {
+                    "radius": 0.0143,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 0.00016,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "AMPA"
+                }
+            }
+        }
+    },
+    "IN,CX": {
+        "name": "IN,CX",
+        "pre": [
+            "x",
+            "IN"
+        ],
+        "post": [
+            "x",
+            "CX"
+        ],
+        "connect_models": {
+            "IN,CX,GABAMap_A_D1": {
+                "name": "IN,CX,GABAMap_A_D1",
+                "property_map": {
+                    "radius": 0.014,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "GABAMap_A_D1"
+                }
+            }
+        }
+    },
+    "IN3,CX3": {
+        "name": "IN3,CX3",
+        "pre": [
+            "x",
+            "IN3"
+        ],
+        "post": [
+            "x",
+            "CX3"
+        ],
+        "connect_models": {
+            "IN3,CX3,GABAMap_A_D1": {
+                "name": "IN3,CX3,GABAMap_A_D1",
+                "property_map": {
+                    "radius": 0.014,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "GABAMap_A_D1"
+                }
+            }
+        }
+    },
+    "IN4,CX4": {
+        "name": "IN4,CX4",
+        "pre": [
+            "x",
+            "IN4"
+        ],
+        "post": [
+            "x",
+            "CX4"
+        ],
+        "connect_models": {
+            "IN4,CX4,GABAMap_A_D1": {
+                "name": "IN4,CX4,GABAMap_A_D1",
+                "property_map": {
+                    "radius": 0.014,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "GABAMap_A_D1"
+                }
+            }
+        }
+    },
+    "IN5a,CX5a": {
+        "name": "IN5a,CX5a",
+        "pre": [
+            "x",
+            "IN5a"
+        ],
+        "post": [
+            "x",
+            "CX5a"
+        ],
+        "connect_models": {
+            "IN5a,CX5a,GABAMap_A_D1": {
+                "name": "IN5a,CX5a,GABAMap_A_D1",
+                "property_map": {
+                    "radius": 0.014,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "GABAMap_A_D1"
+                }
+            }
+        }
+    },
+    "IN5b,CX5b": {
+        "name": "IN5b,CX5b",
+        "pre": [
+            "x",
+            "IN5b"
+        ],
+        "post": [
+            "x",
+            "CX5b"
+        ],
+        "connect_models": {
+            "IN5b,CX5b,GABAMap_A_D1": {
+                "name": "IN5b,CX5b,GABAMap_A_D1",
+                "property_map": {
+                    "radius": 0.014,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "GABAMap_A_D1"
+                }
+            }
+        }
+    },
+    "IN6,CX6": {
+        "name": "IN6,CX6",
+        "pre": [
+            "x",
+            "IN6"
+        ],
+        "post": [
+            "x",
+            "CX6"
+        ],
+        "connect_models": {
+            "IN6,CX6,GABAMap_A_D1": {
+                "name": "IN6,CX6,GABAMap_A_D1",
+                "property_map": {
+                    "radius": 0.014,
+                    "col_sci": 1000,
+                    "prob": 1,
+                    "prob_oc": 1,
+                    "distribution": "fixed",
+                    "strength": 5e-05,
+                    "mini_s": 0.0,
+                    "mini_f": 0.0,
+                    "name": "GABAMap_A_D1"
+                }
+            }
+        }
+    }
+}

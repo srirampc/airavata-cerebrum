@@ -1,8 +1,18 @@
+import ast
 import json
 import pydantic
 import traitlets
 import typing
+import pathlib
 import abc
+
+
+class TraitDef(pydantic.BaseModel):
+    value_type: str
+    label: str
+    default: typing.Any
+    from_ui: typing.Callable = lambda x: x
+    to_ui: typing.Callable = lambda x: x
 
 
 class StructBase(pydantic.BaseModel, abc.ABC):
@@ -20,27 +30,67 @@ class StructBase(pydantic.BaseModel, abc.ABC):
         return set([])
 
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
+    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
         return {}
+
+class DataFile(StructBase):
+    path: pathlib.Path
+
+    class TraitDefMapper:
+        map: typing.Dict[str, TraitDef] = {
+            "name": TraitDef(value_type="text", label="Key", default=""),
+            "path": TraitDef(value_type="text", label="File Path", default=""),
+        }
+
+    class DataTrait(StructBase.StructBaseTrait):
+        # property_map = traitlets.Dict()
+        path = traitlets.Unicode()
+
+    def exclude(self) -> typing.Set[str]:
+        return set([])
+
+    @classmethod
+    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+        return cls.TraitDefMapper.map
+
+    @classmethod
+    def trait_type(cls) -> type[traitlets.HasTraits]:
+        return cls.DataTrait
+
 
 
 class DataLink(StructBase):
     property_map: typing.Dict = {}
 
+    class TraitDefMapper:
+        map: typing.Dict[str, TraitDef] = {
+            "name": TraitDef(value_type="text", label="Name", default=""),
+            "property_map": TraitDef(
+                value_type="textarea",
+                label="Property Map",
+                default="{}",
+                from_ui=lambda x: ast.literal_eval(x),
+                to_ui=lambda x: json.dumps(x, indent=4),
+            ),
+        }
+
     class DataTrait(StructBase.StructBaseTrait):
         # property_map = traitlets.Dict()
         property_map = traitlets.Unicode()
+
+        def __init__(self, property_map={}, **kwargs):
+            super().__init__(
+                property_map=json.dumps(property_map, indent=4),
+                **kwargs,
+            )
 
 
     def exclude(self) -> typing.Set[str]:
         return set([])
 
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "property_map": {"type": "textarea", "label": "Property Map", "default": "{}"},
-        }
+    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+        return cls.TraitDefMapper.map
 
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
@@ -50,8 +100,25 @@ class DataLink(StructBase):
 class ComponentModel(StructBase):
     property_map: typing.Dict = {}
 
+    class TraitDefMapper:
+        map: typing.Dict[str, TraitDef] = {
+            "name": TraitDef(
+                value_type="text",
+                label="Name",
+                default="",
+            ),
+            "property_map": TraitDef(
+                value_type="textarea",
+                label="Property Map",
+                default="{}",
+                from_ui=lambda x: ast.literal_eval(x),
+                to_ui=lambda x: json.dumps(x, indent=4),
+            ),
+        }
+
     class DataTrait(StructBase.StructBaseTrait):
-        property_map = traitlets.Dict()
+        # property_map = traitlets.Dict()
+        property_map = traitlets.Unicode()
 
         def __init__(self, property_map={}, **kwargs):
             super().__init__(
@@ -63,15 +130,8 @@ class ComponentModel(StructBase):
         return set([])
 
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "property_map": {
-                "type": "textarea",
-                "label": "Property Map",
-                "default": "{}",
-            },
-        }
+    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+        return cls.TraitDefMapper.map
 
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
@@ -86,8 +146,60 @@ class NeuronModel(StructBase):
     m_type: str = ""
     template: str = ""
     dynamics_params: str = ""
+    morphology: str = ""
     property_map: typing.Dict = {}
-    data_connect: DataLink = DataLink()
+    data_connect: typing.List[DataLink] = [] 
+
+    class TraitDefMapper:
+        map: typing.Dict[str, TraitDef] = {
+            "N": TraitDef(
+                value_type="int",
+                label="N",
+                default=0,
+            ),
+            "id": TraitDef(
+                value_type="text",
+                label="id",
+                default="",
+            ),
+            "proportion": TraitDef(
+                value_type="float",
+                label="Proportion",
+                default=0.0,
+            ),
+            "name": TraitDef(
+                value_type="text",
+                label="Name",
+                default="",
+            ),
+            "m_type": TraitDef(
+                value_type="text",
+                label="Model Type",
+                default="",
+            ),
+            "template": TraitDef(
+                value_type="text",
+                label="Template",
+                default="",
+            ),
+            "dynamics_params": TraitDef(
+                value_type="text",
+                label="Dynamics Parameters",
+                default="",
+            ),
+            "morphology": TraitDef(
+                value_type="text",
+                label="Morphology",
+                default="",
+            ),
+            "property_map": TraitDef(
+                value_type="textarea",
+                label="Property Map",
+                default="{\n}",
+                from_ui=lambda x: ast.literal_eval(x),
+                to_ui=lambda x: json.dumps(x, indent=4),
+            ),
+        }
 
     class DataTrait(StructBase.StructBaseTrait):
         N = traitlets.Int()
@@ -98,6 +210,7 @@ class NeuronModel(StructBase):
         dynamics_params = traitlets.Unicode()
         # property_map = traitlets.Dict()
         property_map = traitlets.Unicode()
+        morphology = traitlets.Unicode()
 
         def __init__(self, property_map={}, **kwargs):
             super().__init__(
@@ -109,25 +222,8 @@ class NeuronModel(StructBase):
         return set(["data_connect"])
 
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "N": {"type": "int", "label": "N", "default": 0},
-            "id": {"type": "text", "label": "id", "default": ""},
-            "proportion": {"type": "float", "label": "Proportion", "default": 0.0},
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "m_type": {"type": "text", "label": "Model Type", "default": ""},
-            "template": {"type": "text", "label": "Template", "default": ""},
-            "dynamics_params": {
-                "type": "text",
-                "label": "Dynamis Parameters",
-                "default": "",
-            },
-            "property_map": {
-                "type": "textarea",
-                "label": "Property Map",
-                "default": "{\n}",
-            },
-        }
+    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+        return cls.TraitDefMapper.map
 
     def apply_mod(self, mod_model: "NeuronModel") -> "NeuronModel":
         if mod_model.name is not None:
@@ -159,6 +255,29 @@ class Neuron(StructBase):
     dims: typing.Dict[str, typing.Any] = {}
     neuron_models: typing.Dict[str, NeuronModel] = {}
 
+    class TraitDefMapper:
+        map: typing.Dict[str, TraitDef] = {
+            "name": TraitDef(
+                    value_type="text",
+                    label="Name",
+                    default= "",
+            ),
+            "N": TraitDef(**{"value_type": "int", "label": "N", "default": 0}),
+            "fraction": TraitDef(
+                **{"value_type": "float", "label": "Proportion", "default": 0.0}
+            ),
+            "ei": TraitDef(
+                value_type="text", label="E/I", default="",
+            ),
+            "dims": TraitDef(
+                value_type="textarea",
+                label="Property Map",
+                default="{\n}",
+                from_ui=lambda x: ast.literal_eval(x),
+                to_ui=lambda x: json.dumps(x, indent=4),
+            ),
+        }
+
     class DataTrait(StructBase.StructBaseTrait):
         N = traitlets.Int()
         fraction = traitlets.Float(0.0)
@@ -176,14 +295,8 @@ class Neuron(StructBase):
         return set(["neuron_models"])
 
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "N": {"type": "int", "label": "N", "default": 0},
-            "fraction": {"type": "float", "label": "Proportion", "default": 0.0},
-            "ei": {"type": "text", "label": "E/I", "default": ""},
-            "dims": {"type": "textarea", "label": "Property Map", "default": "{\n}"},
-        }
+    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+        return cls.TraitDefMapper.map
 
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
@@ -222,6 +335,45 @@ class Region(StructBase):
     dims: typing.Dict[str, typing.Any] = {}
     neurons: typing.Dict[str, Neuron] = {}
 
+    class TraitDefMapper:
+        map: typing.Dict[str, TraitDef] = {
+            "name": TraitDef(
+                value_type="text",
+                label="Name",
+                default="",
+            ),
+            "ncells": TraitDef(
+                **{
+                    "value_type": "int",
+                    "label": "No. Cells",
+                    "default": 0,
+                }
+            ),
+            "inh_ncells": TraitDef(
+                **{"value_type": "int", "label": "No. Inh. Cells", "default": 0}
+            ),
+            "exc_ncells": TraitDef(
+                **{"value_type": "int", "label": "No. Exc. Cells", "default": 0}
+            ),
+            "inh_fraction": TraitDef(
+                **{"value_type": "float", "label": "Inh. Fraction", "default": 0.0}
+            ),
+            "region_fraction": TraitDef(
+                **{
+                    "value_type": "float",
+                    "label": "Region Fraction",
+                    "default": 0.0,
+                }
+            ),
+            "dims": TraitDef(
+                value_type="textarea",
+                label="Dimensions",
+                default="{\n}",
+                from_ui=lambda x: ast.literal_eval(x),
+                to_ui=lambda x: json.dumps(x, indent=4),
+            ),
+        }
+
     class DataTrait(StructBase.StructBaseTrait):
         inh_fraction = traitlets.Float(0.0)
         region_fraction = traitlets.Float(0.0)
@@ -241,20 +393,8 @@ class Region(StructBase):
         return set(["neurons"])
 
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "ncells": {"type": "int", "label": "No. Cells", "default": 0},
-            "inh_ncells": {"type": "int", "label": "No. Inh. Cells", "default": 0},
-            "exc_ncells": {"type": "int", "label": "No. Exc. Cells", "default": 0},
-            "inh_fraction": {"type": "float", "label": "Inh. Fraction", "default": 0.0},
-            "region_fraction": {
-                "type": "float",
-                "label": "Region Fraction",
-                "default": 0.0,
-            },
-            "dims": {"type": "textarea", "label": "Dimensions", "default": "{\n}"},
-        }
+    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+        return cls.TraitDefMapper.map
 
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
@@ -299,6 +439,36 @@ class ConnectionModel(StructBase):
     dynamics_params: str = ""
     property_map: typing.Dict = {}
 
+    class TraitDefMapper:
+        map: typing.Dict[str, TraitDef] = {
+            "name": TraitDef(
+                value_type="text",
+                label="Name",
+                default="",
+            ),
+            "source_model_id": TraitDef(
+                value_type="text",
+                label="Source Id.",
+                default="",
+            ),
+            "target_model_id": TraitDef(
+                value_type="text",
+                label="Target Id.",
+                default="",
+            ),
+            "weight_max": TraitDef(
+                **{"value_type": "float", "label": "Max. Weight", "default": 0.0}
+            ),
+            "delay": TraitDef(**{"value_type": "float", "label": "Delay", "default": 0.0}),
+            "property_map": TraitDef(
+                value_type="textarea",
+                label="Property Map",
+                default="{\n}",
+                from_ui=lambda x: ast.literal_eval(x),
+                to_ui=lambda x: json.dumps(x, indent=4),
+            ),
+        }
+
     class DataTrait(StructBase.StructBaseTrait):
         target_model_id = traitlets.Unicode()
         source_model_id = traitlets.Unicode()
@@ -309,7 +479,7 @@ class ConnectionModel(StructBase):
 
         def __init__(self, property_map={}, **kwargs):
             super().__init__(
-                dims=json.dumps(property_map, indent=4),
+                property_map=json.dumps(property_map, indent=4),
                 **kwargs,
             )
 
@@ -317,19 +487,8 @@ class ConnectionModel(StructBase):
         return set([])
 
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "source_model_id": {"type": "text", "label": "Source Id.", "default": ""},
-            "target_model_id": {"type": "text", "label": "Target Id.", "default": ""},
-            "weight_max": {"type": "float", "label": "Max. Weight", "default": 0.0},
-            "delay": {"type": "float", "label": "Delay", "default": 0.0},
-            "property_map": {
-                "type": "textarea",
-                "label": "Property Map",
-                "default": "{\n}",
-            },
-        }
+    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+        return cls.TraitDefMapper.map
 
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
@@ -361,6 +520,39 @@ class Connection(StructBase):
     connect_models: typing.Dict[str, ConnectionModel] = {}
     property_map: typing.Dict = {}
 
+    class TraitDefMapper:
+        map: typing.Dict[str, TraitDef] = {
+            "name": TraitDef(
+                value_type="text",
+                label="Name",
+                default="",
+            ),
+            "probability": TraitDef(
+                **{"value_type": "float", "label": "Inh. Fraction", "default": 0.0}
+            ),
+            "pre": TraitDef(
+                value_type="textarea",
+                label="Pre-Synapse",
+                default="()",
+                from_ui=lambda x: ast.literal_eval(x),
+                to_ui=lambda x: repr(x),
+            ),
+            "post": TraitDef(
+                value_type="textarea",
+                label="Post-Synapse",
+                default="()",
+                from_ui=lambda x: ast.literal_eval(x),
+                to_ui=lambda x: repr(x),
+            ),
+            "property_map": TraitDef(
+                value_type="textarea",
+                label="Property Map",
+                default="{\n}",
+                from_ui=lambda x: ast.literal_eval(x),
+                to_ui=lambda x: json.dumps(x, indent=4),
+            ),
+        }
+
     class DataTrait(StructBase.StructBaseTrait):
         # pre = traitlets.Tuple(traitlets.Unicode(), traitlets.Unicode())
         # post = traitlets.Tuple(traitlets.Unicode(), traitlets.Unicode())
@@ -382,18 +574,8 @@ class Connection(StructBase):
         return set(["connect_models"])
 
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "pre": {"type": "textarea", "label": "Pre-Synapse", "default": "()"},
-            "post": {"type": "textarea", "label": "Post-Synapse", "default": "()"},
-            "probability": {"type": "float", "label": "Inh. Fraction", "default": 0.0},
-            "property_map": {
-                "type": "textarea",
-                "label": "Property Map",
-                "default": "{\n}",
-            },
-        }
+    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+        return cls.TraitDefMapper.map
 
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
@@ -426,6 +608,20 @@ class ExtNetwork(StructBase):
     locations: typing.Dict[str, Region] = {}
     connections: typing.Dict[str, Connection] = {}
 
+    class TraitDefMapper:
+        map: typing.Dict[str, TraitDef] = {
+            "name": TraitDef(
+                value_type="text",
+                label= "Name",
+                default="",
+            ),
+            "ncells": TraitDef(
+                value_type="int",
+                label="No. Cells",
+                default=0,
+            ),
+        }
+
     class DataTrait(StructBase.StructBaseTrait):
         ncells = traitlets.Int(0)
 
@@ -433,11 +629,8 @@ class ExtNetwork(StructBase):
         return set(["locations", "connections"])
 
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "ncells": {"type": "int", "label": "No. Cells", "default": 0},
-        }
+    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+        return cls.TraitDefMapper.map
 
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
@@ -467,6 +660,25 @@ class Network(StructBase):
     connections: typing.Dict[str, Connection] = {}
     dims: typing.Dict[str, typing.Any] = {}
     ext_networks: typing.Dict[str, ExtNetwork] = {}
+    data_connect: typing.List[DataLink] = [] 
+    data_files: typing.List[DataFile] = []
+
+    class TraitDefMapper:
+        map: typing.Dict[str, TraitDef] = {
+            "name": TraitDef(
+                value_type="text", label="Name", default="",
+            ),
+            "ncells": TraitDef(
+                value_type="int", label="No. Cells", default=0,
+            ),
+            "dims": TraitDef(
+                value_type="textarea",
+                label="Dimensions",
+                default="{\n}",
+                from_ui=lambda x: ast.literal_eval(x),
+                to_ui=lambda x: json.dumps(x, indent=4),
+            ),
+        }
 
     class DataTrait(StructBase.StructBaseTrait):
         ncells = traitlets.Int(0)
@@ -483,12 +695,8 @@ class Network(StructBase):
         return set(["locations", "connections", "ext_networks"])
 
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "ncells": {"type": "int", "label": "No. Cells", "default": 0},
-            "dims": {"type": "textarea", "label": "Dimensions", "default": "{\n}"},
-        }
+    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+        return cls.TraitDefMapper.map
 
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
@@ -583,6 +791,12 @@ class ConnectionMapper(abc.ABC):
     @abc.abstractmethod
     def map(self) -> Connection | None:
         return None
+
+
+def dict2netstruct(
+    network_struct: typing.Dict,
+) -> Network:
+    return Network.model_validate(network_struct)
 
 
 #

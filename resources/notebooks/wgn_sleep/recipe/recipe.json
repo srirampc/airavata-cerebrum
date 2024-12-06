@@ -1,0 +1,83 @@
+{
+    "data2model_map": {
+        "locations": {
+            "Left": {
+                "property_map": {
+                    "neurons": [
+                        "RE",
+                        "REa",
+                        "TC",
+                        "TCa",
+                        "CX",
+                        "CX3",
+                        "CX4",
+                        "CX5a",
+                        "CX6",
+                        "IN",
+                        "IN3",
+                        "IN4",
+                        "IN5a",
+                        "IN5b",
+                        "IN6"
+                    ],
+                    "source_data": {}
+                },
+ "'RE"   :{ "property_map": { "ei": "e" }, "source_data": {} },
+ "'REa"  :{ "property_map": { "ei": "e" }, "source_data": {} },
+ "'TC"   :{ "property_map": { "ei": "e" }, "source_data": {} },
+ "'TCa"  :{ "property_map": { "ei": "e" }, "source_data": {} },
+ "'CX"   :{ "property_map": { "ei": "e" }, "source_data": {} },
+ "'CX3"  :{ "property_map": { "ei": "e" }, "source_data": {} },
+ "'CX4"  :{ "property_map": { "ei": "e" }, "source_data": {} },
+ "'CX5a" :{ "property_map": { "ei": "e" }, "source_data": {} },
+ "'CX6"  :{ "property_map": { "ei": "e" }, "source_data": {} },
+ "'IN"   :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'IN3"  :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'IN4"  :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'IN5a" :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'IN5b" :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'IN6"  :{ "property_map": { "ei": "i" }, "source_data": {} }
+            },
+            "Right": {
+                "property_map": {
+                    "neurons": [
+                        "'rRE",
+                        "'rREa",
+                        "'rTC",
+                        "'rTCa",
+                        "'rCX",
+                        "'rCX3",
+                        "'rCX4",
+                        "'rCX5a",
+                        "'rCX6",
+                        "'rIN",
+                        "'rIN3",
+                        "'rIN4",
+                        "'rIN5a",
+                        "'rIN5b",
+                        "'rIN6"
+                    ],
+                    "source_data": {}
+                },
+ "'RE"   :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'REa"  :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'TC"   :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'TCa"  :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'CX"   :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'CX3"  :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'CX4"  :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'CX5a" :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'CX6"  :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'IN"   :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'IN3"  :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'IN4"  :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'IN5a" :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'IN5b" :{ "property_map": { "ei": "i" }, "source_data": {} },
+ "'IN6"  :{ "property_map": { "ei": "i" }, "source_data": {} }
+            }
+
+        },
+        "connections": {}
+    },
+    "source_data": {}
+}

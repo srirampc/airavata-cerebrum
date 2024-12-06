@@ -6,9 +6,9 @@ import argparse
 import shutil
 
 import logging
-import airavata_cerebrum.util.desc_config as cbm_dcfg
+import airavata_cerebrum.model.setup as cbm_setup
+import airavata_cerebrum.model.recipe as cbm_recipe
 import airavata_cerebrum.view.tree as cbm_tree
-import airavata_cerebrum.model.desc as cbm_desc
 import mousev1.model as mousev1
 
 import json
@@ -97,20 +97,20 @@ except FileExistsError:
     print(f"Symlink already exists: {os.path.join(target_bkg_dir, 'bkg_spikes_250Hz_3s.h5')}")
 
 
-md_desc_config = cbm_dcfg.init_model_desc_config(
+mdr_setup = cbm_setup.init_model_desc_config(
     name="v1l4",
-    base_dir="./",
-    config_files={"config": [config_file], "templates": ["config_template.json"] },
-    config_dir="./v1l4/description/",
+    model_base_dir="./",
+    recipe_files={"config": [config_file], "templates": ["config_template.json"] },
+    recipe_dir="./v1l4/description/",
 )
 
-model_dex = cbm_desc.ModelDescription(
-    config=md_desc_config.config,
-    region_mapper=mousev1.V1RegionMapper,                                                                                                                                                                                                         
-    neuron_mapper=mousev1.V1NeuronMapper,                                                                                                                                                                                                         
-    connection_mapper=mousev1.V1ConnectionMapper,                                                                                                                                                                                                     
-    network_builder=mousev1.V1BMTKNetworkBuilder,                                                                                                                                                                                                   
-    custom_mod=custom_mod_file,                                                                                                                                                                                                               
+model_recipe = cbm_recipe.ModelRecipe(
+    recipe_setup=mdr_setup,
+    region_mapper=mousev1.V1RegionMapper,
+    neuron_mapper=mousev1.V1NeuronMapper,
+    connection_mapper=mousev1.V1ConnectionMapper,
+    network_builder=mousev1.V1BMTKNetworkBuilder,
+    custom_mod=custom_mod_file,
     save_flag=True,
 )
 
@@ -135,20 +135,20 @@ pd.DataFrame(connect_matrix, index=row_names, columns=col_names)
 logging.basicConfig(level=logging.INFO)
 # mdb_data = model_dex.db_post_ops()
 
-msrc = model_dex.map_source_data()
+msrc = model_recipe.map_source_data()
 
 with open(custom_mod_file) as ifx:
     custom_mod_dict = json.load(ifx)
 IPython.display.JSON(custom_mod_dict)
 
-msrc = model_dex.build_net_struct()
-msrc = model_dex.apply_custom_mod()
+msrc = model_recipe.build_net_struct()
+msrc = model_recipe.apply_custom_mod()
 
-bmtk_net_builder = mousev1.V1BMTKNetworkBuilder(model_dex.network_struct)
+bmtk_net_builder = mousev1.V1BMTKNetworkBuilder(model_recipe.network_struct)
 bmtk_net = bmtk_net_builder.build()
 
-bmtk_net_builder.net.save(str(model_dex.config.network_dir))
-bmtk_net_builder.bkg_net.save(str(model_dex.config.network_dir))
+bmtk_net_builder.net.save(str(model_recipe.recipe_setup.network_dir))
+bmtk_net_builder.bkg_net.save(str(model_recipe.recipe_setup.network_dir))
 
 # Converting to 
 mousev1ops.convert_ctdb_models_to_nest("./v1l4/components/point_neuron_models/", "./v1l4/components/cell_models/")
