@@ -6,10 +6,11 @@ import types
 import ipywidgets as iwidgets
 import ipytree as itree
 import traitlets
+from traitlets.traitlets import Integer
 
 from .. import base
 from ..register import find_type
-from ..model.setup import RecipeKeys, RecipeSetup
+from ..model.setup import RecipeKeys, RecipeLabels, RecipeSetup
 from ..model import structure as structure
 
 
@@ -23,7 +24,7 @@ class CfgTreeNames:
     CONNECTIONS = "Connections"
 
 
-def instantiate_widget(widget_key, **kwargs):
+def scalar_widget(widget_key, **kwargs) -> None | iwidgets.CoreWidget:
     match widget_key:
         case "int" | "int32" | "int64":
             return iwidgets.IntText(value=kwargs["default"], disabled=False)
@@ -52,23 +53,99 @@ def instantiate_widget(widget_key, **kwargs):
             )
 
 
-class PropertyMapLayout(iwidgets.GridspecLayout):
-    def __init__(self, value: typing.Dict, **kwargs):
-        super().__init__(len(value), 2, **kwargs)
-        self.value = value
-        for ix, (kx, vx) in enumerate(self.value.items()):
-            self[ix, 0] = iwidgets.Label(str(kx) + " :")
-            wdx = instantiate_widget(type(vx).__name__, default=vx)
-            wdx.add_traits(node_key=traitlets.Unicode(kx))  # type: ignore
-            wdx.observe(self.update_value)  # type: ignore
-            self[ix, 1] = wdx
+class ContainerLayout(iwidgets.GridspecLayout):
+    def __init__(self, n_rows, n_columns, value, **kwargs):
+        super().__init__( n_rows, n_columns, value=value, **kwargs)
+        if n_columns == 2:
+            for ix, (kx, vx) in enumerate(self.value_items(value)):
+                self[ix, 0] = iwidgets.Label(str(kx) + " :")
+                self[ix, 1] = self.entry_widget(kx, vx)
+        else:
+            self[0, 0] = iwidgets.Label(" --N/A-- ")
+        # self.observe(self.change_value)  # type: ignore
 
-    def update_value(self, change):
-        # print(change)
+    @abc.abstractmethod
+    def value_items(self, value) -> typing.Iterable:
+        pass
+
+    @abc.abstractmethod
+    def entry_widget(self, kx, vx) -> iwidgets.Widget | None:
+        pass
+
+    @abc.abstractmethod
+    def update_value(self, node_key, new_value) -> None:
+        pass
+
+    def change_value(self, change):
+        # print("L:", change)
         if change["name"] == "value" and change["old"] != change["new"]:
-            nkey = change["owner"].node_key
-            nvalue = change["new"]
-            self.value[nkey] = nvalue
+            node_key = change["owner"].node_key
+            new_value = change["new"]
+            self.update_value(node_key, new_value)
+
+
+class PropertyListLayout(ContainerLayout):
+    value = traitlets.List(help="List values").tag(sync=True)
+
+    def __init__(self, value: typing.List, **kwargs):
+        super().__init__(len(value), 2, value=value, **kwargs)
+       
+    def value_items(self, value):
+        return enumerate(value)
+
+    def entry_widget(self, kx, vx):
+        tname = type(vx).__name__
+        wdx = scalar_widget(tname, default=vx)
+        wdx.add_traits(node_key=traitlets.Integer(kx))  # type: ignore
+        wdx.observe(self.change_value)  # type: ignore
+        return wdx
+
+    def update_value(self, node_key: Integer, new_value) -> None:
+        self.value[node_key] = new_value
+
+
+class PropertyMapLayout(ContainerLayout):
+    value = traitlets.Dict(help="Dict values").tag(sync=True)
+
+    def __init__(self, value: typing.Dict, **kwargs):
+        # print("Value: ", len(value))
+        if len(value) > 0:
+            super().__init__(len(value), 2, value=value, **kwargs)
+        else:
+            super().__init__(1, 1, value=value, **kwargs)
+
+    def value_items(self, value) -> typing.Iterable:
+        return value.items()
+
+    def init_widget(self, vx) -> iwidgets.CoreWidget | None:
+        tname = type(vx).__name__
+        match tname:
+            case "list":
+                return PropertyListLayout(vx)
+            case _:
+                return scalar_widget(tname, default=vx)
+
+    def entry_widget(self, kx, vx) -> iwidgets.CoreWidget | None:
+        wdx = self.init_widget(vx)
+        wdx.add_traits(node_key=traitlets.Unicode(kx))  # type: ignore
+        wdx.observe(self.change_value)  # type: ignore
+        return wdx
+
+
+def container_layout(widget_key, **kwargs):
+    match widget_key:
+        case "dict":
+            return PropertyMapLayout(value=kwargs["default"], **kwargs)
+        case "list":
+            return PropertyListLayout(value=kwargs["default"], **kwargs)
+
+
+def render_property(widget_key, **kwargs):
+    match widget_key:
+        case "dict":
+            return container_layout(widget_key, **kwargs)
+        case _:
+            return scalar_widget(widget_key, **kwargs)
 
 
 #
@@ -100,40 +177,41 @@ class PanelBase:
 class CfgSidePanel(PanelBase):
     def __init__(self, template_map, **kwargs):
         super().__init__(**kwargs)
-        for ekey, vmap in template_map["init_params"].items():
-            self.widget_map[ekey] = instantiate_widget(vmap["type"], **vmap)
-        for ekey, vmap in template_map["exec_params"].items():
-            self.widget_map[ekey] = instantiate_widget(vmap["type"], **vmap)
+        for ekey, vmap in template_map[RecipeKeys.INIT_PARAMS].items():
+            self.widget_map[ekey] = render_property(vmap[RecipeKeys.TYPE], **vmap)
+        for ekey, vmap in template_map[RecipeKeys.EXEC_PARAMS].items():
+            self.widget_map[ekey] = render_property(vmap[RecipeKeys.TYPE], **vmap)
 
         # Set Widgets
-        init_widgets = [iwidgets.Label(" Init Arguments : ")]
+        ip_widgets: typing.List[iwidgets.Label | iwidgets.HBox] = []
         if (
             RecipeKeys.INIT_PARAMS in template_map
             and template_map[RecipeKeys.INIT_PARAMS]
         ):
-            init_widgets += [
+            ip_widgets = [iwidgets.Label(RecipeLabels.INIT_PARAMS)] + [
                 self.wrap(kx, wx)
                 for kx, wx in template_map[RecipeKeys.INIT_PARAMS].items()
             ]
         else:
-            init_widgets[0].value += " N/A "
-        exec_widgets = [iwidgets.Label(" Exec Arguments : ")]
+            ip_widgets = [iwidgets.Label(RecipeLabels.INIT_PARAMS + RecipeLabels.NA)]
+        ep_widgets: typing.List[iwidgets.Label | iwidgets.HBox] = []
         if (
             RecipeKeys.EXEC_PARAMS in template_map
             and template_map[RecipeKeys.EXEC_PARAMS]
         ):
-            exec_widgets += [
+            ep_widgets = [iwidgets.Label(RecipeLabels.EXEC_PARAMS)] + [
                 self.wrap(kx, wx)
                 for kx, wx in template_map[RecipeKeys.EXEC_PARAMS].items()
             ]
         else:
-            exec_widgets[0].value += " N/A "
-        self.layout = iwidgets.VBox(init_widgets + exec_widgets)
+            ep_widgets = [iwidgets.Label(RecipeLabels.EXEC_PARAMS + RecipeLabels.NA)]
+        self.layout = iwidgets.VBox(ip_widgets + ep_widgets)
 
-    def wrap(self, widget_key: str, twid_def: structure.TraitDef):
+    def wrap(self, widget_key: str, twid_def: typing.Dict[str, str]):
+        # print("W Key", widget_key)
         return iwidgets.HBox(
             [
-                iwidgets.Label(twid_def.label + " :"),
+                iwidgets.Label(twid_def["label"] + " :"),
                 self.widget_map[widget_key],
             ]
         )
@@ -144,7 +222,7 @@ class StructSidePanel(PanelBase):
         super().__init__(**kwargs)
         str_dict = struct_comp.model_dump()
         for ekey, vmap in struct_comp.trait_ui().items():
-            self.widget_map[ekey] = instantiate_widget(
+            self.widget_map[ekey] = render_property(
                 vmap.value_type,
                 default=vmap.to_ui(str_dict[ekey]),
             )
@@ -275,7 +353,7 @@ class ConfigTreeBase(TreeBase):
     def build(self) -> TreeBase:
         self.tree = self.init_tree()
         self.panel_dict = self.init_side_panels()
-        self.tree.observe(self.tree_update, names="selected_nodes")
+        self.tree.observe(self.tree_update, names="selected_nodes")  # type: ignore
         self.layout = iwidgets.TwoByTwoLayout(top_left=self.tree, bottom_right=None)
         return self
 
@@ -310,7 +388,7 @@ class SourceDataTreeView(ConfigTreeBase):
             root_node.add_node(db_node)
         self.tree = itree.Tree(multiple_selection=False)
         self.tree.add_node(root_node)
-        self.tree.layout.width = self.left_width
+        self.tree.layout.width = self.left_width  # type:ignore
         return self.tree
 
 
@@ -342,7 +420,7 @@ class D2MLocationsTreeView(ConfigTreeBase):
             root_node.add_node(loc_node)
         self.tree = itree.Tree(multiple_selection=False)
         self.tree.add_node(root_node)
-        self.tree.layout.width = self.left_width
+        self.tree.layout.width = self.left_width  # type: ignore
         return self.tree
 
 
@@ -378,7 +456,7 @@ class D2MConnectionsTreeView(ConfigTreeBase):
             root_node.add_node(self.init_conncection_node(conn_name, conn_desc))
         self.tree = itree.Tree(multiple_selection=False)
         self.tree.add_node(root_node)
-        self.tree.layout.width = self.left_width
+        self.tree.layout.width = self.left_width  # type: ignore
         return self.tree
 
 
@@ -505,13 +583,13 @@ class NetworkTreeView(TreeBase):
         root_node.add_node(data_file_node)
         self.tree = itree.Tree(multiple_selection=False)
         self.tree.add_node(root_node)
-        self.tree.layout.width = self.left_width
+        self.tree.layout.width = self.left_width  # type: ignore
         return self.tree
 
     def build(self) -> TreeBase:
         self.tree = self.init_tree()
         self.panel_dict = self.init_side_panels()
-        self.tree.observe(self.tree_update, names="selected_nodes")
+        self.tree.observe(self.tree_update, names="selected_nodes")  # type:ignore
         self.layout = iwidgets.TwoByTwoLayout(top_left=self.tree, bottom_right=None)
         return self
 

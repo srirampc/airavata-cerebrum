@@ -68,15 +68,15 @@ class DataLink(StructBase):
             "property_map": TraitDef(
                 value_type="textarea",
                 label="Property Map",
-                default="{}",
-                from_ui=lambda x: ast.literal_eval(x),
-                to_ui=lambda x: json.dumps(x, indent=4),
+                default={},
+                # from_ui=lambda x: ast.literal_eval(x),
+                # to_ui=lambda x: json.dumps(x, indent=4),
             ),
         }
 
     class DataTrait(StructBase.StructBaseTrait):
-        # property_map = traitlets.Dict()
-        property_map = traitlets.Unicode()
+        property_map = traitlets.Dict()
+        # property_map = traitlets.Unicode()
 
         def __init__(self, property_map={}, **kwargs):
             super().__init__(
@@ -108,11 +108,11 @@ class ComponentModel(StructBase):
                 default="",
             ),
             "property_map": TraitDef(
-                value_type="textarea",
+                value_type="dict",
                 label="Property Map",
-                default="{}",
-                from_ui=lambda x: ast.literal_eval(x),
-                to_ui=lambda x: json.dumps(x, indent=4),
+                default={},
+                # from_ui=lambda x: ast.literal_eval(x),
+                # to_ui=lambda x: json.dumps(x, indent=4),
             ),
         }
 
@@ -270,11 +270,11 @@ class Neuron(StructBase):
                 value_type="text", label="E/I", default="",
             ),
             "dims": TraitDef(
-                value_type="textarea",
-                label="Property Map",
-                default="{\n}",
-                from_ui=lambda x: ast.literal_eval(x),
-                to_ui=lambda x: json.dumps(x, indent=4),
+                value_type="dict",
+                label="Dimensions",
+                default={},
+                # from_ui=lambda x: ast.literal_eval(x),
+                # to_ui=lambda x: json.dumps(x, indent=4),
             ),
         }
 
@@ -282,12 +282,16 @@ class Neuron(StructBase):
         N = traitlets.Int()
         fraction = traitlets.Float(0.0)
         ei = traitlets.Unicode()
-        # dims = traitlets.Dict(key_trait=traitlets.Unicode())
-        dims = traitlets.Unicode()
+        dims = traitlets.Dict(key_trait=traitlets.Unicode())
+        # dims = traitlets.Unicode()
 
-        def __init__(self, dims={}, **kwargs):
+        def __init__(
+            self,
+            # dims={},
+            **kwargs
+        ):
             super().__init__(
-                dims=json.dumps(dims, indent=4),
+                # dims=json.dumps(kwargs["dims"], indent=4),
                 **kwargs,
             )
 
@@ -366,22 +370,23 @@ class Region(StructBase):
                 }
             ),
             "dims": TraitDef(
-                value_type="textarea",
+                value_type="dict",
                 label="Dimensions",
-                default="{\n}",
-                from_ui=lambda x: ast.literal_eval(x),
-                to_ui=lambda x: json.dumps(x, indent=4),
+                default={},
+                # from_ui=lambda x: ast.literal_eval(x),
+                # to_ui=lambda x: json.dumps(x, indent=4),
             ),
         }
 
     class DataTrait(StructBase.StructBaseTrait):
+        traitlets.Sentinel
         inh_fraction = traitlets.Float(0.0)
         region_fraction = traitlets.Float(0.0)
         ncells = traitlets.Int()
         inh_ncells = traitlets.Int()
         exc_ncells = traitlets.Int()
-        # dims = traitlets.Dict(key_trait=traitlets.Unicode())
-        dims = traitlets.Unicode()
+        dims = traitlets.Dict(key_trait=traitlets.Unicode())
+        # dims = traitlets.Unicode()
 
         def __init__(self, dims={}, **kwargs):
             super().__init__(
@@ -461,11 +466,11 @@ class ConnectionModel(StructBase):
             ),
             "delay": TraitDef(**{"value_type": "float", "label": "Delay", "default": 0.0}),
             "property_map": TraitDef(
-                value_type="textarea",
+                value_type="dict",
                 label="Property Map",
-                default="{\n}",
-                from_ui=lambda x: ast.literal_eval(x),
-                to_ui=lambda x: json.dumps(x, indent=4),
+                default={},
+                # from_ui=lambda x: ast.literal_eval(x),
+                # to_ui=lambda x: json.dumps(x, indent=4),
             ),
         }
 
@@ -474,12 +479,16 @@ class ConnectionModel(StructBase):
         source_model_id = traitlets.Unicode()
         weight_max = traitlets.Float(0.0)
         delay = traitlets.Float(0.0)
-        # property_map = traitlets.Dict(key_trait=traitlets.Unicode())
-        property_map = traitlets.Unicode()
+        property_map = traitlets.Dict(key_trait=traitlets.Unicode())
+        # property_map = traitlets.Unicode()
 
-        def __init__(self, property_map={}, **kwargs):
+        def __init__(
+            self,
+            # property_map={},
+            **kwargs
+        ):
             super().__init__(
-                property_map=json.dumps(property_map, indent=4),
+                # property_map=json.dumps(property_map, indent=4),
                 **kwargs,
             )
 
@@ -528,7 +537,9 @@ class Connection(StructBase):
                 default="",
             ),
             "probability": TraitDef(
-                **{"value_type": "float", "label": "Inh. Fraction", "default": 0.0}
+                value_type="float",
+                label="Inh. Fraction",
+                default=0.0,
             ),
             "pre": TraitDef(
                 value_type="textarea",
@@ -545,28 +556,34 @@ class Connection(StructBase):
                 to_ui=lambda x: repr(x),
             ),
             "property_map": TraitDef(
-                value_type="textarea",
+                value_type="dict",
                 label="Property Map",
-                default="{\n}",
-                from_ui=lambda x: ast.literal_eval(x),
-                to_ui=lambda x: json.dumps(x, indent=4),
+                default={},
+                # from_ui=lambda x: ast.literal_eval(x),
+                # to_ui=lambda x: json.dumps(x, indent=4),
             ),
         }
 
     class DataTrait(StructBase.StructBaseTrait):
         # pre = traitlets.Tuple(traitlets.Unicode(), traitlets.Unicode())
         # post = traitlets.Tuple(traitlets.Unicode(), traitlets.Unicode())
-        # property_map = traitlets.Dict(key_trait=traitlets.Unicode())
         pre = traitlets.Unicode()
         post = traitlets.Unicode()
         probability = traitlets.Float(0.0)
-        property_map = traitlets.Unicode()
+        property_map = traitlets.Dict(key_trait=traitlets.Unicode())
+        # property_map = traitlets.Unicode()
 
-        def __init__(self, pre=(), post=(), property_map={}, **kwargs):
+        def __init__(
+            self,
+            pre=(),
+            post=(),
+            # property_map={},
+            **kwargs
+        ):
             super().__init__(
                 pre=repr(pre),
                 post=repr(post),
-                property_map=json.dumps(property_map, indent=4),
+                # property_map=json.dumps(property_map, indent=4),
                 **kwargs,
             )
 
@@ -672,22 +689,26 @@ class Network(StructBase):
                 value_type="int", label="No. Cells", default=0,
             ),
             "dims": TraitDef(
-                value_type="textarea",
+                value_type="dict",
                 label="Dimensions",
-                default="{\n}",
-                from_ui=lambda x: ast.literal_eval(x),
-                to_ui=lambda x: json.dumps(x, indent=4),
+                default={},
+                # from_ui=lambda x: ast.literal_eval(x),
+                # to_ui=lambda x: json.dumps(x, indent=4),
             ),
         }
 
     class DataTrait(StructBase.StructBaseTrait):
         ncells = traitlets.Int(0)
-        # dims = traitlets.Dict(key_trait=traitlets.Unicode())
-        dims = traitlets.Unicode()
+        dims = traitlets.Dict(key_trait=traitlets.Unicode())
+        # dims = traitlets.Unicode()
 
-        def __init__(self, dims={}, **kwargs):
+        def __init__(
+            self,
+            # dims={},
+            **kwargs
+        ):
             super().__init__(
-                dims=json.dumps(dims, indent=4),
+                # dims=json.dumps(dims, indent=4),
                 **kwargs,
             )
 

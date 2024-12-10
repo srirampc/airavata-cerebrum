@@ -37,6 +37,13 @@ class RecipeKeys:
     #
     RECIPE_SECTIONS = [DB2MODEL_MAP, SRC_DATA]
 #
+# Lookup Keys in Configuration dictionary
+class RecipeLabels:
+    INIT_PARAMS = " Init Arguments : "
+    EXEC_PARAMS = " Exec Arguments : "
+    NA = " N/A "
+ 
+#
 # Class for structure of Recipes
 class RecipeSetup(pydantic.BaseModel):
     recipe_dir: str | pathlib.Path = pathlib.Path(".")

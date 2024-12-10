@@ -23,8 +23,9 @@ dependencies:
   - requests=2.31
   - scipy=1.9
   - sqlalchemy
-  - traitlets=5.1
+  - traitlets=5.14.3
   - tqdm=4.66
+  - openmpi-mpicc
 
   - pip:
       - anndata
