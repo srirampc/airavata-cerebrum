@@ -2657,19 +2657,19 @@
     "data_files": [
         {
             "name": "left_subnet",
-            "path": "./data/Map_642_To_10242_30-Aug-2017_LH.txt",
+            "path": "./data/Map_642_To_10242_30-Aug-2017_LH.txt"
         },
         {
             "name" : "right_subnet",
-            "path": "./data/Map_642_To_10242_30-Aug-2017_RH.txt",
+            "path": "./data/Map_642_To_10242_30-Aug-2017_RH.txt"
         },
         {
             "name": "left_right_map",
-            "path": "./data/Map_LH_RH_10242_30-Aug-2017.txt",
+            "path": "./data/Map_LH_RH_10242_30-Aug-2017.txt"
         },
         {
             "name": "left_right_map_small",
-            "path": "./data/Map_LH_RH_642_30-Aug-2017.txt",
+            "path": "./data/Map_LH_RH_642_30-Aug-2017.txt"
         },
         {
             "name": "dist3d_probability",

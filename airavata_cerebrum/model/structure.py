@@ -34,12 +34,19 @@ class StructBase(pydantic.BaseModel, abc.ABC):
         return {}
 
 class DataFile(StructBase):
-    path: pathlib.Path
+    # path: pathlib.Path
+    path: str 
 
     class TraitDefMapper:
         map: typing.Dict[str, TraitDef] = {
             "name": TraitDef(value_type="text", label="Key", default=""),
-            "path": TraitDef(value_type="text", label="File Path", default=""),
+            "path": TraitDef(
+                value_type="text", 
+                label="File Path",
+                default="",
+                # from_ui=pathlib.Path,
+                # to_ui=str,
+            ),
         }
 
     class DataTrait(StructBase.StructBaseTrait):
@@ -388,9 +395,13 @@ class Region(StructBase):
         dims = traitlets.Dict(key_trait=traitlets.Unicode())
         # dims = traitlets.Unicode()
 
-        def __init__(self, dims={}, **kwargs):
+        def __init__(
+            self,
+            # dims={},
+            **kwargs
+        ):
             super().__init__(
-                dims=json.dumps(dims, indent=4),
+                # dims=json.dumps(dims, indent=4),
                 **kwargs,
             )
 
@@ -465,6 +476,11 @@ class ConnectionModel(StructBase):
                 **{"value_type": "float", "label": "Max. Weight", "default": 0.0}
             ),
             "delay": TraitDef(**{"value_type": "float", "label": "Delay", "default": 0.0}),
+            "dynamics_params": TraitDef(
+                value_type="text",
+                label="Dynamics Params",
+                default="",
+            ),
             "property_map": TraitDef(
                 value_type="dict",
                 label="Property Map",
@@ -479,6 +495,7 @@ class ConnectionModel(StructBase):
         source_model_id = traitlets.Unicode()
         weight_max = traitlets.Float(0.0)
         delay = traitlets.Float(0.0)
+        dynamics_params = traitlets.Unicode()
         property_map = traitlets.Dict(key_trait=traitlets.Unicode())
         # property_map = traitlets.Unicode()
 

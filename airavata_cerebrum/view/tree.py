@@ -57,7 +57,7 @@ class ContainerLayout(iwidgets.GridspecLayout):
     def __init__(self, n_rows, n_columns, value, **kwargs):
         super().__init__( n_rows, n_columns, value=value, **kwargs)
         if n_columns == 2:
-            for ix, (kx, vx) in enumerate(self.value_items(value)):
+            for ix, (kx, vx) in enumerate(self.items(value)):
                 self[ix, 0] = iwidgets.Label(str(kx) + " :")
                 self[ix, 1] = self.entry_widget(kx, vx)
         else:
@@ -65,24 +65,24 @@ class ContainerLayout(iwidgets.GridspecLayout):
         # self.observe(self.change_value)  # type: ignore
 
     @abc.abstractmethod
-    def value_items(self, value) -> typing.Iterable:
+    def items(self, value) -> typing.Iterable:
         pass
 
     @abc.abstractmethod
     def entry_widget(self, kx, vx) -> iwidgets.Widget | None:
         pass
 
-    @abc.abstractmethod
     def update_value(self, node_key, new_value) -> None:
-        pass
+        self.value[node_key] = new_value
 
     def change_value(self, change):
         # print("L:", change)
         if change["name"] == "value" and change["old"] != change["new"]:
+            _log().info("CTR Change Value : " + change)
             node_key = change["owner"].node_key
             new_value = change["new"]
             self.update_value(node_key, new_value)
-
+    
 
 class PropertyListLayout(ContainerLayout):
     value = traitlets.List(help="List values").tag(sync=True)
@@ -90,7 +90,7 @@ class PropertyListLayout(ContainerLayout):
     def __init__(self, value: typing.List, **kwargs):
         super().__init__(len(value), 2, value=value, **kwargs)
        
-    def value_items(self, value):
+    def items(self, value):
         return enumerate(value)
 
     def entry_widget(self, kx, vx):
@@ -99,9 +99,6 @@ class PropertyListLayout(ContainerLayout):
         wdx.add_traits(node_key=traitlets.Integer(kx))  # type: ignore
         wdx.observe(self.change_value)  # type: ignore
         return wdx
-
-    def update_value(self, node_key: Integer, new_value) -> None:
-        self.value[node_key] = new_value
 
 
 class PropertyMapLayout(ContainerLayout):
@@ -114,18 +111,21 @@ class PropertyMapLayout(ContainerLayout):
         else:
             super().__init__(1, 1, value=value, **kwargs)
 
-    def value_items(self, value) -> typing.Iterable:
+    def items(self, value) -> typing.Iterable:
         return value.items()
 
     def init_widget(self, vx) -> iwidgets.CoreWidget | None:
         tname = type(vx).__name__
         match tname:
+            case "NoneType":
+                return scalar_widget("str", default="None")
             case "list":
                 return PropertyListLayout(vx)
             case _:
                 return scalar_widget(tname, default=vx)
 
     def entry_widget(self, kx, vx) -> iwidgets.CoreWidget | None:
+        # print("kx, vx: ", kx, vx)
         wdx = self.init_widget(vx)
         wdx.add_traits(node_key=traitlets.Unicode(kx))  # type: ignore
         wdx.observe(self.change_value)  # type: ignore
@@ -267,10 +267,9 @@ class TreeBase(abc.ABC):
         new_val = change["new"]
         if not len(new_val):
             return
-        _log().warning("Key : " + new_val[0].node_key)
         node_key = new_val[0].node_key
+        _log().warning("Key : " + node_key + str(node_key in self.panel_dict))
         if node_key in self.panel_dict:
-            _log().warning("Key in Panel ")
             side_panel = self.panel_dict[node_key]
             side_panel.update(new_val[0])
             self.layout.bottom_right = side_panel.layout
@@ -482,38 +481,51 @@ class NetworkTreeView(TreeBase):
         for _, cx_model in net_connect.connect_models.items():
             self.panel_dict[cx_model.name] = StructSidePanel(cx_model)
 
-    def init_ext_net_side_panels(self, ext_net: structure.ExtNetwork) -> None:
-        self.panel_dict[ext_net.name] = StructSidePanel(ext_net)
-        for _, net_region in ext_net.locations.items():
+    # def init_ext_net_side_panels(self, ext_net: structure.ExtNetwork) -> None:
+    #     self.panel_dict[ext_net.name] = StructSidePanel(ext_net)
+    #     for _, net_region in ext_net.locations.items():
+    #         self.init_region_side_panels(net_region)
+    #     for _, net_connect in ext_net.connections.items():
+    #         self.init_conn_side_panels(net_connect)
+
+    def init_graph_side_panels(self, gnet: structure.ExtNetwork | structure.Network) -> None:
+        self.panel_dict[gnet.name] = StructSidePanel(gnet)
+        #
+        for _, net_region in gnet.locations.items():
             self.init_region_side_panels(net_region)
-        for _, net_connect in ext_net.connections.items():
+        #
+        for _, net_connect in gnet.connections.items():
             self.init_conn_side_panels(net_connect)
 
-    def init_data_link_panel(self, data_link: structure.DataLink) -> None:
-        if data_link.name and data_link.property_map:
-            self.panel_dict[data_link.name] = StructSidePanel(data_link)
+    def init_ext_network_panels(self) -> None:
+        for _, ext_net in self.net_struct.ext_networks.items():
+            self.init_graph_side_panels(ext_net)
 
-    def init_data_file_panel(self, data_file: structure.DataFile) -> None:
-        self.panel_dict[data_file.name] = StructSidePanel(data_file)
+    def init_data_link_panels(self) -> None:
+        for data_lx in self.net_struct.data_connect:
+            if data_lx.name and data_lx.property_map:
+                self.panel_dict[data_lx.name] = StructSidePanel(data_lx)
+
+    def init_data_file_panels(self) -> None:
+        for data_fx in self.net_struct.data_files:
+            self.panel_dict[data_fx.name] = StructSidePanel(data_fx)
+
 
     def init_side_panels(self) -> typing.Dict[str, PanelBase]:
         _log().info(
-            "Start Left-side panel construction for [%s]", str(self.net_struct.name)
+            "Start Right-side panel construction for [%s]", str(self.net_struct.name)
         )
-        self.panel_dict[self.net_struct.name] = StructSidePanel(self.net_struct)
-        #
-        for _, net_region in self.net_struct.locations.items():
-            self.init_region_side_panels(net_region)
-        #
-        for _, net_connect in self.net_struct.connections.items():
-            self.init_conn_side_panels(net_connect)
-        #
-        for _, ext_net in self.net_struct.ext_networks.items():
-            self.init_ext_net_side_panels(ext_net)
-        for data_cx in self.net_struct.data_connect:
-            self.init_data_link_panel(data_cx)
-        for data_fx in self.net_struct.data_files:
-            self.init_data_file_panel(data_fx)
+        # self.panel_dict[self.net_struct.name] = StructSidePanel(self.net_struct)
+        # #
+        # for _, net_region in self.net_struct.locations.items():
+        #     self.init_region_side_panels(net_region)
+        # #
+        # for _, net_connect in self.net_struct.connections.items():
+        #     self.init_conn_side_panels(net_connect)
+        self.init_graph_side_panels(self.net_struct) 
+        self.init_ext_network_panels()
+        self.init_data_link_panels()
+        self.init_data_file_panels()
         _log().info("Completed Left-side panel construction")
         return self.panel_dict
 
@@ -554,7 +566,7 @@ class NetworkTreeView(TreeBase):
     def data_file_node(self, data_file: structure.DataFile) -> CBTreeNode | None:
         return TreeBase.struct_tree_node(data_file)
 
-    def init_tree(self) -> itree.Tree:
+    def init_tree_nodes(self) -> CBTreeNode:
         root_node = TreeBase.struct_tree_node(self.net_struct)
         location_node = CBTreeNode(node_key="net.locations", name="Regions")
         #
@@ -581,6 +593,10 @@ class NetworkTreeView(TreeBase):
         for data_fx in self.net_struct.data_files:
             data_link_node.add_node(self.data_file_node(data_fx))
         root_node.add_node(data_file_node)
+        return root_node
+
+    def init_tree(self) -> itree.Tree:
+        root_node = self.init_tree_nodes()
         self.tree = itree.Tree(multiple_selection=False)
         self.tree.add_node(root_node)
         self.tree.layout.width = self.left_width  # type: ignore
