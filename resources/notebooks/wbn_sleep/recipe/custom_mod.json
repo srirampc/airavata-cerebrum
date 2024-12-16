@@ -54,9 +54,9 @@
                 "CX": {
                     "name": "CX",
                     "ei": "e",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -64,9 +64,9 @@
                 "CX3": {
                     "name": "CX3",
                     "ei": "e",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -74,9 +74,9 @@
                 "CX4": {
                     "name": "CX4",
                     "ei": "e",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -84,9 +84,19 @@
                 "CX5a": {
                     "name": "CX5a",
                     "ei": "e",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
+                        "y": 1
+                    },
+                    "neuron_models": {}
+                },
+                "CX5b": {
+                    "name": "CX5b",
+                    "ei": "e",
+                    "N": 10242,
+                    "dims": {
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -94,9 +104,9 @@
                 "CX6": {
                     "name": "CX6",
                     "ei": "e",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -104,9 +114,9 @@
                 "IN": {
                     "name": "IN",
                     "ei": "i",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -114,9 +124,9 @@
                 "IN3": {
                     "name": "IN3",
                     "ei": "i",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -124,9 +134,9 @@
                 "IN4": {
                     "name": "IN4",
                     "ei": "i",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -134,9 +144,9 @@
                 "IN5a": {
                     "name": "IN5a",
                     "ei": "i",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -144,9 +154,9 @@
                 "IN5b": {
                     "name": "IN5b",
                     "ei": "i",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -154,9 +164,9 @@
                 "IN6": {
                     "name": "IN6",
                     "ei": "i",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -215,9 +225,9 @@
                 "rCX": {
                     "name": "rCX",
                     "ei": "e",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -225,9 +235,9 @@
                 "rCX3": {
                     "name": "rCX3",
                     "ei": "e",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -235,9 +245,9 @@
                 "rCX4": {
                     "name": "rCX4",
                     "ei": "e",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -245,9 +255,19 @@
                 "rCX5a": {
                     "name": "rCX5a",
                     "ei": "e",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
+                        "y": 1
+                    },
+                    "neuron_models": {}
+                },
+                "rCX5b": {
+                    "name": "rCX5b",
+                    "ei": "e",
+                    "N": 10242,
+                    "dims": {
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -255,9 +275,9 @@
                 "rCX6": {
                     "name": "rCX6",
                     "ei": "e",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -265,9 +285,9 @@
                 "rIN": {
                     "name": "rIN",
                     "ei": "i",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -275,9 +295,9 @@
                 "rIN3": {
                     "name": "rIN3",
                     "ei": "i",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -285,9 +305,9 @@
                 "rIN4": {
                     "name": "rIN4",
                     "ei": "i",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -295,9 +315,9 @@
                 "rIN5a": {
                     "name": "rIN5a",
                     "ei": "i",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -305,9 +325,9 @@
                 "rIN5b": {
                     "name": "rIN5b",
                     "ei": "i",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -315,9 +335,9 @@
                 "rIN6": {
                     "name": "rIN6",
                     "ei": "i",
-                    "N": 1042,
+                    "N": 10242,
                     "dims": {
-                        "x": 1042,
+                        "x": 10242,
                         "y": 1
                     },
                     "neuron_models": {}
@@ -2657,39 +2677,39 @@
     "data_files": [
         {
             "name": "left_subnet",
-            "path": "./data/Map_642_To_10242_30-Aug-2017_LH.txt"
+            "path": "./wbn_sleep/data/Map_642_To_10242_30-Aug-2017_LH.txt"
         },
         {
             "name" : "right_subnet",
-            "path": "./data/Map_642_To_10242_30-Aug-2017_RH.txt"
+            "path": "./wbn_sleep/data/Map_642_To_10242_30-Aug-2017_RH.txt"
         },
         {
             "name": "left_right_map",
-            "path": "./data/Map_LH_RH_10242_30-Aug-2017.txt"
+            "path": "./wbn_sleep/data/Map_LH_RH_10242_30-Aug-2017.txt"
         },
         {
             "name": "left_right_map_small",
-            "path": "./data/Map_LH_RH_642_30-Aug-2017.txt"
+            "path": "./wbn_sleep/data/Map_LH_RH_642_30-Aug-2017.txt"
         },
         {
             "name": "dist3d_probability",
-            "path": "./data/dist_inMeters_prob_LH_onesOnDiag.txt"
+            "path": "./wbn_sleep/data/dist_inMeters_prob_LH_onesOnDiag.txt"
         },
         {
             "name": "weight_factor",
-            "path": "./data/weights_LH.txt"
+            "path": "./wbn_sleep/data/weights_LH.txt"
         },
         {
             "name": "weight_factor_inpy",
-            "path": "./data/weights_INPY_both_hemi.txt"
+            "path": "./wbn_sleep/data/weights_INPY_both_hemi.txt"
         },
         {
             "name": "thalamus_cortex_distance",
-            "path": "./data/thalCort_dist_inMeters_LH.txt"
+            "path": "./wbn_sleep/data/thalCort_dist_inMeters_LH.txt"
         },
         {
             "name": "intra_thalamus_distance",
-            "path": "./data/dist_TC_LH_zeroDiag.txt"
+            "path": "./wbn_sleep/data/dist_TC_LH_zeroDiag.txt"
         }
     ]
 }

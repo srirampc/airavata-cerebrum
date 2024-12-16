@@ -6,6 +6,7 @@ import typing
 import jsonpath
 import numpy as np
 import scipy
+import scipy.stats
 import pandas as pd
 import bmtk.builder
 import bmtk.builder.node_pool
@@ -640,3 +641,8 @@ class V1BMTKNetworkBuilder:
         self.add_bkg_nodes()
         self.add_bkg_edges()
         return self.net
+
+    def save(self, network_dir):
+        self.net.save(str(network_dir))
+        self.bkg_net.save(str(network_dir))
+

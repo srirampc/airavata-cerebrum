@@ -119,12 +119,12 @@ class ModelRecipe(pydantic.BaseModel):
             )
         return self.network_struct
 
-    def build_bmtk(self):
+    def build_network(self, save_flag=True):
         # Construct model
         net_builder = self.network_builder(self.network_struct)
-        bmtk_net = net_builder.build()
-        bmtk_net.save(str(self.recipe_setup.network_dir))
-        net_builder.bkg_net.save(str(self.recipe_setup.network_dir))
+        net_builder.build()
+        if save_flag:
+            net_builder.save()
         return net_builder
 
 def netstruct_from_file(struct_file: pathlib.Path) -> structure.Network | None:

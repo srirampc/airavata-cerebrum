@@ -372,7 +372,7 @@ class SourceDataTreeView(ConfigTreeBase):
         self.src_data_desc = mdr_setup.recipe_sections[RecipeKeys.SRC_DATA]
 
     def init_tree(self) -> itree.Tree:
-        root_node = CBTreeNode(name=CfgTreeNames.SRC_DATA, node_key="root")
+        root_node = CBTreeNode(name=CfgTreeNames.SRC_DATA, node_key="source_data")
         for db_key, db_desc in self.src_data_desc.items():
             db_node = self.init_db_node(
                 db_key,

@@ -2,11 +2,11 @@ import logging
 import pathlib
 import typing
 import pydantic
-import matplotlib
 import mousev1.model as v1model
 import mousev1.operations as v1ops
 from airavata_cerebrum.model.setup import RecipeSetup
 from airavata_cerebrum.model.recipe import ModelRecipe
+from airavata_cerebrum.model.recipe import netstruct_from_file
 
 logging.basicConfig(level=logging.INFO)
 
@@ -30,21 +30,22 @@ def model_desc(cfg_set: RcpSettings):
         config_dir=cfg_set.recipe_dir,
         create_model_dir=True,
     )
+    custom_mod_struct = netstruct_from_file(cfg_set.custom_mod) 
     return ModelRecipe(
         recipe_setup=md_recipe_setup,
         region_mapper=v1model.V1RegionMapper,
         neuron_mapper=v1model.V1NeuronMapper,
         connection_mapper=v1model.V1ConnectionMapper,
         network_builder=v1model.V1BMTKNetworkBuilder,
-        custom_mod=cfg_set.custom_mod,
+        mod_structure=custom_mod_struct,
         save_flag=cfg_set.save_flag,
     )
 
 def struct_bmtk(cfg_set: RcpSettings):
     md_dex = model_desc(cfg_set)
     md_dex.build_net_struct()
-    md_dex.apply_custom_mod()
-    md_dex.build_bmtk()
+    md_dex.apply_mod()
+    md_dex.build_network()
 
 def build_bmtk(cfg_set: RcpSettings):
     md_dex = model_desc(cfg_set)
@@ -52,8 +53,8 @@ def build_bmtk(cfg_set: RcpSettings):
     md_dex.db_post_ops()
     md_dex.map_source_data()
     md_dex.build_net_struct()
-    md_dex.apply_custom_mod()
-    md_dex.build_bmtk()
+    md_dex.apply_mod()
+    md_dex.build_network()
 
 def convert_models_to_nest(cfg_set: RcpSettings):
     v1ops.convert_ctdb_models_to_nest(cfg_set.ctdb_models_dir,
