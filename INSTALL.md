@@ -48,3 +48,14 @@ the versions
   C/C++ modules of mpi4py (compiled using mpicc).
 - To avoid this, it is recommend to install the MPI libraries on the system first
   before creating the conda environment and installing the python libraries.
+
+### Miniforge `conda` Issue when installed with `spack`
+
+If installing conda with miniforge, in some cases the following error appears:
+`ModuleNotFoundError: No module named 'conda'`
+
+This happens when the conda script (`$CONDA_EXE`)  has in its first line 
+`#!/usr/bin/env python`, which picks up the python from the `cerebrum` environment
+which is currently being installed instead of the base environment. To fix this,
+replace the `/usr/bin/env python` with the python installed in the base 
+environment (generally corresponds of the environment variable `$CONDA_PYTHON_EXE`).
