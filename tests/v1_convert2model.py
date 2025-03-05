@@ -1,12 +1,12 @@
-import ast
 import json
 import collections
 import parse
+import typing as t
 import pandas as pd
 from airavata_cerebrum.model.structure import Connection, ConnectionModel
 
 
-def make_connect_model(in_dcx):
+def make_connect_model(in_dcx: dict[str, t.Any]):
     mdict = {}
     src_result = parse.parse("{}{:d}{}", in_dcx["source_label"])
     tgt_result = parse.parse("{}{:d}{}", in_dcx["target_label"])
@@ -38,7 +38,11 @@ def make_connect_model(in_dcx):
         return (None, None)
 
 
-def make_connect(conn_str, conn_dct, model_lookup):
+def make_connect(
+    conn_str: str,
+    conn_dct: dict[str, t.Any],
+    model_lookup : dict[str, t.Any]
+):
     presult = parse.parse("{}{:d}{}-{}{:d}{}", conn_str)
     if type(presult) is parse.Result:
         cdict = {}
@@ -58,13 +62,18 @@ def make_connect(conn_str, conn_dct, model_lookup):
         return (None, None)
 
 
-def conn_dict(json_file, model_lookup):
+def conn_dict(
+    json_file : str,
+    model_lookup : dict[str, t.Any]
+):
     with open(json_file) as ifx:
         jconn_dict = json.load(ifx)
-    return dict(make_connect(kv, rx, model_lookup) for kv, rx in jconn_dict.items())
+    return dict(
+        make_connect(kv, rx, model_lookup) for kv, rx in jconn_dict.items()
+    )
 
 
-def conn_model_dict(json_file):
+def conn_model_dict(json_file: str) -> dict[str, t.Any]:
     with open(json_file) as ifx:
         jconn_lst = json.load(ifx)
     cmdl_dict = collections.defaultdict(list)
@@ -75,20 +84,14 @@ def conn_model_dict(json_file):
     return cmdl_dict
 
 
-def build_connections(conn_file, model_file):
+def build_connections(conn_file: str, model_file: str):
     mdxx_dict = conn_model_dict(model_file)
     return conn_dict(conn_file, mdxx_dict)
 
 
-def v1_main():
-    connex = build_connections(
-        "./v1/v1_conn_props_April2.json", "./v1/v1_edge_models_April2.json"
-    )
-    with open("./v1/v1_custom_full.json", "w") as ofx:
-        json.dump(connex, ofx)
-
-
-def bkg_conn_model(m_entry):
+def bkg_conn_model(
+    m_entry: dict[str, t.Any]
+)-> tuple[tuple[str, str], dict[str, t.Any]]:
     _, lx, neuronx = parse.parse("{}{:d}{}", m_entry["population"])  # type:ignore
     rkeyx = (str(lx), neuronx)
     stgt_mid = str(m_entry["target_model_id"])
@@ -107,8 +110,9 @@ def bkg_conn_model(m_entry):
 
 
 def bkg_connections(
-    bkg_weights_file="./bkg_weights_model_l4.csv", out_file="./bkg_conn_net_l4.json"
-):
+    bkg_weights_file: str,
+    out_file: str,
+) -> dict[str, t.Any]:
     wdf = pd.read_csv(bkg_weights_file, sep=" ")
     bkg_mdl_lst = wdf.to_dict(orient="records")
     bkg_mx_lst = [bkg_conn_model(x) for x in bkg_mdl_lst]
@@ -130,7 +134,9 @@ def bkg_connections(
     return conn_dict
 
 
-def lgn_conn_model(m_entry):
+def lgn_conn_model(
+    m_entry: dict[str, t.Any]
+)-> tuple[tuple[str, str], dict[str, t.Any]]:
     _, lx, neuronx = parse.parse("{}{:d}{}", m_entry["population"])  # type:ignore
     rkeyx = (str(lx), neuronx)
     stgt_mid = str(m_entry["target_model_id"])
@@ -147,8 +153,9 @@ def lgn_conn_model(m_entry):
 
 
 def lgn_connections(
-    lgn_weights_file="./lgn_weights_model_l4.csv", out_file="./lgn_conn_net_l4.json"
-):
+    lgn_weights_file: str,
+    out_file: str
+) -> dict[str, t.Any]:
     wdf = pd.read_csv(lgn_weights_file, sep=" ")
     lgn_mdl_lst = wdf.to_dict(orient="records")
     lgn_mx_lst = [lgn_conn_model(x) for x in lgn_mdl_lst]
@@ -168,6 +175,25 @@ def lgn_connections(
     with open(out_file, "w") as ofx:
         json.dump(conn_dict, ofx, indent=4)
     return conn_dict
+
+
+def v1_main():
+    connex = build_connections(
+        "./v1/v1_conn_props_April2.json", "./v1/v1_edge_models_April2.json"
+    )
+    with open("./v1/v1_custom_full.json", "w") as ofx:
+        json.dump(connex, ofx)
+
+
+def prep_l4():
+    lgn_connections(
+        "./lgn_weights_model_l4.csv",
+        "./lgn_conn_net_l4.json"
+    )
+    bkg_connections(
+        "./bkg_weights_model_l4.csv",
+        "./bkg_conn_net_l4.json"
+    )
 
 
 def main():
