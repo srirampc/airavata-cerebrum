@@ -1,7 +1,7 @@
 import logging
-import pathlib
 import typing
 import pydantic
+from pathlib import Path
 import mousev1.model as v1model
 import mousev1.operations as v1ops
 from airavata_cerebrum.model.setup import RecipeSetup
@@ -13,21 +13,24 @@ logging.basicConfig(level=logging.INFO)
 
 class RcpSettings(pydantic.BaseModel):
     name: str = "v1l4"
-    base_dir: pathlib.Path = pathlib.Path("./")
-    recipe_dir: pathlib.Path = pathlib.Path("./v1l4/recipe/")
-    recipe_files: typing.Dict[str, typing.List[str | pathlib.Path]] = {"recipe": ["config.json"]}
-    custom_mod: pathlib.Path = pathlib.Path("./v1l4/recipe/custom_mod.json")
-    ctdb_models_dir: pathlib.Path = pathlib.Path("./v1l4/components/point_neuron_models/")
-    nest_models_dir: pathlib.Path = pathlib.Path("./v1l4/components/cell_models/")
+    base_dir: Path = Path("./")
+    recipe_dir: Path = Path("./v1l4/recipe/")
+    recipe_files: typing.Dict[str, typing.List[str | Path]] = {
+        "recipe": ["recipe.json"],
+        "templates": ["recipe_template.json"]
+    }
+    custom_mod: Path = Path("./v1l4/recipe/custom_mod.json")
+    ctdb_models_dir: Path = Path("./v1l4/components/point_neuron_models/")
+    nest_models_dir: Path = Path("./v1l4/components/cell_models/")
     save_flag: bool = False
 
 
-def model_desc(cfg_set: RcpSettings):
+def model_recipe(cfg_set: RcpSettings):
     md_recipe_setup = RecipeSetup(
         name=cfg_set.name,
         base_dir=cfg_set.base_dir,
-        config_files=cfg_set.recipe_files,
-        config_dir=cfg_set.recipe_dir,
+        recipe_files=cfg_set.recipe_files,
+        recipe_dir=cfg_set.recipe_dir,
         create_model_dir=True,
     )
     custom_mod_struct = netstruct_from_file(cfg_set.custom_mod) 
@@ -42,13 +45,13 @@ def model_desc(cfg_set: RcpSettings):
     )
 
 def struct_bmtk(cfg_set: RcpSettings):
-    md_dex = model_desc(cfg_set)
+    md_dex = model_recipe(cfg_set)
     md_dex.build_net_struct()
     md_dex.apply_mod()
     md_dex.build_network()
 
 def build_bmtk(cfg_set: RcpSettings):
-    md_dex = model_desc(cfg_set)
+    md_dex = model_recipe(cfg_set)
     md_dex.download_db_data()
     md_dex.db_post_ops()
     md_dex.map_source_data()
