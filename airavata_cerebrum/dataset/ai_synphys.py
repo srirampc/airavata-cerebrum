@@ -1,21 +1,24 @@
-import collections
 import logging
-import typing
+import typing as t
 import traitlets
 import aisynphys
 #
+from typing_extensions import override
 from aisynphys.database import SynphysDatabase
+from aisynphys.database.schema.experiment import PairBase
 from aisynphys.cell_class import CellClass, classify_cells, classify_pairs
 from aisynphys.connectivity import measure_connectivity
 #
-from .. import base
+from ..base import DbQuery, OpXFormer, QryItr
 
 
-class CellClassSelection(
-    collections.namedtuple("CellClassSelection", ["layer", "neuron", "criteria"])
-):
+class CellClassSelection(t.NamedTuple):
+    layer: str
+    neuron: str
+    criteria: dict[str, str | tuple[str, str]]
+
     @property
-    def name(self):
+    def name(self) -> str:
         return self.layer + "-" + self.neuron
 
 
@@ -61,12 +64,13 @@ def _log():
     return logging.getLogger(__name__)
 
 
-class AISynPhysQuery(base.DbQuery):
+class AISynPhysQuery(DbQuery):
+    @t.final
     class QryTraits(traitlets.HasTraits):
         download_base = traitlets.Unicode()
         layer = traitlets.List()
 
-    def __init__(self, **params):
+    def __init__(self, **params: t.Any):
         """
         Initialize AI SynphysDatabase
         Parameters
@@ -77,20 +81,20 @@ class AISynPhysQuery(base.DbQuery):
            Run the database
 
         """
-        self.name = __name__ + ".ABCDbMERFISHQuery"
-        self.download_base = params["download_base"]
+        self.name : str = __name__ + ".ABCDbMERFISHQuery"
+        self.download_base : str = params["download_base"]
         aisynphys.config.cache_path = self.download_base
-        self.sdb = SynphysDatabase.load_current("small")
-        self.projects = self.sdb.mouse_projects
+        self.sdb : SynphysDatabase = SynphysDatabase.load_current("small")
+        self.projects : list[str] = self.sdb.mouse_projects
         if "projects" in params and params["projects"]:
             self.projects = params["projects"]
-        self.qpairs = self.sdb.pair_query(project_name=self.projects).all()
+        self.qpairs : list[PairBase] = self.sdb.pair_query(project_name=self.projects).all()
 
     def select_cell_classes(
         self,
-        layer_list: typing.List[str] | None,
-        neuron_list: typing.List[str] | None = None
-    ) -> typing.Dict[str, CellClass]:
+        layer_list: list[str] | None,
+        neuron_list: list[str] | None = None
+    ) -> dict[str, CellClass]:
         layer_set = CELL_LAYER_SET
         if layer_list:
             layer_set = set(layer_list)
@@ -103,11 +107,12 @@ class AISynPhysQuery(base.DbQuery):
             if (cselect.layer in layer_set) and (cselect.neuron in neuron_set)
         }
 
+    @override
     def run(
         self,
-        in_iter: typing.Iterable | None,
-        **params: typing.Any,
-    ) -> typing.Iterable | None:
+        in_iter: QryItr | None,
+        **params: t.Any,
+    ) -> QryItr | None:
         """
         Get the connectivity probabilities for given layter
 
@@ -125,7 +130,7 @@ class AISynPhysQuery(base.DbQuery):
         """
         #
         default_args = {}
-        rarg = {**default_args, **params} if params is not None else default_args
+        rarg = {**default_args, **params} if params else default_args
         _log().info("AISynPhysQuery Args : %s", rarg)
         layer_list = rarg["layer"]
         cell_classes = self.select_cell_classes(layer_list)
@@ -154,6 +159,7 @@ class AISynPhysQuery(base.DbQuery):
             }
         ]
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.QryTraits
@@ -162,11 +168,11 @@ class AISynPhysQuery(base.DbQuery):
 #
 # ------- Query and Xform Registers -----
 #
-def query_register() -> typing.List[type[base.DbQuery]]:
+def query_register() -> list[type[DbQuery]]:
     return [
         AISynPhysQuery,
     ]
 
 
-def xform_register() -> typing.List[type[base.OpXFormer]]:
+def xform_register() -> list[type[OpXFormer]]:
     return []

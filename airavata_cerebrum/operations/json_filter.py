@@ -1,36 +1,39 @@
 import logging
-import typing
+import typing as t
+from typing_extensions import override
 import jsonpath
 import traitlets
 #
-from .. import base
+from ..base import OpXFormer, XformElt, XformItr, XformSeq
 
 
 def _log():
     return logging.getLogger(__name__)
 
 
-class JPointerFilter(base.OpXFormer):
+class JPointerFilter(OpXFormer):
+    @t.final
     class FilterTraits(traitlets.HasTraits):
         paths = traitlets.List()
         keys = traitlets.List()
 
-    def __init__(self, **params):
-        self.name = __name__ + ".JPointerFilter"
-        self.patch_out = None
+    def __init__(self, **params: t.Any):
+        self.name : str = __name__ + ".JPointerFilter"
+        self.patch_out : str | None = None
 
-    def resolve(self, fpath, dctx):
+    def resolve(self, fpath: str, dctx: XformSeq | None):
         jptr = jsonpath.JSONPointer(fpath)
-        if jptr.exists(dctx):
+        if dctx and jptr.exists(dctx):
             return jptr.resolve(dctx)
         else:
             return None
 
+    @override
     def xform(
         self,
-        in_iter: typing.Iterable | None,
-        **params: typing.Any,
-    ) -> typing.Iterable | None:
+        in_iter: XformItr | None,
+        **params: t.Any,
+    ) -> XformItr | None:
         """
         Filter the output only if the destination path is present in dctx.
 
@@ -52,24 +55,29 @@ class JPointerFilter(base.OpXFormer):
         fp_lst = params["paths"]
         key_lst = params["keys"]
         return [
-            {key: self.resolve(fpath, in_iter) for fpath, key in zip(fp_lst, key_lst)}
+            {key: self.resolve(
+                fpath,
+                in_iter  # pyright: ignore[reportArgumentType]
+            ) for fpath, key in zip(fp_lst, key_lst)}
         ]
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
 
 
-class IterJPatchFilter(base.OpXFormer):
+class IterJPatchFilter(OpXFormer):
+    @t.final
     class FilterTraits(traitlets.HasTraits):
         filter_exp = traitlets.Bytes()
         dest_path = traitlets.Bytes()
 
-    def __init__(self, **init_params):
-        self.name = __name__ + ".IterJPatchFilter"
-        self.patch_out = None
+    def __init__(self, **init_params: t.Any):
+        self.name : str = __name__ + ".IterJPatchFilter"
+        self.patch_out : str | None = None
 
-    def patch(self, ctx, filter_exp, dest_path):
+    def patch(self, ctx: XformElt, filter_exp: str, dest_path: str):
         fx = jsonpath.findall(filter_exp, ctx)
         try:
             if jsonpath.JSONPointer(dest_path).exists(ctx):
@@ -88,11 +96,12 @@ class IterJPatchFilter(base.OpXFormer):
             )
             return None
 
+    @override
     def xform(
         self,
-        in_iter: typing.Iterable | None,
-        **params: typing.Any,
-    ) -> typing.Iterable | None:
+        in_iter: XformItr | None,
+        **params: t.Any,
+    ) -> XformItr | None:
         """
         Select the output matching the filter expression and place in
         the destination.
@@ -118,29 +127,32 @@ class IterJPatchFilter(base.OpXFormer):
             iter(self.patch(x, filter_exp, dest_path) for x in in_iter if x)
             if in_iter
             else None
-        )
+        ) # pyright: ignore[reportReturnType]
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
 
 
-class IterJPointerFilter(base.OpXFormer):
+class IterJPointerFilter(OpXFormer):
+    @t.final
     class FilterTraits(traitlets.HasTraits):
         path = traitlets.Unicode()
 
-    def __init__(self, **params):
-        self.name = __name__ + ".IterJPointerFilter"
-        self.patch_out = None
+    def __init__(self, **params: t.Any):
+        self.name : str = __name__ + ".IterJPointerFilter"
+        self.patch_out : str | None = None
 
-    def exists(self, ctx, fpath):
+    def exists(self, ctx: XformElt, fpath: str):
         return jsonpath.JSONPointer(fpath).exists(ctx)
 
+    @override
     def xform(
         self,
-        in_iter: typing.Iterable | None,
-        **params: typing.Any,
-    ) -> typing.Iterable | None:
+        in_iter: XformItr | None,
+        **params: t.Any,
+    ) -> XformItr | None:
         """
         Filter the output only if the destination path is present.
 
@@ -163,6 +175,7 @@ class IterJPointerFilter(base.OpXFormer):
             iter(x for x in in_iter if x and self.exists(x, fpath)) if in_iter else None
         )
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
@@ -170,7 +183,7 @@ class IterJPointerFilter(base.OpXFormer):
 #
 # ----- Mapper, Filter and Query Registers ------
 #
-def query_register():
+def query_register() -> list[type]:
     return []
 
 

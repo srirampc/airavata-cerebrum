@@ -2,22 +2,22 @@ import ast
 import json
 import pydantic
 import traitlets
-import typing
-import pathlib
 import abc
+import typing as t
+from typing_extensions import override
 
 
 class TraitDef(pydantic.BaseModel):
-    value_type: str
+    value_type: t.Literal["text", "textarea", "int", "float", "dict"]
     label: str
-    default: typing.Any
-    from_ui: typing.Callable = lambda x: x
-    to_ui: typing.Callable = lambda x: x
+    default: t.Any
+    from_ui: t.Callable[[str], t.Any] = lambda x: x
+    to_ui: t.Callable[[t.Any], str] = lambda x: str(x)
 
-
-class StructBase(pydantic.BaseModel, abc.ABC):
+class StructBase(pydantic.BaseModel, metaclass=abc.ABCMeta):
     name: str = ""
 
+    @t.final
     class StructBaseTrait(traitlets.HasTraits):
         name = traitlets.Unicode()
 
@@ -26,11 +26,11 @@ class StructBase(pydantic.BaseModel, abc.ABC):
         return cls.StructBaseTrait
 
     @abc.abstractmethod
-    def exclude(self) -> typing.Set[str]:
+    def exclude(self) -> set[str]:
         return set([])
 
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+    def trait_ui(cls) -> dict[str, TraitDef]:
         return {}
 
 class DataFile(StructBase):
@@ -38,7 +38,7 @@ class DataFile(StructBase):
     path: str 
 
     class TraitDefMapper:
-        map: typing.Dict[str, TraitDef] = {
+        map: dict[str, TraitDef] = {
             "name": TraitDef(value_type="text", label="Key", default=""),
             "path": TraitDef(
                 value_type="text", 
@@ -49,17 +49,21 @@ class DataFile(StructBase):
             ),
         }
 
+    @t.final
     class DataTrait(StructBase.StructBaseTrait):
         # property_map = traitlets.Dict()
-        path = traitlets.Unicode()
+        path  = traitlets.Unicode()
 
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set([])
 
+    @override
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+    def trait_ui(cls) -> dict[str, TraitDef]:
         return cls.TraitDefMapper.map
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
@@ -67,10 +71,10 @@ class DataFile(StructBase):
 
 
 class DataLink(StructBase):
-    property_map: typing.Dict = {}
+    property_map: dict[str, t.Any] = {}
 
     class TraitDefMapper:
-        map: typing.Dict[str, TraitDef] = {
+        map: dict[str, TraitDef] = {
             "name": TraitDef(value_type="text", label="Name", default=""),
             "property_map": TraitDef(
                 value_type="textarea",
@@ -81,34 +85,41 @@ class DataLink(StructBase):
             ),
         }
 
+    @t.final
     class DataTrait(StructBase.StructBaseTrait):
         property_map = traitlets.Dict()
         # property_map = traitlets.Unicode()
 
-        def __init__(self, property_map={}, **kwargs):
+        def __init__(
+            self,
+            property_map: dict[str, t.Any]={}, #pyright:ignore[reportCallInDefaultInitializer]
+            **kwargs: t.Any
+        ):
             super().__init__(
                 property_map=json.dumps(property_map, indent=4),
                 **kwargs,
             )
 
-
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set([])
 
+    @override
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+    def trait_ui(cls) -> dict[str, TraitDef]:
         return cls.TraitDefMapper.map
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
 
 
 class ComponentModel(StructBase):
-    property_map: typing.Dict = {}
+    property_map: dict[str, t.Any] = {}
 
     class TraitDefMapper:
-        map: typing.Dict[str, TraitDef] = {
+        map: dict[str, TraitDef] = {
             "name": TraitDef(
                 value_type="text",
                 label="Name",
@@ -123,23 +134,31 @@ class ComponentModel(StructBase):
             ),
         }
 
+    @t.final
     class DataTrait(StructBase.StructBaseTrait):
         # property_map = traitlets.Dict()
         property_map = traitlets.Unicode()
 
-        def __init__(self, property_map={}, **kwargs):
+        def __init__(
+            self,
+            property_map: dict[str, t.Any]={}, #pyright:ignore[reportCallInDefaultInitializer]
+            **kwargs : t.Any
+        ):
             super().__init__(
                 property_map=json.dumps(property_map, indent=4),
                 **kwargs,
             )
 
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set([])
 
+    @override
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+    def trait_ui(cls) -> dict[str, TraitDef]:
         return cls.TraitDefMapper.map
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
@@ -154,11 +173,11 @@ class NeuronModel(StructBase):
     template: str = ""
     dynamics_params: str = ""
     morphology: str = ""
-    property_map: typing.Dict = {}
-    data_connect: typing.List[DataLink] = [] 
+    property_map: dict[str, t.Any] = {}
+    data_connect: list[DataLink] = [] 
 
     class TraitDefMapper:
-        map: typing.Dict[str, TraitDef] = {
+        map: dict[str, TraitDef] = {
             "N": TraitDef(
                 value_type="int",
                 label="N",
@@ -208,6 +227,7 @@ class NeuronModel(StructBase):
             ),
         }
 
+    @t.final
     class DataTrait(StructBase.StructBaseTrait):
         N = traitlets.Int()
         id = traitlets.Unicode()
@@ -219,28 +239,34 @@ class NeuronModel(StructBase):
         property_map = traitlets.Unicode()
         morphology = traitlets.Unicode()
 
-        def __init__(self, property_map={}, **kwargs):
+        def __init__(
+            self,
+            property_map: dict[str, t.Any]={}, #pyright:ignore[reportCallInDefaultInitializer]
+            **kwargs : t.Any
+        ):
             super().__init__(
                 property_map=json.dumps(property_map, indent=4),
                 **kwargs,
             )
 
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set(["data_connect"])
 
+    @override
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+    def trait_ui(cls) -> dict[str, TraitDef]:
         return cls.TraitDefMapper.map
 
     def apply_mod(self, mod_model: "NeuronModel") -> "NeuronModel":
-        if mod_model.name is not None:
+        if mod_model.name:
             self.name = mod_model.name
         # Model Parameters
-        if mod_model.m_type is not None:
+        if mod_model.m_type:
             self.m_type = mod_model.m_type
-        if mod_model.template is not None:
+        if mod_model.template:
             self.template = mod_model.template
-        if mod_model.dynamics_params is not None:
+        if mod_model.dynamics_params:
             self.dynamics_params = mod_model.dynamics_params
         # Model Property Map
         for pkey, pvalue in mod_model.property_map.items():
@@ -250,6 +276,7 @@ class NeuronModel(StructBase):
                 self.property_map[pkey] = pvalue
         return self
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
@@ -258,20 +285,22 @@ class NeuronModel(StructBase):
 class Neuron(StructBase):
     N: int = 0
     fraction: float = 0.0
-    ei: typing.Literal["e", "i"]  # Either e or i
-    dims: typing.Dict[str, typing.Any] = {}
-    neuron_models: typing.Dict[str, NeuronModel] = {}
+    ei: t.Literal["e", "i"]  # Either e or i
+    dims: dict[str, t.Any] = {}
+    neuron_models: dict[str, NeuronModel] = {}
 
     class TraitDefMapper:
-        map: typing.Dict[str, TraitDef] = {
+        map: dict[str, TraitDef] = {
             "name": TraitDef(
                     value_type="text",
                     label="Name",
                     default= "",
             ),
-            "N": TraitDef(**{"value_type": "int", "label": "N", "default": 0}),
+            "N": TraitDef(value_type="int", label="N", default=0),
             "fraction": TraitDef(
-                **{"value_type": "float", "label": "Proportion", "default": 0.0}
+                value_type="float",
+                label="Proportion",
+                default=0.0
             ),
             "ei": TraitDef(
                 value_type="text", label="E/I", default="",
@@ -285,6 +314,7 @@ class Neuron(StructBase):
             ),
         }
 
+    @t.final
     class DataTrait(StructBase.StructBaseTrait):
         N = traitlets.Int()
         fraction = traitlets.Float(0.0)
@@ -295,20 +325,23 @@ class Neuron(StructBase):
         def __init__(
             self,
             # dims={},
-            **kwargs
+            **kwargs: t.Any
         ):
             super().__init__(
                 # dims=json.dumps(kwargs["dims"], indent=4),
                 **kwargs,
             )
 
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set(["neuron_models"])
 
+    @override
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+    def trait_ui(cls) -> dict[str, TraitDef]:
         return cls.TraitDefMapper.map
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
@@ -318,7 +351,7 @@ class Neuron(StructBase):
         if mod_neuron.fraction > 0:
             self.fraction = mod_neuron.fraction
         if mod_neuron.N > 0:
-            self.N = mod_neuron.N
+            self.N = mod_neuron.N # pyright: ignore[reportConstantRedefinition]
         # Neuron dimensions
         for dim_key, dim_value in mod_neuron.dims.items():
             if dim_key not in self.dims:
@@ -333,7 +366,7 @@ class Neuron(StructBase):
                 self.neuron_models[mx_name].apply_mod(neuron_mx)
         return self
 
-    def exclude_set(self) -> typing.Set[str]:
+    def exclude_set(self) -> set[str]:
         return set(["neuron_models"])
 
 
@@ -343,38 +376,40 @@ class Region(StructBase):
     ncells: int = 0
     inh_ncells: int = 0
     exc_ncells: int = 0
-    dims: typing.Dict[str, typing.Any] = {}
-    neurons: typing.Dict[str, Neuron] = {}
+    dims: dict[str, t.Any] = {}
+    neurons: dict[str, Neuron] = {}
 
     class TraitDefMapper:
-        map: typing.Dict[str, TraitDef] = {
+        map: dict[str, TraitDef] = {
             "name": TraitDef(
                 value_type="text",
                 label="Name",
                 default="",
             ),
             "ncells": TraitDef(
-                **{
-                    "value_type": "int",
-                    "label": "No. Cells",
-                    "default": 0,
-                }
+                value_type="int",
+                label= "No. Cells",
+                default=0,
             ),
             "inh_ncells": TraitDef(
-                **{"value_type": "int", "label": "No. Inh. Cells", "default": 0}
+                value_type= "int",
+                label= "No. Inh. Cells",
+                default= 0
             ),
             "exc_ncells": TraitDef(
-                **{"value_type": "int", "label": "No. Exc. Cells", "default": 0}
+                value_type="int",
+                label="No. Exc. Cells",
+                default=0
             ),
             "inh_fraction": TraitDef(
-                **{"value_type": "float", "label": "Inh. Fraction", "default": 0.0}
+                value_type="float",
+                label="Inh. Fraction",
+                default= 0.0
             ),
             "region_fraction": TraitDef(
-                **{
-                    "value_type": "float",
-                    "label": "Region Fraction",
-                    "default": 0.0,
-                }
+                value_type="float",
+                label="Region Fraction",
+                default= 0.0,
             ),
             "dims": TraitDef(
                 value_type="dict",
@@ -385,6 +420,7 @@ class Region(StructBase):
             ),
         }
 
+    @t.final
     class DataTrait(StructBase.StructBaseTrait):
         traitlets.Sentinel
         inh_fraction = traitlets.Float(0.0)
@@ -398,20 +434,23 @@ class Region(StructBase):
         def __init__(
             self,
             # dims={},
-            **kwargs
+            **kwargs : t.Any
         ):
             super().__init__(
                 # dims=json.dumps(dims, indent=4),
                 **kwargs,
             )
 
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set(["neurons"])
 
+    @override
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+    def trait_ui(cls) -> dict[str, TraitDef]:
         return cls.TraitDefMapper.map
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
@@ -441,7 +480,7 @@ class Region(StructBase):
                 self.neurons[nx_name].apply_mod(nx_obj)
         return self
 
-    def find_neuron(self, neuron_name) -> Neuron | None:
+    def find_neuron(self, neuron_name: str) -> Neuron | None:
         if neuron_name in self.neurons:
             return self.neurons[neuron_name]
         return None
@@ -453,10 +492,10 @@ class ConnectionModel(StructBase):
     weight_max: float = 0.0
     delay: float = 0.0
     dynamics_params: str = ""
-    property_map: typing.Dict = {}
+    property_map: dict[str, t.Any] = {}
 
     class TraitDefMapper:
-        map: typing.Dict[str, TraitDef] = {
+        map: dict[str, TraitDef] = {
             "name": TraitDef(
                 value_type="text",
                 label="Name",
@@ -473,9 +512,15 @@ class ConnectionModel(StructBase):
                 default="",
             ),
             "weight_max": TraitDef(
-                **{"value_type": "float", "label": "Max. Weight", "default": 0.0}
+                value_type="float",
+                label="Max. Weight",
+                default=0.0
             ),
-            "delay": TraitDef(**{"value_type": "float", "label": "Delay", "default": 0.0}),
+            "delay": TraitDef(
+                value_type="float",
+                label="Delay",
+                default=0.0
+            ),
             "dynamics_params": TraitDef(
                 value_type="text",
                 label="Dynamics Params",
@@ -490,6 +535,7 @@ class ConnectionModel(StructBase):
             ),
         }
 
+    @t.final
     class DataTrait(StructBase.StructBaseTrait):
         target_model_id = traitlets.Unicode()
         source_model_id = traitlets.Unicode()
@@ -502,20 +548,23 @@ class ConnectionModel(StructBase):
         def __init__(
             self,
             # property_map={},
-            **kwargs
+            **kwargs : t.Any
         ):
             super().__init__(
                 # property_map=json.dumps(property_map, indent=4),
                 **kwargs,
             )
 
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set([])
 
+    @override
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+    def trait_ui(cls) -> dict[str, TraitDef]:
         return cls.TraitDefMapper.map
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
@@ -540,14 +589,14 @@ class ConnectionModel(StructBase):
 
 
 class Connection(StructBase):
-    pre: typing.Tuple[str, str]
-    post: typing.Tuple[str, str]
+    pre: tuple[str, str]
+    post: tuple[str, str]
     probability: float = 0.0
-    connect_models: typing.Dict[str, ConnectionModel] = {}
-    property_map: typing.Dict = {}
+    connect_models: dict[str, ConnectionModel] = {}
+    property_map: dict[str, t.Any] = {} # pyright: ignore[reportExplicitt.Any]
 
     class TraitDefMapper:
-        map: typing.Dict[str, TraitDef] = {
+        map: dict[str, TraitDef] = {
             "name": TraitDef(
                 value_type="text",
                 label="Name",
@@ -581,6 +630,7 @@ class Connection(StructBase):
             ),
         }
 
+    @t.final
     class DataTrait(StructBase.StructBaseTrait):
         # pre = traitlets.Tuple(traitlets.Unicode(), traitlets.Unicode())
         # post = traitlets.Tuple(traitlets.Unicode(), traitlets.Unicode())
@@ -592,10 +642,10 @@ class Connection(StructBase):
 
         def __init__(
             self,
-            pre=(),
-            post=(),
+            pre: tuple[str, ...]=(),
+            post: tuple[str, ...]=(),
             # property_map={},
-            **kwargs
+            **kwargs : t.Any
         ):
             super().__init__(
                 pre=repr(pre),
@@ -604,13 +654,16 @@ class Connection(StructBase):
                 **kwargs,
             )
 
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set(["connect_models"])
 
+    @override
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+    def trait_ui(cls) -> dict[str, TraitDef]:
         return cls.TraitDefMapper.map
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
@@ -639,11 +692,11 @@ class Connection(StructBase):
 
 class ExtNetwork(StructBase):
     ncells: int = 0
-    locations: typing.Dict[str, Region] = {}
-    connections: typing.Dict[str, Connection] = {}
+    locations: dict[str, Region] = {}
+    connections: dict[str, Connection] = {}
 
     class TraitDefMapper:
-        map: typing.Dict[str, TraitDef] = {
+        map: dict[str, TraitDef] = {
             "name": TraitDef(
                 value_type="text",
                 label= "Name",
@@ -656,16 +709,20 @@ class ExtNetwork(StructBase):
             ),
         }
 
+    @t.final
     class DataTrait(StructBase.StructBaseTrait):
         ncells = traitlets.Int(0)
 
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set(["locations", "connections"])
 
+    @override
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+    def trait_ui(cls) -> dict[str, TraitDef]:
         return cls.TraitDefMapper.map
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
@@ -690,15 +747,15 @@ class ExtNetwork(StructBase):
 
 class Network(StructBase):
     ncells: int = 0
-    locations: typing.Dict[str, Region] = {}
-    connections: typing.Dict[str, Connection] = {}
-    dims: typing.Dict[str, typing.Any] = {}
-    ext_networks: typing.Dict[str, ExtNetwork] = {}
-    data_connect: typing.List[DataLink] = [] 
-    data_files: typing.List[DataFile] = []
+    locations: dict[str, Region] = {}
+    connections: dict[str, Connection] = {}
+    dims: dict[str, t.Any] = {} # pyright: ignore[reportExplicitt.Any]
+    ext_networks: dict[str, ExtNetwork] = {}
+    data_connect: list[DataLink] = [] 
+    data_files: list[DataFile] = []
 
     class TraitDefMapper:
-        map: typing.Dict[str, TraitDef] = {
+        map: dict[str, TraitDef] = {
             "name": TraitDef(
                 value_type="text", label="Name", default="",
             ),
@@ -714,6 +771,7 @@ class Network(StructBase):
             ),
         }
 
+    @t.final
     class DataTrait(StructBase.StructBaseTrait):
         ncells = traitlets.Int(0)
         dims = traitlets.Dict(key_trait=traitlets.Unicode())
@@ -722,20 +780,23 @@ class Network(StructBase):
         def __init__(
             self,
             # dims={},
-            **kwargs
+            **kwargs : t.Any
         ):
             super().__init__(
                 # dims=json.dumps(dims, indent=4),
                 **kwargs,
             )
 
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set(["locations", "connections", "ext_networks"])
 
+    @override
     @classmethod
-    def trait_ui(cls) -> typing.Dict[str, TraitDef]:
+    def trait_ui(cls) -> dict[str, TraitDef]:
         return cls.TraitDefMapper.map
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
@@ -786,7 +847,7 @@ class Network(StructBase):
                 self.locations[lx].neurons[nx].N = ncells
         return self
 
-    def find_neuron(self, neuron_name) -> Neuron | None:
+    def find_neuron(self, neuron_name: str) -> Neuron | None:
         for lx, lrx in self.locations.items():
             neuron_obj = lrx.find_neuron(neuron_name)
             if neuron_obj:
@@ -797,23 +858,25 @@ class Network(StructBase):
 #
 # Mapper Abstract Classes
 #
+MapperDesc : t.TypeAlias = dict[str, dict[str, t.Any]]
+
 class RegionMapper(abc.ABC):
     @abc.abstractmethod
-    def __init__(self, name: str, desc: typing.Dict[str, typing.Dict]):
+    def __init__(self, name: str, desc: MapperDesc):
         return None
 
     @abc.abstractmethod
-    def neuron_names(self) -> typing.List[str]:
+    def neuron_names(self) -> list[str]:
         return []
 
     @abc.abstractmethod
-    def map(self, region_neurons: typing.Dict[str, Neuron]) -> Region | None:
+    def map(self, region_neurons: dict[str, Neuron]) -> Region | None:
         return None
 
 
 class NeuronMapper(abc.ABC):
     @abc.abstractmethod
-    def __init__(self, name: str, desc: typing.Dict[str, typing.Dict]):
+    def __init__(self, name: str, desc: MapperDesc):
         return None
 
     @abc.abstractmethod
@@ -823,7 +886,7 @@ class NeuronMapper(abc.ABC):
 
 class ConnectionMapper(abc.ABC):
     @abc.abstractmethod
-    def __init__(self, name: str, desc: typing.Dict[str, typing.Dict]):
+    def __init__(self, name: str, desc: MapperDesc):
         return None
 
     @abc.abstractmethod
@@ -832,7 +895,7 @@ class ConnectionMapper(abc.ABC):
 
 
 def dict2netstruct(
-    network_struct: typing.Dict,
+    network_struct: dict[str, t.Any], # pyright: ignore[reportExplicitt.Any]
 ) -> Network:
     return Network.model_validate(network_struct)
 
@@ -840,7 +903,7 @@ def dict2netstruct(
 #
 #
 def srcdata2network(
-    network_desc: typing.Dict,
+    network_desc: dict[str, t.Any], # pyright: ignore[reportExplicitt.Any]
     model_name: str,
     desc2region_mapper: type[RegionMapper],
     desc2neuron_mapper: type[NeuronMapper],
@@ -868,33 +931,39 @@ def srcdata2network(
     )
 
 
-def subset_network(net_stats: Network, region_list: typing.List[str]) -> Network:
+def subset_network(net_stats: Network, region_list: list[str]) -> Network:
     sub_locs = {k: v for k, v in net_stats.locations.items() if k in region_list}
     return Network(name=net_stats.name, dims=net_stats.dims, locations=sub_locs)
 
 
-def map_node_paramas(model_struct, node_map):
-    pass
-
-
-def filter_node_params(model_struct, filter_predicate):
-    pass
-
-
-def map_edge_paramas(model_struct, node_map):
-    pass
-
-
-def filter_edge_params(model_struct, filter_predicate):
-    pass
-
-
-def union_network(model_struct1, model_struct2):
-    pass
-
-
-def join_network(model_struct1, model_struct2):
-    pass
+# TODO: Map Node Parameters
+# def map_node_paramas(model_struct, node_map):
+#     pass
+# 
+# 
+# TODO: Filter node Parameters
+# def filter_node_params(model_struct, filter_predicate):
+#     pass
+# 
+# 
+# TODO: Map Edge Parameters
+# def map_edge_paramas(model_struct, node_map):
+#     pass
+# 
+# 
+# TODO: Filter Edge Parameters
+# def filter_edge_params(model_struct, filter_predicate):
+#     pass
+# 
+# 
+# TODO: Union Parameters
+# def union_network(model_struct1, model_struct2):
+#     pass
+# 
+# 
+# TODO: Join Network
+# def join_network(model_struct1, model_struct2):
+#     pass
 
 
 #

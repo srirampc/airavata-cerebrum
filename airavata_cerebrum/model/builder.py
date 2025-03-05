@@ -1,10 +1,15 @@
-import typing
+import typing as t
 import numpy as np
+import numpy.typing as npt
+
 from bmtk.builder import NetworkBuilder
+
 from . import structure
 
-
-def generate_random_pos(N: int, params: typing.Dict) -> np.ndarray:
+def generate_random_pos(
+    N: int, 
+    params: dict[str, t.Any]
+) -> npt.NDArray[np.float64]:
     r_scale = 1
     if "dims" in params and "scale" in params["dims"]:
         r_scale = params["dims"]["scale"]
@@ -36,10 +41,11 @@ def add_network_nodes(net_model: structure.Network, out_file: str) -> NetworkBui
                 "z": positions[:, 2],
                 "tuning_angle": np.linspace(0.0, 360.0, N, endpoint=False),
             }
-            net.add_nodes(**node_props)
+            net.add_nodes(**node_props)  # pyright: ignore[reportArgumentType]
     net.save(out_file)
     return net
 
 
-def build_model(model_struct: structure.Network) -> None:
-    pass
+# TODO: Build Model
+# def build_model(model_struct: structure.Network) -> None:
+#    pass

@@ -1,16 +1,27 @@
 import logging
 import os
-import pathlib
 import subprocess
 import time
-import typing
-import pandas as pd
-import anndata
-import matplotlib.pyplot as plt
-import abc_atlas_access.abc_atlas_cache.abc_project_cache as abc_cache
-import traitlets
+import typing as t
 
-from .. import base
+#
+import anndata
+import numpy as np
+import numpy.typing as npt
+import matplotlib.pyplot as plt
+import pandas as pd
+import traitlets
+#
+from typing_extensions import override
+from pathlib import Path
+from abc_atlas_access.abc_atlas_cache.abc_project_cache import AbcProjectCache
+
+#
+from ..base import DbQuery, OpXFormer, QryItr
+
+ProcessResult : t.TypeAlias = subprocess.CompletedProcess[bytes]
+NDFloatArray : t.TypeAlias = npt.NDArray[np.floating[t.Any]]
+DictDataFrame: t.TypeAlias = dict[str, pd.DataFrame]
 
 PARCEL_META_DATA_KEY = "cell_metadata_with_parcellation_annotation"
 MERFISH_CCF_DATASET_KEY = "MERFISH-C57BL6J-638850-CCF"
@@ -77,9 +88,9 @@ def _log():
     return logging.getLogger(__name__)
 
 
-def abc_cache_download_meta(download_base: str | pathlib.Path,
+def abc_cache_download_meta(download_base: str | Path,
                             abc_data_key: str,
-                            meta_key: str | None) -> str | pathlib.Path | None:
+                            meta_key: str | None) -> str | Path | None:
     """
     Download meta data frame obtained with
         - download_base as the cached directory,
@@ -103,7 +114,7 @@ def abc_cache_download_meta(download_base: str | pathlib.Path,
        Cell meta data for each of the cell, with each row being a cell.
 
     """
-    pcache = abc_cache.AbcProjectCache.from_s3_cache(download_base)
+    pcache = AbcProjectCache.from_s3_cache(download_base)
     pcache.load_manifest()
     if abc_data_key not in pcache.list_directories:
         _log().error(
@@ -120,9 +131,9 @@ def abc_cache_download_meta(download_base: str | pathlib.Path,
     return None
 
 
-def abc_cache_download_exp_mat(download_base: str | pathlib.Path,
+def abc_cache_download_exp_mat(download_base: str | Path,
                                abc_data_key: str,
-                               gex_key: str | None) -> str | pathlib.Path | None:
+                               gex_key: str | None) -> str | Path | None:
     """
     Download data frame obtained with
         - download_base as the cached directory,
@@ -146,7 +157,7 @@ def abc_cache_download_exp_mat(download_base: str | pathlib.Path,
        Cell meta data for each of the cell, with each row being a cell.
 
     """
-    pcache = abc_cache.AbcProjectCache.from_s3_cache(download_base)
+    pcache = AbcProjectCache.from_s3_cache(download_base)
     pcache.load_manifest()
     if abc_data_key not in pcache.list_directories:
         _log().error(
@@ -163,7 +174,7 @@ def abc_cache_download_exp_mat(download_base: str | pathlib.Path,
     return None
 
 
-def abc_cache_download_all_meta_data(download_base: str | pathlib.Path) -> None:
+def abc_cache_download_all_meta_data(download_base: str | Path) -> None:
     """
     Download all the metadata files using ABC Cache object.
 
@@ -177,15 +188,15 @@ def abc_cache_download_all_meta_data(download_base: str | pathlib.Path) -> None:
     list
         List of return values of the executions download commands.
     """
-    pcache = abc_cache.AbcProjectCache.from_s3_cache(download_base)
+    pcache = AbcProjectCache.from_s3_cache(download_base)
     pcache.load_manifest()
     for rdir in pcache.list_directories:
         abc_cache_download_meta(download_base, rdir, None)
 
 
 def download_merfish_manifest(
-    download_base : str | pathlib.Path = "./cache/abc_mouse"
-) -> typing.Dict[str, typing.Any]:
+    download_base : str | Path = "./cache/abc_mouse"
+) -> dict[str, t.Any]:
     """
     Downloads the Manifiest JSON data using the Cache
 
@@ -200,16 +211,16 @@ def download_merfish_manifest(
     manifest: dict
         manifest json as a dict
     """
-    pcache = abc_cache.AbcProjectCache.from_s3_cache(download_base)
+    pcache = AbcProjectCache.from_s3_cache(download_base)
     pcache.load_manifest()
     manifest = pcache.cache._manifest.data
     return manifest
 
 
 def merfish_files_meta(
-        download_base : str | pathlib.Path = "./cache/abc_mouse",
+        download_base : str | Path = "./cache/abc_mouse",
         abc_data_key : str = "MERFISH-C57BL6J-638850"
-) -> typing.Tuple[typing.Dict[str, typing.Any], typing.Dict]:
+) -> tuple[dict[str, t.Any], dict[str, t.Any]]:
     """
     Downloads the Manifiest JSON data from ABC AWS Store and retrieve
     MERFISH-C57BL6J-638850 meta data JSON object.
@@ -233,16 +244,18 @@ def merfish_files_meta(
     return manifest, merf_meta
 
 
-def aws_s3_copy(remote_path: str | pathlib.Path,
-                local_path: str | pathlib.Path) -> subprocess.CompletedProcess:
+def aws_s3_copy(
+    remote_path: str | Path,
+    local_path: str | Path
+) -> ProcessResult:
     """
     Run aws s3 cp command from remote_path to local_path
 
     Parameters
     ----------
-    remote_path : str | pathlib.Path
+    remote_path : str | Path
         Remove AWS path
-    local_path: str | pathlib.Path
+    local_path: str | Path
         Local path
 
     Returns
@@ -262,16 +275,18 @@ def aws_s3_copy(remote_path: str | pathlib.Path,
     return result
 
 
-def aws_s3_sync(remote_path: str | pathlib.Path,
-                local_path: str | pathlib.Path) -> subprocess.CompletedProcess:
+def aws_s3_sync(
+    remote_path: str | Path,
+    local_path: str | Path
+) -> ProcessResult:
     """
     Run aws s3 sync command from remote_path to local_path
 
     Parameters
     ----------
-    remote_path : str | pathlib.Path
+    remote_path : str | Path
         Remove AWS path
-    local_path: str | pathlib.Path
+    local_path: str | Path
         Local path
 
     Returns
@@ -292,10 +307,10 @@ def aws_s3_sync(remote_path: str | pathlib.Path,
 
 
 def aws_download_file(
-    download_base: str | pathlib.Path,
-    manifest: typing.Dict[str, typing.Dict],
-    file_dict: typing.Dict[str, typing.Any],
-) -> subprocess.CompletedProcess:
+    download_base: str | Path,
+    manifest: dict[str, dict[str, t.Any]],
+    file_dict: dict[str, t.Any],
+) -> ProcessResult:
     """
     Given a file entry in manifest, download the file using AWS CLI 'aws'
     to the relative path constructed from the download_base.
@@ -338,12 +353,14 @@ def aws_download_file(
     """
     print(file_dict["relative_path"], file_dict["size"])
     local_path = os.path.join(download_base, file_dict["relative_path"])
-    local_path = pathlib.Path(local_path)
+    local_path = Path(local_path)
     remote_path = manifest["resource_uri"] + file_dict["relative_path"]
     return aws_s3_copy(remote_path, local_path)
 
 
-def download_size(manifest: typing.Dict[str, typing.Any]) -> typing.Dict[str, float]:
+def download_size(
+    manifest: dict[str, t.Any]
+) -> dict[str, float]:
     """
     Construct a dictionary containing the file sizes in GB given in the
     manifest
@@ -371,8 +388,10 @@ def download_size(manifest: typing.Dict[str, typing.Any]) -> typing.Dict[str, fl
     return file_size_dict
 
 
-def aws_download_meta_data(manifest: typing.Dict[str, typing.Any],
-                           download_base: str | pathlib.Path):
+def aws_download_meta_data(
+    manifest: dict[str, t.Any],
+    download_base: str | Path
+)-> list[ProcessResult]:
     """
     Download all the metadata files using AWS CLI listed in the manifest to
     download_base.
@@ -399,7 +418,7 @@ def aws_download_meta_data(manifest: typing.Dict[str, typing.Any],
                 continue
             d_dict = r_dict["directories"][d]
             local_path = os.path.join(download_base, d_dict["relative_path"])
-            local_path = pathlib.Path(local_path)
+            local_path = Path(local_path)
             remote_path = manifest["resource_uri"] + d_dict["relative_path"]
             #
             result = aws_s3_sync(remote_path, local_path)
@@ -408,15 +427,8 @@ def aws_download_meta_data(manifest: typing.Dict[str, typing.Any],
 
 
 def abc_cache_download_abc_exp_matrices(
-    download_base: str | pathlib.Path,
-    exp_mat_dict: typing.Dict[str, typing.List[str]] = {
-        "MERFISH-C57BL6J-638850" : ["C57BL6J-638850/log2"],
-        "WMB-10Xv2" : ["WMB-10Xv2-TH/log2"],
-        "Zhuang-ABCA-1" : ["Zhuang-ABCA-1/log2"],
-        "Zhuang-ABCA-2" : ["Zhuang-ABCA-2/log2"],
-        "Zhuang-ABCA-3" : ["Zhuang-ABCA-3/log2"],
-        "Zhuang-ABCA-4" : ["Zhuang-ABCA-4/log2"]
-    },
+    download_base: str | Path,
+    exp_mat_dict: dict[str, list[str]] | None = None,
 ) -> None:
     """
     Download the following genes expression matrices listed in the dict
@@ -426,7 +438,7 @@ def abc_cache_download_abc_exp_matrices(
     ----------
     download_base: str
         Directory to which meta data is to be downloaded
-    exp_mat_dict: typing.Dict
+    exp_mat_dict: dict
         dict mapping string to a lit of matrix entry keys
 
     Returns
@@ -434,23 +446,25 @@ def abc_cache_download_abc_exp_matrices(
     list
         List of return values of the executions download commands.
     """
+    if exp_mat_dict is None:
+        exp_mat_dict = {
+            "MERFISH-C57BL6J-638850" : ["C57BL6J-638850/log2"],
+            "WMB-10Xv2" : ["WMB-10Xv2-TH/log2"],
+            "Zhuang-ABCA-1" : ["Zhuang-ABCA-1/log2"],
+            "Zhuang-ABCA-2" : ["Zhuang-ABCA-2/log2"],
+            "Zhuang-ABCA-3" : ["Zhuang-ABCA-3/log2"],
+            "Zhuang-ABCA-4" : ["Zhuang-ABCA-4/log2"]
+        }
     for data_key, exp_file_lst in exp_mat_dict.items():
         for exp_file_key in exp_file_lst:
             abc_cache_download_exp_mat(download_base, data_key, exp_file_key)
 
 
 def aws_download_abc_exp_matrices(
-    download_base: pathlib.Path,
-    manifest : typing.Dict[str, typing.Any],
-    dataset_exp_keys: typing.Dict[str, str] = {
-        "WMB-10Xv2": "WMB-10Xv2-TH",
-        "MERFISH-C57BL6J-638850": "C57BL6J-638850",
-        "Zhuang-ABCA-1": "Zhuang-ABCA-1",
-        "Zhuang-ABCA-2": "Zhuang-ABCA-2",
-        "Zhuang-ABCA-3": "Zhuang-ABCA-3",
-        "Zhuang-ABCA-4": "Zhuang-ABCA-4"
-    },
-) -> typing.List[subprocess.CompletedProcess]:
+    download_base: Path,
+    manifest : dict[str, t.Any],
+    dataset_exp_keys: dict[str, str] | None = None,
+) -> list[ProcessResult]:
     """
     Download the genes expression matrices listed in the dataset_exp_keys
     from the location described by the manifest to download_base location.
@@ -469,6 +483,15 @@ def aws_download_abc_exp_matrices(
     list
         List of return values of the executions download commands.
     """
+    if dataset_exp_keys is None:
+        dataset_exp_keys = {
+            "WMB-10Xv2": "WMB-10Xv2-TH",
+            "MERFISH-C57BL6J-638850": "C57BL6J-638850",
+            "Zhuang-ABCA-1": "Zhuang-ABCA-1",
+            "Zhuang-ABCA-2": "Zhuang-ABCA-2",
+            "Zhuang-ABCA-3": "Zhuang-ABCA-3",
+            "Zhuang-ABCA-4": "Zhuang-ABCA-4"
+        }
     download_results = []
     start = time.process_time()
     # Downloading data Expresssion matrices
@@ -483,9 +506,9 @@ def aws_download_abc_exp_matrices(
 
 
 def aws_download_image_volumes(
-    download_base: str | pathlib.Path,
-    manifest: typing.Dict[str, typing.Any],
-) -> typing.List[subprocess.CompletedProcess]:
+    download_base: str | Path,
+    manifest: dict[str, t.Any],
+) -> list[ProcessResult]:
     """
     Download all the image volumes listed in the manifest to download_base
 
@@ -509,7 +532,7 @@ def aws_download_image_volumes(
                 continue
             d_dict = r_dict["directories"][d]
             local_path = os.path.join(download_base, d_dict["relative_path"])
-            local_path = pathlib.Path(local_path)
+            local_path = Path(local_path)
             remote_path = manifest["resource_uri"] + d_dict["relative_path"]
             result = aws_s3_sync(remote_path, local_path)
             download_results.append(result)
@@ -517,7 +540,7 @@ def aws_download_image_volumes(
 
 
 def download_abc_data(
-    download_base: str | pathlib.Path,
+    download_base: str | Path,
     image_download: bool = False
 ) -> None:
     """
@@ -543,7 +566,7 @@ def download_abc_data(
 
 
 def taxonomy_meta(
-    download_base: str | pathlib.Path,
+    download_base: str | Path,
     abc_data_key: str,
     meta_key: str
 ) -> pd.DataFrame | None:
@@ -577,8 +600,8 @@ def taxonomy_meta(
 
 
 def taxonomy_cluster(
-    download_base: str | pathlib.Path
-) -> typing.Tuple[pd.DataFrame | None, pd.DataFrame | None]:
+    download_base: str | Path
+) -> tuple[pd.DataFrame | None, pd.DataFrame | None]:
     """
     Return the taxonomy meta data, specifically cluster name annotation and the
     colors assigned for the clusters, from download_base.
@@ -613,7 +636,7 @@ def taxonomy_cluster(
 
 
 def cell_metadata(
-    download_base : str | pathlib.Path,
+    download_base : str | Path,
     abc_data_key : str = "MERFISH-C57BL6J-638850"
 ) -> pd.DataFrame | None:
     """
@@ -644,7 +667,7 @@ def cell_metadata(
 
 
 def gene_metadata(
-    download_base : str | pathlib.Path,
+    download_base : str | Path,
     abc_data_key : str = "MERFISH-C57BL6J-638850"
 ) -> pd.DataFrame | None:
     """
@@ -673,7 +696,7 @@ def gene_metadata(
 
 
 def gene_expression_matrix(
-    download_base : str | pathlib.Path,
+    download_base : str | Path,
     source : str = "MERFISH-C57BL6J-638850",
     file_id: str = "C57BL6J-638850/log2",
 ) -> anndata.AnnData | None:
@@ -692,26 +715,37 @@ def gene_expression_matrix(
     adata = anndata.read_h5ad(data_file, backed="r")
     return adata
 
-
-def plot_section(xx, yy, cc=None, val=None, fig_width=8, fig_height=8, cmap=None):
+def plot_section(
+    xx: NDFloatArray,
+    yy: NDFloatArray,
+    cc: str | None =None,
+    val: str | None=None,
+    fig_width: int=8,
+    fig_height: int=8,
+    cmap: str | None =None
+)  -> tuple[plt.FigureBase, NDFloatArray]:
     """
     Plot a Section of the MERFISH co-ordinates
     """
     fig, ax = plt.subplots()
-    fig.set_size_inches(fig_width, fig_height)  # type:ignore
+    fig.set_size_inches(fig_width, fig_height)  # pyright: ignore[reportAttributeAccessIssue]
     if cmap is not None:
         plt.scatter(xx, yy, s=0.5, c=val, marker=".", cmap=cmap)
     elif cc is not None:
         plt.scatter(xx, yy, s=0.5, color=cc, marker=".")
-    ax.set_ylim(11, 0)  # type:ignore
-    ax.set_xlim(0, 11)  # type:ignore
-    ax.axis("equal")  # type:ignore
-    ax.set_xticks([])  # type:ignore
-    ax.set_yticks([])  # type:ignore
+    ax.set_ylim(11, 0)  # pyright: ignore[reportAttributeAccessIssue] 
+    ax.set_xlim(0, 11)  # pyright: ignore[reportAttributeAccessIssue] 
+    ax.axis("equal")   # pyright: ignore[reportAttributeAccessIssue] 
+    ax.set_xticks([])  # pyright: ignore[reportAttributeAccessIssue] 
+    ax.set_yticks([])  # pyright: ignore[reportAttributeAccessIssue] 
     return fig, ax
 
 
-def create_expression_dataframe(adata, gene_meta, section_meta):
+def create_expression_dataframe(
+    adata: pd.DataFrame,
+    gene_meta: pd.DataFrame,
+    section_meta : pd.DataFrame
+):
     """
     Gene expression data frame with the genes and meta data variables as its
     columns
@@ -722,46 +756,61 @@ def create_expression_dataframe(adata, gene_meta, section_meta):
     return joined
 
 
-def aggregate_by_metadata(df, gnames, group_value, sort=False):
+def aggregate_by_metadata(
+    df: pd.DataFrame,
+    gnames: list[str],
+    group_value: str,
+    sort: bool=False
+)-> pd.DataFrame:
     """
     Aggregate gene expression by 'group_value' and report the average gene
     expression values of the list of genes given by 'gnames'
     """
-    grouped = df.groupby(group_value)[gnames].mean()
+    grouped : pd.DataFrame = df.groupby(
+        group_value
+    )[gnames].mean() # pyright: ignore[reportAssignmentType]
     if sort:
         grouped = grouped.sort_values(by=gnames[0], ascending=False)
     return grouped
 
 
-def plot_heatmap(
-    df,
-    ylabel="Expression",
-    lmin=0,
-    lmax=5,
-    fig_width=8,
-    fig_height=4,
-    cmap=plt.cm.magma_r,  # type:ignore
+def plot_heatmap( # pyright: ignore[reportUnknownParameterType]
+    df: pd.DataFrame,
+    ylabel: str="Expression",
+    lmin: int=0,
+    lmax: int=5,
+    fig_width: int=8,
+    fig_height: int=4,
+    cmap: str="magma",
 ):
     """
     Plot Heat Map based on the input data frame
     """
     arr = df.to_numpy()
     fig, ax = plt.subplots()
-    fig.set_size_inches(fig_width, fig_height)  # type:ignore
-    im = ax.imshow(arr, cmap=cmap, aspect="auto", vmin=lmin, vmax=lmax)  # type:ignore
+    fig.set_size_inches(   # pyright: ignore[reportAttributeAccessIssue]
+        fig_width,
+        fig_height
+    )
+    im = ax.imshow(  # pyright: ignore[reportAttributeAccessIssue]
+        arr,
+        cmap=cmap,
+        aspect="auto", 
+        vmin=lmin,
+        vmax=lmax)
     xlabs = df.columns.values
     ylabs = df.index.values
-    ax.set_xticks(range(len(xlabs)))  # type:ignore
-    ax.set_xticklabels(xlabs)  # type:ignore
-    ax.set_yticks(range(len(ylabs)))  # type:ignore
-    ax.set_yticklabels(ylabs)  # type:ignore
-    plt.setp(ax.get_xticklabels(), rotation=90)  # type:ignore
-    cbar = ax.figure.colorbar(im, ax=ax)  # type:ignore
+    ax.set_xticks(range(len(xlabs)))   # pyright: ignore[reportAttributeAccessIssue] 
+    ax.set_xticklabels(xlabs)    # pyright: ignore[reportAttributeAccessIssue] # type:ignore
+    ax.set_yticks(range(len(ylabs)))    # pyright: ignore[reportAttributeAccessIssue] # type:ignore
+    ax.set_yticklabels(ylabs)    # pyright: ignore[reportAttributeAccessIssue] # type:ignore
+    plt.setp(ax.get_xticklabels(), rotation=90)  # pyright: ignore[reportAttributeAccessIssue] 
+    cbar = ax.figure.colorbar(im, ax=ax)  # pyright: ignore[reportAttributeAccessIssue]
     cbar.set_label(ylabel)
     return im
 
 
-def cell_ccf_meta(ccf_meta_file):
+def cell_ccf_meta(ccf_meta_file: str | Path) -> pd.DataFrame:
     """
     Data frame containing the Cell Allen CCF Meta
     """
@@ -769,14 +818,16 @@ def cell_ccf_meta(ccf_meta_file):
     return cell_ccf
 
 
-def valid_genes_symbols(gene_meta):
+def valid_genes_symbols(gene_meta: pd.DataFrame) -> list[str]:
     """
     Genes that doesn't contain 'Blank'
     """
     return gene_meta[~gene_meta.gene_symbol.str.contains("Blank")].gene_symbol.values
 
 
-def filter_invalid_genes(gene_meta, valid_genes):
+def filter_invalid_genes(
+    gene_meta: pd.DataFrame,
+    valid_genes: list[str] | set[str]):
     """
     Select the valid genes
     """
@@ -787,9 +838,9 @@ def filter_invalid_genes(gene_meta, valid_genes):
 
 
 def predicate_flags_df(area_cell_df: pd.DataFrame,
-                       flag_key_map: typing.Dict[str, str],
+                       flag_key_map: dict[str, str],
                        select_col: str,
-                       pred_fn: typing.Callable[[pd.Series, str], pd.Series],
+                       pred_fn: t.Callable[[pd.Series, str], pd.Series],
                        exclude_column: str | None = None) -> pd.DataFrame:
     """
     Cell meta data frame with flags added to indicate
@@ -798,7 +849,10 @@ def predicate_flags_df(area_cell_df: pd.DataFrame,
     ends with "Glut" (E) or "GABA" (I)
     """
     pred_dct = {
-        flag_column : pred_fn(area_cell_df[select_col], flag_key)
+        flag_column : pred_fn(
+            area_cell_df[select_col], # pyright: ignore[reportArgumentType]
+            flag_key
+        )
         for flag_column, flag_key in flag_key_map.items()
     }
     pred_df = pd.DataFrame(pred_dct)
@@ -807,38 +861,45 @@ def predicate_flags_df(area_cell_df: pd.DataFrame,
     return pred_df
 
 
-def concat_predicate_flags_df(area_cell_df: pd.DataFrame,
-                              flag_key_map: typing.Dict[str, str],
-                              select_col: str,
-                              pred_fn: typing.Callable[[pd.Series, str], pd.Series],
-                              exclude_column: str | None = None) -> pd.DataFrame:
+def concat_predicate_flags_df(
+    area_cell_df: pd.DataFrame,
+    flag_key_map: dict[str, str],
+    select_col: str,
+    pred_fn: t.Callable[[pd.Series, str], pd.Series],
+    exclude_column: str | None = None
+) -> pd.DataFrame:
     pred_df = predicate_flags_df(area_cell_df, flag_key_map,
                                  select_col, pred_fn, exclude_column)
     return pd.concat([area_cell_df, pred_df], axis=1)
 
 
-def cell_meta_ei_flags(area_cell_df):
+def cell_meta_ei_flags(area_cell_df: pd.DataFrame):
     """
     Cell meta data frame with flags added to indicate
     excitatory ('E'), inhibitory ('I'), Other ('O')
     based on whether the class of the cell property "class"
     ends with "Glut" (E) or "GABA" (I)
     """
-    def endswith_pred_fn(df_col, skey):
+    def endswith_pred_fn(df_col: pd.Series, skey: str) -> pd.Series:
         return df_col.str.endswith(skey)
     flag_key_map = {"E": "Glut", "I": "GABA"}
     return concat_predicate_flags_df(area_cell_df, flag_key_map,
                                      "class", endswith_pred_fn, "O")
 
 
-def cell_meta_subclass_flags(area_cell_df, subclass_mapset: dict):
+def cell_meta_subclass_flags(
+    area_cell_df: pd.DataFrame,
+    subclass_mapset: dict[str, set[str]]
+) -> dict[str, pd.Series]:
     pred_subclass = {}
     for kx, subx in subclass_mapset.items():
-        pred_subclass[kx] = area_cell_df["subclass"].isin(subx)
+        pred_subclass[kx] = (
+            area_cell_df["subclass"].isin(subx) # pyright: ignore[reportArgumentType]
+        )
     return pred_subclass
 
 
-def cell_meta_gaba_flags(area_cell_df):
+def cell_meta_gaba_flags(area_cell_df: pd.DataFrame):
     if len(area_cell_df) == 0:
         return area_cell_df
     pred_gaba = area_cell_df["subclass"].str.endswith("Gaba")
@@ -873,10 +934,20 @@ def cell_meta_glut_flags(area_cell_df: pd.DataFrame):
 
 
 def cell_meta_type_flags(area_cell_df: pd.DataFrame):
-    return cell_meta_glut_flags(cell_meta_gaba_flags(cell_meta_ei_flags(area_cell_df)))
+    return cell_meta_glut_flags(
+        cell_meta_gaba_flags(
+            cell_meta_ei_flags(
+                area_cell_df
+            )
+        )
+    )
 
 
-def cell_meta_type_ratios(area_sumdf, ax, nregion):
+def cell_meta_type_ratios(
+    area_sumdf : pd.DataFrame | pd.Series,
+    ax: str,
+    nregion: int
+) -> pd.DataFrame:
     ratio_df = pd.DataFrame(index=area_sumdf.index)
     #
     ratio_df["Region"] = ax
@@ -898,8 +969,10 @@ def cell_meta_type_ratios(area_sumdf, ax, nregion):
         ratio_df[fraction_col] = area_sumdf[colx] / area_sumdf[GLUT]
     return ratio_df
 
-
-def region_ccf_cell_types(cell_ccf, region_list):
+def region_ccf_cell_types(
+    cell_ccf: pd.DataFrame,
+    region_list: list[str]
+) -> tuple[DictDataFrame, DictDataFrame, DictDataFrame]:
     #
     region_ctx_ccf = {}
     region_frac_ccf = {}
@@ -928,7 +1001,9 @@ def region_ccf_cell_types(cell_ccf, region_list):
         region_name = region
         # 3. Compute the ratios
         region_ei_ratio = cell_meta_type_ratios(
-            region_ei_ctx, region_name, n_region_layers
+            region_ei_ctx,
+            region_name,
+            n_region_layers
         )
         # Save to the data frame to the dict
         region_cell_ccf[region] = region_df
@@ -937,23 +1012,28 @@ def region_ccf_cell_types(cell_ccf, region_list):
     return region_cell_ccf, region_ctx_ccf, region_frac_ccf
 
 
-def region_cell_type_ratios(region_name, download_base,
-                            merfish_ccf_data_key=MERFISH_CCF_DATASET_KEY,
-                            parcel_meta_data_key=PARCEL_META_DATA_KEY):
+def region_cell_type_ratios(
+    region_name: str,
+    download_base: str,
+    merfish_ccf_data_key: str=MERFISH_CCF_DATASET_KEY,
+    parcel_meta_data_key: str=PARCEL_META_DATA_KEY
+):
     # Cell Meta and CCF Meta data
     ccf_meta_file = abc_cache_download_meta(download_base, merfish_ccf_data_key,
                                             parcel_meta_data_key)
-    cell_ccf = cell_ccf_meta(ccf_meta_file)
-    _, _, region_frac_ccf = region_ccf_cell_types(cell_ccf, [region_name])
-    return region_frac_ccf[region_name]
+    if ccf_meta_file:
+        cell_ccf = cell_ccf_meta(ccf_meta_file)
+        _, _, region_frac_ccf = region_ccf_cell_types(cell_ccf, [region_name])
+        return region_frac_ccf[region_name]
 
 
-class ABCDbMERFISH_CCFQuery(base.DbQuery):
+class ABCDbMERFISH_CCFQuery(DbQuery):
+    @t.final
     class QryTraits(traitlets.HasTraits):
         download_base = traitlets.Unicode()
         region = traitlets.List()
 
-    def __init__(self, **params):
+    def __init__(self, **params: t.Any):
         """
         Initialize MERFISH Query
         Parameters
@@ -962,20 +1042,23 @@ class ABCDbMERFISH_CCFQuery(base.DbQuery):
            File location to store the manifest and the cells.json files
 
         """
-        self.name = __name__ + ".ABCDbMERFISHQuery"
-        self.download_base = params["download_base"]
-        self.pcache = abc_cache.AbcProjectCache.from_s3_cache(self.download_base)
+        self.name : str = __name__ + ".ABCDbMERFISHQuery"
+        self.download_base : str = params["download_base"]
+        self.pcache : AbcProjectCache = AbcProjectCache.from_s3_cache(
+            self.download_base
+        )
         self.pcache.load_latest_manifest()
         self.pcache.get_directory_metadata(MERFISH_CCF_DATASET_KEY)
-        self.ccf_meta_file = self.pcache.get_metadata_path(
+        self.ccf_meta_file : Path = self.pcache.get_metadata_path(
             MERFISH_CCF_DATASET_KEY, PARCEL_META_DATA_KEY
         )
 
+    @override
     def run(
         self,
-        in_iter: typing.Iterable | None,
-        **params: typing.Dict[str, typing.Any],
-    ) -> typing.Iterable | None:
+        in_iter: QryItr | None,
+        **params: t.Any,
+    ) -> QryItr | None:
         """
         Get the cell types ratios corresponding to a region
 
@@ -993,7 +1076,7 @@ class ABCDbMERFISH_CCFQuery(base.DbQuery):
         """
         #
         default_args = {}
-        rarg = {**default_args, **params} if params is not None else default_args
+        rarg = {**default_args, **params} if params else default_args
         _log().info("ABCDbMERFISH_CCFQuery Args : %s", rarg)
         region_list = rarg["region"]
         #
@@ -1003,6 +1086,7 @@ class ABCDbMERFISH_CCFQuery(base.DbQuery):
             {rx: rdf.to_dict(orient="index") for rx, rdf in region_frac_map.items()}
         ]
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.QryTraits
@@ -1011,11 +1095,11 @@ class ABCDbMERFISH_CCFQuery(base.DbQuery):
 #
 # ------- Query and Xform Registers -----
 #
-def query_register() -> typing.List[type[base.DbQuery]]:
+def query_register() -> list[type[DbQuery]]:
     return [
         ABCDbMERFISH_CCFQuery,
     ]
 
 
-def xform_register() -> typing.List[type[base.OpXFormer]]:
+def xform_register() -> list[type[OpXFormer]]:
     return []

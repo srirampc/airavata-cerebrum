@@ -1,7 +1,8 @@
 import logging
-import typing
+import typing as t
 import tqdm.contrib.logging as tqdm_log
 
+from collections.abc import Iterable
 from . import register, base
 from .model.setup import RecipeKeys
 
@@ -10,14 +11,16 @@ def _log():
 
 
 def run_workflow(
-    workflow_steps: typing.List[typing.Dict],
-    wf_iter: typing.Iterable | None = None
-) -> typing.Iterable | None:
+    workflow_steps: list[dict[str, t.Any]] | None,
+    wf_iter: Iterable[dict[str, t.Any]] | None = None
+) -> Iterable[dict[str, t.Any]] | None:
+    if workflow_steps is None:
+        return None
     for wf_step in workflow_steps:
-        sname = wf_step[RecipeKeys.NAME]
-        slabel = wf_step[RecipeKeys.LABEL] if RecipeKeys.LABEL in wf_step else sname
-        iparams: typing.Dict[str, typing.Any] = wf_step[RecipeKeys.INIT_PARAMS]
-        eparams: typing.Dict[str, typing.Any] = wf_step[RecipeKeys.EXEC_PARAMS]
+        sname : str = wf_step[RecipeKeys.NAME]
+        slabel : str = wf_step[RecipeKeys.LABEL] if RecipeKeys.LABEL in wf_step else sname
+        iparams: dict[str, t.Any] = wf_step[RecipeKeys.INIT_PARAMS]
+        eparams: dict[str, t.Any] = wf_step[RecipeKeys.EXEC_PARAMS]
         match wf_step[RecipeKeys.TYPE]:
             case "query":
                 _log().info("Start Query : [%s]",  slabel)
@@ -39,12 +42,14 @@ def run_workflow(
                     _log().info("Complete XForm : [%s]", slabel)
                 else:
                     _log().error("Failed to find XFormer : [%s]", sname)
+            case _:
+                pass
     return wf_iter
 
 
 def run_db_connect_workflows(
-    source_data_cfg: typing.Dict[str, typing.Any]
-) -> typing.Dict[str, typing.Any]:
+    source_data_cfg: dict[str, t.Any]
+) -> dict[str, t.Any]:
     db_connect_output = {}
     #
     for db_name, db_wcfg in source_data_cfg.items():
@@ -64,18 +69,20 @@ def run_db_connect_workflows(
 
 
 def run_ops_workflows(
-    db_conn_data: typing.Dict[str, typing.Any],
-    ops_config_desc: typing.Dict[str, typing.Any],
+    db_conn_data: dict[str, t.Any],
+    ops_config_desc: dict[str, t.Any],
     ops_key: str | None = None
-) -> typing.Dict[str, typing.Any]:
+) -> dict[str, t.Any]:
     op_output_data = {}
     for src_db, op_config in ops_config_desc.items():
         _log().info("Start op workflow for db [%s]", src_db)
         wf_input = db_conn_data[src_db]
         op_desc = op_config[ops_key] if ops_key else op_config
-        op_output = list(
-            run_workflow(op_desc[CfgKeys.WORKFLOW], wf_input) # type: ignore
+        op_output = run_workflow(
+            op_desc[RecipeKeys.WORKFLOW],
+            wf_input
         )
+        op_output = list(op_output) if op_output else []
         _log().debug(
             "WF Desc: [%s]; WF IN: [%s]; Op output: [%s]",
             str(op_desc),
@@ -88,9 +95,9 @@ def run_ops_workflows(
 
 
 def map_srcdata_locations(
-    source_data: typing.Dict[str, typing.Any],
-    data2loc_map: typing.Dict[str, typing.Any],
-) -> typing.Dict[str, typing.Any]:
+    source_data: dict[str, t.Any],
+    data2loc_map: dict[str, t.Any],
+) -> dict[str, t.Any]:
     net_locations = {}
     for location, location_desc in data2loc_map.items():
         neuron_desc_map = {}
@@ -107,9 +114,9 @@ def map_srcdata_locations(
     return net_locations
 
 def map_srcdata_connections(
-    source_data: typing.Dict[str, typing.Any],
-    data2con_map: typing.Dict[str, typing.Any],
-) -> typing.Dict[str, typing.Any]:
+    source_data: dict[str, t.Any],
+    data2con_map: dict[str, t.Any],
+) -> dict[str, t.Any]:
     net_connections = {}
     for connx, connx_desc in data2con_map.items():
         conn_desc_map = {}

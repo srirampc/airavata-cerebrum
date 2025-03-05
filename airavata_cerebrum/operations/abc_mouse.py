@@ -1,20 +1,27 @@
 import traitlets
-import typing
+import typing as t
+from typing_extensions import override
 #
-from .. import base
+from ..base import OpXFormer, XformItr, DbQuery
 from .json_filter import JPointerFilter
 
 
-class ABCDbMERFISH_CCFLayerRegionFilter(base.OpXFormer):
+class ABCDbMERFISH_CCFLayerRegionFilter(OpXFormer):
+    @t.final
     class FilterTraits(traitlets.HasTraits):
         region = traitlets.Unicode()
         sub_region = traitlets.Unicode()
 
-    def __init__(self, **params):
-        self.jptr_filter = JPointerFilter(**params)
-        self.path_fmt = "/0/{}/{}"
+    def __init__(self, **params: t.Any):
+        self.jptr_filter : JPointerFilter = JPointerFilter(**params)
+        self.path_fmt : str = "/0/{}/{}"
 
-    def xform(self, in_iter: typing.Iterable | None, **params) -> typing.Iterable | None:
+    @override
+    def xform(
+        self,
+        in_iter: XformItr | None,
+        **params : t.Any
+    ) -> XformItr | None:
         region = params["region"]
         sub_region = params["sub_region"]
         rpath = self.path_fmt.format(region, sub_region)
@@ -24,23 +31,30 @@ class ABCDbMERFISH_CCFLayerRegionFilter(base.OpXFormer):
             keys=[sub_region],
         )
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
 
 
-class ABCDbMERFISH_CCFFractionFilter(base.OpXFormer):
+class ABCDbMERFISH_CCFFractionFilter(OpXFormer):
+    @t.final
     class FilterTraits(traitlets.HasTraits):
         region = traitlets.Unicode()
         cell_type = traitlets.Unicode()
 
-    def __init__(self, **params):
-        self.jptr_filter = JPointerFilter(**params)
-        self.ifrac_fmt = "/0/{}/inhibitory fraction"
-        self.fwr_fmt = "/0/{}/fraction wi. region"
-        self.frac_fmt = "/0/{}/{} fraction"
+    def __init__(self, **params: t.Any):
+        self.jptr_filter : JPointerFilter = JPointerFilter(**params)
+        self.ifrac_fmt : str = "/0/{}/inhibitory fraction"
+        self.fwr_fmt : str = "/0/{}/fraction wi. region"
+        self.frac_fmt : str = "/0/{}/{} fraction"
 
-    def xform(self, in_iter: typing.Iterable | None, **params) -> typing.Iterable | None:
+    @override
+    def xform(
+        self,
+        in_iter: XformItr | None,
+        **params: t.Any
+    ) -> XformItr | None:
         region = params["region"]
         frac_paths = [
             self.ifrac_fmt.format(region),
@@ -57,6 +71,7 @@ class ABCDbMERFISH_CCFFractionFilter(base.OpXFormer):
             keys=frac_keys,
         )
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
@@ -65,11 +80,11 @@ class ABCDbMERFISH_CCFFractionFilter(base.OpXFormer):
 #
 # ------- Query and Xform Registers -----
 #
-def query_register() -> typing.List[type[base.DbQuery]]:
+def query_register() -> list[type[DbQuery]]:
     return []
 
 
-def xform_register() -> typing.List[type[base.OpXFormer]]:
+def xform_register() -> list[type[OpXFormer]]:
     return [
         ABCDbMERFISH_CCFLayerRegionFilter,
         ABCDbMERFISH_CCFFractionFilter,

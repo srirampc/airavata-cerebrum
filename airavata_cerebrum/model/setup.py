@@ -1,8 +1,9 @@
-import pathlib
-import typing
-import os
 import logging
+import os
+import typing as t
 import pydantic
+
+from pathlib import Path
 
 from ..util import io as cbmio
 
@@ -13,6 +14,7 @@ def _log():
 
 #
 # Lookup Keys in Configuration dictionary
+@t.final
 class RecipeKeys:
     RECIPE = "recipe"
     # Recipe Sections
@@ -38,6 +40,7 @@ class RecipeKeys:
     RECIPE_SECTIONS = [DB2MODEL_MAP, SRC_DATA]
 #
 # Lookup Keys in Configuration dictionary
+@t.final
 class RecipeLabels:
     INIT_PARAMS = " Init Arguments : "
     EXEC_PARAMS = " Exec Arguments : "
@@ -46,23 +49,23 @@ class RecipeLabels:
 #
 # Class for structure of Recipes
 class RecipeSetup(pydantic.BaseModel):
-    recipe_dir: str | pathlib.Path = pathlib.Path(".")
-    recipe_sections: typing.Dict[str, typing.Any] = {}
-    recipe_files: typing.Dict[str, typing.List[str | pathlib.Path]]
+    recipe_dir: str | Path = Path(".")
+    recipe_sections: dict[str, t.Any] = {}
+    recipe_files: dict[str, list[str | Path]]
     #
     create_model_dir: bool = False
     name: str
-    base_dir: str | pathlib.Path
+    base_dir: str | Path
 
     @property
-    def model_dir(self) -> pathlib.Path:
-        return pathlib.Path(self.base_dir, self.name)
+    def model_dir(self) -> Path:
+        return Path(self.base_dir, self.name)
 
     @property
-    def network_dir(self) -> pathlib.Path:
-        return pathlib.Path(self.base_dir, self.name, RecipeKeys.NETWORK)
+    def network_dir(self) -> Path:
+        return Path(self.base_dir, self.name, RecipeKeys.NETWORK)
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: t.Any):
         super().__init__(**kwargs)
         # Check if recipe available
         if RecipeKeys.RECIPE in self.recipe_files:
@@ -85,20 +88,20 @@ class RecipeSetup(pydantic.BaseModel):
                 if cfg_dict:
                     self.update_section(cfg_dict, RecipeKeys.TEMPLATES)
 
-    def recipe_file_path(self, file_name: str | pathlib.Path) -> str | pathlib.Path:
+    def recipe_file_path(self, file_name: str | Path) -> str | Path:
         if self.recipe_dir:
-            return pathlib.Path(self.recipe_dir, file_name)
+            return Path(self.recipe_dir, file_name)
         return file_name
 
     def recipe_output_prefix(self, cfg_key: str) -> str:
         return cfg_key + "_output"
 
-    def get_section(self, cfg_key: str) -> typing.Dict[str, typing.Any]:
+    def get_section(self, cfg_key: str) -> dict[str, t.Any]:
         return self.recipe_sections[cfg_key]
 
     def update_section(
         self,
-        section_dict: typing.Dict[str, typing.Any],
+        section_dict: dict[str, t.Any],
         section_key: str | None = None,
     ) -> None:
         if section_key:
@@ -127,18 +130,18 @@ class RecipeSetup(pydantic.BaseModel):
     def valid(self) -> bool:
         return all(cfg_key in self.recipe_sections for cfg_key in RecipeKeys.RECIPE_SECTIONS)
 
-    def get_template_for(self, reg_key: str) -> typing.Dict[str, typing.Any]:
+    def get_template_for(self, reg_key: str) -> dict[str, t.Any]:
         return self.recipe_sections[RecipeKeys.TEMPLATES][reg_key]
 
-    def get_templates(self) -> typing.Dict[str, typing.Any]:
+    def get_templates(self) -> dict[str, t.Any]:
         return self.recipe_sections[RecipeKeys.TEMPLATES]
 
 
 def init_model_setup(
-    name,
-    model_base_dir,
-    recipe_files,
-    recipe_dir,
+    name: str,
+    model_base_dir: str| Path,
+    recipe_files: dict[str, list[str | Path]],
+    recipe_dir: str| Path,
 ) -> RecipeSetup:
     return RecipeSetup(
             name=name,

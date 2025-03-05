@@ -1,14 +1,15 @@
 import numpy as np
 import scipy
 import scipy.stats
-import typing
+import typing as t
+import numpy.typing as npt
 
 
 def generate_random_cyl_pos(
         N: int,
-        layer_range: typing.List[float] | np.ndarray,
-        radial_range: typing.List[float] | np.ndarray,
-) -> np.ndarray:
+        layer_range: list[float] | npt.NDArray[np.floating[t.Any]],
+        radial_range: list[float] | npt.NDArray[np.floating[t.Any]],
+) -> npt.NDArray[np.bool_ | np.floating[t.Any]]:
     radius_outer = radial_range[1]
     radius_inner = radial_range[0]
 
@@ -39,6 +40,6 @@ def generate_target_sizes(
     ln_rvs = ln_rv.rvs(N).round()
     return ln_rvs
 
-
-def generate_node_positions(model_struct):
-    pass
+# TODO: Generate node positions
+# def generate_node_positions(model_struct):
+#     pass

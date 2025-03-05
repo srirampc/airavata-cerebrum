@@ -1,19 +1,21 @@
 import logging
-import typing
+import typing as t
+from typing_extensions import override
 import traitlets
 #
-from .. import base
+from ..base import OpXFormer, XformItr, XformElt, DbQuery
 
 
 def _log():
     return logging.getLogger(__name__)
 
 
-class IterAttrMapper(base.OpXFormer):
+class IterAttrMapper(OpXFormer):
+    @t.final
     class MapperTraits(traitlets.HasTraits):
         attribute = traitlets.Unicode()
 
-    def __init__(self, **params):
+    def __init__(self, **params: t.Any):
         """
         Attribute value mapper
 
@@ -22,14 +24,15 @@ class IterAttrMapper(base.OpXFormer):
         attribute : str
            Attribute of the cell type; key of the cell type descr. dict
         """
-        self.name = __name__ + ".IterAttrMapper"
-        self.attr = params["attribute"]
+        self.name : str = __name__ + ".IterAttrMapper"
+        self.attr: str = params["attribute"]
 
+    @override
     def xform(
         self,
-        in_iter: typing.Iterable | None,
-        **params
-    ) -> typing.Iterable | None:
+        in_iter: XformItr | None,
+        **params: t.Any
+    ) -> XformItr | None:
         """
         Get values from cell type descriptions
 
@@ -49,25 +52,28 @@ class IterAttrMapper(base.OpXFormer):
             return None
         return iter(x[self.attr] for x in in_iter)
 
+    @override
     @classmethod
     def trait_type(cls):
         return cls.MapperTraits
 
 
-class IterAttrFilter(base.OpXFormer):
+class IterAttrFilter(OpXFormer):
+    @t.final
     class FilterTraits(traitlets.HasTraits):
         key = traitlets.Unicode()
         filters = traitlets.List()
 
-    def __init__(self, **params):
-        self.name = __name__ + ".IterAttrFilter"
-        self.key_fn = lambda x: x
+    def __init__(self, **params: t.Any):
+        self.name : str = __name__ + ".IterAttrFilter"
+        self.key_fn : t.Callable[[XformElt], XformElt] = lambda x: x
 
+    @override
     def xform(
         self,
-        in_iter: typing.Iterable | None,
-        **params: typing.Any,
-    ) -> typing.Iterable | None:
+        in_iter: XformItr | None,
+        **params: t.Any,
+    ) -> XformItr | None:
         """
         Filter cell type descriptions matching all the values for the given attrs.
 
@@ -103,6 +109,7 @@ class IterAttrFilter(base.OpXFormer):
             )
         ) if in_iter else None
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
@@ -111,11 +118,11 @@ class IterAttrFilter(base.OpXFormer):
 #
 # ------- Query and Xform Registers -----
 #
-def query_register() -> typing.List[type[base.DbQuery]]:
+def query_register() -> list[type[DbQuery]]:
     return []
 
 
-def xform_register() -> typing.List[type[base.OpXFormer]]:
+def xform_register() -> list[type[OpXFormer]]:
     return [
         IterAttrMapper,
         IterAttrFilter,

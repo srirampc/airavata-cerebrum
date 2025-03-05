@@ -16,16 +16,17 @@ def _log():
 
 
 # File paths
+@typing.final
 class RecipePaths:
     RECIPE_IO_DIR = "recipe"
 
 
 class ModelRecipe(pydantic.BaseModel):
     recipe_setup: RecipeSetup
-    region_mapper: typing.Type[structure.RegionMapper]
-    neuron_mapper: typing.Type[structure.NeuronMapper]
-    connection_mapper: typing.Type[structure.ConnectionMapper]
-    network_builder: typing.Type
+    region_mapper: type[structure.RegionMapper]
+    neuron_mapper: type[structure.NeuronMapper]
+    connection_mapper: type[structure.ConnectionMapper]
+    network_builder: type
     mod_structure: structure.Network | None = None
     save_flag: bool = True
     out_format: typing.Literal["json", "yaml", "yml"] = "json"
@@ -40,7 +41,7 @@ class ModelRecipe(pydantic.BaseModel):
             os.makedirs(out_path.parent)
         return out_path.with_suffix("." + self.out_format)
 
-    def download_db_data(self) -> typing.Dict[str, typing.Any]:
+    def download_db_data(self) -> dict[str, typing.Any]:
         db_src_config = self.recipe_setup.get_section(RecipeKeys.SRC_DATA)
         _log().info("Start Query and Download Data")
         db_connect_output = workflow.run_db_connect_workflows(db_src_config)
@@ -54,18 +55,30 @@ class ModelRecipe(pydantic.BaseModel):
         return db_connect_output
 
     def db_post_ops(self):
-        db_connect_key = RecipeKeys.DB_CONNECT
-        db_datasrc_key = RecipeKeys.SRC_DATA
-        db_connect_data = cbmio.load(self.output_location(db_connect_key))
+        db_connect_data = cbmio.load(
+            self.output_location(RecipeKeys.DB_CONNECT)
+        )
         db_src_config = self.recipe_setup.get_section(RecipeKeys.SRC_DATA)
         db_post_op_data = None
         if db_connect_data:
             db_post_op_data = workflow.run_ops_workflows(
-                db_connect_data, db_src_config, RecipeKeys.POST_OPS
+                db_connect_data,
+                db_src_config,
+                RecipeKeys.POST_OPS
             )
         if self.save_flag and db_post_op_data:
-            cbmio.dump(db_post_op_data, self.output_location(db_datasrc_key), indent=4)
+            cbmio.dump(
+                db_post_op_data,
+                self.output_location(RecipeKeys.SRC_DATA),
+                indent=4
+            )
         return db_post_op_data
+
+    def run_db_workflows(self):
+        db_connection_output = self.download_db_data()
+        db_post_op_data = self.db_post_ops()
+        return db_connection_output, db_post_op_data
+
 
     def map_source_data(self):
         db2model_map = self.recipe_setup.get_section(RecipeKeys.DB2MODEL_MAP)
@@ -93,17 +106,20 @@ class ModelRecipe(pydantic.BaseModel):
         return srcdata_map_output
 
     def build_net_struct(self):
-        network_desc_output = cbmio.load(self.output_location(RecipeKeys.DB2MODEL_MAP))
-        if not network_desc_output:
-            return None
-        self.network_struct = structure.srcdata2network(
-            network_desc_output,
-            self.recipe_setup.name,
-            self.region_mapper,
-            self.neuron_mapper,
-            self.connection_mapper,
+        network_desc_output = cbmio.load(
+            self.output_location(RecipeKeys.DB2MODEL_MAP)
         )
-        return self.network_struct
+        if not network_desc_output:
+            network_desc_output = self.map_source_data()
+        if network_desc_output:
+            self.network_struct = structure.srcdata2network(
+                network_desc_output,
+                self.recipe_setup.name,
+                self.region_mapper,
+                self.neuron_mapper,
+                self.connection_mapper,
+            )
+            return self.network_struct
 
     def apply_mod(self):
         if self.mod_structure:
@@ -119,7 +135,7 @@ class ModelRecipe(pydantic.BaseModel):
             )
         return self.network_struct
 
-    def build_network(self, save_flag=True):
+    def build_network(self, save_flag: bool=True):
         # Construct model
         net_builder = self.network_builder(self.network_struct)
         net_builder.build()

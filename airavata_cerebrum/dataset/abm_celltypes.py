@@ -1,28 +1,30 @@
 import json
-import os
-import typing
 import logging
+import os
+import typing as t
+import traitlets
 import allensdk.core.cell_types_cache
 import allensdk.api.queries.cell_types_api
-import allensdk.api.queries.glif_api
-from numba.cuda.cudadrv.driver import pathlib
-import traitlets
-
-from .. import base
+#
+from typing_extensions import override
+from allensdk.api.queries.glif_api import GlifApi
+from pathlib import Path
+from ..base import DbQuery, QryItr, OpXFormer
 
 
 def _log():
     return logging.getLogger(__name__)
 
 
-class CTDbCellCacheQuery(base.DbQuery):
+class CTDbCellCacheQuery(DbQuery):
+    @t.final
     class QryTraits(traitlets.HasTraits):
         download_base = traitlets.Unicode()
         species = traitlets.Unicode()
         manifest = traitlets.Unicode()
         cells = traitlets.Unicode()
 
-    def __init__(self, **params):
+    def __init__(self, **params: t.Any):
         """
         Initialixe Cache Query
         Parameters
@@ -31,14 +33,15 @@ class CTDbCellCacheQuery(base.DbQuery):
            File location to store the manifest and the cells.json files
 
         """
-        self.name = "allensdk.core.cell_types_cache.CellTypesCache"
-        self.download_base = params["download_base"]
+        self.name : str = "allensdk.core.cell_types_cache.CellTypesCache"
+        self.download_base : str = params["download_base"]
 
+    @override
     def run(
         self,
-        in_iter: typing.Iterable | None,
-        **params: typing.Dict[str, typing.Any],
-    ) -> typing.Iterable | None:
+        in_iter: QryItr | None,
+        **params: t.Any,
+    ) -> QryItr | None:
         """
         Get the cell types information from allensdk.core.cell_types_cache.CellTypesCache
 
@@ -67,11 +70,17 @@ class CTDbCellCacheQuery(base.DbQuery):
             "mainfest": "manifest.json",
             "cells": "cells.json",
         }
-        rarg = {**default_args, **params} if params is not None else default_args
+        rarg = {**default_args, **params} if params else default_args
         #
         _log().debug("CTDbCellCacheQuery Args : %s", rarg)
-        self.manifest_file = os.path.join(self.download_base, rarg["mainfest"])
-        self.cells_file = os.path.join(self.download_base, rarg["cells"])
+        self.manifest_file: str = os.path.join(
+            self.download_base,
+            str(rarg["mainfest"])
+        )
+        self.cells_file : str = os.path.join(
+            self.download_base,
+            str(rarg["cells"])
+        )
         ctc = allensdk.core.cell_types_cache.CellTypesCache(
             manifest_file=self.manifest_file
         )
@@ -79,19 +88,26 @@ class CTDbCellCacheQuery(base.DbQuery):
         _log().debug("CTDbCellCacheQuery CT List : %d", len(ct_list))
         return ct_list
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.QryTraits
 
 
-class CTDbCellApiQuery(base.DbQuery):
+class CTDbCellApiQuery(DbQuery):
+    @t.final
     class QryTraits(traitlets.HasTraits):
         species = traitlets.Unicode()
 
-    def __init__(self, **params):
-        self.name = "allensdk.api.queries.cell_types_api.CellTypesApi"
+    def __init__(self, **params: t.Any):
+        self.name : str = "allensdk.api.queries.cell_types_api.CellTypesApi"
 
-    def run(self, in_iter: typing.Iterable | None, **run_params) -> typing.Iterable:
+    @override
+    def run(
+        self,
+        in_iter: QryItr | None,
+        **run_params: t.Any
+    ) -> QryItr:
         """
         Get the cell types information from allensdk.api.queries.cell_types_api.CellTypesApi
 
@@ -120,22 +136,29 @@ class CTDbCellApiQuery(base.DbQuery):
         _log().debug("CTDbCellApiQuery CT List : %d", len(ct_list))
         return ct_list
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.QryTraits
 
 
-class CTDbGlifApiQuery(base.DbQuery):
+class CTDbGlifApiQuery(DbQuery):
+    @t.final
     class QryTraits(traitlets.HasTraits):
         key = traitlets.Unicode()
         first = traitlets.Bool()
 
-    def __init__(self, **params):
-        self.name = "allensdk.api.queries.glif_api.GlifApi"
-        self.glif_api = allensdk.api.queries.glif_api.GlifApi()
-        self.key_fn = lambda x: x
+    def __init__(self, **params: t.Any):
+        self.name : str = "allensdk.api.queries.glif_api.GlifApi"
+        self.glif_api : GlifApi = GlifApi()
+        self.key_fn : t.Callable[[t.Any], str] = lambda x: x
 
-    def run(self, in_iter: typing.Iterable | None, **params) -> typing.Iterable | None:
+    @override
+    def run(
+        self,
+        in_iter: QryItr | None,
+        **params: t.Any
+    ) -> QryItr | None:
         """
         Get neuronal models using GlifApi for a given iterator of specimen ids
 
@@ -181,43 +204,51 @@ class CTDbGlifApiQuery(base.DbQuery):
                 if x
             )
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.QryTraits
 
 
-class CTDbGlifApiModelConfigQry(base.DbQuery):
+class CTDbGlifApiModelConfigQry(DbQuery):
+    @t.final
     class QryTraits(traitlets.HasTraits):
         suffix = traitlets.Unicode()
         output_dir = traitlets.Unicode()
 
-    def __init__(self, **params):
-        self.name = "allensdk.api.queries.glif_api.GlifApi"
-        self.glif_api = allensdk.api.queries.glif_api.GlifApi()
+    def __init__(self, **params: t.Any):
+        self.name : str = "allensdk.api.queries.glif_api.GlifApi"
+        self.glif_api : GlifApi = GlifApi()
 
-    def download_model_config(self, rcd_dict):
+    def download_model_config(self, rcd_dict: dict[str, t.Any]):
         neuronal_model_id = rcd_dict["glif"]["neuronal_models"][0]["id"]
         spec_id = rcd_dict["ct"]["specimen__id"]
         neuron_config = self.glif_api.get_neuron_configs([neuronal_model_id])
         if neuron_config:
-            cfg_fname = pathlib.Path(
+            cfg_fname = Path(
                 self.output_dir, "{}{}".format(spec_id, self.suffix)
             )
             with open(cfg_fname, "w") as cfg_fx:
                 json.dump(neuron_config[neuronal_model_id], cfg_fx, indent=4)
         return rcd_dict
 
-    def run(self, in_iter: typing.Iterable | None, **params) -> typing.Iterable | None:
+    @override
+    def run(
+        self,
+        in_iter: QryItr | None,
+        **params: t.Any
+    ) -> QryItr | None:
         if not in_iter:
             return None
-        self.suffix = params["suffix"]
-        self.output_dir = params["output_dir"]
+        self.suffix : str= params["suffix"]
+        self.output_dir : str = params["output_dir"]
         _log().debug("CTDbGlifApiQuery Args : %s", params)
         # Create Config
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
         return iter(self.download_model_config(rcx) for rcx in in_iter if rcx)
 
+    @override
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.QryTraits
@@ -226,7 +257,7 @@ class CTDbGlifApiModelConfigQry(base.DbQuery):
 #
 # ------- Query and Xform Registers -----
 #
-def query_register() -> typing.List[type[base.DbQuery]]:
+def query_register() -> list[type[DbQuery]]:
     return [
         CTDbCellCacheQuery,
         CTDbCellApiQuery,
@@ -235,5 +266,5 @@ def query_register() -> typing.List[type[base.DbQuery]]:
     ]
 
 
-def xform_register() -> typing.List[type[base.OpXFormer]]:
+def xform_register() -> list[type[OpXFormer]]:
     return []
