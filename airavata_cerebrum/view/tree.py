@@ -8,7 +8,7 @@ import ipywidgets as iwidgets
 import ipytree as itree
 import traitlets
 
-from .. import base
+from ..base import DbQuery, OpXFormer
 from ..register import find_type
 from ..model.setup import RecipeKeys, RecipeLabels, RecipeSetup
 from ..model import structure as structure
@@ -288,7 +288,7 @@ class TreeBase(abc.ABC):
         register_key: str,
         init_params: dict[str, t.Any]
     ) -> CBTreeNode | None:
-        src_class: type[base.DbQuery] | type[base.OpXFormer] | None = find_type(
+        src_class: type[DbQuery] | type[OpXFormer] | None = find_type(
             register_key
         )
         if src_class:

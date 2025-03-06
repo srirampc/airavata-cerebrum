@@ -7,6 +7,7 @@ dependencies:
   - pip
 
   # Key dependencies -------
+  - anywidget=0.9
   - ipywidgets=8.1
   - ipytree=0.2
   - python-jsonpath
@@ -14,6 +15,7 @@ dependencies:
   - nest-simulator=3.8
   - numba=0.60
   - numpy=1.23
+  - marimo=0.11
   - matplotlib=3.7
   - openpyxl=3.1
   - pandas=1.5

@@ -23,20 +23,21 @@ build-backend = "poetry.core.masonry.api"
 name = "airavata-cerebrum"
 version = "0.1"
 description = "Apache Airavata Cerebrum : Integrated Data-driver Modeling for Computational Neuroscience"
-authors = [
-    "Sriram P Chockalingam <srirampc@gatech.edu>"
-]
-maintainers = [
-    "Apache Airavata Developers <dev@apache.airavata.org>"
-]
+authors = ["Sriram P Chockalingam <srirampc@gatech.edu>"]
+maintainers = ["Apache Airavata Developers <dev@apache.airavata.org>"]
 readme = "README.md"
 homepage = "https://github.com/apache/airavata-cerebrum"
-license =  "Apache-2.0" 
-keywords = [ "Data-driven", "Computational Neuroscience", "Neuroscience Modeling"]
+license = "Apache-2.0"
+keywords = [
+    "Data-driven",
+    "Computational Neuroscience",
+    "Neuroscience Modeling",
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-abc_atlas_access =  { git = "https://github.com/alleninstitute/abc_atlas_access" }
+anywidget = "^0.9"
+abc_atlas_access = { git = "https://github.com/alleninstitute/abc_atlas_access" }
 neuroanalysis = { git = "https://github.com/alleninstitute/neuroanalysis" }
 aisynphys = { git = "https://github.com/alleninstitute/aisynphys" }
 allensdk = "^2.16"
@@ -48,6 +49,7 @@ intervaltree = "^3.1.0"
 ipywidgets = "^8.1"
 ipytree = "^0.2"
 jupyterlab = "^3.5"
+marimo = "^0.11"
 matplotlib = "^3.7"
 numpy = "^1.23"
 openpyxl = "^3.1"
@@ -71,14 +73,8 @@ tqdm = "^4.66"
 include = ["airavata_cerebrum"]
 
 [tool.pyright]
-include = [
-    "airavata_cerebrum",
-    "tests",
-    "resources"
-]
-exclude = [
-    "**/__pycache__"
-]
+include = ["airavata_cerebrum", "tests", "resources"]
+exclude = ["**/__pycache__"]
 # reportOptionalMemberAccess = false,
 # reportOptionalSubscript = false,
 # reportGeneralTypeIssues = false,

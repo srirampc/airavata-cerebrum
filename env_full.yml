@@ -8,16 +8,17 @@ dependencies:
 
   # Convenience -------------
   - black
-  
+
   # Testing
   - pytest
   - iminuit
-  
+
   # modeling
   - openpyxl
   - numba
 
   # allensdk
+  - anywidget
   - future
   - ipywidgets
   - ipytree
@@ -26,6 +27,7 @@ dependencies:
   - jupyter
   - nest-simulator
   - numpy
+  - marimo
   - matplotlib
   # - nest-asyncio
   - pandas
@@ -52,17 +54,16 @@ dependencies:
   - tqdm
   - xarray
 
-
   # PIP dependencies
   - pip:
-    - anndata
-    - allensdk
-    - bmtk
-    - mpi4py
-    - parse
-    - pylightxl
-    - pytree
-    - scanpy
-    - git+https://github.com/alleninstitute/abc_atlas_access
-    - git+https://github.com/alleninstitute/neuroanalysis
-    - git+https://github.com/alleninstitute/aisynphys
+      - anndata
+      - allensdk
+      - bmtk
+      - mpi4py
+      - parse
+      - pylightxl
+      - pytree
+      - scanpy
+      - git+https://github.com/alleninstitute/abc_atlas_access
+      - git+https://github.com/alleninstitute/neuroanalysis
+      - git+https://github.com/alleninstitute/aisynphys
