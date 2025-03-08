@@ -16,7 +16,7 @@ from ..base import DbQuery, OpXFormer
 from ..register import find_type
 from ..model.setup import RecipeKeys, RecipeLabels, RecipeSetup
 from ..model import structure as structure
-from .tree import CfgTreeNames
+from . import RcpTreeNames
 
 def _log():
     return logging.getLogger(__name__)
@@ -79,12 +79,12 @@ class PropertyListLayout(mo.ui.array):
         **kwargs: t.Any
     ):
         super().__init__(
-            [wx for wx in self.array_widgets(value) if wx],
+            [wx for wx in self.widgets(value) if wx],
             label=label,
             **kwargs
         )
 
-    def array_widgets(self, value: list[t.Any]):
+    def widgets(self, value: list[t.Any]):
         return(
             scalar_widget(
                 type(vx).__name__,
@@ -99,7 +99,7 @@ class PropertyMapLayout(mo.ui.dictionary):
 
     def __init__(self, value: dict[str, t.Any], **kwargs: t.Any):
         super().__init__(
-            {kx: wx for kx, wx in self.dict_widgets(value) if wx},
+            {kx: wx for kx, wx in self.widgets(value) if wx},
             **kwargs
         )
         # print("Value: ", len(value))
@@ -118,11 +118,11 @@ class PropertyMapLayout(mo.ui.dictionary):
             case _:
                 return scalar_widget(tname, default=vx, label=label)
 
-    def dict_widgets(
+    def widgets(
         self,
         value: dict[str, t.Any]
     ) -> Iterable[tuple[str, UIElement[t.Any, t.Any] | None]]:
-        return(
+        return (
             (kx, self.init_widget(vx)) for kx, vx in value.items()
         )
 
@@ -384,7 +384,7 @@ class SourceDataTreeView(RecipeTreeBase):
 
     @override
     def init_tree(self) -> AnyWidget:
-        root_node = CBTreeNode(name=CfgTreeNames.SRC_DATA, node_key="source_data")
+        root_node = CBTreeNode(name=RcpTreeNames.SRC_DATA, node_key="source_data")
         for db_key, db_desc in self.src_data_desc.items():
             db_node = self.init_db_node(
                 db_key,
@@ -466,7 +466,7 @@ class D2MConnectionsTreeView(RecipeTreeBase):
 
     @override
     def init_tree(self) -> AnyWidget:
-        root_node = CBTreeNode(name=CfgTreeNames.CONNECTIONS, node_key="tree")
+        root_node = CBTreeNode(name=RcpTreeNames.CONNECTIONS, node_key="tree")
         for conn_name, conn_desc in self.d2m_map_desc[RecipeKeys.CONNECTIONS].items():
             root_node.add_node(self.init_conncection_node(conn_name, conn_desc))
         #TODO: initialize tree

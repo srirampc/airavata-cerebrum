@@ -57,6 +57,11 @@ class IterAttrMapper(OpXFormer):
     def trait_type(cls):
         return cls.MapperTraits
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.MapperTraits(**trait_values)
+
 
 class IterAttrFilter(OpXFormer):
     @t.final
@@ -113,6 +118,11 @@ class IterAttrFilter(OpXFormer):
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
+
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.FilterTraits(**trait_values)
 
 
 #

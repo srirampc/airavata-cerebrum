@@ -16,15 +16,20 @@ class EmptyTraits(traitlets.HasTraits):
     pass
 
 
-# Abstract interface for Database Queries
-class DbQuery(abc.ABC):
+class TraitInterface(abc.ABC):
     @abc.abstractmethod
-    def __init__(
-        self,
-        **params: t.Any
-    ):
-        return None
+    @classmethod
+    def trait_type(cls) -> type[traitlets.HasTraits]:
+        return EmptyTraits
 
+    @abc.abstractmethod
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return EmptyTraits(**trait_values)
+
+
+# Abstract interface for Database Queries
+class DbQuery(TraitInterface, abc.ABC):
     @abc.abstractmethod
     def run(
         self,
@@ -33,14 +38,9 @@ class DbQuery(abc.ABC):
     ) -> QryItr | None:
         return None
 
-    @classmethod
-    @abc.abstractmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return EmptyTraits
-
 
 # Abstract interface for XFormer operations
-class OpXFormer(abc.ABC):
+class OpXFormer(TraitInterface, abc.ABC):
     @abc.abstractmethod
     def xform(
         self,
@@ -48,8 +48,3 @@ class OpXFormer(abc.ABC):
         **params: t.Any,
     ) -> XformItr | None:
         return None
-
-    @classmethod
-    @abc.abstractmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return EmptyTraits

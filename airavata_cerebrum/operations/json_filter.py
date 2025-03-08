@@ -66,6 +66,11 @@ class JPointerFilter(OpXFormer):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.FilterTraits(**trait_values)
+
 
 class IterJPatchFilter(OpXFormer):
     @t.final
@@ -134,6 +139,11 @@ class IterJPatchFilter(OpXFormer):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.FilterTraits(**trait_values)
+
 
 class IterJPointerFilter(OpXFormer):
     @t.final
@@ -179,6 +189,12 @@ class IterJPointerFilter(OpXFormer):
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
+
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.FilterTraits(**trait_values)
+
 
 #
 # ----- Mapper, Filter and Query Registers ------

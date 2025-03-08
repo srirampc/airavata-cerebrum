@@ -26,6 +26,11 @@ class IdentityXformer(OpXFormer):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.IdTraits
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.IdTraits(**trait_values)
+
 
 class TQDMWrapper(OpXFormer):
     @t.final
@@ -47,6 +52,11 @@ class TQDMWrapper(OpXFormer):
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.TqTraits
+
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.TqTraits(**trait_values)
 
 
 class DataSlicer(OpXFormer):
@@ -72,6 +82,10 @@ class DataSlicer(OpXFormer):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.SliceTraits
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.SliceTraits(**trait_values)
 #
 #
 def query_register() -> list[type[DbQuery]]:

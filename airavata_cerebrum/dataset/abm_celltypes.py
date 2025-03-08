@@ -93,6 +93,11 @@ class CTDbCellCacheQuery(DbQuery):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.QryTraits
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.QryTraits(**trait_values)
+
 
 class CTDbCellApiQuery(DbQuery):
     @t.final
@@ -140,6 +145,11 @@ class CTDbCellApiQuery(DbQuery):
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.QryTraits
+
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.QryTraits(**trait_values)
 
 
 class CTDbGlifApiQuery(DbQuery):
@@ -209,6 +219,11 @@ class CTDbGlifApiQuery(DbQuery):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.QryTraits
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.QryTraits(**trait_values)
+
 
 class CTDbGlifApiModelConfigQry(DbQuery):
     @t.final
@@ -252,6 +267,11 @@ class CTDbGlifApiModelConfigQry(DbQuery):
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.QryTraits
+
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.QryTraits(**trait_values)
 
 
 #

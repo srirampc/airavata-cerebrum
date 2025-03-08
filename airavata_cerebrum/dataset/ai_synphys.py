@@ -164,6 +164,11 @@ class AISynPhysQuery(DbQuery):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.QryTraits
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.QryTraits(**trait_values)
+
 
 #
 # ------- Query and Xform Registers -----

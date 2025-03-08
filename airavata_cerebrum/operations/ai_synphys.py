@@ -32,6 +32,10 @@ class AISynPhysPairFilter(OpXFormer):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.FilterTraits(**trait_values)
 
 #
 # ------- Query and Xform Registers -----

@@ -35,6 +35,11 @@ class CTModelNameFilter(OpXFormer):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.FilterTraits(**trait_values)
+
 
 class CTExplainedRatioFilter(OpXFormer):
     @t.final
@@ -67,6 +72,11 @@ class CTExplainedRatioFilter(OpXFormer):
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
+
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.FilterTraits(**trait_values)
 
 
 class CTPropertyFilter(OpXFormer):
@@ -110,6 +120,10 @@ class CTPropertyFilter(OpXFormer):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.FilterTraits(**trait_values)
 
 #
 # ------- Query and Xform Registers -----

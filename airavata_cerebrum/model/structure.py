@@ -14,6 +14,7 @@ class TraitDef(pydantic.BaseModel):
     from_ui: t.Callable[[str], t.Any] = lambda x: x
     to_ui: t.Callable[[t.Any], str] = lambda x: str(x)
 
+
 class StructBase(pydantic.BaseModel, metaclass=abc.ABCMeta):
     name: str = ""
 
@@ -21,17 +22,25 @@ class StructBase(pydantic.BaseModel, metaclass=abc.ABCMeta):
     class StructBaseTrait(traitlets.HasTraits):
         name = traitlets.Unicode()
 
+    @abc.abstractmethod
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.StructBaseTrait
 
     @abc.abstractmethod
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.StructBaseTrait(**trait_values)
+
+    @abc.abstractmethod
     def exclude(self) -> set[str]:
         return set([])
 
+    @abc.abstractmethod
     @classmethod
     def trait_ui(cls) -> dict[str, TraitDef]:
         return {}
+
 
 class DataFile(StructBase):
     # path: pathlib.Path
@@ -68,6 +77,10 @@ class DataFile(StructBase):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.DataTrait(**trait_values)
 
 
 class DataLink(StructBase):
@@ -113,6 +126,11 @@ class DataLink(StructBase):
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
+
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.DataTrait(**trait_values)
 
 
 class ComponentModel(StructBase):
@@ -162,6 +180,11 @@ class ComponentModel(StructBase):
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
+
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.DataTrait(**trait_values)
 
 
 class NeuronModel(StructBase):
@@ -281,6 +304,11 @@ class NeuronModel(StructBase):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.DataTrait(**trait_values)
+
 
 class Neuron(StructBase):
     N: int = 0
@@ -346,6 +374,15 @@ class Neuron(StructBase):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
 
+    @override
+    def exclude_set(self) -> set[str]:
+        return set(["neuron_models"])
+
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.DataTrait(**trait_values)
+
     def apply_mod(self, mod_neuron: "Neuron") -> "Neuron":
         # Fraction and counts
         if mod_neuron.fraction > 0:
@@ -365,9 +402,6 @@ class Neuron(StructBase):
             else:
                 self.neuron_models[mx_name].apply_mod(neuron_mx)
         return self
-
-    def exclude_set(self) -> set[str]:
-        return set(["neuron_models"])
 
 
 class Region(StructBase):
@@ -454,6 +488,11 @@ class Region(StructBase):
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
+
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.DataTrait(**trait_values)
 
     def apply_mod(self, mod_region: "Region") -> "Region":
         # update fractions
@@ -569,6 +608,11 @@ class ConnectionModel(StructBase):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.DataTrait(**trait_values)
+
     def apply_mod(self, mod_cmd: "ConnectionModel") -> "ConnectionModel":
         # Apply modification
         if mod_cmd.target_model_id:
@@ -593,7 +637,7 @@ class Connection(StructBase):
     post: tuple[str, str]
     probability: float = 0.0
     connect_models: dict[str, ConnectionModel] = {}
-    property_map: dict[str, t.Any] = {} # pyright: ignore[reportExplicitt.Any]
+    property_map: dict[str, t.Any] = {}
 
     class TraitDefMapper:
         map: dict[str, TraitDef] = {
@@ -668,6 +712,11 @@ class Connection(StructBase):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.DataTrait(**trait_values)
+
     def apply_mod(self, mod_con: "Connection") -> "Connection":
         if mod_con.pre[0] and mod_con.pre[1]:
             self.pre = mod_con.pre
@@ -726,6 +775,11 @@ class ExtNetwork(StructBase):
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
+
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.DataTrait(**trait_values)
 
     def apply_mod(self, mod_net: "ExtNetwork") -> "ExtNetwork":
         if mod_net.ncells > 0:
@@ -800,6 +854,11 @@ class Network(StructBase):
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.DataTrait
+
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.DataTrait(**trait_values)
 
     def apply_mod(self, mod_net: "Network") -> "Network":
         # Update dims

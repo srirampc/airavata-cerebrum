@@ -36,6 +36,11 @@ class ABCDbMERFISH_CCFLayerRegionFilter(OpXFormer):
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
 
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.FilterTraits(**trait_values)
+
 
 class ABCDbMERFISH_CCFFractionFilter(OpXFormer):
     @t.final
@@ -75,6 +80,11 @@ class ABCDbMERFISH_CCFFractionFilter(OpXFormer):
     @classmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.FilterTraits
+
+    @override
+    @classmethod
+    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
+        return cls.FilterTraits(**trait_values)
 
 
 #
