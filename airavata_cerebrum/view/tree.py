@@ -9,7 +9,7 @@ import traitlets
 
 from ..model.setup import RecipeKeys, RecipeLabels, RecipeSetup
 from ..model import structure as structure
-from . import RcpTreeNames, StructTreeNames, TNode, recipe_step_tnode, struct_tnode
+from . import RcpTreeNames, StructTreeNames, PayLoad, recipe_step_payload, struct_payload
 
 
 def _log():
@@ -74,7 +74,7 @@ class PropertyListLayout(iwidgets.GridspecLayout):
 
 
 class PropertyMapLayout(iwidgets.GridspecLayout):
-    value : traitlets.Dict[str, t.Any] = traitlets.Dict(
+    value : traitlets.Dict = traitlets.Dict(
         help="Dict values"
     ).tag(sync=True)
 
@@ -130,23 +130,32 @@ def render_property(
 #  tree.add_node(rnode)
 #  tree
 class CBTreeNode(itree.Node):
-    node : TNode = TNode()
+
+    def __init__(
+        self,
+        name: str,
+        payload: PayLoad | None,
+        nodes: tuple[t.Any] | None= None,
+        **kwargs : t.Any
+    ):
+        super().__init__(name, nodes if nodes else [], **kwargs)
+        self.payload : PayLoad | None = payload
 
     @classmethod
     def init(cls, name: str, key: str) -> "CBTreeNode":
-        return cls(name=name, node=TNode(node_key=key))
+        return cls(name=name, payload=PayLoad(node_key=key))
 
     @classmethod
     def from_struct(cls, struct_obj: structure.StructBase) -> "CBTreeNode":
         return cls(
             name=struct_obj.name,
-            node=struct_tnode(struct_obj)
+            payload=struct_payload(struct_obj)
         )
     @classmethod
     def from_recipe_step(cls, wf_step: dict[str, t.Any]) -> "CBTreeNode":
         return cls(
             name=wf_step[RecipeKeys.LABEL],
-            node=recipe_step_tnode(wf_step)
+            payload=recipe_step_payload(wf_step)
         )
 
 # Base class for side panel
@@ -258,12 +267,18 @@ class TreeBase(abc.ABC):
         new_val = change["new"]
         if not len(new_val):
             return
-        tnode : TNode = new_val[0].node 
-        node_key = tnode.node_key
-        _log().warning("Key : " + node_key + str(node_key in self.panel_dict))
+        pload : PayLoad = new_val[0].payload 
+        node_key = pload.node_key
+        node_traits = pload.node_traits
+        _log().warning(
+            "Tree Update : [%s %s %s]",
+            node_key,
+            str(node_key in self.panel_dict),
+            str(node_traits.trait_names() if node_traits else None)
+        )
         if node_key in self.panel_dict:
             side_panel = self.panel_dict[node_key]
-            side_panel.update(tnode.node_traits)
+            side_panel.update(node_traits)
             self.layout.bottom_right = side_panel.layout
 
 
@@ -278,13 +293,18 @@ class RecipeTreeBase(TreeBase, metaclass=abc.ABCMeta):
         self.panel_keys: set[str] = set([])
         self.mdr_setup: RecipeSetup = mdr_setup
 
-    def init_db_node(
+    def recipe_step_node(
         self, db_key: str, db_desc: dict[str, t.Any]
     ) -> tuple[CBTreeNode, set[str]]:
         panel_keys = set([])
         db_node = CBTreeNode.init(db_desc[RecipeKeys.LABEL], db_key)
         for wf_step in db_desc[RecipeKeys.WORKFLOW]:
-            db_node.add_node(CBTreeNode.from_recipe_step(wf_step))
+            rcp_node = CBTreeNode.from_recipe_step(wf_step)
+            # _log().warning("Add %s %s %s",
+            #                str(wf_step[RecipeKeys.NAME]),
+            #                str(rcp_node.payload.node_key),
+            #                str(rcp_node.payload.node_traits.trait_names()))
+            db_node.add_node(rcp_node)
             panel_keys.add(wf_step[RecipeKeys.NAME])
         return db_node, panel_keys
 
@@ -333,7 +353,7 @@ class SourceDataTreeView(RecipeTreeBase):
         panel_keys:  set[str] = set([])
         root_node = CBTreeNode.init(RcpTreeNames.SRC_DATA, "source_data")
         for db_key, db_desc in self.src_data_desc.items():
-            db_node, node_panel_keys = self.init_db_node(
+            db_node, node_panel_keys = self.recipe_step_node(
                 db_key,
                 {
                     RecipeKeys.LABEL: db_desc[RecipeKeys.LABEL],
@@ -361,13 +381,13 @@ class D2MLocationsTreeView(RecipeTreeBase):
         super().__init__(mdr_setup, left_width, **kwargs)
         self.d2m_map_desc : dict[str, t.Any] = mdr_setup.recipe_sections[RecipeKeys.DB2MODEL_MAP]
 
-    def init_neuron_node(
+    def neuron_node(
         self, neuron_name: str, neuron_desc: dict[str, t.Any]
     ) -> tuple[CBTreeNode, set[str]]:
         panel_keys : set[str] = set([])
         neuron_node = CBTreeNode.init(neuron_name, RcpTreeNames.D2M_NEURON)
         for db_key, db_desc in neuron_desc[RecipeKeys.SRC_DATA].items():
-            db_node, node_panel_keys = self.init_db_node(db_key, db_desc)
+            db_node, node_panel_keys = self.recipe_step_node(db_key, db_desc)
             neuron_node.add_node(db_node)
             panel_keys |= node_panel_keys
         return neuron_node, panel_keys
@@ -379,7 +399,7 @@ class D2MLocationsTreeView(RecipeTreeBase):
         for loc_name, loc_desc in self.d2m_map_desc[RecipeKeys.LOCATIONS].items():
             loc_node = CBTreeNode.init(loc_name, RcpTreeNames.D2M_LOCATION)
             for neuron_name, neuron_desc in loc_desc.items():
-                neuron_node, node_panel_keys = self.init_neuron_node(
+                neuron_node, node_panel_keys = self.neuron_node(
                     neuron_name,
                     neuron_desc
                 )
@@ -402,7 +422,7 @@ class D2MConnectionsTreeView(RecipeTreeBase):
         super().__init__(mdr_setup, left_width, **kwargs)
         self.d2m_map_desc : dict[str, t.Any] = mdr_setup.recipe_sections[RecipeKeys.DB2MODEL_MAP]
 
-    def init_conncection_node(
+    def conncection_node(
         self, connect_name: str, connect_desc: dict[str, t.Any]
     ) -> tuple[CBTreeNode, set[str]]:
         panel_keys : set[str] = set([])
@@ -415,15 +435,18 @@ class D2MConnectionsTreeView(RecipeTreeBase):
                 wf_step[RecipeKeys.NAME]
                 for wf_step in db_desc[RecipeKeys.WORKFLOW]
             )
-            conn_node.add_node(self.init_db_node(db_key, db_desc))
+            conn_node.add_node(db_node)
         return conn_node, panel_keys
 
     @override
     def build_tree(self) -> tuple[itree.Tree, set[str]]:
         panel_keys : set[str] = set([])
-        root_node = CBTreeNode(name=RcpTreeNames.CONNECTIONS, node_key="tree")
+        root_node = CBTreeNode(
+            name=RcpTreeNames.CONNECTIONS,
+            payload=PayLoad("tree")
+        )
         for name, desc in self.d2m_map_desc[RecipeKeys.CONNECTIONS].items():
-            conn_node, node_panel_keys = self.init_conncection_node(name, desc)
+            conn_node, node_panel_keys = self.conncection_node(name, desc)
             root_node.add_node(conn_node)
             panel_keys |= node_panel_keys
         tree : itree.Tree = itree.Tree(multiple_selection=False)

@@ -1,3 +1,4 @@
+import logging
 import typing as t
 
 import traitlets
@@ -7,6 +8,8 @@ from ..model.setup import RecipeKeys
 from ..model.structure import StructBase
 from ..register import find_type
 
+def _log():
+    return logging.getLogger(__name__)
 
 @t.final
 class RcpTreeNames:
@@ -34,21 +37,26 @@ class StructTreeNames:
 
 
 
-class TNode(traitlets.HasTraits):
-    node_key: traitlets.Unicode[str, str | bytes] = traitlets.Unicode()
-    node_traits: traitlets.HasTraits = traitlets.HasTraits()
+class PayLoad:
+    def __init__(
+        self,
+        node_key: str,
+        node_traits: traitlets.HasTraits | None = None
+    ) -> None:
+        self.node_key: str = node_key
+        self.node_traits: traitlets.HasTraits | None = node_traits
 
 
-def struct_tnode(struct_obj: StructBase) -> TNode:
-    return TNode(
+def struct_payload(struct_obj: StructBase) -> PayLoad:
+    return PayLoad(
         node_key=struct_obj.name,
-        node_trait=struct_obj.trait_instance(
+        node_traits=struct_obj.trait_instance(
             **struct_obj.model_dump(exclude=struct_obj.exclude()),
         ),
     )
 
 
-def recipe_step_tnode(wf_step: dict[str, t.Any]) -> TNode | None:
+def recipe_step_payload(wf_step: dict[str, t.Any]) -> PayLoad | None:
     wf_dict = (
         {
             RecipeKeys.NAME: wf_step[RecipeKeys.LABEL],
@@ -62,11 +70,27 @@ def recipe_step_tnode(wf_step: dict[str, t.Any]) -> TNode | None:
     )
     if RecipeKeys.NODE_KEY in wf_dict:
         if src_class:
-            return TNode(
-                node_key=wf_dict[RecipeKeys.NODE_KEY],
-                node_traits=src_class.trait_instance(**wf_dict),
+            nkey=wf_dict[RecipeKeys.NODE_KEY]
+            ntraits = src_class.trait_instance(**wf_dict)
+            plx = PayLoad(
+                node_key=nkey,
+                node_traits=ntraits,
             )
+            # _log().warning(
+            #     "Data [%s %s %s %s %s]",
+            #     str(wf_dict),
+            #     str(src_class),
+            #     str(nkey),
+            #     str(ntraits.trait_names()),
+            #     str(plx.node_traits.trait_names()),
+            # )
+            return plx
         else:
-            return TNode(**wf_dict)
+            _log().warning(
+                "Default Data [%s %s]",
+                str(wf_dict),
+                str(src_class)
+            )
+            return PayLoad(**wf_dict)
     else:
         return None

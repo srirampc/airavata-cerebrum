@@ -17,13 +17,13 @@ class EmptyTraits(traitlets.HasTraits):
 
 
 class TraitInterface(abc.ABC):
-    @abc.abstractmethod
     @classmethod
+    @abc.abstractmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return EmptyTraits
 
-    @abc.abstractmethod
     @classmethod
+    @abc.abstractmethod
     def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
         return EmptyTraits(**trait_values)
 

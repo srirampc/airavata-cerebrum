@@ -12,7 +12,7 @@ class TraitDef(pydantic.BaseModel):
     label: str
     default: t.Any
     from_ui: t.Callable[[str], t.Any] = lambda x: x
-    to_ui: t.Callable[[t.Any], str] = lambda x: str(x)
+    to_ui: t.Callable[[t.Any], t.Any] = lambda x: x
 
 
 class StructBase(pydantic.BaseModel, metaclass=abc.ABCMeta):
@@ -22,13 +22,13 @@ class StructBase(pydantic.BaseModel, metaclass=abc.ABCMeta):
     class StructBaseTrait(traitlets.HasTraits):
         name = traitlets.Unicode()
 
-    @abc.abstractmethod
     @classmethod
+    @abc.abstractmethod
     def trait_type(cls) -> type[traitlets.HasTraits]:
         return cls.StructBaseTrait
 
-    @abc.abstractmethod
     @classmethod
+    @abc.abstractmethod
     def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
         return cls.StructBaseTrait(**trait_values)
 
@@ -36,8 +36,8 @@ class StructBase(pydantic.BaseModel, metaclass=abc.ABCMeta):
     def exclude(self) -> set[str]:
         return set([])
 
-    @abc.abstractmethod
     @classmethod
+    @abc.abstractmethod
     def trait_ui(cls) -> dict[str, TraitDef]:
         return {}
 
@@ -90,7 +90,7 @@ class DataLink(StructBase):
         map: dict[str, TraitDef] = {
             "name": TraitDef(value_type="text", label="Name", default=""),
             "property_map": TraitDef(
-                value_type="textarea",
+                value_type="dict",
                 label="Property Map",
                 default={},
                 # from_ui=lambda x: ast.literal_eval(x),
@@ -109,7 +109,7 @@ class DataLink(StructBase):
             **kwargs: t.Any
         ):
             super().__init__(
-                property_map=json.dumps(property_map, indent=4),
+                property_map=property_map,
                 **kwargs,
             )
 
@@ -154,8 +154,8 @@ class ComponentModel(StructBase):
 
     @t.final
     class DataTrait(StructBase.StructBaseTrait):
-        # property_map = traitlets.Dict()
-        property_map = traitlets.Unicode()
+        property_map = traitlets.Dict()
+        # property_map = traitlets.Unicode()
 
         def __init__(
             self,
@@ -163,7 +163,7 @@ class ComponentModel(StructBase):
             **kwargs : t.Any
         ):
             super().__init__(
-                property_map=json.dumps(property_map, indent=4),
+                property_map=property_map,
                 **kwargs,
             )
 
@@ -242,11 +242,11 @@ class NeuronModel(StructBase):
                 default="",
             ),
             "property_map": TraitDef(
-                value_type="textarea",
+                value_type="dict",
                 label="Property Map",
-                default="{\n}",
-                from_ui=lambda x: ast.literal_eval(x),
-                to_ui=lambda x: json.dumps(x, indent=4),
+                default={},
+                # from_ui=lambda x: ast.literal_eval(x),
+                # to_ui=lambda x: json.dumps(x, indent=4),
             ),
         }
 
@@ -258,8 +258,8 @@ class NeuronModel(StructBase):
         m_type = traitlets.Unicode()
         template = traitlets.Unicode()
         dynamics_params = traitlets.Unicode()
-        # property_map = traitlets.Dict()
-        property_map = traitlets.Unicode()
+        property_map = traitlets.Dict()
+        # property_map = traitlets.Unicode()
         morphology = traitlets.Unicode()
 
         def __init__(
@@ -268,7 +268,7 @@ class NeuronModel(StructBase):
             **kwargs : t.Any
         ):
             super().__init__(
-                property_map=json.dumps(property_map, indent=4),
+                property_map=property_map,
                 **kwargs,
             )
 
@@ -803,7 +803,7 @@ class Network(StructBase):
     ncells: int = 0
     locations: dict[str, Region] = {}
     connections: dict[str, Connection] = {}
-    dims: dict[str, t.Any] = {} # pyright: ignore[reportExplicitt.Any]
+    dims: dict[str, t.Any] = {}
     ext_networks: dict[str, ExtNetwork] = {}
     data_connect: list[DataLink] = [] 
     data_files: list[DataFile] = []

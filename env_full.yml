@@ -2,56 +2,53 @@ channels:
   - conda-forge
 
 dependencies:
-  # Basics ------------------
-  - python=3.10
+  # Python version and pip
+  - python=3.12
   - pip
 
-  # Convenience -------------
-  - black
-
-  # Testing
-  - pytest
-  - iminuit
-
-  # modeling
-  - openpyxl
-  - numba
-
-  # allensdk
+  # Requirements for airavata cerebrum
   - anywidget
-  - future
+  - duckdb
   - ipywidgets
   - ipytree
-  - jinja2
-  - python-jsonpath
   - jupyter
   - nest-simulator
+  - numba
   - numpy
   - marimo
   - matplotlib
-  # - nest-asyncio
+  - openmpi-mpicc
+  - openpyxl
   - pandas
-  - pillow
-  - psycopg2-binary
   - pydantic
-  - pynrrd
   - pyqtgraph
   - python-dateutil
+  - python-jsonpath
   - pyyaml
   - requests
-  - scikit-build
-  - scikit-image
   - scikit-learn
   - scipy
-  - seaborn
-  - semver
-  - statsmodels
-  - simpleitk
-  - simplejson
-  - six
   - sqlalchemy
   - traitlets
   - tqdm
+
+  # From v1 model
+  - black
+  - iminuit
+  - jinja2
+  # - nest-asyncio
+  - pillow
+  - psycopg2-binar
+  - pynrrd
+  - pytest
+  - scikit-build
+  - scikit-image
+  - seaborn
+  - semver
+  - six
+  - statsmodels
+  - simpleitk
+  - simplejson
   - xarray
 
   # PIP dependencies
@@ -61,8 +58,8 @@ dependencies:
       - bmtk
       - mpi4py
       - parse
+      - polars
       - pylightxl
-      - pytree
       - scanpy
       - git+https://github.com/alleninstitute/abc_atlas_access
       - git+https://github.com/alleninstitute/neuroanalysis
