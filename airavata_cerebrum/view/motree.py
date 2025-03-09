@@ -16,7 +16,7 @@ from ..base import DbQuery, OpXFormer
 from ..register import find_type
 from ..model.setup import RecipeKeys, RecipeLabels, RecipeSetup
 from ..model import structure as structure
-from . import RcpTreeNames
+from . import PayLoad, RcpTreeNames, recipe_step_payload, struct_payload
 
 def _log():
     return logging.getLogger(__name__)
@@ -165,13 +165,11 @@ class RecipeSidePanel(PanelBase):
         for ekey, vmap in template_map[RecipeKeys.INIT_PARAMS].items():
             self.widget_map[ekey] = render_property(
                 vmap[RecipeKeys.TYPE],
-                label = vmap["label"] + " :",
                 **vmap
             )
         for ekey, vmap in template_map[RecipeKeys.EXEC_PARAMS].items():
             self.widget_map[ekey] = render_property(
                 vmap[RecipeKeys.TYPE],
-                label = vmap["label"] + " :",
                 **vmap
             )
 
@@ -243,12 +241,38 @@ class StructSidePanel(PanelBase):
 
 #
 # Base class for tree node
-class CBTreeNode(traitlets.HasTraits):
-    node_key : traitlets.Unicode[str, str | bytes] = traitlets.Unicode()
-    children : dict[str, "CBTreeNode" | None] = {}
+class CBTreeNode:
+    def __init__(
+        self,
+        name: str,
+        payload: PayLoad | None,
+        nodes: list["CBTreeNode"] | None= None,
+        **kwargs : t.Any
+    ):
+        self.payload : PayLoad | None = payload
+        self.children : dict[str, "CBTreeNode"] = {}
+        if nodes:
+            self.children = {nx.payload.node_key : nx for nx in nodes}
 
-    def add_node(self, child: "CBTreeNode" | None):
-        self.children[child.node_key] = child
+    def add_node(self, child: "CBTreeNode"):
+        self.children[child.payload.node_key] = child
+
+    @classmethod
+    def init(cls, name: str, key: str) -> "CBTreeNode":
+        return cls(name=name, payload=PayLoad(node_key=key))
+
+    @classmethod
+    def from_struct(cls, struct_obj: structure.StructBase) -> "CBTreeNode":
+        return cls(
+            name=struct_obj.name,
+            payload=struct_payload(struct_obj)
+        )
+    @classmethod
+    def from_recipe_step(cls, wf_step: dict[str, t.Any]) -> "CBTreeNode":
+        return cls(
+            name=wf_step[RecipeKeys.LABEL],
+            payload=recipe_step_payload(wf_step)
+        )
 
 
 class TreeBase(abc.ABC):
@@ -264,68 +288,26 @@ class TreeBase(abc.ABC):
         self.left_width: str = left_width
 
     @abc.abstractmethod
-    def init_tree(self) -> AnyWidget:
-        pass
-
-    @abc.abstractmethod
     def build(self) -> "TreeBase | None":
-        return None
+        pass
 
     def tree_update(self, change: dict[str, t.Any]):
         new_val = change["new"]
         if not len(new_val):
             return
-        node_key = new_val[0].node_key
-        _log().warning("Key : " + node_key + str(node_key in self.panel_dict))
+        pload : PayLoad = new_val[0].payload 
+        node_key = pload.node_key
+        node_traits = pload.node_traits
+        _log().warning(
+            "Tree Update : [%s %s %s]",
+            node_key,
+            str(node_key in self.panel_dict),
+            str(node_traits.trait_names() if node_traits else None)
+        )
         if node_key in self.panel_dict:
             side_panel = self.panel_dict[node_key]
-            side_panel.update(new_val[0])
+            side_panel.update(node_traits)
             self.layout = mo.hstack([self.tree, side_panel.layout])
-
-    @staticmethod
-    def struct_tree_node(struct_obj: structure.StructBase) -> CBTreeNode:
-        tnode_class = types.new_class(
-            struct_obj.__class__.__name__ + "Node",
-            bases=(CBTreeNode, struct_obj.trait_type()),
-        )
-        return tnode_class(
-            node_key=struct_obj.name,
-            **struct_obj.model_dump(exclude=struct_obj.exclude()),
-        )
-
-    @staticmethod
-    def type_trait_tree_node(
-        register_key: str,
-        init_params: dict[str, t.Any]
-    ) -> CBTreeNode | None:
-        src_class: type[DbQuery] | type[OpXFormer] | None = find_type(
-            register_key
-        )
-        if src_class:
-            tnode_class = types.new_class(
-                src_class.__name__ + "Node",
-                bases=(CBTreeNode, src_class.trait_type()),
-            )
-            return tnode_class(**init_params)
-        elif RecipeKeys.NODE_KEY in init_params and RecipeKeys.NAME in init_params:
-            return CBTreeNode(**init_params)
-        else:
-            return None
-
-    @staticmethod
-    def wflow_step_tree_node(
-        wf_step: dict[str, t.Any]
-    ) -> CBTreeNode | None:
-        step_key = wf_step[RecipeKeys.NAME]
-        wf_dict = (
-            {
-                RecipeKeys.NAME: wf_step[RecipeKeys.LABEL],
-                RecipeKeys.NODE_KEY: wf_step[RecipeKeys.NAME],
-            }
-            | wf_step[RecipeKeys.INIT_PARAMS]
-            | wf_step[RecipeKeys.EXEC_PARAMS]
-        )
-        return RecipeTreeBase.type_trait_tree_node(step_key, wf_dict)
 
 
 class RecipeTreeBase(TreeBase, metaclass=abc.ABCMeta):
@@ -338,18 +320,24 @@ class RecipeTreeBase(TreeBase, metaclass=abc.ABCMeta):
         super().__init__(left_width, **kwargs)
         self.mdr_setup: RecipeSetup = mdr_setup
 
-    def init_db_node(
-        self, db_key: str, db_desc: dict[str, t.Any]
+    def db_recipe_node(
+        self,
+        db_key: str,
+        db_desc: dict[str, t.Any]
     ) -> CBTreeNode:
-        db_node = CBTreeNode(name=db_desc[RecipeKeys.LABEL], node_key=db_key)
+        db_node = CBTreeNode.init(
+            name=db_desc[RecipeKeys.LABEL],
+            key=db_key
+        )
         for wf_step in db_desc[RecipeKeys.WORKFLOW]:
-            db_node.add_node(RecipeTreeBase.wflow_step_tree_node(wf_step))
+            db_node.add_node(CBTreeNode.from_recipe_step(wf_step))
             self.panel_keys.add(wf_step[RecipeKeys.NAME])
         return db_node
 
-    def init_side_panels(self) -> dict[str, PanelBase]:
+    def build_side_panels(self) -> dict[str, PanelBase]:
         _log().info(
-            "Start Left-side panel construction for [%s]", str(self.panel_dict.keys())
+            "Start Left-side panel construction for [%s]",
+            str(self.panel_dict.keys())
         )
         for pkey in self.panel_keys:
             _log().debug("Initializing Panels for [%s]", pkey)
@@ -360,15 +348,15 @@ class RecipeTreeBase(TreeBase, metaclass=abc.ABCMeta):
 
     @override
     def build(self) -> TreeBase:
-        self.tree : AnyWidget | None = self.init_tree()
-        self.panel_dict : dict[str, PanelBase]= self.init_side_panels()
+        self.tree : AnyWidget | None = self.build_tree()
+        self.panel_dict : dict[str, PanelBase]= self.build_side_panels()
         self.tree.observe(self.tree_update, names="selected_nodes")
         self.layout : mo.Html | None = mo.hstack([self.tree, mo.vstack([])])
         return self
 
     @override
     @abc.abstractmethod
-    def init_tree(self) -> AnyWidget:
+    def build_tree(self) -> AnyWidget:
         pass
 
 
@@ -380,13 +368,18 @@ class SourceDataTreeView(RecipeTreeBase):
         **kwargs: t.Any,
     ) -> None:
         super().__init__(mdr_setup, left_width, **kwargs)
-        self.src_data_desc : dict[str, t.Any] = mdr_setup.recipe_sections[RecipeKeys.SRC_DATA]
+        self.src_data_desc : dict[str, t.Any] = (
+            mdr_setup.recipe_sections[RecipeKeys.SRC_DATA]
+        )
 
     @override
-    def init_tree(self) -> AnyWidget:
-        root_node = CBTreeNode(name=RcpTreeNames.SRC_DATA, node_key="source_data")
+    def build_tree(self) -> AnyWidget:
+        root_node = CBTreeNode.init(
+            name=RcpTreeNames.SRC_DATA,
+            key="source_data"
+        )
         for db_key, db_desc in self.src_data_desc.items():
-            db_node = self.init_db_node(
+            db_node = self.db_recipe_node(
                 db_key,
                 {
                     RecipeKeys.LABEL: db_desc[RecipeKeys.LABEL],
@@ -404,73 +397,73 @@ class SourceDataTreeView(RecipeTreeBase):
         return self.tree
 
 
-class D2MLocationsTreeView(RecipeTreeBase):
-    def __init__(
-        self,
-        mdr_setup: RecipeSetup,
-        left_width: str="40%",
-        **kwargs: t.Any,
-    ) -> None:
-        super().__init__(mdr_setup, left_width, **kwargs)
-        self.d2m_map_desc : dict[str, t.Any] = mdr_setup.recipe_sections[RecipeKeys.DB2MODEL_MAP]
-
-    def init_neuron_node(
-        self, neuron_name: str, neuron_desc: dict[str, t.Any]
-    ) -> CBTreeNode:
-        neuron_node = CBTreeNode(name=neuron_name, node_key="d2m_map.neuron")
-        for db_key, db_desc in neuron_desc[RecipeKeys.SRC_DATA].items():
-            neuron_node.add_node(self.init_db_node(db_key, db_desc))
-        return neuron_node
-
-    @override
-    def init_tree(self) -> AnyWidget:
-        root_node = CBTreeNode(name=RecipeKeys.LOCATIONS, node_key="root")
-        for loc_name, loc_desc in self.d2m_map_desc[RecipeKeys.LOCATIONS].items():
-            loc_node = CBTreeNode(name=loc_name, node_key="d2m_map.location")
-            for neuron_name, neuron_desc in loc_desc.items():
-                neuron_node = self.init_neuron_node(neuron_name, neuron_desc)
-                loc_node.add_node(neuron_node)
-            root_node.add_node(loc_node)
-        #TODO: initialize tree
-        self.tree : itree.Tree = itree.Tree(multiple_selection=False)
-        self.tree.add_node(root_node)
-        self.tree.layout.width = self.left_width  # type: ignore
-        return self.tree
-
-
-class D2MConnectionsTreeView(RecipeTreeBase):
-    def __init__(
-        self,
-        mdr_setup: RecipeSetup,
-        left_width: str="40%",
-        **kwargs: t.Any,
-    ) -> None:
-        super().__init__(mdr_setup, left_width, **kwargs)
-        self.d2m_map_desc : dict[str, t.Any] = mdr_setup.recipe_sections[RecipeKeys.DB2MODEL_MAP]
-
-    def init_conncection_node(
-        self, connect_name: str, connect_desc: dict[str, t.Any]
-    ) -> CBTreeNode:
-        conn_node = CBTreeNode(name=connect_name, node_key="d2m_map.connection")
-        for db_key, db_desc in connect_desc[RecipeKeys.SRC_DATA].items():
-            db_node = CBTreeNode(name=db_desc[RecipeKeys.LABEL], node_key=db_key)
-            for wf_step in db_desc[RecipeKeys.WORKFLOW]:
-                db_node.add_node(RecipeTreeBase.wflow_step_tree_node(wf_step))
-            self.panel_keys.union(
-                set(
-                    wf_step[RecipeKeys.NAME] for wf_step in db_desc[RecipeKeys.WORKFLOW]
-                )
-            )
-            conn_node.add_node(self.init_db_node(db_key, db_desc))
-        return conn_node
-
-    @override
-    def init_tree(self) -> AnyWidget:
-        root_node = CBTreeNode(name=RcpTreeNames.CONNECTIONS, node_key="tree")
-        for conn_name, conn_desc in self.d2m_map_desc[RecipeKeys.CONNECTIONS].items():
-            root_node.add_node(self.init_conncection_node(conn_name, conn_desc))
-        #TODO: initialize tree
-        self.tree : itree.Tree = itree.Tree(multiple_selection=False)
-        self.tree.add_node(root_node)
-        self.tree.layout.width = self.left_width  # type: ignore
-        return self.tree
+# class D2MLocationsTreeView(RecipeTreeBase):
+#     def __init__(
+#         self,
+#         mdr_setup: RecipeSetup,
+#         left_width: str="40%",
+#         **kwargs: t.Any,
+#     ) -> None:
+#         super().__init__(mdr_setup, left_width, **kwargs)
+#         self.d2m_map_desc : dict[str, t.Any] = mdr_setup.recipe_sections[RecipeKeys.DB2MODEL_MAP]
+# 
+#     def init_neuron_node(
+#         self, neuron_name: str, neuron_desc: dict[str, t.Any]
+#     ) -> CBTreeNode:
+#         neuron_node = CBTreeNode(name=neuron_name, node_key="d2m_map.neuron")
+#         for db_key, db_desc in neuron_desc[RecipeKeys.SRC_DATA].items():
+#             neuron_node.add_node(self.recipe_step_node(db_key, db_desc))
+#         return neuron_node
+# 
+#     @override
+#     def init_tree(self) -> AnyWidget:
+#         root_node = CBTreeNode(name=RecipeKeys.LOCATIONS, node_key="root")
+#         for loc_name, loc_desc in self.d2m_map_desc[RecipeKeys.LOCATIONS].items():
+#             loc_node = CBTreeNode(name=loc_name, node_key="d2m_map.location")
+#             for neuron_name, neuron_desc in loc_desc.items():
+#                 neuron_node = self.init_neuron_node(neuron_name, neuron_desc)
+#                 loc_node.add_node(neuron_node)
+#             root_node.add_node(loc_node)
+#         #TODO: initialize tree
+#         self.tree : itree.Tree = itree.Tree(multiple_selection=False)
+#         self.tree.add_node(root_node)
+#         self.tree.layout.width = self.left_width  # type: ignore
+#         return self.tree
+# 
+# 
+# class D2MConnectionsTreeView(RecipeTreeBase):
+#     def __init__(
+#         self,
+#         mdr_setup: RecipeSetup,
+#         left_width: str="40%",
+#         **kwargs: t.Any,
+#     ) -> None:
+#         super().__init__(mdr_setup, left_width, **kwargs)
+#         self.d2m_map_desc : dict[str, t.Any] = mdr_setup.recipe_sections[RecipeKeys.DB2MODEL_MAP]
+# 
+#     def init_conncection_node(
+#         self, connect_name: str, connect_desc: dict[str, t.Any]
+#     ) -> CBTreeNode:
+#         conn_node = CBTreeNode(name=connect_name, node_key="d2m_map.connection")
+#         for db_key, db_desc in connect_desc[RecipeKeys.SRC_DATA].items():
+#             db_node = CBTreeNode(name=db_desc[RecipeKeys.LABEL], node_key=db_key)
+#             for wf_step in db_desc[RecipeKeys.WORKFLOW]:
+#                 db_node.add_node(RecipeTreeBase.wflow_step_tree_node(wf_step))
+#             self.panel_keys.union(
+#                 set(
+#                     wf_step[RecipeKeys.NAME] for wf_step in db_desc[RecipeKeys.WORKFLOW]
+#                 )
+#             )
+#             conn_node.add_node(self.recipe_step_node(db_key, db_desc))
+#         return conn_node
+# 
+#     @override
+#     def init_tree(self) -> AnyWidget:
+#         root_node = CBTreeNode(name=RcpTreeNames.CONNECTIONS, node_key="tree")
+#         for conn_name, conn_desc in self.d2m_map_desc[RecipeKeys.CONNECTIONS].items():
+#             root_node.add_node(self.init_conncection_node(conn_name, conn_desc))
+#         #TODO: initialize tree
+#         self.tree : itree.Tree = itree.Tree(multiple_selection=False)
+#         self.tree.add_node(root_node)
+#         self.tree.layout.width = self.left_width  # type: ignore
+#         return self.tree

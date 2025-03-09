@@ -293,7 +293,7 @@ class RecipeTreeBase(TreeBase, metaclass=abc.ABCMeta):
         self.panel_keys: set[str] = set([])
         self.mdr_setup: RecipeSetup = mdr_setup
 
-    def recipe_step_node(
+    def db_recipe_node(
         self, db_key: str, db_desc: dict[str, t.Any]
     ) -> tuple[CBTreeNode, set[str]]:
         panel_keys = set([])
@@ -353,7 +353,7 @@ class SourceDataTreeView(RecipeTreeBase):
         panel_keys:  set[str] = set([])
         root_node = CBTreeNode.init(RcpTreeNames.SRC_DATA, "source_data")
         for db_key, db_desc in self.src_data_desc.items():
-            db_node, node_panel_keys = self.recipe_step_node(
+            db_node, node_panel_keys = self.db_recipe_node(
                 db_key,
                 {
                     RecipeKeys.LABEL: db_desc[RecipeKeys.LABEL],
@@ -387,7 +387,7 @@ class D2MLocationsTreeView(RecipeTreeBase):
         panel_keys : set[str] = set([])
         neuron_node = CBTreeNode.init(neuron_name, RcpTreeNames.D2M_NEURON)
         for db_key, db_desc in neuron_desc[RecipeKeys.SRC_DATA].items():
-            db_node, node_panel_keys = self.recipe_step_node(db_key, db_desc)
+            db_node, node_panel_keys = self.db_recipe_node(db_key, db_desc)
             neuron_node.add_node(db_node)
             panel_keys |= node_panel_keys
         return neuron_node, panel_keys
