@@ -47,20 +47,28 @@ class PayLoad:
         self.node_traits: traitlets.HasTraits | None = node_traits
 
 
-def struct_payload(struct_obj: StructBase) -> PayLoad:
+def struct_payload(
+    struct_obj: StructBase,
+    node_key: str | None = None,
+) -> PayLoad:
     return PayLoad(
-        node_key=struct_obj.name,
+        node_key=node_key if node_key else struct_obj.name,
         node_traits=struct_obj.trait_instance(
             **struct_obj.model_dump(exclude=struct_obj.exclude()),
         ),
     )
 
 
-def recipe_step_payload(wf_step: dict[str, t.Any]) -> PayLoad | None:
+def recipe_step_payload(
+    wf_step: dict[str, t.Any],
+    node_key: str | None = None,
+) -> PayLoad | None:
     wf_dict = (
         {
             RecipeKeys.NAME: wf_step[RecipeKeys.LABEL],
-            RecipeKeys.NODE_KEY: wf_step[RecipeKeys.NAME],
+            RecipeKeys.NODE_KEY: (
+                node_key if node_key else wf_step[RecipeKeys.NAME]
+            ),
         }
         | wf_step[RecipeKeys.INIT_PARAMS]
         | wf_step[RecipeKeys.EXEC_PARAMS]

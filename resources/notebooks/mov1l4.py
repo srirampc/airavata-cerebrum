@@ -11,6 +11,7 @@ def _():
     import airavata_cerebrum.model.recipe as cbm_recipe
     import airavata_cerebrum.view.motree as cbm_motree
     import marimo as mo
+    import awitree
 
     custom_mod_file = "./v1l4/recipe/custom_mod.json"
     m_base_dir = "./"
@@ -33,6 +34,7 @@ def _():
         recipe_dir=rcp_dir,
     )
     return (
+        awitree,
         cbm_motree,
         cbm_recipe,
         cbm_setup,
@@ -51,31 +53,54 @@ def _():
 
 
 @app.cell
-def _(recipe_dict):
-    recipe_dict
+def _(cbm_motree, mdr_setup, mo):
+    src_tree = cbm_motree.SourceDataTreeView(mdr_setup).build()
+    stree = src_tree.tree
+    spanel_dict = src_tree.panel_dict
+    smotree = mo.ui.anywidget(stree)
+    return smotree, spanel_dict, src_tree, stree
+
+
+@app.cell
+def _(mo, smotree, spanel_dict, src_tree, stree):
+    srt_selected = (
+        spanel_dict[stree.selected_nodes[0]["id"]]
+        if (
+            stree.selected_nodes and
+            len(stree.selected_nodes) > 0 and
+            (stree.selected_nodes[0]["id"] in spanel_dict)
+        ) else None
+    )
+    mo.hstack(
+        [
+            smotree,
+            srt_selected.layout if srt_selected else None
+        ],
+        widths=src_tree.widths
+    )
+    return (srt_selected,)
+
+
+@app.cell
+def _(rtree):
+    rtree.selected_nodes
     return
 
 
 @app.cell
-def _(mdr_setup):
-    mdr_setup.recipe_sections["templates"]
-    cpfilter = mdr_setup.get_template_for("airavata_cerebrum.operations.abm_celltypes.CTPropertyFilter")
-    cpfilter
-    return (cpfilter,)
-
-
-@app.cell
-def _(cbm_motree, cpfilter):
-
-    spanel = cbm_motree.RecipeSidePanel(cpfilter)
-    spanel.layout
-    return (spanel,)
-
-
-@app.cell
-def _(mo):
-    mo.state
-    return
+def _(awitree):
+    rtree = awitree.Tree(data={
+            "id": "0",
+            "text":"Main Root",
+            "state": {"open" : True},
+            "children" : [
+                {"id": "1", "text" : "Sub Node 1", "children":[]},
+                {"id": "2", "text" : "Sub Node 2", "children":[]},
+                {"id": "3", "text" : "Sub Node 3", "children":[]},
+            ]
+    })
+    rtree
+    return (rtree,)
 
 
 if __name__ == "__main__":

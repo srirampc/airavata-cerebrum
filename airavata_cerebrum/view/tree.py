@@ -170,8 +170,9 @@ class PanelBase:
             lx.unlink()
         self.links.clear()
 
-    def update(self, new_val: traitlets.HasTraits | None):
+    def update(self, pload: PayLoad):
         self.clear_links()
+        new_val: traitlets.HasTraits | None = pload.node_traits
         if not new_val:
             return
         for slot, widx in self.widget_map.items():
@@ -278,7 +279,7 @@ class TreeBase(abc.ABC):
         )
         if node_key in self.panel_dict:
             side_panel = self.panel_dict[node_key]
-            side_panel.update(node_traits)
+            side_panel.update(pload)
             self.layout.bottom_right = side_panel.layout
 
 
