@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.11.17"
-app = marimo.App(width="full")
+app = marimo.App()
 
 
 @app.cell
@@ -10,6 +10,8 @@ def _():
     import airavata_cerebrum.model.setup as cbm_setup
     import airavata_cerebrum.model.recipe as cbm_recipe
     import airavata_cerebrum.view.motree as cbm_motree
+    import airavata_cerebrum.model.structure as cbm_structure
+    import airavata_cerebrum.util as cbm_utils
     import marimo as mo
     import awitree
 
@@ -19,28 +21,30 @@ def _():
     rcp_files = {"recipe": ["recipe.json"], "templates": ["recipe_template.json"]}
     rcp_dir = "./v1l4/recipe/"
 
-    recipe_dict = {}
-    with open("./v1l4/recipe/recipe.json") as ifx:
-        recipe_dict = json.load(ifx)
-
-    custom_mod_dict = {}
-    with open(custom_mod_file) as ifx:
-        custom_mod_dict = json.load(ifx)
-
+    recipe_dict = cbm_utils.io.load_json("./v1l4/recipe/recipe.json")
+    cmod_dict = cbm_utils.io.load_json(custom_mod_file)
     mdr_setup = cbm_setup.init_model_setup(
         name=m_name,
         model_base_dir=m_base_dir,
         recipe_files=rcp_files,
         recipe_dir=rcp_dir,
     )
+
+    tree_view_widths = [0.4, 0.6]
+    cmod_struct = cbm_structure.Network.model_validate(cmod_dict)
+
+    stree, spanel_dict = cbm_motree.SourceDataTreeView(mdr_setup).build().view_comps()
+    smotree = mo.ui.anywidget(stree)
     return (
         awitree,
         cbm_motree,
         cbm_recipe,
         cbm_setup,
-        custom_mod_dict,
+        cbm_structure,
+        cbm_utils,
+        cmod_dict,
+        cmod_struct,
         custom_mod_file,
-        ifx,
         json,
         m_base_dir,
         m_name,
@@ -49,58 +53,92 @@ def _():
         rcp_dir,
         rcp_files,
         recipe_dict,
+        smotree,
+        spanel_dict,
+        stree,
+        tree_view_widths,
     )
 
 
-@app.cell
-def _(cbm_motree, mdr_setup, mo):
-    src_tree = cbm_motree.SourceDataTreeView(mdr_setup).build()
-    stree = src_tree.tree
-    spanel_dict = src_tree.panel_dict
-    smotree = mo.ui.anywidget(stree)
-    return smotree, spanel_dict, src_tree, stree
-
-
-@app.cell
-def _(mo, smotree, spanel_dict, src_tree, stree):
-    srt_selected = (
-        spanel_dict[stree.selected_nodes[0]["id"]]
-        if (
-            stree.selected_nodes and
-            len(stree.selected_nodes) > 0 and
-            (stree.selected_nodes[0]["id"] in spanel_dict)
-        ) else None
-    )
+@app.cell(hide_code=True)
+def _(cbm_motree, mo, smotree, spanel_dict, stree, tree_view_widths):
+    srt_selected = cbm_motree.TreeBase.panel_selector(stree, spanel_dict)
     mo.hstack(
         [
             smotree,
             srt_selected.layout if srt_selected else None
         ],
-        widths=src_tree.widths
+        widths=tree_view_widths
     )
     return (srt_selected,)
 
 
 @app.cell
-def _(rtree):
-    rtree.selected_nodes
-    return
+def _(cbm_motree, mdr_setup, mo):
+    d2mltree, d2ml_panel_dict = cbm_motree.D2MLocationsTreeView(mdr_setup).build().view_comps()
+    d2ml_motree = mo.ui.anywidget(d2mltree)
+    return d2ml_motree, d2ml_panel_dict, d2mltree
+
+
+@app.cell(hide_code=True)
+def _(
+    cbm_motree,
+    d2ml_motree,
+    d2ml_panel_dict,
+    d2mltree,
+    mo,
+    tree_view_widths,
+):
+    d2mlrt_selected = cbm_motree.TreeBase.panel_selector(d2mltree, d2ml_panel_dict)
+    mo.hstack(
+        [
+            d2ml_motree,
+            d2mlrt_selected.layout if d2mlrt_selected else mo.vstack([])
+        ],
+        widths=tree_view_widths
+    )
+    return (d2mlrt_selected,)
 
 
 @app.cell
-def _(awitree):
-    rtree = awitree.Tree(data={
-            "id": "0",
-            "text":"Main Root",
-            "state": {"open" : True},
-            "children" : [
-                {"id": "1", "text" : "Sub Node 1", "children":[]},
-                {"id": "2", "text" : "Sub Node 2", "children":[]},
-                {"id": "3", "text" : "Sub Node 3", "children":[]},
-            ]
-    })
-    rtree
-    return (rtree,)
+def _(cbm_motree, mdr_setup, mo):
+    d2mctree, d2mc_panel_map = cbm_motree.D2MConnectionsTreeView(mdr_setup).build().view_comps()
+    d2mc_motree = mo.ui.anywidget(d2mctree)
+    return d2mc_motree, d2mc_panel_map, d2mctree
+
+
+@app.cell(hide_code=True)
+def _(cbm_motree, d2mc_motree, d2mc_panel_map, mo, tree_view_widths):
+    d2mcrt_selected = cbm_motree.TreeBase.panel_selector(d2mc_motree, d2mc_panel_map)
+    mo.hstack(
+        [
+            d2mc_motree,
+            d2mcrt_selected.layout if d2mcrt_selected else None
+        ],
+        widths=tree_view_widths
+    )
+    return (d2mcrt_selected,)
+
+
+@app.cell
+def _(cbm_motree, cmod_struct, mo):
+    cmod_tview = cbm_motree.NetworkTreeView(cmod_struct).build()
+    cmodtree, cmod_panel_dict = cmod_tview.view_comps()
+    cmod_motree = mo.ui.anywidget(cmodtree)
+    return cmod_motree, cmod_panel_dict, cmod_tview, cmodtree
+
+
+@app.cell
+def _(cbm_motree, cmod_motree, cmod_panel_dict, mo, tree_view_widths):
+    cmod_selected = cbm_motree.TreeBase.panel_selector(cmod_motree, cmod_panel_dict)
+    mo.hstack(
+        [
+            cmod_motree,
+            cmod_selected.layout if cmod_selected else None
+        ],
+        widths=tree_view_widths
+    )
+    return (cmod_selected,)
 
 
 if __name__ == "__main__":

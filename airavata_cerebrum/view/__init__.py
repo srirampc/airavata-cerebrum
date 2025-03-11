@@ -17,6 +17,7 @@ class RcpTreeNames:
     LOCATIONS = "Locations"
     CONNECTIONS = "Connections"
     REGIONS = "Regions"
+    D2M = "Data->Model"
     D2M_NEURON = "d2m_map.neuron"
     D2M_LOCATION = "d2m_map.location"
     D2M_CONNECION =  "d2m_map.connection"

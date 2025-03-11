@@ -79,12 +79,11 @@ class PropertyListLayout(mo.ui.array):
         **kwargs: t.Any
     ):
         super().__init__(
-            [wx for wx in self.widgets(value) if wx],
+            [wx for wx in self.widgets(value, **kwargs) if wx is not None],
             label=label,
-            **kwargs
         )
 
-    def widgets(self, value: list[t.Any]):
+    def widgets(self, value: list[t.Any], **_kwargs: t.Any):
         return(
             scalar_widget(
                 type(vx).__name__,
@@ -97,17 +96,18 @@ class PropertyListLayout(mo.ui.array):
 # NOTE: Features of trait setting and change handler not included 
 class PropertyMapLayout(mo.ui.dictionary):
 
-    def __init__(self, value: dict[str, t.Any], **kwargs: t.Any):
+    def __init__(self, value: dict[str, t.Any], label:str="", **kwargs: t.Any):
         super().__init__(
-            {kx: wx for kx, wx in self.widgets(value) if wx},
-            **kwargs
+            {kx: wx for kx, wx in self.widgets(value, **kwargs) if wx is not None},
+            label=label,
         )
         # print("Value: ", len(value))
 
     def init_widget(
         self,
         vx: t.Any,
-        label:str = ""
+        label:str = "",
+         **_kwargs: t.Any
     ) -> UIElement[t.Any, t.Any] | None:
         tname = type(vx).__name__
         match tname:
@@ -120,10 +120,11 @@ class PropertyMapLayout(mo.ui.dictionary):
 
     def widgets(
         self,
-        value: dict[str, t.Any]
+        value: dict[str, t.Any],
+         **kwargs: t.Any
     ) -> Iterable[tuple[str, UIElement[t.Any, t.Any] | None]]:
         return (
-            (kx, self.init_widget(vx)) for kx, vx in value.items()
+            (kx, self.init_widget(vx, **kwargs)) for kx, vx in value.items()
         )
 
 def render_property(
@@ -131,9 +132,10 @@ def render_property(
     label:str = "",
     **kwargs: t.Any
 ) -> UIElement[t.Any, t.Any] | None:
+    # _log().warning("Render Out [%s]", str(kwargs))
     match widget_key:
         case "dict":
-            return PropertyMapLayout(value=kwargs["default"], **kwargs)
+            return PropertyMapLayout(value=kwargs["default"], label=label, **kwargs)
         case "list":
             return PropertyListLayout(value=kwargs["default"], **kwargs)
         case _:
@@ -245,7 +247,7 @@ class StructSidePanel(PanelBase):
             self.widget_map[kx] for kx in struct_comp.trait_ui().keys()
         )
         struct_widgets = mo.ui.array(
-            [wx for  wx in wd_itr if wx],
+            [wx for  wx in wd_itr if wx is not None],
             label=struct_comp.name
         )
         self.layout : mo.Html | None = mo.vstack([struct_widgets])
@@ -274,7 +276,7 @@ class CBTreeNode:
         return {
             'id' : self.payload.node_key,
             'text': self.name,
-            'state': {'open': True},
+            'state': {'disabled': False},
             'children': [
                 cx.awi_dict() for _kx, cx in self.children.items()
             ]
@@ -343,6 +345,23 @@ class TreeBase(abc.ABC):
             side_panel.update()
             self.layout = mo.hstack([self.tree, side_panel.layout])
 
+    def view_comps(self):
+        return (self.tree, self.panel_dict)
+
+    @staticmethod
+    def panel_selector(
+        axtree: awitree.Tree,
+        axpanel_dict: dict[str, PanelBase]
+    ) -> PanelBase | None:
+        return (
+            axpanel_dict[axtree.selected_nodes[0]["id"]]
+            if (
+                axtree.selected_nodes and
+                len(axtree.selected_nodes) > 0 and
+                (axtree.selected_nodes[0]["id"] in axpanel_dict)
+            ) else None
+        )
+
 
 class RecipeTreeBase(TreeBase, metaclass=abc.ABCMeta):
     def __init__(
@@ -398,7 +417,7 @@ class RecipeTreeBase(TreeBase, metaclass=abc.ABCMeta):
         pass
 
 
-class SourceDataTreeView(RecipeTreeBase):
+class DataSourceRecipeView(RecipeTreeBase):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
@@ -436,7 +455,7 @@ class SourceDataTreeView(RecipeTreeBase):
         return tree
 
 
-class D2MLocationsTreeView(RecipeTreeBase):
+class Datat2ModelRecipeView(RecipeTreeBase):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
@@ -466,9 +485,8 @@ class D2MLocationsTreeView(RecipeTreeBase):
             neuron_node.add_node(db_node)
         return neuron_node
 
-    @override
-    def build_tree(self) -> AnyWidget:
-        self.root_node : CBTreeNode | None = CBTreeNode.init(
+    def locations(self):
+        loc_root_node : CBTreeNode | None = CBTreeNode.init(
             name=RecipeKeys.LOCATIONS,
             key="d2m_map.locations.root"
         )
@@ -484,25 +502,8 @@ class D2MLocationsTreeView(RecipeTreeBase):
                     neuron_desc
                 )
                 loc_node.add_node(neuron_node)
-            self.root_node.add_node(loc_node)
-        #TODO: initialize tree
-        # initialize tree
-        tree : AnyWidget = awitree.Tree(
-            data=self.root_node.awi_dict()
-        )
-        # self.tree.layout.width = self.left_width  # type:ignore
-        return tree
-
-
-class D2MConnectionsTreeView(RecipeTreeBase):
-    def __init__(
-        self,
-        mdr_setup: RecipeSetup,
-        left_width: float=0.4,
-        **kwargs: t.Any,
-    ) -> None:
-        super().__init__(mdr_setup, left_width, **kwargs)
-        self.d2m_map_desc : dict[str, t.Any] = mdr_setup.recipe_sections[RecipeKeys.DB2MODEL_MAP]
+            loc_root_node.add_node(loc_node)
+        return loc_root_node
 
     def conncection_node(
         self,
@@ -521,20 +522,34 @@ class D2MConnectionsTreeView(RecipeTreeBase):
             conn_node.add_node(db_node)
         return conn_node
 
-    @override
-    def build_tree(self) -> AnyWidget:
-        self.root_node : CBTreeNode | None = CBTreeNode.init(
+
+    def connections(self):
+        root_conn_node : CBTreeNode | None = CBTreeNode.init(
             name=RcpTreeNames.CONNECTIONS,
             key="d2m_map.connections.root"
         )
         for conn_name, conn_desc in self.d2m_map_desc[RecipeKeys.CONNECTIONS].items():
-            self.root_node.add_node(self.conncection_node(conn_name, conn_desc))
+            root_conn_node.add_node(self.conncection_node(conn_name, conn_desc))
+        return root_conn_node
+
+
+    @override
+    def build_tree(self) -> AnyWidget:
+        self.root_node : CBTreeNode | None = CBTreeNode.init(
+            name=RcpTreeNames.D2M,
+            key="d2m_map.root"
+        )
+        self.root_node.add_node(self.locations())
+        self.root_node.add_node(self.connections())
         # initialize tree
+        tree_data = self.root_node.awi_dict()
+        tree_data["state"] = {"selected": True, "opened" : True}
         tree : AnyWidget = awitree.Tree(
-            data=self.root_node.awi_dict()
+            data=tree_data
         )
         # self.tree.layout.width = self.left_width  # type:ignore
         return tree
+
 
 
 class NetworkTreeView(TreeBase):
@@ -547,154 +562,150 @@ class NetworkTreeView(TreeBase):
         super().__init__(left_width, **kwargs)
         self.net_struct : structure.Network = net_struct
 
-    def region_side_panels(self, net_region: structure.Region) -> None:
-        self.panel_dict[net_region.name] = StructSidePanel(net_region)
+    def region_node(
+        self,
+        net_region: structure.Region,
+        region_pfx:str="r"
+    ) -> CBTreeNode:
+        region_key = f"{region_pfx}-{net_region.name}"
+        region_node = CBTreeNode.from_struct(net_region, region_key)
+        self.panel_dict[region_key] = StructSidePanel(net_region)
         for _, rx_neuron in net_region.neurons.items():
-            self.panel_dict[rx_neuron.name] = StructSidePanel(rx_neuron)
+            neuron_key = f"{region_key}-{rx_neuron.name}"
+            neuron_node = CBTreeNode.from_struct(rx_neuron, neuron_key)
+            self.panel_dict[neuron_key] = StructSidePanel(rx_neuron)
             for _, nx_model in rx_neuron.neuron_models.items():
-                self.panel_dict[nx_model.name] = StructSidePanel(nx_model)
-
-    def conn_side_panels(self, net_connect: structure.Connection) -> None:
-        self.panel_dict[net_connect.name] = StructSidePanel(net_connect)
-        for _, cx_model in net_connect.connect_models.items():
-            self.panel_dict[cx_model.name] = StructSidePanel(cx_model)
-
-    # def init_ext_net_side_panels(self, ext_net: structure.ExtNetwork) -> None:
-    #     self.panel_dict[ext_net.name] = StructSidePanel(ext_net)
-    #     for _, net_region in ext_net.locations.items():
-    #         self.init_region_side_panels(net_region)
-    #     for _, net_connect in ext_net.connections.items():
-    #         self.init_conn_side_panels(net_connect)
-
-    def graph_side_panels(self, gnet: structure.ExtNetwork | structure.Network) -> None:
-        self.panel_dict[gnet.name] = StructSidePanel(gnet)
-        #
-        for _, net_region in gnet.locations.items():
-            self.region_side_panels(net_region)
-        #
-        for _, net_connect in gnet.connections.items():
-            self.conn_side_panels(net_connect)
-
-    def ext_network_panels(self) -> None:
-        for _, ext_net in self.net_struct.ext_networks.items():
-            self.graph_side_panels(ext_net)
-
-    def data_link_panels(self) -> None:
-        for data_lx in self.net_struct.data_connect:
-            if data_lx.name and data_lx.property_map:
-                self.panel_dict[data_lx.name] = StructSidePanel(data_lx)
-
-    def data_file_panels(self) -> None:
-        for data_fx in self.net_struct.data_files:
-            self.panel_dict[data_fx.name] = StructSidePanel(data_fx)
-
-
-    def build_side_panels(self) -> dict[str, PanelBase]:
-        _log().info(
-            "Start Right-side panel construction for [%s]",
-            str(self.net_struct.name)
-        )
-        # self.panel_dict[self.net_struct.name] = StructSidePanel(self.net_struct)
-        # #
-        # for _, net_region in self.net_struct.locations.items():
-        #     self.init_region_side_panels(net_region)
-        # #
-        # for _, net_connect in self.net_struct.connections.items():
-        #     self.init_conn_side_panels(net_connect)
-        self.graph_side_panels(self.net_struct) 
-        self.ext_network_panels()
-        self.data_link_panels()
-        self.data_file_panels()
-        _log().info("Completed Left-side panel construction")
-        return self.panel_dict
-
-    def region_node(self, net_region: structure.Region) -> CBTreeNode:
-        region_node = CBTreeNode.from_struct(net_region)
-        for _, rx_neuron in net_region.neurons.items():
-            neuron_node = CBTreeNode.from_struct(rx_neuron)
-            for _, nx_model in rx_neuron.neuron_models.items():
-                neuron_node.add_node(CBTreeNode.from_struct(nx_model))
+                model_key = f"{neuron_key}-{nx_model.name}"
+                neuron_node.add_node(
+                    CBTreeNode.from_struct(nx_model, model_key)
+                )
+                self.panel_dict[model_key] = StructSidePanel(nx_model)
             region_node.add_node(neuron_node)
         return region_node
 
-    def connection_node(self, net_connect: structure.Connection) -> CBTreeNode:
-        connect_node = CBTreeNode.from_struct(net_connect)
+    def connection_node(
+        self,
+        net_connect: structure.Connection,
+        connect_pfx:str="c"
+    ) -> CBTreeNode:
+        conn_key = f"{connect_pfx}-{net_connect.name}"
+        connect_node = CBTreeNode.from_struct(net_connect, conn_key)
+        self.panel_dict[conn_key] = StructSidePanel(net_connect)
         for _, cx_model in net_connect.connect_models.items():
-            connect_node.add_node(CBTreeNode.from_struct(cx_model))
+            cx_key = f"{conn_key}-{cx_model.name}"
+            connect_node.add_node(CBTreeNode.from_struct(cx_model, cx_key))
+            self.panel_dict[cx_key] = StructSidePanel(cx_model)
         return connect_node
 
-    def ext_network_node(self, ext_net: structure.ExtNetwork) -> CBTreeNode:
-        ext_net_node = CBTreeNode.from_struct(ext_net)
+    def ext_network_node(
+            self,
+            ext_net: structure.ExtNetwork,
+            ext_prefix: str = ""
+    ) -> CBTreeNode:
+        ext_key = f"{ext_prefix}-{ext_net.name}"
+        ext_net_node = CBTreeNode.from_struct(ext_net, ext_key)
+        self.panel_dict[ext_key] = StructSidePanel(ext_net)
         location_node = CBTreeNode.init(
             StructTreeNames.REGIONS,
             ext_net.name + ".locations"
         )
         for _, net_region in ext_net.locations.items():
-            location_node.add_node(self.region_node(net_region))
+            location_node.add_node(self.region_node(net_region, ext_key))
         ext_net_node.add_node(location_node)
         connect_node = CBTreeNode.init(
             StructTreeNames.CONNECTIONS,
             ext_net.name + ".connections",
         )
         for _, net_connect in ext_net.connections.items():
-            connect_node.add_node(self.connection_node(net_connect))
+            connect_node.add_node(self.connection_node(net_connect, ext_key))
         ext_net_node.add_node(connect_node)
         return ext_net_node
 
-    def data_link_node(self, data_link: structure.DataLink) -> CBTreeNode | None:
+    def data_link_node(
+            self,
+            data_link: structure.DataLink,
+            dl_prefix: str = ""
+    ) -> CBTreeNode | None:
         if data_link.name and data_link.property_map:
-            return CBTreeNode.from_struct(data_link)
+            dl_key = f"{dl_prefix}-{data_link.name}"
+            dl_node = CBTreeNode.from_struct(data_link, dl_key)
+            self.panel_dict[dl_key] = StructSidePanel(data_link)
+            return dl_node
         return None
 
-    def data_file_node(self, data_file: structure.DataFile) -> CBTreeNode | None:
-        return CBTreeNode.from_struct(data_file)
+    def data_file_node(
+        self,
+        data_file: structure.DataFile,
+        df_prefix: str = ""
+    ) -> CBTreeNode | None:
+        df_key = f"{df_prefix}-{data_file.name}"
+        df_node = CBTreeNode.from_struct(data_file, df_key)
+        self.panel_dict[df_key] = StructSidePanel(data_file)
+        return df_node
 
-    def build_tree_nodes(self) -> CBTreeNode:
-        root_node = CBTreeNode.from_struct(self.net_struct)
-        location_node = CBTreeNode.init(
-            StructTreeNames.REGIONS,
-            "net.locations"
-        )
+    def locations(self, root_key:str):
+        #
+        loc_key = f"{root_key}-loc"
+        location_node = CBTreeNode.init(StructTreeNames.REGIONS, loc_key)
         #
         for _, net_region in self.net_struct.locations.items():
-            location_node.add_node(self.region_node(net_region))
-        root_node.add_node(location_node)
+            location_node.add_node(self.region_node(net_region, loc_key))
+        return location_node
+
+    def connections(self, root_key: str):
         #
-        connect_node = CBTreeNode.init(
-            StructTreeNames.CONNECTIONS,
-            "net.connections",
-        )
+        conn_key = f"{root_key}-conn"
+        connect_node = CBTreeNode.init(StructTreeNames.CONNECTIONS, conn_key)
         for _, net_connect in self.net_struct.connections.items():
-            connect_node.add_node(self.connection_node(net_connect))
-        root_node.add_node(connect_node)
+            connect_node.add_node(self.connection_node(net_connect, conn_key))
+        return connect_node
+
+    def ext_networks(self, root_key: str):
         #
+        ext_key = f"{root_key}-extnet"
         ext_net_node = CBTreeNode.init(
             StructTreeNames.EXTERNAL_NETWORKS,
-             "net.ext_networks",
+            ext_key
         )
         for _, ext_net in self.net_struct.ext_networks.items():
-            ext_net_node.add_node(self.ext_network_node(ext_net))
-        root_node.add_node(ext_net_node)
+            ext_net_node.add_node(self.ext_network_node(ext_net, ext_key))
+        return ext_net_node
+
+    def data_links(self, root_key: str):
         #
+        data_link_key = f"{root_key}-dlinks"
         data_link_node = CBTreeNode.init(
             StructTreeNames.DATA_LINKS,
-            "net.data_links",
+            data_link_key,
         )
         for data_cx in self.net_struct.data_connect:
-            data_cx_node = self.data_link_node(data_cx)
+            data_cx_node = self.data_link_node(data_cx, data_link_key)
             if data_cx_node:
                 data_link_node.add_node(data_cx_node)
-        root_node.add_node(data_link_node)
+        return data_link_node
+
+    def data_files(self, root_key: str):
         #
+        data_file_key = f"{root_key}-dfiles"
         data_file_node = CBTreeNode.init(
             StructTreeNames.DATA_FILES,
-            "net.data_files",
+            data_file_key,
         )
         for data_fx in self.net_struct.data_files:
-            data_fx_node = self.data_file_node(data_fx)
+            data_fx_node = self.data_file_node(data_fx, data_file_key)
             if data_fx_node:
-                data_link_node.add_node(data_fx_node)
-        root_node.add_node(data_file_node)
+                data_file_node.add_node(data_fx_node)
+        return data_file_node
+
+    def build_tree_nodes(self) -> CBTreeNode:
+        root_key = self.net_struct.name
+        #
+        root_node = CBTreeNode.from_struct(self.net_struct, root_key)
+        root_node.add_node(self.locations(root_key))
+        root_node.add_node(self.connections(root_key))
+        root_node.add_node(self.ext_networks(root_key))
+        root_node.add_node(self.data_links(root_key))
+        root_node.add_node(self.data_files(root_key))
         return root_node
 
     def build_tree(self) -> AnyWidget:
@@ -710,7 +721,7 @@ class NetworkTreeView(TreeBase):
     @override
     def build(self) -> TreeBase:
         self.tree : AnyWidget | None = self.build_tree()
-        self.panel_dict : dict[str, PanelBase] = self.build_side_panels()
+        # self.panel_dict : dict[str, PanelBase] = self.build_side_panels()
         # self.tree.observe(self.tree_update, names="selected_nodes")  # type:ignore
         self.layout : mo.Html | None = mo.hstack(
             [self.tree, mo.vstack([])],
