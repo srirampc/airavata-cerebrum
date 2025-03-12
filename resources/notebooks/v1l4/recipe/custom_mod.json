@@ -1,5 +1,5 @@
 {
-    "name": "v1l4",
+    "name": "User-Mod-V1L4",
     "dims": {
         "core_radius": 400.0,
         "radius": 845.0
@@ -4565,7 +4565,6 @@
                         },
                         "sONtOFF_001": {
                             "N": 5,
-                            "name": "sONtOFF_001",
                             "ei": "e",
                             "name": "sONtOFF_001",
                             "neuron_models": {

@@ -1,10 +1,11 @@
 import ast
-import json
 import pydantic
 import traitlets
 import abc
 import typing as t
 from typing_extensions import override
+
+from ..util import io as uio
 
 
 class TraitDef(pydantic.BaseModel):
@@ -913,11 +914,15 @@ class Network(StructBase):
         return self
 
     def find_neuron(self, neuron_name: str) -> Neuron | None:
-        for lx, lrx in self.locations.items():
+        for _lx, lrx in self.locations.items():
             neuron_obj = lrx.find_neuron(neuron_name)
             if neuron_obj:
                 return neuron_obj
         return None
+
+    @classmethod
+    def from_json(cls, json_file: str) -> "Network":
+        return cls.model_validate(uio.load_json(json_file))
 
 
 #

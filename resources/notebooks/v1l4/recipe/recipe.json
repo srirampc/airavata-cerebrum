@@ -33,7 +33,7 @@
                     },
                     "source_data": {
                         "airavata_cerebrum.dataset.abm_celltypes": {
-                            "label": "Select Cell Types",
+                            "label": "Cell Types DB:Filter",
                             "workflow": [
                                 {
                                     "label": "Select Line",
@@ -49,7 +49,7 @@
                             ]
                         },
                         "airavata_cerebrum.dataset.abc_mouse": {
-                            "label": "Filter Cell Fraction",
+                            "label": "Brain Atlas:Cell Fraction",
                             "workflow": [
                                 {
                                     "type": "xform",
@@ -71,7 +71,7 @@
                     },
                     "source_data": {
                         "airavata_cerebrum.dataset.abm_celltypes": {
-                            "label": "Select Cell Types",
+                            "label": "Cell Types DB:Filter",
                             "workflow": [
                                 {
                                     "type": "xform",
@@ -87,7 +87,7 @@
                             ]
                         },
                         "airavata_cerebrum.dataset.abc_mouse": {
-                            "label": "Filter Cell Fraction",
+                            "label": "Brain Atlas:Cell Fraction",
                             "workflow": [
                                 {
                                     "type": "xform",
@@ -109,7 +109,7 @@
                     },
                     "source_data": {
                         "airavata_cerebrum.dataset.abm_celltypes": {
-                            "label": "Select Cell Types",
+                            "label": "Cell Types DB:Filter",
                             "workflow": [
                                 {
                                     "type": "xform",
@@ -125,7 +125,7 @@
                             ]
                         },
                         "airavata_cerebrum.dataset.abc_mouse": {
-                            "label": "Filter Cell Fraction",
+                            "label": "Brain Atlas:Cell Fraction",
                             "workflow": [
                                 {
                                     "type": "xform",
@@ -147,7 +147,7 @@
                     },
                     "source_data": {
                         "airavata_cerebrum.dataset.abm_celltypes": {
-                            "label": "Select Cell Types",
+                            "label": "Cell Types DB:Filter",
                             "workflow": [
                                 {
                                     "type": "xform",
@@ -163,7 +163,7 @@
                             ]
                         },
                         "airavata_cerebrum.dataset.abc_mouse": {
-                            "label": "Filter Cell Fraction",
+                            "label": "Brain Atlas:Cell Fraction",
                             "workflow": [
                                 {
                                     "type": "xform",
@@ -185,7 +185,7 @@
                     },
                     "source_data": {
                         "airavata_cerebrum.dataset.abm_celltypes": {
-                            "label": "Select Cell Types",
+                            "label": "Cell Types DB:Filter",
                             "workflow": [
                                 {
                                     "type": "xform",
@@ -201,7 +201,7 @@
                             ]
                         },
                         "airavata_cerebrum.dataset.abc_mouse": {
-                            "label": "Filter Cell Fraction",
+                            "label": "Brain Atlas:Cell Fraction",
                             "workflow": [
                                 {
                                     "label": "Select Region/Type",
@@ -222,7 +222,7 @@
         "connections": {
             "(('4', 'Pvalb'), ('4', 'Pvalb'))": {
                 "source_data": {
-                    "airavata_cerebrum.dataset.ai_synphys" : {
+                    "airavata_cerebrum.dataset.ai_synphys": {
                         "label": "AI Syn Phys",
                         "workflow": [
                             {
@@ -241,7 +241,7 @@
             },
             "(('4', 'Pvalb'), ('4', 'Sst'))": {
                 "source_data": {
-                    "airavata_cerebrum.dataset.ai_synphys" : {
+                    "airavata_cerebrum.dataset.ai_synphys": {
                         "label": "AI Syn Phys",
                         "workflow": [
                             {
@@ -260,7 +260,7 @@
             },
             "(('4', 'Pvalb'), ('4', 'Vip'))": {
                 "source_data": {
-                    "airavata_cerebrum.dataset.ai_synphys" : {
+                    "airavata_cerebrum.dataset.ai_synphys": {
                         "label": "AI Syn Phys",
                         "workflow": [
                             {
@@ -278,8 +278,8 @@
                 }
             },
             "(('4', 'Sst'), ('4', 'Pvalb'))": {
-                 "source_data": {
-                    "airavata_cerebrum.dataset.ai_synphys" : {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
                         "label": "AI Syn Phys",
                         "workflow": [
                             {
@@ -298,7 +298,7 @@
             },
             "(('4', 'Sst'), ('4', 'Sst'))": {
                 "source_data": {
-                    "airavata_cerebrum.dataset.ai_synphys" : {
+                    "airavata_cerebrum.dataset.ai_synphys": {
                         "label": "AI Syn Phys",
                         "workflow": [
                             {
@@ -317,7 +317,7 @@
             },
             "(('4', 'Sst'), ('4', 'Vip'))": {
                 "source_data": {
-                    "airavata_cerebrum.dataset.ai_synphys" : {
+                    "airavata_cerebrum.dataset.ai_synphys": {
                         "label": "AI Syn Phys",
                         "workflow": [
                             {
@@ -336,7 +336,7 @@
             },
             "(('4', 'Vip'), ('4', 'Pvalb'))": {
                 "source_data": {
-                    "airavata_cerebrum.dataset.ai_synphys" : {
+                    "airavata_cerebrum.dataset.ai_synphys": {
                         "label": "AI Syn Phys",
                         "workflow": [
                             {
@@ -355,7 +355,7 @@
             },
             "(('4', 'Vip'), ('4', 'Sst'))": {
                 "source_data": {
-                    "airavata_cerebrum.dataset.ai_synphys" : {
+                    "airavata_cerebrum.dataset.ai_synphys": {
                         "label": "AI Syn Phys",
                         "workflow": [
                             {
@@ -374,7 +374,7 @@
             },
             "(('4', 'Vip'), ('4', 'Vip'))": {
                 "source_data": {
-                    "airavata_cerebrum.dataset.ai_synphys" : {
+                    "airavata_cerebrum.dataset.ai_synphys": {
                         "label": "AI Syn Phys",
                         "workflow": [
                             {

@@ -2,35 +2,31 @@ import abc
 import itertools
 import logging
 import typing as t
-
-import marimo as mo
-import awitree
-
 from collections.abc import Iterable
+
+import awitree
+import marimo as mo
 import traitlets
-from typing_extensions import override
 from anywidget import AnyWidget
 from marimo._plugins.ui._core.ui_element import UIElement
+from typing_extensions import override
 
-from ..model.setup import RecipeKeys, RecipeLabels, RecipeSetup
 from ..model import structure as structure
-from . import PayLoad, RcpTreeNames, StructTreeNames, recipe_step_payload, struct_payload
+from ..model.setup import RecipeKeys, RecipeLabels, RecipeSetup
+from . import (PayLoad, RcpTreeNames, StructTreeNames, recipe_step_payload,
+               recipe_traits, struct_payload)
+
 
 def _log():
     return logging.getLogger(__name__)
 
 
 def scalar_widget(
-    widget_key: str,
-    label: str = "",
-    **kwargs: t.Any
+    widget_key: str, label: str = "", **kwargs: t.Any
 ) -> UIElement[t.Any, t.Any] | None:
     match widget_key:
         case "int" | "int32" | "int64":
-            return mo.ui.number(
-                value=kwargs["default"],
-                label=label
-            )
+            return mo.ui.number(value=kwargs["default"], label=label)
         case "float" | "float32" | "float64":
             return mo.ui.number(
                 value=kwargs["default"],
@@ -70,33 +66,25 @@ def scalar_widget(
             return None
 
 
-# NOTE: Features of trait setting and change handler not included 
+# NOTE: Features of trait setting and change handler not included
 class PropertyListLayout(mo.ui.array):
-    def __init__(
-        self,
-        value: list[t.Any],
-        label:str="",
-        **kwargs: t.Any
-    ):
+    def __init__(self, value: list[t.Any], label: str = "", **kwargs: t.Any):
         super().__init__(
             [wx for wx in self.widgets(value, **kwargs) if wx is not None],
             label=label,
         )
 
     def widgets(self, value: list[t.Any], **_kwargs: t.Any):
-        return(
-            scalar_widget(
-                type(vx).__name__,
-                label=str(kx) + " :",
-                default=vx
-            ) for kx, vx in enumerate(value) 
+        return (
+            scalar_widget(type(vx).__name__, label=str(kx) + " :", default=vx)
+            for kx, vx in enumerate(value)
         )
 
 
-# NOTE: Features of trait setting and change handler not included 
+# NOTE: Features of trait setting and change handler not included
 class PropertyMapLayout(mo.ui.dictionary):
 
-    def __init__(self, value: dict[str, t.Any], label:str="", **kwargs: t.Any):
+    def __init__(self, value: dict[str, t.Any], label: str = "", **kwargs: t.Any):
         super().__init__(
             {kx: wx for kx, wx in self.widgets(value, **kwargs) if wx is not None},
             label=label,
@@ -104,10 +92,7 @@ class PropertyMapLayout(mo.ui.dictionary):
         # print("Value: ", len(value))
 
     def init_widget(
-        self,
-        vx: t.Any,
-        label:str = "",
-         **_kwargs: t.Any
+        self, vx: t.Any, label: str = "", **_kwargs: t.Any
     ) -> UIElement[t.Any, t.Any] | None:
         tname = type(vx).__name__
         match tname:
@@ -119,18 +104,13 @@ class PropertyMapLayout(mo.ui.dictionary):
                 return scalar_widget(tname, default=vx, label=label)
 
     def widgets(
-        self,
-        value: dict[str, t.Any],
-         **kwargs: t.Any
+        self, value: dict[str, t.Any], **kwargs: t.Any
     ) -> Iterable[tuple[str, UIElement[t.Any, t.Any] | None]]:
-        return (
-            (kx, self.init_widget(vx, **kwargs)) for kx, vx in value.items()
-        )
+        return ((kx, self.init_widget(vx, **kwargs)) for kx, vx in value.items())
+
 
 def render_property(
-    widget_key: str,
-    label:str = "",
-    **kwargs: t.Any
+    widget_key: str, label: str = "", **kwargs: t.Any
 ) -> UIElement[t.Any, t.Any] | None:
     # _log().warning("Render Out [%s]", str(kwargs))
     match widget_key:
@@ -143,34 +123,80 @@ def render_property(
 
 
 # Base class for side panel
-# NOTE: Features of update and clearing links not included 
+# NOTE: Features of update and clearing links not included
 class PanelBase:
-    def __init__(self, layout: mo.Html | None=None):
-        self._layout : mo.Html | None = layout
-        self.ui_elements : list[UIElement[t.Any, t.Any]] = []
-
-    @property
-    def layout(self):
-        return self._layout
+    def __init__(self, layout: mo.Html | None = None):
+        self._layout: mo.Html | None = layout
+        self.ui_elements: list[UIElement[t.Any, t.Any]] = []
 
     def update(self):
-        # NOTE: Unlink here
-        # NOTE: Create links and append to the 'links' here
+        # NOTE: Called when selected node is changed
         pass
 
+    @abc.abstractmethod
+    def build_layout(self) -> mo.Html | None:
+        pass
 
-class WorkflowStepPanel(PanelBase):
+    @property
+    def layout(self) -> mo.Html | None:
+        if self._layout is not None:
+            return self._layout
+        else:
+            self.set_layout(self.build_layout())
+            return self._layout
+
+    def set_layout(self, value: mo.Html | None):
+        self._layout = value
+
+
+class DBWorkflowSidePanel(PanelBase):
     def __init__(
         self,
-        template_map: dict[str, t.Any],
-        add_layout: bool,
-        elt_traits: traitlets.HasTraits | None = None,
-        **kwargs: t.Any
+        mdr_setup: RecipeSetup,
+        workfow_desc: list[dict[str, t.Any]],
+        delay_build: bool = False,
+        **kwargs: t.Any,
     ):
         super().__init__(**kwargs)
+        self.mdr_setup: RecipeSetup = mdr_setup
+        self.workfow_desc: list[dict[str, t.Any]] = workfow_desc
         # Setup Widgets
+        if delay_build:
+            self.set_layout(None)
+        else:
+            self.set_layout(self.build_layout())
+
+    @override
+    def build_layout(self) -> mo.Html | None:
+        return mo.vstack(
+            [
+                mo.ui.array(
+                    self.render_workflow_step(wf_step),
+                    label=f"Step {wf_idx + 1} : {wf_step[RecipeKeys.LABEL]}",
+                )
+                for wf_idx, wf_step in enumerate(self.workfow_desc)
+            ]
+        )
+
+    def render_workflow_step(
+        self, wf_step: dict[str, t.Any]
+    ) -> list[UIElement[t.Any, t.Any]]:
+        step_key = wf_step[RecipeKeys.NAME]
+        _log().debug("Initializing Panels for [%s]", step_key)
+        rcp_template = self.mdr_setup.get_template_for(step_key)
+        _, rcp_traits = recipe_traits(wf_step)
+        return self.workflow_ui(
+            rcp_template,
+            rcp_traits,
+        )
+
+    def workflow_ui(
+        self,
+        template_map: dict[str, t.Any],
+        elt_traits: traitlets.HasTraits | None = None,
+    ) -> list[UIElement[t.Any, t.Any]]:
         trait_vals = elt_traits.trait_values() if elt_traits else {}
-        self.ui_elements : list[UIElement[t.Any, t.Any]] = [
+        return [
             self.params_widget(
                 template_map,
                 trait_vals,
@@ -184,90 +210,65 @@ class WorkflowStepPanel(PanelBase):
                 RecipeLabels.EXEC_PARAMS,
             ),
         ]
-        # Setup the Layout
-        self.layout_ : mo.Html | None = (
-            mo.vstack(self.ui_elements) if add_layout else None
-        )
 
     def params_widget(
         self,
         template_map: dict[str, t.Any],
         trait_vals: dict[str, t.Any],
         params_key: str,
-        params_label: str
+        params_label: str,
     ):
         if template_map[params_key]:
-            wd_itr : Iterable[UIElement[t.Any, t.Any] | None] = (
+            wd_itr: Iterable[UIElement[t.Any, t.Any] | None] = (
                 self.property_widget(trait_vals, ekey, vmap)
                 for ekey, vmap in template_map[params_key].items()
-            ) 
+            )
             return mo.ui.array(
-                [wx for wx in wd_itr if wx is not None],
-                label=params_label
+                [wx for wx in wd_itr if wx is not None], label=params_label
             )
         else:
-            return mo.ui.array(
-                [],
-                label=params_label
-            )
+            return mo.ui.array([], label=params_label)
 
     def property_widget(
         self,
         traitv_dct: dict[str, t.Any],
-        ekey: str, 
+        ekey: str,
         vmap: dict[str, t.Any],
     ):
         if ekey in traitv_dct:
             vmap["default"] = traitv_dct[ekey]
-        return render_property(
-            vmap[RecipeKeys.TYPE],
-            **vmap
-        )
+        return render_property(vmap[RecipeKeys.TYPE], **vmap)
 
 
 class StructSidePanel(PanelBase):
     def __init__(
         self,
         struct_comp: structure.StructBase,
-        delay_build: bool = False, 
-        **kwargs: t.Any
+        delay_build: bool = False,
+        **kwargs: t.Any,
     ):
         super().__init__(**kwargs)
-        self.struct_ : structure. StructBase = struct_comp
+        self._struct: structure.StructBase = struct_comp
         if delay_build:
-            self.ui_elements = []
-            self.layout_ = None 
+            self.set_layout(None)
         else:
-            self.build()
+            self.set_layout(self.build_layout())
 
-    def build(self):
+    @override
+    def build_layout(self):
         # Set Widgets
-        wd_itr : Iterable[UIElement[t.Any, t.Any] | None] = (
+        wd_itr: Iterable[UIElement[t.Any, t.Any] | None] = (
             render_property(
                 vmap.value_type,
-                label=vmap.label  + " :",
-                default=vmap.to_ui(self.struct_.get(ekey)),
+                label=vmap.label + " :",
+                default=vmap.to_ui(self._struct.get(ekey)),
             )
-            for ekey, vmap in self.struct_.trait_ui().items()
+            for ekey, vmap in self._struct.trait_ui().items()
         )
-        self.ui_elements : list[UIElement[t.Any, t.Any]] = [
-            wx for  wx in wd_itr if wx is not None
+        ui_elements: list[UIElement[t.Any, t.Any]] = [
+            wx for wx in wd_itr if wx is not None
         ]
-        self.layout_ : mo.Html | None = mo.vstack([
-            mo.ui.array(
-                self.ui_elements,
-                label=self.struct_.name
-            )
-        ])
-
-    @property
-    @override
-    def layout(self) -> mo.Html | None:
-        if self.layout_ is not None:
-            return self.layout_
-        else:
-            self.build()
-            return self.layout_
+        return mo.vstack([mo.ui.array(ui_elements, label=self._struct.name)])
 
 
 #
@@ -277,26 +278,24 @@ class CBTreeNode:
         self,
         name: str,
         payload: PayLoad | None,
-        nodes: list["CBTreeNode"] | None= None,
-        **kwargs : t.Any
+        nodes: list["CBTreeNode"] | None = None,
+        **kwargs: t.Any,
     ):
         self.name: str = name
-        self.payload : PayLoad | None = payload
-        self.children : dict[str, "CBTreeNode"] = {}
+        self.payload: PayLoad | None = payload
+        self.children: dict[str, "CBTreeNode"] = {}
         if nodes:
-            self.children = {nx.payload.node_key : nx for nx in nodes}
+            self.children = {nx.payload.node_key: nx for nx in nodes}
 
     def add_node(self, child: "CBTreeNode"):
         self.children[child.payload.node_key] = child
 
     def awi_dict(self) -> dict[str, t.Any]:
         return {
-            'id' : self.payload.node_key,
-            'text': self.name,
-            'state': {'disabled': False},
-            'children': [
-                cx.awi_dict() for _kx, cx in self.children.items()
-            ]
+            "id": self.payload.node_key,
+            "text": self.name,
+            "state": {"disabled": False},
+            "children": [cx.awi_dict() for _kx, cx in self.children.items()],
         }
 
     @classmethod
@@ -309,20 +308,15 @@ class CBTreeNode:
         struct_obj: structure.StructBase,
         node_key: str | None = None,
     ) -> "CBTreeNode":
-        return cls(
-            name=struct_obj.name,
-            payload=struct_payload(struct_obj, node_key)
-        )
+        return cls(name=struct_obj.name, payload=struct_payload(struct_obj, node_key))
 
     @classmethod
     def from_recipe_step(
-        cls,
-        wf_step: dict[str, t.Any],
-        node_key: str | None = None
+        cls, wf_step: dict[str, t.Any], node_key: str | None = None
     ) -> "CBTreeNode":
         return cls(
             name=wf_step[RecipeKeys.LABEL],
-            payload=recipe_step_payload(wf_step, node_key)
+            payload=recipe_step_payload(wf_step, node_key),
         )
 
 
@@ -332,25 +326,23 @@ class TreeBase(abc.ABC):
         left_width: float = 0.5,
         **kwargs: t.Any,
     ):
-        self.tree: AnyWidget | None = None
+        self.tree: awitree.Tree | None = None
         self.layout: mo.Html | None = None
         self.panel_dict: dict[str, PanelBase] = {}
         self.left_width: float = left_width
-        self.widths : list[float] = [left_width, 1 - left_width]
+        self.widths: list[float] = [left_width, 1 - left_width]
 
     @abc.abstractmethod
-    def build(self) -> "TreeBase":
+    def build(self, root_pfx: str = "") -> "TreeBase":
         pass
 
     def tree_update(self, change: dict[str, t.Any]):
         new_val = change["new"]
         if not len(new_val):
             return
-        selected_nodes : list[dict[str, t.Any]] = new_val
+        selected_nodes: list[dict[str, t.Any]] = new_val
         _log().warning(
-            "Tree Update selected_nodes : [%s %s]",
-            str(change),
-            str(selected_nodes)
+            "Tree Update selected_nodes : [%s %s]", str(change), str(selected_nodes)
         )
         selected_id: str = selected_nodes[0]["id"]
         _log().warning(
@@ -362,86 +354,64 @@ class TreeBase(abc.ABC):
             side_panel.update()
             self.layout = mo.hstack([self.tree, side_panel.layout])
 
-    def view_comps(self):
-        return (self.tree, self.panel_dict)
+    def view_components(
+        self,
+    ) -> tuple[awitree.Tree | None, tuple[dict[str, PanelBase], ...]]:
+        return (self.tree, (self.panel_dict,))
 
     @staticmethod
     def panel_selector(
-        axtree: awitree.Tree,
-        axpanel_dict: dict[str, PanelBase]
+        axtree: awitree.Tree, taxpanel_dict: tuple[dict[str, PanelBase], ...]
     ) -> PanelBase | None:
-        return (
-            axpanel_dict[axtree.selected_nodes[0]["id"]]
-            if (
-                axtree.selected_nodes and
-                len(axtree.selected_nodes) > 0 and
-                (axtree.selected_nodes[0]["id"] in axpanel_dict)
-            ) else None
+        selected_node_id = (
+            axtree.selected_nodes[0]["id"]
+            if (axtree.selected_nodes and len(axtree.selected_nodes) > 0)
+            else None
         )
+        if selected_node_id is not None:
+            for axp_dict in taxpanel_dict:
+                if selected_node_id in axp_dict:
+                    return axp_dict[selected_node_id]
+        return None
 
 
 class RecipeTreeBase(TreeBase, metaclass=abc.ABCMeta):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
-        left_width: float=0.4,
+        left_width: float = 0.4,
         **kwargs: t.Any,
     ):
         super().__init__(left_width, **kwargs)
         self.mdr_setup: RecipeSetup = mdr_setup
         self.root_node: CBTreeNode | None = None
 
-    def wf_step_render(
-        self,
-        wf_step: dict[str, t.Any]
-    ) -> list[UIElement[t.Any, t.Any]]:
-        step_key = wf_step[RecipeKeys.NAME]
-        _log().debug("Initializing Panels for [%s]", step_key)
-        ptemplate = self.mdr_setup.get_template_for(step_key)
-        pload = recipe_step_payload(wf_step)
-        return WorkflowStepPanel(
-            ptemplate,
-            False,
-            pload.node_traits,
-        ).ui_elements
-
-    def db_recipe_node(
+    def db_workflow_recipe_node(
         self,
         db_key: str,
-        db_desc: dict[str, t.Any]
+        db_desc: dict[str, t.Any],
+        delay_build: bool = False,
     ) -> tuple[CBTreeNode, PanelBase]:
-        db_node = CBTreeNode.init(
-            name=db_desc[RecipeKeys.LABEL],
-            key=db_key
+        db_node = CBTreeNode.init(name=db_desc[RecipeKeys.LABEL], key=db_key)
+        _log().info("Start Left-side panel construction for [%s]", str(db_key))
+        db_panel = DBWorkflowSidePanel(
+            self.mdr_setup, db_desc[RecipeKeys.WORKFLOW], delay_build
         )
-        wflow_desc = db_desc[RecipeKeys.WORKFLOW]
-        _log().info(
-            "Start Left-side panel construction for [%s]",
-            str(db_key)
-        )
-        panel_layout = mo.vstack([
-            mo.ui.array(
-                self.wf_step_render(wf_step),
-                label=f"Step {wf_idx + 1} : {wf_step[RecipeKeys.LABEL]}"
-            )
-            for wf_idx, wf_step in enumerate(wflow_desc)
-        ])
-        db_panel = PanelBase(layout=panel_layout)
         _log().info("Completed Left-side panel construction")
         return db_node, db_panel
 
     @override
-    def build(self) -> TreeBase:
-        self.tree : AnyWidget | None = self.build_tree()
+    def build(self, root_pfx: str = "") -> TreeBase:
+        self.tree: awitree.Tree | None = self.build_tree(root_pfx)
         # self.tree.observe(self.tree_update, names="selected_nodes")
-        self.layout_ : mo.Html | None = mo.hstack(
-            [self.tree, mo.vstack([])],
-            widths=[self.left_width, 1-self.left_width])
+        self.layout_: mo.Html | None = mo.hstack(
+            [self.tree, mo.vstack([])], widths=[self.left_width, 1 - self.left_width]
+        )
         return self
 
     @override
     @abc.abstractmethod
-    def build_tree(self) -> AnyWidget:
+    def build_tree(self, root_pfx: str = "") -> awitree.Tree:
         pass
 
 
@@ -449,156 +419,132 @@ class DataSourceRecipeView(RecipeTreeBase):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
-        left_width: float=0.4,
+        left_width: float = 0.4,
         **kwargs: t.Any,
     ) -> None:
         super().__init__(mdr_setup, left_width, **kwargs)
-        self.src_data_desc : dict[str, t.Any] = (
-            mdr_setup.recipe_sections[RecipeKeys.SRC_DATA]
-        )
+        self.src_data_desc: dict[str, t.Any] = mdr_setup.recipe_sections[
+            RecipeKeys.SRC_DATA
+        ]
 
     @override
-    def build_tree(self) -> AnyWidget:
-        self.root_node : CBTreeNode | None = CBTreeNode.init(
-            name=RcpTreeNames.SRC_DATA,
-            key="source_data"
+    def build_tree(self, root_pfx: str = "") -> awitree.Tree:
+        root_key = f"{root_pfx}-{RecipeKeys.SRC_DATA}"
+        self.root_node: CBTreeNode | None = CBTreeNode.init(
+            name=RcpTreeNames.SRC_DATA, key=root_key
         )
         for db_key, db_desc in self.src_data_desc.items():
+            src_db_key = f"{root_key}-{db_key}"
             wf_iter = itertools.chain(
                 db_desc[RecipeKeys.DB_CONNECT][RecipeKeys.WORKFLOW],
                 db_desc[RecipeKeys.POST_OPS][RecipeKeys.WORKFLOW],
             )
-            db_node, db_panel = self.db_recipe_node(
-                db_key,
+            db_node, db_panel = self.db_workflow_recipe_node(
+                src_db_key,
                 {
-                    RecipeKeys.LABEL : db_desc[RecipeKeys.LABEL],
-                    RecipeKeys.WORKFLOW : wf_iter
-                }
+                    RecipeKeys.LABEL: db_desc[RecipeKeys.LABEL],
+                    RecipeKeys.WORKFLOW: wf_iter,
+                },
             )
-            self.panel_dict[db_key] = db_panel
+            self.panel_dict[src_db_key] = db_panel
             self.root_node.add_node(db_node)
         # initialize tree
         tree_data = self.root_node.awi_dict()
-        tree_data["state"] = {"selected": True, "opened" : True}
-        tree : AnyWidget = awitree.Tree(data=tree_data)
+        tree_data["state"] = {"selected": True, "opened": True}
+        tree: AnyWidget = awitree.Tree(data=tree_data)
         # self.tree.layout.width = self.left_width  # type:ignore
         return tree
 
 
-class Datat2ModelRecipeView(RecipeTreeBase):
+class Data2ModelRecipeView(RecipeTreeBase):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
-        left_width: float=0.4,
+        left_width: float = 0.4,
         **kwargs: t.Any,
     ) -> None:
         super().__init__(mdr_setup, left_width, **kwargs)
-        self.d2m_map_desc : dict[str, t.Any] = (
-            mdr_setup.recipe_sections[RecipeKeys.DB2MODEL_MAP]
-        )
+        self.d2m_map_desc: dict[str, t.Any] = mdr_setup.recipe_sections[
+            RecipeKeys.DB2MODEL_MAP
+        ]
 
     def neuron_node(
-        self,
-        location_name: str,
-        neuron_name: str,
-        neuron_desc: dict[str, t.Any]
+        self, neuron_name: str, neuron_desc: dict[str, t.Any], loc_node_pfx: str
     ) -> CBTreeNode:
-        neuron_pfx : str = f"{location_name}-{neuron_name}"
-        neuron_node = CBTreeNode.init(
-            name=neuron_name,
-            key=f"d2m_map-{neuron_pfx}"
-        )
+        neuron_pfx: str = f"{loc_node_pfx}-{neuron_name}"
+        neuron_node = CBTreeNode.init(name=neuron_name, key=f"d2m_map-{neuron_pfx}")
         for db_key, db_desc in neuron_desc[RecipeKeys.SRC_DATA].items():
             db_loc_key = f"{neuron_pfx}-{db_key}"
-            db_node, db_panel = self.db_recipe_node(
-                db_loc_key,
-                db_desc
-            )
+            db_node, db_panel = self.db_workflow_recipe_node(db_loc_key, db_desc)
             self.panel_dict[db_loc_key] = db_panel
             neuron_node.add_node(db_node)
         return neuron_node
 
-    def locations(self):
-        loc_root_node : CBTreeNode | None = CBTreeNode.init(
-            name=RcpTreeNames.LOCATIONS,
-            key="d2m_map.locations.root"
+    def locations(self, loc_pfx: str = ""):
+        loc_key = f"{loc_pfx}-{RecipeKeys.LOCATIONS}"
+        loc_root_node: CBTreeNode | None = CBTreeNode.init(
+            name=RcpTreeNames.LOCATIONS, key=loc_key
         )
         for loc_name, loc_desc in self.d2m_map_desc[RecipeKeys.LOCATIONS].items():
-            loc_node = CBTreeNode.init(
-                name=loc_name,
-                key=f"d2m_map-{loc_name}"
-            )
+            loc_node_key = f"{loc_key}-{loc_name}"
+            loc_node = CBTreeNode.init(name=loc_name, key=loc_node_key)
             for neuron_name, neuron_desc in loc_desc.items():
-                neuron_node = self.neuron_node(
-                    loc_name,
-                    neuron_name,
-                    neuron_desc
-                )
+                neuron_node = self.neuron_node(neuron_name, neuron_desc, loc_node_key)
                 loc_node.add_node(neuron_node)
             loc_root_node.add_node(loc_node)
         return loc_root_node
 
     def conncection_node(
-        self,
-        connect_name: str,
-        connect_desc: dict[str, t.Any]
+        self, connect_name: str, connect_desc: dict[str, t.Any], conn_node_pfx: str
     ) -> CBTreeNode:
-        conn_node = CBTreeNode.init(
-            name=connect_name,
-            key=f"d2m_map-{connect_name}"
-        )
+        conn_node_key = f"{conn_node_pfx}-{connect_name}"
+        conn_node = CBTreeNode.init(name=connect_name, key=conn_node_key)
         for db_key, db_desc in connect_desc[RecipeKeys.SRC_DATA].items():
-            db_conn_key = f"{connect_name}-{db_key}"
-            db_node, db_panel = self.db_recipe_node(
-                db_conn_key,
-                db_desc
-            )
+            db_conn_key = f"{conn_node_key}-{db_key}"
+            db_node, db_panel = self.db_workflow_recipe_node(db_conn_key, db_desc)
             self.panel_dict[db_conn_key] = db_panel
             conn_node.add_node(db_node)
         return conn_node
 
-
-    def connections(self):
-        root_conn_node : CBTreeNode | None = CBTreeNode.init(
-            name=RcpTreeNames.CONNECTIONS,
-            key="d2m_map.connections.root"
+    def connections(self, conn_pfx: str):
+        conn_key = f"{conn_pfx}-{RecipeKeys.CONNECTIONS}"
+        root_conn_node: CBTreeNode | None = CBTreeNode.init(
+            name=RcpTreeNames.CONNECTIONS, key=conn_key
         )
         for conn_name, conn_desc in self.d2m_map_desc[RecipeKeys.CONNECTIONS].items():
-            root_conn_node.add_node(self.conncection_node(conn_name, conn_desc))
+            root_conn_node.add_node(
+                self.conncection_node(conn_name, conn_desc, conn_key)
+            )
         return root_conn_node
 
-
     @override
-    def build_tree(self) -> AnyWidget:
-        self.root_node : CBTreeNode | None = CBTreeNode.init(
-            name=RcpTreeNames.D2M,
-            key="d2m_map.root"
+    def build_tree(self, root_pfx: str = "") -> awitree.Tree:
+        root_key = f"{root_pfx}-{RecipeKeys.DB2MODEL_MAP}"
+        self.root_node: CBTreeNode | None = CBTreeNode.init(
+            name=RcpTreeNames.D2M, key=root_key
         )
-        self.root_node.add_node(self.locations())
-        self.root_node.add_node(self.connections())
+        self.root_node.add_node(self.locations(root_key))
+        self.root_node.add_node(self.connections(root_key))
         # initialize tree
         tree_data = self.root_node.awi_dict()
-        tree_data["state"] = {"selected": True, "opened" : True}
-        tree : AnyWidget = awitree.Tree(data=tree_data)
+        tree_data["state"] = {"selected": True, "opened": True}
+        tree: AnyWidget = awitree.Tree(data=tree_data)
         # self.tree.layout.width = self.left_width  # type:ignore
         return tree
 
 
-
-class NetworkTreeView(TreeBase):
+class NetworkStructureView(TreeBase):
     def __init__(
         self,
         net_struct: structure.Network,
-        left_width: float=0.4,
+        left_width: float = 0.4,
         **kwargs: t.Any,
     ) -> None:
         super().__init__(left_width, **kwargs)
-        self.net_struct : structure.Network = net_struct
+        self.net_struct: structure.Network = net_struct
 
     def region_node(
-        self,
-        net_region: structure.Region,
-        region_pfx:str="r"
+        self, net_region: structure.Region, region_pfx: str = "r"
     ) -> CBTreeNode:
         region_key = f"{region_pfx}-{net_region.name}"
         region_node = CBTreeNode.from_struct(net_region, region_key)
@@ -609,17 +555,13 @@ class NetworkTreeView(TreeBase):
             self.panel_dict[neuron_key] = StructSidePanel(rx_neuron)
             for _, nx_model in rx_neuron.neuron_models.items():
                 model_key = f"{neuron_key}-{nx_model.name}"
-                neuron_node.add_node(
-                    CBTreeNode.from_struct(nx_model, model_key)
-                )
+                neuron_node.add_node(CBTreeNode.from_struct(nx_model, model_key))
                 self.panel_dict[model_key] = StructSidePanel(nx_model, True)
             region_node.add_node(neuron_node)
         return region_node
 
     def connection_node(
-        self,
-        net_connect: structure.Connection,
-        connect_pfx:str="c"
+        self, net_connect: structure.Connection, connect_pfx: str = "c"
     ) -> CBTreeNode:
         conn_key = f"{connect_pfx}-{net_connect.name}"
         connect_node = CBTreeNode.from_struct(net_connect, conn_key)
@@ -631,16 +573,13 @@ class NetworkTreeView(TreeBase):
         return connect_node
 
     def ext_network_node(
-            self,
-            ext_net: structure.ExtNetwork,
-            ext_prefix: str = ""
+        self, ext_net: structure.ExtNetwork, ext_prefix: str = ""
     ) -> CBTreeNode:
         ext_key = f"{ext_prefix}-{ext_net.name}"
         ext_net_node = CBTreeNode.from_struct(ext_net, ext_key)
         self.panel_dict[ext_key] = StructSidePanel(ext_net)
         location_node = CBTreeNode.init(
-            StructTreeNames.REGIONS,
-            ext_net.name + ".locations"
+            StructTreeNames.REGIONS, ext_net.name + ".locations"
         )
         for _, net_region in ext_net.locations.items():
             location_node.add_node(self.region_node(net_region, ext_key))
@@ -655,9 +594,7 @@ class NetworkTreeView(TreeBase):
         return ext_net_node
 
     def data_link_node(
-            self,
-            data_link: structure.DataLink,
-            dl_prefix: str = ""
+        self, data_link: structure.DataLink, dl_prefix: str = ""
     ) -> CBTreeNode | None:
         if data_link.name and data_link.property_map:
             dl_key = f"{dl_prefix}-{data_link.name}"
@@ -667,16 +604,14 @@ class NetworkTreeView(TreeBase):
         return None
 
     def data_file_node(
-        self,
-        data_file: structure.DataFile,
-        df_prefix: str = ""
+        self, data_file: structure.DataFile, df_prefix: str = ""
     ) -> CBTreeNode | None:
         df_key = f"{df_prefix}-{data_file.name}"
         df_node = CBTreeNode.from_struct(data_file, df_key)
         self.panel_dict[df_key] = StructSidePanel(data_file)
         return df_node
 
-    def locations(self, root_key:str):
+    def locations(self, root_key: str):
         #
         loc_key = f"{root_key}-loc"
         location_node = CBTreeNode.init(StructTreeNames.REGIONS, loc_key)
@@ -696,10 +631,7 @@ class NetworkTreeView(TreeBase):
     def ext_networks(self, root_key: str):
         #
         ext_key = f"{root_key}-extnet"
-        ext_net_node = CBTreeNode.init(
-            StructTreeNames.EXTERNAL_NETWORKS,
-            ext_key
-        )
+        ext_net_node = CBTreeNode.init(StructTreeNames.EXTERNAL_NETWORKS, ext_key)
         for _, ext_net in self.net_struct.ext_networks.items():
             ext_net_node.add_node(self.ext_network_node(ext_net, ext_key))
         return ext_net_node
@@ -730,8 +662,8 @@ class NetworkTreeView(TreeBase):
                 data_file_node.add_node(data_fx_node)
         return data_file_node
 
-    def build_tree_nodes(self) -> CBTreeNode:
-        root_key = self.net_struct.name
+    def build_tree_nodes(self, root_pfx: str) -> CBTreeNode:
+        root_key = f"{root_pfx}-{self.net_struct.name}"
         #
         root_node = CBTreeNode.from_struct(self.net_struct, root_key)
         root_node.add_node(self.locations(root_key))
@@ -741,26 +673,88 @@ class NetworkTreeView(TreeBase):
         root_node.add_node(self.data_files(root_key))
         return root_node
 
-    def build_tree(self) -> AnyWidget:
-        self.root_node : CBTreeNode | None = self.build_tree_nodes()
+    def build_tree(self, root_pfx: str = "") -> awitree.Tree:
+        self.root_node: CBTreeNode | None = self.build_tree_nodes(root_pfx)
         # initialize tree
         tree_data = self.root_node.awi_dict()
-        tree_data["state"] = {"selected": True, "opened" : True}
-        tree : AnyWidget = awitree.Tree(data=tree_data)
+        tree_data["state"] = {"selected": True, "opened": True}
+        tree: AnyWidget = awitree.Tree(data=tree_data)
         # self.tree.layout.width = self.left_width  # type:ignore
         return tree
 
-
     @override
-    def build(self) -> TreeBase:
-        self.tree : AnyWidget | None = self.build_tree()
+    def build(self, root_pfx: str = "") -> TreeBase:
+        self.tree: awitree.Tree | None = self.build_tree(root_pfx)
         # self.panel_dict : dict[str, PanelBase] = self.build_side_panels()
         # self.tree.observe(self.tree_update, names="selected_nodes")  # type:ignore
-        self.layout_ : mo.Html | None = mo.hstack(
-            [self.tree, mo.vstack([])],
-            widths=self.widths
+        self.layout_: mo.Html | None = mo.hstack(
+            [self.tree, mo.vstack([])], widths=self.widths
         )
         return self
 
     def values_dict(self):
         pass
+
+
+class RecipeExplorer(TreeBase):
+    def __init__(
+        self,
+        mdr_setup: RecipeSetup,
+        net_struct: structure.Network,
+        left_width: float = 0.4,
+        **kwargs: t.Any,
+    ) -> None:
+        super().__init__(left_width, **kwargs)
+        self._data_src: DataSourceRecipeView = DataSourceRecipeView(
+            mdr_setup, left_width, **kwargs
+        )
+        self._d2m: Data2ModelRecipeView = Data2ModelRecipeView(
+            mdr_setup, left_width, **kwargs
+        )
+        self._struct: NetworkStructureView = NetworkStructureView(
+            net_struct, left_width, **kwargs
+        )
+
+    def build_tree(self, root_pfx: str = "") -> awitree.Tree:
+        root_key = f"{root_pfx}-integ"
+        self._data_src.build(root_key)
+        self._d2m.build(root_key)
+        self._struct.build(root_key)
+        # initialize tree
+        self.root_node: CBTreeNode | None = CBTreeNode.init(
+            name=f"{root_pfx}-{RcpTreeNames.RECIPE}",
+            key=root_key
+        )
+        if self._data_src.root_node:
+            self.root_node.add_node(self._data_src.root_node)
+        if self._d2m.root_node:
+            self.root_node.add_node(self._d2m.root_node)
+        if self._struct.root_node:
+            self.root_node.add_node(self._struct.root_node)
+        # build tree data
+        tree_data = self.root_node.awi_dict()
+        tree_data["state"] = {"selected": True, "opened": True}
+        tree: awitree.Tree = awitree.Tree(data=tree_data)
+        # self.tree.layout.width = self.left_width  # type:ignore
+        return tree
+
+    @override
+    def build(self, root_pfx: str = "") -> TreeBase:
+        self.tree: awitree.Tree | None = self.build_tree(root_pfx)
+        # self.panel_dict : dict[str, PanelBase] = self.build_side_panels()
+        # self.tree.observe(self.tree_update, names="selected_nodes")  # type:ignore
+        self.layout_: mo.Html | None = mo.hstack(
+            [self.tree, mo.vstack([])], widths=self.widths
+        )
+        return self
+
+    @override
+    def view_components(self):
+        return (
+            self.tree,
+            (
+                self._data_src.panel_dict,
+                self._d2m.panel_dict,
+                self._struct.panel_dict,
+            ),
+        )

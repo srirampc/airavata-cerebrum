@@ -10,6 +10,7 @@ import numpy as np
 import numpy.typing as npt
 import matplotlib.pyplot as plt
 import pandas as pd
+import polars as pl
 import traitlets
 #
 from typing_extensions import override
@@ -728,16 +729,16 @@ def plot_section(
     Plot a Section of the MERFISH co-ordinates
     """
     fig, ax = plt.subplots()
-    fig.set_size_inches(fig_width, fig_height)  # pyright: ignore[reportAttributeAccessIssue]
+    fig.set_size_inches(fig_width, fig_height)
     if cmap is not None:
         plt.scatter(xx, yy, s=0.5, c=val, marker=".", cmap=cmap)
     elif cc is not None:
         plt.scatter(xx, yy, s=0.5, color=cc, marker=".")
-    ax.set_ylim(11, 0)  # pyright: ignore[reportAttributeAccessIssue] 
-    ax.set_xlim(0, 11)  # pyright: ignore[reportAttributeAccessIssue] 
-    ax.axis("equal")   # pyright: ignore[reportAttributeAccessIssue] 
-    ax.set_xticks([])  # pyright: ignore[reportAttributeAccessIssue] 
-    ax.set_yticks([])  # pyright: ignore[reportAttributeAccessIssue] 
+    ax.set_ylim(11, 0)
+    ax.set_xlim(0, 11)
+    ax.axis("equal")
+    ax.set_xticks([])
+    ax.set_yticks([])
     return fig, ax
 
 
@@ -774,7 +775,7 @@ def aggregate_by_metadata(
     return grouped
 
 
-def plot_heatmap( # pyright: ignore[reportUnknownParameterType]
+def plot_heatmap(
     df: pd.DataFrame,
     ylabel: str="Expression",
     lmin: int=0,
@@ -788,11 +789,11 @@ def plot_heatmap( # pyright: ignore[reportUnknownParameterType]
     """
     arr = df.to_numpy()
     fig, ax = plt.subplots()
-    fig.set_size_inches(   # pyright: ignore[reportAttributeAccessIssue]
+    fig.set_size_inches(
         fig_width,
         fig_height
     )
-    im = ax.imshow(  # pyright: ignore[reportAttributeAccessIssue]
+    im = ax.imshow(
         arr,
         cmap=cmap,
         aspect="auto", 
@@ -800,12 +801,12 @@ def plot_heatmap( # pyright: ignore[reportUnknownParameterType]
         vmax=lmax)
     xlabs = df.columns.values
     ylabs = df.index.values
-    ax.set_xticks(range(len(xlabs)))   # pyright: ignore[reportAttributeAccessIssue] 
-    ax.set_xticklabels(xlabs)    # pyright: ignore[reportAttributeAccessIssue] # type:ignore
-    ax.set_yticks(range(len(ylabs)))    # pyright: ignore[reportAttributeAccessIssue] # type:ignore
-    ax.set_yticklabels(ylabs)    # pyright: ignore[reportAttributeAccessIssue] # type:ignore
-    plt.setp(ax.get_xticklabels(), rotation=90)  # pyright: ignore[reportAttributeAccessIssue] 
-    cbar = ax.figure.colorbar(im, ax=ax)  # pyright: ignore[reportAttributeAccessIssue]
+    ax.set_xticks(range(len(xlabs)))
+    ax.set_xticklabels(xlabs)
+    ax.set_yticks(range(len(ylabs)))
+    ax.set_yticklabels(ylabs)
+    plt.setp(ax.get_xticklabels(), rotation=90)
+    cbar = ax.figure.colorbar(im, ax=ax)
     cbar.set_label(ylabel)
     return im
 
@@ -1096,6 +1097,28 @@ class ABCDbMERFISH_CCFQuery(DbQuery):
     @classmethod
     def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
         return cls.QryTraits(**trait_values)
+
+
+class DFBuilder:
+    def qry2dict(
+        self,
+        in_iter: QryItr,
+    ) -> list[dict[str, t.Any]]:
+        subr_stats = []
+        for qresult in in_iter:
+            for _rx, region_dct in qresult.items():
+                for _sr, subregion_dct in region_dct.items():
+                    subr_stats.append(subregion_dct)
+        return subr_stats
+
+    def run(
+        self,
+        in_iter: QryItr | None,
+        **_params: t.Any,
+    ) -> pl.DataFrame | None:
+        if in_iter is None:
+            return None
+        return pl.DataFrame(self.qry2dict(in_iter))
 
 #
 # ------- Query and Xform Registers -----

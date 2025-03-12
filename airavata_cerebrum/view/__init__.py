@@ -13,7 +13,8 @@ def _log():
 
 @t.final
 class RcpTreeNames:
-    SRC_DATA = "Source Data"
+    RECIPE = "Recipe"
+    SRC_DATA = "Data Sources"
     LOCATIONS = "Locations"
     CONNECTIONS = "Connections"
     REGIONS = "Regions"
@@ -25,7 +26,7 @@ class RcpTreeNames:
 
 @t.final
 class StructTreeNames:
-    SRC_DATA = "Source Data"
+    SRC_DATA = "Data Sources"
     LOCATIONS = "Locations"
     CONNECTIONS = "Connections"
     REGIONS = "Regions"
@@ -59,12 +60,11 @@ def struct_payload(
         ),
     )
 
-
-def recipe_step_payload(
+def workflow_params(
     wf_step: dict[str, t.Any],
     node_key: str | None = None,
-) -> PayLoad | None:
-    wf_dict = (
+) -> dict[str, t.Any]:
+    return (
         {
             RecipeKeys.NAME: wf_step[RecipeKeys.LABEL],
             RecipeKeys.NODE_KEY: (
@@ -74,16 +74,31 @@ def recipe_step_payload(
         | wf_step[RecipeKeys.INIT_PARAMS]
         | wf_step[RecipeKeys.EXEC_PARAMS]
     )
+
+def recipe_traits(
+    wf_step: dict[str, t.Any],
+    node_key: str | None = None,
+) -> tuple[dict[str, t.Any], traitlets.HasTraits | None]:
     src_class: type[DbQuery] | type[OpXFormer] | None = find_type(
         wf_step[RecipeKeys.NAME]
     )
+    wf_dict: dict[str, t.Any] = workflow_params(wf_step, node_key)
+    if src_class:
+        return wf_dict, src_class.trait_instance(**wf_dict)
+    else:
+        return wf_dict, None
+
+def recipe_step_payload(
+    wf_step: dict[str, t.Any],
+    node_key: str | None = None,
+) -> PayLoad | None:
+    wf_dict,  rcp_traits = recipe_traits(wf_step, node_key)
     if RecipeKeys.NODE_KEY in wf_dict:
-        if src_class:
+        if rcp_traits:
             nkey=wf_dict[RecipeKeys.NODE_KEY]
-            ntraits = src_class.trait_instance(**wf_dict)
             plx = PayLoad(
                 node_key=nkey,
-                node_traits=ntraits,
+                node_traits=rcp_traits,
             )
             # _log().warning(
             #     "Data [%s %s %s %s %s]",
@@ -98,7 +113,7 @@ def recipe_step_payload(
             _log().warning(
                 "Default Data [%s %s]",
                 str(wf_dict),
-                str(src_class)
+                str(rcp_traits)
             )
             return PayLoad(**wf_dict)
     else:
