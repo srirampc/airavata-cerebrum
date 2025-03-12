@@ -33,7 +33,8 @@ def _():
     tree_view_widths = [0.4, 0.6]
     cmod_struct = cbm_structure.Network.model_validate(cmod_dict)
 
-    stree, spanel_dict = cbm_motree.SourceDataTreeView(mdr_setup).build().view_comps()
+    sdtree = cbm_motree.DataSourceRecipeView(mdr_setup).build()
+    stree, spanel_dict = sdtree.view_comps()
     smotree = mo.ui.anywidget(stree)
     return (
         awitree,
@@ -53,6 +54,7 @@ def _():
         rcp_dir,
         rcp_files,
         recipe_dict,
+        sdtree,
         smotree,
         spanel_dict,
         stree,
@@ -75,9 +77,16 @@ def _(cbm_motree, mo, smotree, spanel_dict, stree, tree_view_widths):
 
 @app.cell
 def _(cbm_motree, mdr_setup, mo):
-    d2mltree, d2ml_panel_dict = cbm_motree.D2MLocationsTreeView(mdr_setup).build().view_comps()
+    d2mview = cbm_motree.Datat2ModelRecipeView(mdr_setup).build()
+    d2mltree, d2ml_panel_dict = d2mview.view_comps()
     d2ml_motree = mo.ui.anywidget(d2mltree)
-    return d2ml_motree, d2ml_panel_dict, d2mltree
+    return d2ml_motree, d2ml_panel_dict, d2mltree, d2mview
+
+
+@app.cell
+def _(d2ml_motree):
+    d2ml_motree
+    return
 
 
 @app.cell(hide_code=True)
@@ -101,26 +110,6 @@ def _(
 
 
 @app.cell
-def _(cbm_motree, mdr_setup, mo):
-    d2mctree, d2mc_panel_map = cbm_motree.D2MConnectionsTreeView(mdr_setup).build().view_comps()
-    d2mc_motree = mo.ui.anywidget(d2mctree)
-    return d2mc_motree, d2mc_panel_map, d2mctree
-
-
-@app.cell(hide_code=True)
-def _(cbm_motree, d2mc_motree, d2mc_panel_map, mo, tree_view_widths):
-    d2mcrt_selected = cbm_motree.TreeBase.panel_selector(d2mc_motree, d2mc_panel_map)
-    mo.hstack(
-        [
-            d2mc_motree,
-            d2mcrt_selected.layout if d2mcrt_selected else None
-        ],
-        widths=tree_view_widths
-    )
-    return (d2mcrt_selected,)
-
-
-@app.cell
 def _(cbm_motree, cmod_struct, mo):
     cmod_tview = cbm_motree.NetworkTreeView(cmod_struct).build()
     cmodtree, cmod_panel_dict = cmod_tview.view_comps()
@@ -132,11 +121,11 @@ def _(cbm_motree, cmod_struct, mo):
 def _(cbm_motree, cmod_motree, cmod_panel_dict, mo, tree_view_widths):
     cmod_selected = cbm_motree.TreeBase.panel_selector(cmod_motree, cmod_panel_dict)
     mo.hstack(
-        [
-            cmod_motree,
-            cmod_selected.layout if cmod_selected else None
-        ],
-        widths=tree_view_widths
+       [
+           cmod_motree,
+           cmod_selected.layout if cmod_selected else None
+       ],
+       widths=tree_view_widths
     )
     return (cmod_selected,)
 

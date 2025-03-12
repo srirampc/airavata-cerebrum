@@ -18,6 +18,12 @@ class TraitDef(pydantic.BaseModel):
 class StructBase(pydantic.BaseModel, metaclass=abc.ABCMeta):
     name: str = ""
 
+    def get(self, field: str) -> t.Any:
+        try:
+            return getattr(self, field)
+        except AttributeError:
+            return None
+
     @t.final
     class StructBaseTrait(traitlets.HasTraits):
         name = traitlets.Unicode()
