@@ -48,3 +48,13 @@ class OpXFormer(TraitInterface, abc.ABC):
         **params: t.Any,
     ) -> XformItr | None:
         return None
+
+# Abstract interface for DBWrite operations
+class QryDBWriter(abc.ABC):
+    @abc.abstractmethod
+    def write(
+        self,
+        in_iter: QryItr | None,
+        **_params: t.Any,
+    ) -> None:
+        pass

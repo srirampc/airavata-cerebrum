@@ -1,5 +1,10 @@
+import ast
+import itertools
 import logging
 import typing as t
+#
+import duckdb
+import polars as pl
 import traitlets
 import aisynphys
 #
@@ -9,7 +14,7 @@ from aisynphys.database.schema.experiment import PairBase
 from aisynphys.cell_class import CellClass, classify_cells, classify_pairs
 from aisynphys.connectivity import measure_connectivity
 #
-from ..base import DbQuery, OpXFormer, QryItr
+from ..base import DbQuery, OpXFormer, QryDBWriter, QryItr
 
 
 class CellClassSelection(t.NamedTuple):
@@ -170,6 +175,60 @@ class AISynPhysQuery(DbQuery):
         return cls.QryTraits(**trait_values)
 
 
+class DFBuilder:
+    @staticmethod
+    def syn_row(pair_literal: str, value: float) -> tuple[str, str, float]:
+        pairx = ast.literal_eval(pair_literal)
+        return (pairx[0], pairx[1], value)
+    
+    @staticmethod
+    def split_pairs(p_dict: dict[str, t.Any]):
+        return (
+            DFBuilder.syn_row(px, vx)
+            for px, vx in p_dict.items()
+        )
+ 
+    @staticmethod
+    def build(
+        in_iter: QryItr | None,
+        **_params: t.Any,
+    ) -> pl.DataFrame | None:
+        if in_iter is None:
+            return None
+        rschema=[
+            ("pre_synapse", pl.String),
+            ("post_synapse", pl.String),
+            ("connect_prob", pl.Float64)
+        ]
+        return pl.DataFrame(
+            (
+                itertools.chain.from_iterable(
+                    DFBuilder.split_pairs(x) for x in in_iter
+                )
+            ),
+            schema=rschema,
+            orient="row",
+        )
+
+
+class DuckDBWriter(QryDBWriter):
+    def __init__(self, db_conn: duckdb.DuckDBPyConnection):
+        self.conn : duckdb.DuckDBPyConnection = db_conn
+
+    @override
+    def write(
+        self,
+        in_iter: QryItr | None,
+        **_params: t.Any,
+    ) -> None:
+        result_df = DFBuilder.build(in_iter) # pyright: ignore[reportUnusedVariable]
+        self.conn.execute(
+            "CREATE OR REPLACE TABLE ai_synphys AS SELECT * FROM result_df"
+        )
+        self.conn.commit()
+
+
+
 #
 # ------- Query and Xform Registers -----
 #
@@ -181,3 +240,7 @@ def query_register() -> list[type[DbQuery]]:
 
 def xform_register() -> list[type[OpXFormer]]:
     return []
+
+
+def dbwriter_register() -> type[QryDBWriter]:
+    return DuckDBWriter

@@ -2,7 +2,7 @@ import itertools
 import typing as t
 from collections.abc import Iterable
 
-from .base import OpXFormer, DbQuery
+from .base import OpXFormer, DbQuery, QryDBWriter
 from .dataset import abc_mouse as abc_mouse_db
 from .dataset import abm_celltypes as abm_celltypes_db
 from .dataset import ai_synphys as ai_synphys_db
@@ -25,13 +25,27 @@ class TypeRegister(t.Generic[RCType]):
     register_map: dict[str, type[RCType]]
 
     def __init__(
-        self, register_lst: Iterable[type[RCType]], base_class: type[RCType]
+        self,
+        register_lst: Iterable[type[RCType]],
+        base_class: type[RCType],
+        key_source: t.Literal['class', 'module'] = 'class'
     ) -> None:
         self.register_map = {
-            class_qual_name(clsx): clsx
+            self.qual_name(clsx, key_source): clsx
             for clsx in register_lst
             if issubclass(clsx, base_class)
         }
+    
+    def qual_name(
+        self,
+        clsx: type,
+        key_source: t.Literal['class', 'module'],
+    ) -> str:
+        match key_source:
+            case 'class':
+                return class_qual_name(clsx)
+            case 'module':
+                return clsx.__module__
 
     def get_object(
         self, query_key: str, **init_params: t.Any
@@ -76,6 +90,16 @@ XFORM_REGISTER: TypeRegister[OpXFormer] = TypeRegister(
     OpXFormer,
 )
 
+QRY_DBWIRTER_REGISTER: TypeRegister[QryDBWriter] = TypeRegister(
+    [
+        abm_celltypes_db.dbwriter_register(),
+        abc_mouse_db.dbwriter_register(),
+        ai_synphys_db.dbwriter_register(),
+    ],
+    QryDBWriter,
+    key_source='module'
+)
+
 
 def find_type(
     register_key: str,
@@ -100,5 +124,13 @@ def get_xform_op_object(
     **params: t.Any,
 ) -> OpXFormer | None:
     return XFORM_REGISTER.get_object(
+        register_key, **params
+    )
+
+def get_query_db_writer_object(
+    register_key: str,
+    **params: t.Any,
+) -> QryDBWriter | None:
+    return QRY_DBWIRTER_REGISTER.get_object(
         register_key, **params
     )

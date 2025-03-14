@@ -28,6 +28,7 @@ dependencies:
   - requests
   - scikit-learn
   - scipy
+  - sqlglot
   - sqlalchemy
   - traitlets
   - tqdm

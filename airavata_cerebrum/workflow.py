@@ -1,5 +1,6 @@
 import logging
 import typing as t
+import duckdb
 import tqdm.contrib.logging as tqdm_log
 
 from collections.abc import Iterable
@@ -129,3 +130,16 @@ def map_srcdata_connections(
         _log().info("Completed db data for connex [%s]", connx)
         net_connections[connx] = conn_desc_map
     return net_connections
+
+def write_db_connect_duck(
+    db_connect_output: dict[str, t.Any],
+    db_name: str,
+) -> None:
+    #
+    with duckdb.connect(db_name) as db_conn:
+        for db_name, db_wout in db_connect_output.items():
+            db_writer = register.get_query_db_writer_object(
+                db_name,
+                db_conn=db_conn
+            )
+            db_writer.write(db_wout)

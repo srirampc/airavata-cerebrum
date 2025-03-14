@@ -1,6 +1,10 @@
+import itertools
 import json
 import logging
 import os
+#
+import duckdb
+import polars as pl
 import typing as t
 import traitlets
 import allensdk.core.cell_types_cache
@@ -9,7 +13,8 @@ import allensdk.api.queries.cell_types_api
 from typing_extensions import override
 from allensdk.api.queries.glif_api import GlifApi
 from pathlib import Path
-from ..base import DbQuery, QryItr, OpXFormer
+from ..base import DbQuery, QryDBWriter, QryItr, OpXFormer
+from ..util import exclude_keys, prefix_keys
 
 
 def _log():
@@ -274,6 +279,115 @@ class CTDbGlifApiModelConfigQry(DbQuery):
         return cls.QryTraits(**trait_values)
 
 
+class DFBuilder:
+    TableTypes: t.TypeAlias = t.Literal["ct", "glif", "nm", "nmr"]
+    @staticmethod
+    def clean_nrn_models(nrn_dct: dict[str, t.Any]):
+        return exclude_keys(
+            (
+                nrn_dct | 
+                prefix_keys(
+                    nrn_dct['neuronal_model_template'],
+                    'template'
+                )
+            ),
+            set([
+                'neuronal_model_template',
+                'neuronal_model_runs',
+                'well_known_files'
+            ])
+        )
+    
+    @staticmethod
+    def clean_nrn_model_runs(nrn_dict: dict[str, t.Any]):
+        return (
+            exclude_keys(
+                nrx,
+                set(['well_known_files'])
+            )
+            for nrx in nrn_dict["neuronal_model_runs"]
+        )
+     
+    
+    @staticmethod
+    def nm_row(glf_dct: dict[str, t.Any] | None):
+        if glf_dct is None:
+            return iter([])
+        return (
+            DFBuilder.clean_nrn_models(nmx)
+            for nmx in glf_dct['neuronal_models']
+        )
+    
+    @staticmethod
+    def nmruns_row(glf_dct: dict[str, t.Any] | None):
+        if glf_dct is None:
+            return iter([])
+        return itertools.chain.from_iterable(
+            DFBuilder.clean_nrn_model_runs(nmx)    
+            for nmx in glf_dct['neuronal_models']
+        )
+        
+    @staticmethod
+    def glif_row(glf_dct: dict[str,t.Any]):
+        return exclude_keys(
+            glf_dct,
+            set(["neuronal_models"])
+        )
+    
+    @staticmethod
+    def build(
+        in_iter: QryItr | None,
+        df_source: TableTypes = "ct",
+        **_params: t.Any,
+    ) -> pl.DataFrame | None:
+        if in_iter is None:
+            return None
+        match df_source:
+            case "ct":
+                return pl.DataFrame(qrst['ct'] for qrst in in_iter)
+            case "glif":
+                return pl.DataFrame(
+                    (
+                        DFBuilder.glif_row(tgx['glif'])
+                        for tgx in in_iter if tgx['glif'] is not None
+                    )
+                )
+            case "nm":
+                return pl.DataFrame(
+                    itertools.chain.from_iterable(
+                        DFBuilder.nm_row(tgx['glif'])
+                        for tgx in in_iter
+                    )
+                )
+            case "nmr":
+                return pl.DataFrame(
+                    itertools.chain.from_iterable(
+                        DFBuilder.nmruns_row(tgx['glif'])
+                        for tgx in in_iter 
+                    )
+                )
+
+
+class DuckDBWriter(QryDBWriter):
+    def __init__(self, db_conn: duckdb.DuckDBPyConnection):
+        self.conn : duckdb.DuckDBPyConnection = db_conn
+
+    @override
+    def write(
+        self,
+        in_iter: QryItr | None,
+        **_params: t.Any,
+    ) -> None:
+        for tbx in t.get_args(DFBuilder.TableTypes):
+            result_df = DFBuilder.build(in_iter, tbx)  # pyright: ignore[reportUnusedVariable]
+            tb_name = f"abm_celltypes_{tbx}"
+            self.conn.execute(
+                f"CREATE OR REPLACE TABLE {tb_name} AS SELECT * FROM result_df"
+            )
+        self.conn.commit()
+
+
+
 #
 # ------- Query and Xform Registers -----
 #
@@ -288,3 +402,7 @@ def query_register() -> list[type[DbQuery]]:
 
 def xform_register() -> list[type[OpXFormer]]:
     return []
+
+
+def dbwriter_register() -> type[QryDBWriter]:
+    return DuckDBWriter

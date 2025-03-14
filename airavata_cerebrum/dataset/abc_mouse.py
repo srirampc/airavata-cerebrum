@@ -6,6 +6,7 @@ import typing as t
 
 #
 import anndata
+import duckdb
 import numpy as np
 import numpy.typing as npt
 import matplotlib.pyplot as plt
@@ -15,10 +16,11 @@ import traitlets
 #
 from typing_extensions import override
 from pathlib import Path
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 from abc_atlas_access.abc_atlas_cache.abc_project_cache import AbcProjectCache
-
 #
-from ..base import DbQuery, OpXFormer, QryItr
+from ..base import DbQuery, OpXFormer, QryDBWriter, QryItr
 
 ProcessResult : t.TypeAlias = subprocess.CompletedProcess[bytes]
 NDFloatArray : t.TypeAlias = npt.NDArray[np.floating[t.Any]]
@@ -724,7 +726,7 @@ def plot_section(
     fig_width: int=8,
     fig_height: int=8,
     cmap: str | None =None
-)  -> tuple[plt.FigureBase, NDFloatArray]:
+)  -> tuple[Figure, Axes]:
     """
     Plot a Section of the MERFISH co-ordinates
     """
@@ -1100,25 +1102,42 @@ class ABCDbMERFISH_CCFQuery(DbQuery):
 
 
 class DFBuilder:
+    @staticmethod
     def qry2dict(
-        self,
         in_iter: QryItr,
     ) -> list[dict[str, t.Any]]:
         subr_stats = []
-        for qresult in in_iter:
-            for _rx, region_dct in qresult.items():
+        for qry_result in in_iter:
+            for _rx, region_dct in qry_result.items():
                 for _sr, subregion_dct in region_dct.items():
                     subr_stats.append(subregion_dct)
         return subr_stats
 
-    def run(
-        self,
+    @staticmethod
+    def build(
         in_iter: QryItr | None,
         **_params: t.Any,
     ) -> pl.DataFrame | None:
         if in_iter is None:
             return None
-        return pl.DataFrame(self.qry2dict(in_iter))
+        return pl.DataFrame(DFBuilder.qry2dict(in_iter))
+
+
+class DuckDBWriter(QryDBWriter):
+    def __init__(self, db_conn: duckdb.DuckDBPyConnection):
+        self.conn : duckdb.DuckDBPyConnection = db_conn
+
+    @override
+    def write(
+        self,
+        in_iter: QryItr | None,
+        **_params: t.Any,
+    ) -> None:
+        result_df = DFBuilder.build(in_iter) # pyright: ignore[reportUnusedVariable]
+        self.conn.execute(
+            "CREATE OR REPLACE TABLE abm_mouse AS SELECT * FROM result_df"
+        )
+        self.conn.commit()
 
 #
 # ------- Query and Xform Registers -----
@@ -1131,3 +1150,7 @@ def query_register() -> list[type[DbQuery]]:
 
 def xform_register() -> list[type[OpXFormer]]:
     return []
+
+
+def dbwriter_register() -> type[QryDBWriter]:
+    return DuckDBWriter

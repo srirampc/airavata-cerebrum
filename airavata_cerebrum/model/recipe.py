@@ -29,6 +29,7 @@ class ModelRecipe(pydantic.BaseModel):
     network_builder: type
     mod_structure: structure.Network | None = None
     save_flag: bool = True
+    write_duck: bool = True
     out_format: typing.Literal["json", "yaml", "yml"] = "json"
     network_struct: structure.Network = structure.Network(name="empty")
 
@@ -41,16 +42,29 @@ class ModelRecipe(pydantic.BaseModel):
             os.makedirs(out_path.parent)
         return out_path.with_suffix("." + self.out_format)
 
+    def save_db_out(
+        self,
+        db_connect_output: dict[str, typing.Any]
+    ) -> None:
+        db_out_loc = self.output_location(RecipeKeys.DB_CONNECT)
+        if self.save_flag:
+            cbmio.dump(
+                db_connect_output,
+                db_out_loc,
+                indent=4,
+            )
+        if self.write_duck:
+            duck_out_loc = str(db_out_loc).replace(self.out_format, 'db')
+            workflow.write_db_connect_duck(
+                db_connect_output,
+                duck_out_loc,
+            )
+
     def download_db_data(self) -> dict[str, typing.Any]:
         db_src_config = self.recipe_setup.get_section(RecipeKeys.SRC_DATA)
         _log().info("Start Query and Download Data")
         db_connect_output = workflow.run_db_connect_workflows(db_src_config)
-        if self.save_flag:
-            cbmio.dump(
-                db_connect_output,
-                self.output_location(RecipeKeys.DB_CONNECT),
-                indent=4,
-            )
+        self.save_db_out(db_connect_output)
         _log().info("Completed Query and Download Data")
         return db_connect_output
 
