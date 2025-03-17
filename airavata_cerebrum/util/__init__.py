@@ -19,3 +19,17 @@ def prefix_keys(
 ) -> dict[str, t.Any]:
     return {f"{pfx}{sep}{kx}": vx for kx, vx in r_dct.items()}
 
+
+def merge_dict_inplace(
+    dest_dct: dict[str, t.Any],
+    from_dct: dict[str, t.Any],
+) -> None:
+    for k, _v in from_dct.items():
+        if (
+            (k in dest_dct) and
+            isinstance(from_dct[k], dict) and
+            isinstance(dest_dct[k], dict)
+        ):
+            merge_dict_inplace(dest_dct[k], from_dct[k])
+        else:
+            dest_dct[k] = from_dct[k]

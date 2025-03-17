@@ -1,9 +1,8 @@
 import ast
 import logging
-import typing
+import typing as t
 
 #
-import jsonpath
 import numpy as np
 import scipy
 import scipy.stats
@@ -12,6 +11,9 @@ import bmtk.builder
 import bmtk.builder.node_pool
 
 #
+from typing_extensions import override
+from jsonpath import JSONPointer
+from airavata_cerebrum.base import QryItr
 from airavata_cerebrum.operations import netops
 from airavata_cerebrum.dataset import abc_mouse
 from mousev1.operations import (
@@ -31,13 +33,14 @@ def _log():
 
 
 class V1RegionMapper(structure.RegionMapper):
-    def __init__(self, name: str, region_desc: typing.Dict[str, typing.Dict]):
-        self.name = name
-        self.region_desc = region_desc
-        self.property_map = self.region_desc["property_map"]
-        self.src_data = self.property_map["airavata_cerebrum.dataset.abc_mouse"][0]
+    def __init__(self, name: str, region_desc: dict[str, dict[str, t.Any]]):
+        self.name : str = name
+        self.region_desc : dict[str, dict[str, t.Any]]= region_desc
+        self.property_map  : dict[str, t.Any] = self.region_desc["property_map"]
+        self.src_data : dict[str, t.Any] = self.property_map["airavata_cerebrum.dataset.abc_mouse"][0]
 
-    def neuron_names(self) -> typing.List[str]:
+    @override
+    def neuron_names(self) -> list[str]:
         return self.property_map["neurons"]
 
     def inh_fraction(self):
@@ -46,8 +49,9 @@ class V1RegionMapper(structure.RegionMapper):
     def region_fraction(self):
         return float(self.src_data["region_fraction"])
 
+    @override
     def map(
-        self, region_neurons: typing.Dict[str, structure.Neuron]
+        self, region_neurons: dict[str, structure.Neuron]
     ) -> structure.Region | None:
         return structure.Region(
             name=self.name,
@@ -61,31 +65,32 @@ structure.RegionMapper.register(V1RegionMapper)
 
 
 class V1NeuronMapper(structure.NeuronMapper):
-    abc_ptr = jsonpath.JSONPointer("/airavata_cerebrum.dataset.abc_mouse/0")
-    ct_ptr = jsonpath.JSONPointer("/airavata_cerebrum.dataset.abm_celltypes")
-    ev_ptr = jsonpath.JSONPointer(
+    abc_ptr = JSONPointer("/airavata_cerebrum.dataset.abc_mouse/0")
+    ct_ptr = JSONPointer("/airavata_cerebrum.dataset.abm_celltypes")
+    ev_ptr = JSONPointer(
         "/glif/neuronal_models/0/neuronal_model_runs/0/explained_variance_ratio"
     )
-    id_ptr = jsonpath.JSONPointer("/glif/neuronal_models/0/neuronal_model_runs/0/id")
+    id_ptr : JSONPointer = JSONPointer("/glif/neuronal_models/0/neuronal_model_runs/0/id")
 
-    def __init__(self, name: str, desc: typing.Dict[str, typing.Dict]):
-        self.name = name
-        self.desc = desc
-        self.ct_data: typing.Iterable | None = None
-        self.abc_data: typing.Iterable | None = None
+    def __init__(self, name: str, desc: dict[str, dict[str, t.Any]]):
+        self.name : str = name
+        self.desc : dict[str, dict[str, t.Any]] = desc
+        self.ct_data: dict[str, t.Any] | None = None
+        self.abc_data: dict[str, t.Any] | None = None
         if self.abc_ptr.exists(desc):
-            self.abc_data = self.abc_ptr.resolve(desc)  # type:ignore
+            self.abc_data = self.abc_ptr.resolve(desc)  # pyright: ignore[reportAttributeAccessIssue]
         else:
             self.abc_data = None
         if self.abc_data is None:
             _log().error("Can not find ABC Pointer in Model Description")
         if self.ct_ptr.exists(desc):
-            self.ct_data = self.ct_ptr.resolve(desc)  # type: ignore
+            self.ct_data = self.ct_ptr.resolve(desc)   # pyright: ignore[reportAttributeAccessIssue]
         else:
             self.ct_data = None
         if self.ct_data is None:
             _log().error("Can not find ABM CT Pointer in Model Description")
 
+    @override
     def map(self) -> structure.Neuron | None:
         ntype = self.desc["property_map"]["ei"]
         if not self.abc_data:
@@ -124,12 +129,14 @@ class V1NeuronMapper(structure.NeuronMapper):
 structure.NeuronMapper.register(V1NeuronMapper)
 
 
+@t.final
 class V1ConnectionMapper(structure.ConnectionMapper):
-    def __init__(self, name: str, desc: typing.Dict[str, typing.Dict]):
-        self.name = name
+    def __init__(self, name: str, desc: dict[str, dict[str, t.Any]]):
+        self.name : str= name
         self.pre, self.post = ast.literal_eval(self.name)
         self.desc = desc
 
+    @override
     def map(self) -> structure.Connection | None:
         if "airavata_cerebrum.dataset.ai_synphys" in self.desc:
             conn_prob = self.desc["airavata_cerebrum.dataset.ai_synphys"][0][
@@ -153,12 +160,12 @@ structure.ConnectionMapper.register(V1ConnectionMapper)
 
 
 class ABCRegionMapper:
-    def __init__(self, name: str, region_desc: typing.Dict):
-        self.name = name
-        self.region_desc = region_desc
+    def __init__(self, name: str, region_desc: dict[str, t.Any]):
+        self.name : str = name
+        self.region_desc : dict[str, t.Any] = region_desc
 
     def map(
-        self, neuron_struct: typing.Dict[str, structure.Neuron]
+        self, neuron_struct: dict[str, structure.Neuron]
     ) -> structure.Region:
         return structure.Region(
             name=self.name,
@@ -171,14 +178,17 @@ class ABCRegionMapper:
 
 
 class ABCNeuronMapper:
-    def __init__(self, name: str, desc: typing.Dict):
-        self.name = name
-        self.desc = desc
-        self.ei_type = desc["ei"]
+    def __init__(self, name: str, desc: dict[str, t.Any]):
+        self.name : str = name
+        self.desc : dict[str, t.Any] = desc
+        self.ei_type : t.Literal['e', 'i'] = desc["ei"]
 
     def map(self) -> structure.Neuron | None:
         frac_col = abc_mouse.FRACTION_COLUMN_FMT.format(self.name)
-        return structure.Neuron(ei=self.ei_type, fraction=float(self.desc[frac_col]))
+        return structure.Neuron(
+            ei=self.ei_type,
+            fraction=float(self.desc[frac_col])
+        )
 
 
 # def atlasdata2regionfractions(
@@ -206,7 +216,7 @@ class V1BMTKNetworkBuilder:
     def __init__(
         self,
         net_struct: structure.Network,
-        **kwargs,
+        **kwargs: t.Any,
     ):
         self.net_struct: structure.Network = net_struct
         self.fraction: float = 1.0
@@ -218,7 +228,7 @@ class V1BMTKNetworkBuilder:
 
         self.min_radius: float = 1.0  # to avoid diverging density near 0
         self.radius: float = self.net_struct.dims["radius"] * np.sqrt(self.fraction)
-        self.radial_range: typing.List[float] = [self.min_radius, self.radius]
+        self.radial_range: list[float] = [self.min_radius, self.radius]
         self.net: bmtk.builder.NetworkBuilder = bmtk.builder.NetworkBuilder(
             self.net_struct.name
         )
@@ -226,7 +236,7 @@ class V1BMTKNetworkBuilder:
     def add_model_nodes(
         self,
         location: str,
-        loc_dims: typing.Dict,
+        loc_dims: dict[str, t.Any],
         pop_neuron: structure.Neuron,
         neuron_model: structure.NeuronModel,
     ):

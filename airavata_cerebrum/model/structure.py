@@ -3,9 +3,11 @@ import pydantic
 import traitlets
 import abc
 import typing as t
+#
+from pathlib import Path
 from typing_extensions import override
 
-from ..util import io as uio
+from ..util import io as uio, merge_dict_inplace
 
 
 class TraitDef(pydantic.BaseModel):
@@ -921,10 +923,19 @@ class Network(StructBase):
         return None
 
     @classmethod
-    def from_json(cls, json_file: str) -> "Network":
-        return cls.model_validate(uio.load_json(json_file))
+    def from_file(cls, in_file: str | Path) -> "Network":
+        return cls.model_validate(uio.load(in_file))
 
-
+    @classmethod
+    def from_file_list(cls, in_files: list[str | Path]) -> "Network":
+        cust_dict : dict[str, t.Any] = {}
+        for ifile in in_files:
+            f_dict = uio.load_json(ifile)
+            if cust_dict and f_dict:
+                merge_dict_inplace(cust_dict, f_dict)
+            else:
+                cust_dict = f_dict
+        return cls.model_validate(cust_dict)
 #
 # Mapper Abstract Classes
 #

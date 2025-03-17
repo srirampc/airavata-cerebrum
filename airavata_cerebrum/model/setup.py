@@ -5,7 +5,7 @@ import pydantic
 
 from pathlib import Path
 
-from ..util import io as cbmio
+from ..util import io as cbmio, merge_dict_inplace
 
 
 def _log():
@@ -51,6 +51,7 @@ class RecipeLabels:
 class RecipeSetup(pydantic.BaseModel):
     recipe_dir: str | Path = Path(".")
     recipe_sections: dict[str, t.Any] = {}
+    recipe_templates: dict[str, t.Any] = {}
     recipe_files: dict[str, list[str | Path]]
     #
     create_model_dir: bool = False
@@ -67,7 +68,15 @@ class RecipeSetup(pydantic.BaseModel):
 
     def __init__(self, **kwargs: t.Any):
         super().__init__(**kwargs)
-        # Check if recipe available
+        self.load_recipe()
+        # Recipe View Templates
+        self.load_templates()
+        # Create model directory
+        if self.create_model_dir and not os.path.exists(self.model_dir):
+            os.makedirs(self.model_dir)
+
+    def load_recipe(self):
+        # Load if recipe available, load sections otherwise
         if RecipeKeys.RECIPE in self.recipe_files:
             self.load_sections()
         else:
@@ -75,18 +84,20 @@ class RecipeSetup(pydantic.BaseModel):
                 self.load_section_list()
             except KeyError:
                 _log().error(
-                    "Failed to find one of two Recipe Keys: [%s]", str(RecipeKeys.RECIPE_SECTIONS)
+                    "Failed to find one of two Recipe Keys: [%s]",
+                    str(RecipeKeys.RECIPE_SECTIONS)
                 )
-        # Create model directory
-        if self.create_model_dir and not os.path.exists(self.model_dir):
-            os.makedirs(self.model_dir)
-        # Recipe View Templates
+
+    def load_templates(self):
         if RecipeKeys.TEMPLATES in self.recipe_files:
             _log().warning("Loading View Templates")
-            for cfg_file in self.recipe_files[RecipeKeys.TEMPLATES]:
-                cfg_dict = cbmio.load(self.recipe_file_path(cfg_file))
-                if cfg_dict:
-                    self.update_section(cfg_dict, RecipeKeys.TEMPLATES)
+            for t_file in self.recipe_files[RecipeKeys.TEMPLATES]:
+                t_dict = cbmio.load(self.recipe_file_path(t_file))
+                if t_dict:
+                    merge_dict_inplace(
+                        self.recipe_templates,
+                        t_dict
+                    )
 
     def recipe_file_path(self, file_name: str | Path) -> str | Path:
         if self.recipe_dir:
@@ -99,24 +110,16 @@ class RecipeSetup(pydantic.BaseModel):
     def get_section(self, cfg_key: str) -> dict[str, t.Any]:
         return self.recipe_sections[cfg_key]
 
-    def update_section(
-        self,
-        section_dict: dict[str, t.Any],
-        section_key: str | None = None,
-    ) -> None:
-        if section_key:
-            if section_key in self.recipe_sections:
-                self.recipe_sections[section_key] |= section_dict
-            else:
-                self.recipe_sections[section_key] = section_dict
-        else:
-            self.recipe_sections |= section_dict
-
     def load_sections(self) -> None:
         for rcp_file in self.recipe_files[RecipeKeys.RECIPE]:
             rcp_dict = cbmio.load(self.recipe_file_path(rcp_file))
-            if rcp_dict:
-                self.update_section(rcp_dict)
+            if rcp_dict and self.recipe_sections:
+                merge_dict_inplace(
+                    self.recipe_sections,
+                    rcp_dict
+                )
+            elif rcp_dict:
+                self.recipe_sections = rcp_dict
 
     def load_section_list(
         self,
@@ -124,17 +127,27 @@ class RecipeSetup(pydantic.BaseModel):
         for rcp_key in RecipeKeys.RECIPE_SECTIONS:
             for rcp_file in self.recipe_files[rcp_key]:
                 rcp_dict = cbmio.load(self.recipe_file_path(rcp_file))
-                if rcp_dict:
-                    self.update_section(rcp_dict, rcp_key)
+                if rcp_dict and self.recipe_sections:
+                    merge_dict_inplace(
+                        self.recipe_sections,
+                        {rcp_key: rcp_dict}
+                    )  
+                elif rcp_dict:
+                    self.recipe_sections[rcp_key] = rcp_dict
 
     def valid(self) -> bool:
-        return all(cfg_key in self.recipe_sections for cfg_key in RecipeKeys.RECIPE_SECTIONS)
+        return all(
+            (
+                cfg_key in self.recipe_sections
+                for cfg_key in RecipeKeys.RECIPE_SECTIONS
+            )
+        )
 
     def get_template_for(self, reg_key: str) -> dict[str, t.Any]:
-        return self.recipe_sections[RecipeKeys.TEMPLATES][reg_key]
+        return self.recipe_templates[reg_key]
 
     def get_templates(self) -> dict[str, t.Any]:
-        return self.recipe_sections[RecipeKeys.TEMPLATES]
+        return self.recipe_templates
 
 
 def init_model_setup(

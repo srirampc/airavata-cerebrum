@@ -1,5 +1,4 @@
 import logging
-import typing
 import pydantic
 from pathlib import Path
 import mousev1.model as v1model
@@ -15,7 +14,7 @@ class RcpSettings(pydantic.BaseModel):
     name: str = "v1l4"
     base_dir: Path = Path("./")
     recipe_dir: Path = Path("./v1l4/recipe/")
-    recipe_files: typing.Dict[str, typing.List[str | Path]] = {
+    recipe_files: dict[str, list[str | Path]] = {
         "recipe": ["recipe.json"],
         "templates": ["recipe_template.json"]
     }

@@ -44,9 +44,11 @@ class ModelRecipe(pydantic.BaseModel):
 
     def save_db_out(
         self,
-        db_connect_output: dict[str, typing.Any]
+        db_connect_output: dict[str, typing.Any] | None ,
+        db_out_loc: str | pathlib.Path,
     ) -> None:
-        db_out_loc = self.output_location(RecipeKeys.DB_CONNECT)
+        if db_connect_output is None: 
+            return
         if self.save_flag:
             cbmio.dump(
                 db_connect_output,
@@ -64,7 +66,9 @@ class ModelRecipe(pydantic.BaseModel):
         db_src_config = self.recipe_setup.get_section(RecipeKeys.SRC_DATA)
         _log().info("Start Query and Download Data")
         db_connect_output = workflow.run_db_connect_workflows(db_src_config)
-        self.save_db_out(db_connect_output)
+        #
+        db_out_loc = self.output_location(RecipeKeys.DB_CONNECT)
+        self.save_db_out(db_connect_output, db_out_loc)
         _log().info("Completed Query and Download Data")
         return db_connect_output
 
@@ -74,25 +78,23 @@ class ModelRecipe(pydantic.BaseModel):
         )
         db_src_config = self.recipe_setup.get_section(RecipeKeys.SRC_DATA)
         db_post_op_data = None
+        _log().info("Start DB Post ops")
         if db_connect_data:
             db_post_op_data = workflow.run_ops_workflows(
                 db_connect_data,
                 db_src_config,
                 RecipeKeys.POST_OPS
             )
-        if self.save_flag and db_post_op_data:
-            cbmio.dump(
-                db_post_op_data,
-                self.output_location(RecipeKeys.SRC_DATA),
-                indent=4
-            )
+            #
+            db_out_loc = self.output_location(RecipeKeys.SRC_DATA)
+            self.save_db_out(db_post_op_data, db_out_loc)
+        _log().info("Completed Post ops")
         return db_post_op_data
 
     def run_db_workflows(self):
         db_connection_output = self.download_db_data()
         db_post_op_data = self.db_post_ops()
         return db_connection_output, db_post_op_data
-
 
     def map_source_data(self):
         db2model_map = self.recipe_setup.get_section(RecipeKeys.DB2MODEL_MAP)
@@ -154,12 +156,11 @@ class ModelRecipe(pydantic.BaseModel):
         net_builder = self.network_builder(self.network_struct)
         net_builder.build()
         if save_flag:
-            net_builder.save()
+            net_builder.save(self.recipe_setup.model_dir)
         return net_builder
 
 def netstruct_from_file(struct_file: pathlib.Path) -> structure.Network | None:
-    if struct_file:
-        network_struct = cbmio.load(struct_file)
-        if network_struct:
-            return structure.dict2netstruct(network_struct)
+    network_struct = cbmio.load(struct_file)
+    if network_struct:
+        return structure.dict2netstruct(network_struct)
     return None
