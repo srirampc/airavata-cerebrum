@@ -1,0 +1,133 @@
+{
+    "source_data": {
+        "airavata_cerebrum.dataset.abm_celltypes": {
+            "label": "Allen Cell Types Databse",
+            "db_connect": {
+                "label": "Query Allen Cell Types Databse",
+                "workflow": [
+                    {
+                        "type": "query",
+                        "label": "Query w. CT API",
+                        "name": "airavata_cerebrum.dataset.abm_celltypes.CTDbCellApiQuery",
+                        "init_params": {},
+                        "exec_params": {
+                            "species": "Mus musculus"
+                        }
+                    },
+                    {
+                        "type": "xform",
+                        "label": "Progress Bar",
+                        "name": "airavata_cerebrum.operations.xform.TQDMWrapper",
+                        "init_params": {},
+                        "exec_params": {
+                            "jupyter": true
+                        }
+                    },
+                    {
+                        "type": "xform",
+                        "label": "Filter by Layer",
+                        "name": "airavata_cerebrum.operations.abm_celltypes.CTPropertyFilter",
+                        "init_params": {},
+                        "exec_params": {
+                            "region": "VISp"
+                        }
+                    },
+                    {
+                        "type": "query",
+                        "label": "Query GLIF Models",
+                        "name": "airavata_cerebrum.dataset.abm_celltypes.CTDbGlifApiQuery",
+                        "init_params": {},
+                        "exec_params": {
+                            "key": "specimen__id",
+                            "first": true
+                        }
+                    }
+                ]
+            },
+            "post_ops": {
+                "label": "Filter GLIF Models w. Explained Variance",
+                "workflow": [
+                    {
+                        "type": "xform",
+                        "label": "Filter 3 LIF Models",
+                        "name": "airavata_cerebrum.operations.abm_celltypes.CTModelNameFilter",
+                        "init_params": {},
+                        "exec_params": {
+                            "model_name": "3 LIF + Afterspike Currents"
+                        }
+                    },
+                    {
+                        "type": "xform",
+                        "label": "Filter Explained variance",
+                        "name": "airavata_cerebrum.operations.abm_celltypes.CTExplainedRatioFilter",
+                        "init_params": {},
+                        "exec_params": {
+                            "ratio": 0.7
+                        }
+                    },
+                    {
+                        "type": "query",
+                        "label": "ABM Model Download",
+                        "name": "airavata_cerebrum.dataset.abm_celltypes.CTDbGlifApiModelConfigQry",
+                        "init_params": {},
+                        "exec_params": {
+                            "suffix": "_glif_lif_asc_config.json",
+                            "output_dir": "v1/components/point_neuron_models/"
+                        }
+                    }
+                ]
+            }
+        },
+        "airavata_cerebrum.dataset.abc_mouse": {
+            "label": "Allen Brain Cell Atlas",
+            "db_connect": {
+                "label": "Query Allen Brain Cell Atlas",
+                "workflow": [
+                    {
+                        "type": "query",
+                        "label": "Query ABC MERFISH dataset",
+                        "name": "airavata_cerebrum.dataset.abc_mouse.ABCDbMERFISH_CCFQuery",
+                        "init_params": {
+                            "download_base": "./cache/abc_mouse/"
+                        },
+                        "exec_params": {
+                            "region": [
+                                "VISp"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "post_ops": {
+                "workflow": []
+            }
+        },
+        "airavata_cerebrum.dataset.ai_synphys": {
+            "label": "AI Syn Phys",
+            "db_connect": {
+                "label": "Query Allen Syn Phys Database",
+                "workflow": [
+                    {
+                        "type": "query",
+                        "label": "AI Syn. Phys. Query",
+                        "name": "airavata_cerebrum.dataset.ai_synphys.AISynPhysQuery",
+                        "init_params": {
+                            "download_base": "./cache/ai_synphys/"
+                        },
+                        "exec_params": {
+                            "layer": [
+                                "L23",
+                                "L4",
+                                "L5",
+                                "L6"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "post_ops": {
+                "workflow": []
+            }
+        }
+    }
+}

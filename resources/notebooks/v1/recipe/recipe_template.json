@@ -136,8 +136,8 @@
             },
             "layer": {
                 "type": "option",
-                "label": "Selected Region",
-                "doc": "Selected Region",
+                "label": "Selected Layer",
+                "doc": "Selected Layer",
                 "options": [
                     "",
                     "4",
@@ -150,8 +150,8 @@
             },
             "region": {
                 "type": "option",
-                "label": "Selected Layer",
-                "doc": "Selected Layer",
+                "label": "Selected Region",
+                "doc": "Selected Region of interest",
                 "options": [
                     "",
                     "VISp",
@@ -200,7 +200,7 @@
             }
         }
     },
-    "airavata_cerebrum.dataset.abm_celltypes.CTDbGlifApiModelConfigQry":{
+    "airavata_cerebrum.dataset.abm_celltypes.CTDbGlifApiModelConfigQry": {
         "type": "query",
         "label": "Acquire GLIF Models",
         "doc": "Acquire GLIF Models",

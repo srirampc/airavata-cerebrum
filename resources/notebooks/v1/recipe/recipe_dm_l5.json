@@ -1,0 +1,34 @@
+{
+    "data2model_map": {
+        "locations": {
+            "Visp5": {
+                "property_map": {
+                    "neurons": [
+                        "('5', 'IT')",
+                        "('5', 'ET')",
+                        "('5', 'Pvalb')",
+                        "('5', 'Vip')",
+                        "('5', 'Sst')"
+                    ],
+                    "source_data": {
+                        "airavata_cerebrum.dataset.abc_mouse": {
+                            "label": "Region Filters",
+                            "workflow": [
+                                {
+                                    "type": "xform",
+                                    "label": "Select Region",
+                                    "name": "airavata_cerebrum.operations.abc_mouse.ABCDbMERFISH_CCFFractionFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "region": "VISp/VISp5"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "connections": {}
+    }
+}
