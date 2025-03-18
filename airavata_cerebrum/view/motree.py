@@ -7,23 +7,28 @@ from collections.abc import Iterable
 import awitree
 import marimo as mo
 import traitlets
-from anywidget import AnyWidget
 from marimo._plugins.ui._core.ui_element import UIElement
 from typing_extensions import override
 
 from ..model import structure as structure
 from ..model.setup import RecipeKeys, RecipeLabels, RecipeSetup
-from . import (PayLoad, RcpTreeNames, StructTreeNames, recipe_step_payload,
-               recipe_traits, struct_payload)
+from . import (PanelBase, TreeBase, CBTreeNode, RcpTreeNames, StructTreeNames,
+               recipe_traits)
 
+
+MoUIElement : t.TypeAlias = UIElement[t.Any, t.Any]
+MoPanelBaseType : t.TypeAlias = PanelBase[mo.Html, MoUIElement]
+MoTreeBase: t.TypeAlias = TreeBase[MoPanelBaseType]
 
 def _log():
     return logging.getLogger(__name__)
 
 
 def scalar_widget(
-    widget_key: str, label: str = "", **kwargs: t.Any
-) -> UIElement[t.Any, t.Any] | None:
+    widget_key: str,
+    label: str = "",
+    **kwargs: t.Any
+) -> MoUIElement | None:
     match widget_key:
         case "int" | "int32" | "int64":
             return mo.ui.number(value=kwargs["default"], label=label)
@@ -84,7 +89,12 @@ class PropertyListLayout(mo.ui.array):
 # NOTE: Features of trait setting and change handler not included
 class PropertyMapLayout(mo.ui.dictionary):
 
-    def __init__(self, value: dict[str, t.Any], label: str = "", **kwargs: t.Any):
+    def __init__(
+        self,
+        value: dict[str, t.Any],
+        label: str = "",
+        **kwargs: t.Any
+    ):
         super().__init__(
             {kx: wx for kx, wx in self.widgets(value, **kwargs) if wx is not None},
             label=label,
@@ -93,7 +103,7 @@ class PropertyMapLayout(mo.ui.dictionary):
 
     def init_widget(
         self, vx: t.Any, label: str = "", **_kwargs: t.Any
-    ) -> UIElement[t.Any, t.Any] | None:
+    ) -> MoUIElement | None:
         tname = type(vx).__name__
         match tname:
             case "NoneType":
@@ -105,13 +115,13 @@ class PropertyMapLayout(mo.ui.dictionary):
 
     def widgets(
         self, value: dict[str, t.Any], **kwargs: t.Any
-    ) -> Iterable[tuple[str, UIElement[t.Any, t.Any] | None]]:
+    ) -> Iterable[tuple[str, MoUIElement | None]]:
         return ((kx, self.init_widget(vx, **kwargs)) for kx, vx in value.items())
 
 
 def render_property(
     widget_key: str, label: str = "", **kwargs: t.Any
-) -> UIElement[t.Any, t.Any] | None:
+) -> MoUIElement | None:
     # _log().warning("Render Out [%s]", str(kwargs))
     match widget_key:
         case "dict":
@@ -122,34 +132,7 @@ def render_property(
             return scalar_widget(widget_key, label=label, **kwargs)
 
 
-# Base class for side panel
-# NOTE: Features of update and clearing links not included
-class PanelBase:
-    def __init__(self, layout: mo.Html | None = None):
-        self._layout: mo.Html | None = layout
-        self.ui_elements: list[UIElement[t.Any, t.Any]] = []
-
-    def update(self):
-        # NOTE: Called when selected node is changed
-        pass
-
-    @abc.abstractmethod
-    def build_layout(self) -> mo.Html | None:
-        pass
-
-    @property
-    def layout(self) -> mo.Html | None:
-        if self._layout is not None:
-            return self._layout
-        else:
-            self.set_layout(self.build_layout())
-            return self._layout
-
-    def set_layout(self, value: mo.Html | None):
-        self._layout = value
-
-
-class DBWorkflowSidePanel(PanelBase):
+class DBWorkflowSidePanel(MoPanelBaseType):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
@@ -180,7 +163,7 @@ class DBWorkflowSidePanel(PanelBase):
 
     def render_workflow_step(
         self, wf_step: dict[str, t.Any]
-    ) -> list[UIElement[t.Any, t.Any]]:
+    ) -> list[MoUIElement]:
         step_key = wf_step[RecipeKeys.NAME]
         _log().debug("Initializing Panels for [%s]", step_key)
         rcp_template = self.mdr_setup.get_template_for(step_key)
@@ -240,7 +223,7 @@ class DBWorkflowSidePanel(PanelBase):
         return render_property(vmap[RecipeKeys.TYPE], **vmap)
 
 
-class StructSidePanel(PanelBase):
+class StructSidePanel(MoPanelBaseType):
     def __init__(
         self,
         struct_comp: structure.StructBase,
@@ -271,137 +254,41 @@ class StructSidePanel(PanelBase):
         return mo.vstack([mo.ui.array(ui_elements, label=self._struct.name)])
 
 
-#
-# Base class for tree node
-class CBTreeNode:
-    def __init__(
-        self,
-        name: str,
-        payload: PayLoad | None,
-        nodes: list["CBTreeNode"] | None = None,
-        **kwargs: t.Any,
-    ):
-        self.name: str = name
-        self.payload: PayLoad | None = payload
-        self.children: dict[str, "CBTreeNode"] = {}
-        if nodes:
-            self.children = {nx.payload.node_key: nx for nx in nodes}
-
-    def add_node(self, child: "CBTreeNode"):
-        self.children[child.payload.node_key] = child
-
-    def awi_dict(self) -> dict[str, t.Any]:
-        return {
-            "id": self.payload.node_key,
-            "text": self.name,
-            "state": {"disabled": False},
-            "children": [cx.awi_dict() for _kx, cx in self.children.items()],
-        }
-
-    @classmethod
-    def init(cls, name: str, key: str) -> "CBTreeNode":
-        return cls(name=name, payload=PayLoad(node_key=key))
-
-    @classmethod
-    def from_struct(
-        cls,
-        struct_obj: structure.StructBase,
-        node_key: str | None = None,
-    ) -> "CBTreeNode":
-        return cls(name=struct_obj.name, payload=struct_payload(struct_obj, node_key))
-
-    @classmethod
-    def from_recipe_step(
-        cls, wf_step: dict[str, t.Any], node_key: str | None = None
-    ) -> "CBTreeNode":
-        return cls(
-            name=wf_step[RecipeKeys.LABEL],
-            payload=recipe_step_payload(wf_step, node_key),
-        )
-
-
-class TreeBase(abc.ABC):
-    def __init__(
-        self,
-        left_width: float = 0.5,
-        **kwargs: t.Any,
-    ):
-        self.tree: awitree.Tree | None = None
-        self.layout: mo.Html | None = None
-        self.panel_dict: dict[str, PanelBase] = {}
-        self.left_width: float = left_width
-        self.widths: list[float] = [left_width, 1 - left_width]
-
-    @abc.abstractmethod
-    def build(self, root_pfx: str = "") -> "TreeBase":
-        pass
-
-    def tree_update(self, change: dict[str, t.Any]):
-        new_val = change["new"]
-        if not len(new_val):
-            return
-        selected_nodes: list[dict[str, t.Any]] = new_val
-        _log().warning(
-            "Tree Update selected_nodes : [%s %s]", str(change), str(selected_nodes)
-        )
-        selected_id: str = selected_nodes[0]["id"]
-        _log().warning(
-            "Tree Update ID : [%s]",
-            selected_id,
-        )
-        if selected_id in self.panel_dict:
-            side_panel = self.panel_dict[selected_id]
-            side_panel.update()
-            self.layout = mo.hstack([self.tree, side_panel.layout])
-
-    def view_components(
-        self,
-    ) -> tuple[awitree.Tree | None, tuple[dict[str, PanelBase], ...]]:
-        return (self.tree, (self.panel_dict,))
-
-    @staticmethod
-    def panel_selector(
-        axtree: awitree.Tree, taxpanel_dict: tuple[dict[str, PanelBase], ...]
-    ) -> PanelBase | None:
-        selected_node_id = (
-            axtree.selected_nodes[0]["id"]
-            if (axtree.selected_nodes and len(axtree.selected_nodes) > 0)
-            else None
-        )
-        if selected_node_id is not None:
-            for axp_dict in taxpanel_dict:
-                if selected_node_id in axp_dict:
-                    return axp_dict[selected_node_id]
-        return None
-
-
-class RecipeTreeBase(TreeBase, metaclass=abc.ABCMeta):
+class RecipeTreeBase(TreeBase[MoPanelBaseType], metaclass=abc.ABCMeta):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
         left_width: float = 0.4,
         **kwargs: t.Any,
     ):
-        super().__init__(left_width, **kwargs)
+        super().__init__(**kwargs)
         self.mdr_setup: RecipeSetup = mdr_setup
         self.root_node: CBTreeNode | None = None
+        self.left_width: float = left_width
+        self.widths: list[float] = [left_width, 1 - left_width]
 
     def db_workflow_recipe_node(
         self,
         db_key: str,
         db_desc: dict[str, t.Any],
         delay_build: bool = False,
-    ) -> tuple[CBTreeNode, PanelBase]:
+    ) -> tuple[CBTreeNode, MoPanelBaseType]:
         db_node = CBTreeNode.init(name=db_desc[RecipeKeys.LABEL], key=db_key)
-        _log().info("Start Left-side panel construction for [%s]", str(db_key))
+        _log().info("Left-side panel construction for [%s]", str(db_key))
         db_panel = DBWorkflowSidePanel(
-            self.mdr_setup, db_desc[RecipeKeys.WORKFLOW], delay_build
+            self.mdr_setup,
+            db_desc[RecipeKeys.WORKFLOW],
+            delay_build
         )
-        _log().info("Completed Left-side panel construction")
+        _log().info("Left-side panel construction")
         return db_node, db_panel
 
     @override
-    def build(self, root_pfx: str = "") -> TreeBase:
+    def set_layout(self, selected_panel: MoPanelBaseType) -> None:
+        self.layout_ = mo.hstack([self.tree, selected_panel.layout])
+
+    @override
+    def build(self, root_pfx: str = "") -> TreeBase[MoPanelBaseType]:
         self.tree: awitree.Tree | None = self.build_tree(root_pfx)
         # self.tree.observe(self.tree_update, names="selected_nodes")
         self.layout_: mo.Html | None = mo.hstack(
@@ -415,7 +302,8 @@ class RecipeTreeBase(TreeBase, metaclass=abc.ABCMeta):
         pass
 
 
-class DataSourceRecipeView(RecipeTreeBase):
+RcpTreeBaseType : t.TypeAlias = RecipeTreeBase[mo.Html, MoUIElement]
+class DataSourceRecipeView(RcpTreeBaseType):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
@@ -451,12 +339,12 @@ class DataSourceRecipeView(RecipeTreeBase):
         # initialize tree
         tree_data = self.root_node.awi_dict()
         tree_data["state"] = {"selected": True, "opened": True}
-        tree: AnyWidget = awitree.Tree(data=tree_data)
+        tree: awitree.Tree = awitree.Tree(data=tree_data)
         # self.tree.layout.width = self.left_width  # type:ignore
         return tree
 
 
-class Data2ModelRecipeView(RecipeTreeBase):
+class Data2ModelRecipeView(RcpTreeBaseType):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
@@ -469,7 +357,10 @@ class Data2ModelRecipeView(RecipeTreeBase):
         ]
 
     def neuron_node(
-        self, neuron_name: str, neuron_desc: dict[str, t.Any], loc_node_pfx: str
+        self,
+        neuron_name: str,
+        neuron_desc: dict[str, t.Any],
+        loc_node_pfx: str
     ) -> CBTreeNode:
         neuron_pfx: str = f"{loc_node_pfx}-{neuron_name}"
         neuron_node = CBTreeNode.init(name=neuron_name, key=f"d2m_map-{neuron_pfx}")
@@ -528,20 +419,26 @@ class Data2ModelRecipeView(RecipeTreeBase):
         # initialize tree
         tree_data = self.root_node.awi_dict()
         tree_data["state"] = {"selected": True, "opened": True}
-        tree: AnyWidget = awitree.Tree(data=tree_data)
+        tree: awitree.Tree = awitree.Tree(data=tree_data)
         # self.tree.layout.width = self.left_width  # type:ignore
         return tree
 
 
-class NetworkStructureView(TreeBase):
+class NetworkStructureView(TreeBase[MoPanelBaseType]):
     def __init__(
         self,
         net_struct: structure.Network,
         left_width: float = 0.4,
         **kwargs: t.Any,
     ) -> None:
-        super().__init__(left_width, **kwargs)
+        super().__init__(**kwargs)
         self.net_struct: structure.Network = net_struct
+        self.left_width: float = left_width
+        self.widths: list[float] = [left_width, 1 - left_width]
+
+    @override
+    def set_layout(self, selected_panel: MoPanelBaseType) -> None:
+        self.layout_ = mo.hstack([self.tree, selected_panel.layout])
 
     def region_node(
         self, net_region: structure.Region, region_pfx: str = "r"
@@ -678,12 +575,12 @@ class NetworkStructureView(TreeBase):
         # initialize tree
         tree_data = self.root_node.awi_dict()
         tree_data["state"] = {"selected": True, "opened": True}
-        tree: AnyWidget = awitree.Tree(data=tree_data)
+        tree: awitree.Tree = awitree.Tree(data=tree_data)
         # self.tree.layout.width = self.left_width  # type:ignore
         return tree
 
     @override
-    def build(self, root_pfx: str = "") -> TreeBase:
+    def build(self, root_pfx: str = "") -> TreeBase[MoPanelBaseType]:
         self.tree: awitree.Tree | None = self.build_tree(root_pfx)
         # self.panel_dict : dict[str, PanelBase] = self.build_side_panels()
         # self.tree.observe(self.tree_update, names="selected_nodes")  # type:ignore
@@ -696,7 +593,7 @@ class NetworkStructureView(TreeBase):
         pass
 
 
-class RecipeExplorer(TreeBase):
+class RecipeExplorer(TreeBase[MoPanelBaseType]):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
@@ -704,16 +601,22 @@ class RecipeExplorer(TreeBase):
         left_width: float = 0.4,
         **kwargs: t.Any,
     ) -> None:
-        super().__init__(left_width, **kwargs)
+        super().__init__(**kwargs)
         self._data_src: DataSourceRecipeView = DataSourceRecipeView(
             mdr_setup, left_width, **kwargs
         )
         self._d2m: Data2ModelRecipeView = Data2ModelRecipeView(
             mdr_setup, left_width, **kwargs
         )
-        self._struct: NetworkStructureView = NetworkStructureView(
+        self._struct: NetworkStructureView[MoPanelBaseType, MoPanelBaseType] = NetworkStructureView(
             net_struct, left_width, **kwargs
         )
+        self.left_width: float = left_width
+        self.widths: list[float] = [left_width, 1 - left_width]
+
+    @override
+    def set_layout(self, selected_panel: MoPanelBaseType) -> None:
+        self.layout_ = mo.hstack([self.tree, selected_panel])
 
     def build_tree(self, root_pfx: str = "") -> awitree.Tree:
         root_key = f"{root_pfx}-integ"
@@ -739,7 +642,7 @@ class RecipeExplorer(TreeBase):
         return tree
 
     @override
-    def build(self, root_pfx: str = "") -> TreeBase:
+    def build(self, root_pfx: str = "") -> TreeBase[MoPanelBaseType]:
         self.tree: awitree.Tree | None = self.build_tree(root_pfx)
         # self.panel_dict : dict[str, PanelBase] = self.build_side_panels()
         # self.tree.observe(self.tree_update, names="selected_nodes")  # type:ignore
