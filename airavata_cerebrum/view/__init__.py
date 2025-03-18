@@ -152,7 +152,7 @@ class PanelBase(t.Generic[LayoutType, UIEltType]):
         self._layout = value
 
 
-PanelType = t.TypeVar('PBT', PanelBase[LayoutType, UIEltType])
+PanelType = t.TypeVar('PBT', bound=PanelBase[LayoutType, UIEltType])
 class TreeBase(abc.ABC, t.Generic[PanelType]):
     def __init__(
         self,

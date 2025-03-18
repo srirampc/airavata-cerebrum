@@ -40,6 +40,7 @@ def scalar_widget(
             return iwidgets.Dropdown(
                 options=kwargs["options"],
                 disabled=False,
+                value=kwargs["default"],
             )
         case "check" | "bool":
             return iwidgets.Checkbox(
@@ -152,8 +153,14 @@ class DBWorkflowSidePanel(IPyPanelType):
         return iwidgets.VBox(
             [
                 iwidgets.VBox(
-                    [f"Step {wf_idx + 1} : {wf_step[RecipeKeys.LABEL]} ::"] +
+                    [
+                        iwidgets.Label(
+                            f"Step {wf_idx + 1} : {wf_step[RecipeKeys.LABEL]} ::",
+                            style={"font_weight": "bold"},
+                        )
+                    ] +
                     self.render_workflow_step(wf_step),
+                    layout=iwidgets.Layout(border="solid")
                 )
                 for wf_idx, wf_step in enumerate(self.workfow_desc)
             ]
@@ -163,7 +170,7 @@ class DBWorkflowSidePanel(IPyPanelType):
         self, wf_step: dict[str, t.Any]
     ) -> list[iwidgets.CoreWidget]:
         step_key = wf_step[RecipeKeys.NAME]
-        _log().debug("Initializing Panels for [%s]", step_key)
+        # _log().warning("Initializing Panels for [%s]", step_key)
         rcp_template = self.mdr_setup.get_template_for(step_key)
         _, rcp_traits = recipe_traits(wf_step)
         return self.workflow_ui(
@@ -205,13 +212,10 @@ class DBWorkflowSidePanel(IPyPanelType):
                 for ekey, vmap in template_map[params_key].items()
             )
             return iwidgets.VBox(
-                [iwidgets.Label(params_label)] +
                 [wx for wx in wd_itr if wx is not None]
             )
         else:
-            return iwidgets.VBox(
-                [iwidgets.Label(params_label + RecipeLabels.NA)] 
-            )
+            return iwidgets.VBox([])
 
     def property_widget(
         self,
@@ -222,7 +226,8 @@ class DBWorkflowSidePanel(IPyPanelType):
         if ekey in traitv_dct:
             vmap["default"] = traitv_dct[ekey]
         pwidget = render_property(vmap[RecipeKeys.TYPE], **vmap)
-        if pwidget is not None:
+        # _log().warning("Rending Prop [%s] [%s]", str(vmap), str(pwidget))
+        if pwidget is None:
             return None
         return iwidgets.HBox(
             [
@@ -271,13 +276,13 @@ class RecipeTreeBase(TreeBase[IPyPanelType], metaclass=abc.ABCMeta):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
-        left_width: str,
+        right_width: str,
         **kwargs: t.Any,
     ):
         super().__init__(**kwargs)
         self.mdr_setup: RecipeSetup = mdr_setup
         self.root_node: CBTreeNode | None = None
-        self.left_width : str = left_width
+        self.right_width : str = right_width
 
     def db_workflow_recipe_node(
         self,
@@ -296,8 +301,8 @@ class RecipeTreeBase(TreeBase[IPyPanelType], metaclass=abc.ABCMeta):
     @override
     def build(self, root_pfx: str = "") -> TreeBase[IPyPanelType]:
         self.tree: awitree.Tree | None = self.build_tree(root_pfx)
-        # self.tree.observe(self.tree_update, names="selected_nodes")
-        self.layout_: iwidgets.TwoByTwoLayout = iwidgets.TwoByTwoLayout(
+        self.tree.observe(self.tree_update, names="selected_nodes")
+        self.layout: iwidgets.TwoByTwoLayout = iwidgets.TwoByTwoLayout(
             top_left=self.tree,
             bottom_right=None
         )
@@ -305,7 +310,7 @@ class RecipeTreeBase(TreeBase[IPyPanelType], metaclass=abc.ABCMeta):
 
     @override
     def set_layout(self, selected_panel: IPyPanelType) -> None:
-          self.layout_.bottom_right = selected_panel.layout
+          self.layout.bottom_right = selected_panel.layout
 
     @override
     @abc.abstractmethod
@@ -313,8 +318,7 @@ class RecipeTreeBase(TreeBase[IPyPanelType], metaclass=abc.ABCMeta):
         pass
 
 
-RcpTreeBaseType : t.TypeAlias = RecipeTreeBase[iwidgets.CoreWidget, iwidgets.Box]
-class DataSourceRecipeView(RcpTreeBaseType):
+class DataSourceRecipeView(RecipeTreeBase):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
@@ -350,18 +354,18 @@ class DataSourceRecipeView(RcpTreeBaseType):
         tree_data = self.root_node.awi_dict()
         tree_data["state"] = {"selected": True, "opened": True}
         tree: awitree.Tree = awitree.Tree(data=tree_data)
-        self.layout_.width = self.left_width
+        #self.layout_.width = self.left_width
         return tree
 
 
-class Data2ModelRecipeView(RcpTreeBaseType):
+class Data2ModelRecipeView(RecipeTreeBase):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
-        left_width: str="40%",
+        right_width: str="60%",
         **kwargs: t.Any,
     ) -> None:
-        super().__init__(mdr_setup, left_width, **kwargs)
+        super().__init__(mdr_setup, right_width, **kwargs)
         self.d2m_map_desc: dict[str, t.Any] = mdr_setup.recipe_sections[
             RecipeKeys.DB2MODEL_MAP
         ]
@@ -437,7 +441,7 @@ class Data2ModelRecipeView(RcpTreeBaseType):
         tree_data = self.root_node.awi_dict()
         tree_data["state"] = {"selected": True, "opened": True}
         tree: awitree.Tree = awitree.Tree(data=tree_data)
-        self.layout_.width = self.left_width
+        #self.layout_.width = self.left_width
         return tree
 
 
@@ -454,7 +458,7 @@ class NetworkStructureView(TreeBase[IPyPanelType]):
 
     @override
     def set_layout(self, selected_panel: IPyPanelType) -> None:
-          self.layout_.bottom_right = selected_panel.layout
+          self.layout.bottom_right = selected_panel.layout
 
     def region_node(
         self, net_region: structure.Region, region_pfx: str = "r"

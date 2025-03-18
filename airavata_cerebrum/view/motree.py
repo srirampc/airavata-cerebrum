@@ -302,8 +302,7 @@ class RecipeTreeBase(TreeBase[MoPanelBaseType], metaclass=abc.ABCMeta):
         pass
 
 
-RcpTreeBaseType : t.TypeAlias = RecipeTreeBase[mo.Html, MoUIElement]
-class DataSourceRecipeView(RcpTreeBaseType):
+class DataSourceRecipeView(RecipeTreeBase):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
@@ -344,7 +343,7 @@ class DataSourceRecipeView(RcpTreeBaseType):
         return tree
 
 
-class Data2ModelRecipeView(RcpTreeBaseType):
+class Data2ModelRecipeView(RecipeTreeBase):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
