@@ -156,7 +156,7 @@ class ModelRecipe(pydantic.BaseModel):
         net_builder = self.network_builder(self.network_struct)
         net_builder.build()
         if save_flag:
-            net_builder.save(self.recipe_setup.model_dir)
+            net_builder.save(self.recipe_setup.network_dir)
         return net_builder
 
 def netstruct_from_file(struct_file: pathlib.Path) -> structure.Network | None:

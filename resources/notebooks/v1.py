@@ -77,6 +77,21 @@ def build_bmtk(rcp_set: RcpSettings):
     md_dex.apply_mod()
     md_dex.build_network()
 
+def run_nest():
+    import nest
+    config_file = "./v1/config_nest.json"
+    # Instantiate SonataNetwork
+    sonata_net = nest.SonataNetwork(config_file)
+
+    # Create and connect nodes
+    node_collections = sonata_net.BuildNetwork()
+    print("Node Collections", node_collections.keys())
+    # Connect spike recorder to a population
+    spike_rec = nest.Create("spike_recorder")
+    nest.Connect(node_collections["v1"], spike_rec)
+
+
+
 def convert_models_to_nest(cfg_set: RcpSettings):
     v1ops.convert_ctdb_models_to_nest(cfg_set.ctdb_models_dir,
                                       cfg_set.nest_models_dir)
