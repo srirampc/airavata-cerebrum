@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.11.21"
-app = marimo.App()
+app = marimo.App(width="medium")
 
 
 @app.cell
@@ -34,8 +34,6 @@ def _(mo):
         1. Source Data : Data Providers and the workflow to access data.
         2. Data to Model Mapping: A Mapping Function to map that funnels the appropriate data to different parts of the model.
         3. Custom Modifications: Description of the model that fills in the details not found in the dataset.
-
-
         """
     )
     return
@@ -99,7 +97,7 @@ def _(mo):
 
 
 @app.cell
-def _(cbm_setup, cbm_structure):
+def _():
     m_name = "V1"
     m_base_dir = "./"
     m_rcp_dir = "./v1/recipe/"
@@ -122,7 +120,19 @@ def _(cbm_setup, cbm_structure):
         "./v1/recipe/custom_mod_l4.json",
         "./v1/recipe/custom_mod_ext.json",
     ] 
+    return cmod_files, m_base_dir, m_name, m_rcp_dir, m_rcp_files
 
+
+@app.cell
+def _(
+    cbm_setup,
+    cbm_structure,
+    cmod_files,
+    m_base_dir,
+    m_name,
+    m_rcp_dir,
+    m_rcp_files,
+):
     # recipe_dict = cbm_utils.io.load_json(main_rcp_file)
     # cmod_dict = cbm_utils.io.load_json(custom_mod_file)
     mdr_setup = cbm_setup.RecipeSetup(
@@ -134,16 +144,7 @@ def _(cbm_setup, cbm_structure):
 
     tree_view_widths = [0.4, 0.6]
     cmod_struct = cbm_structure.Network.from_file_list(cmod_files)
-    return (
-        cmod_files,
-        cmod_struct,
-        m_base_dir,
-        m_name,
-        m_rcp_dir,
-        m_rcp_files,
-        mdr_setup,
-        tree_view_widths,
-    )
+    return cmod_struct, mdr_setup, tree_view_widths
 
 
 @app.cell
@@ -198,6 +199,22 @@ def _(abm_mouse, db_conn, mo):
         engine=db_conn
     )
     return (abm_mouse_df,)
+
+
+@app.cell
+def _(abm_celltypes_ct, db_conn, mo):
+    import quak
+    cols = ["cell_reporter_status", "line_name",
+            "structure__layer",
+           "donor__sex", "donor__age"]
+    abm_ct_df = mo.sql(
+        f"""
+        SELECT {",".join(cols)} FROM abm_celltypes_ct
+        """,
+        engine=db_conn
+    )
+    quak.Widget(abm_ct_df)
+    return abm_ct_df, cols, quak
 
 
 if __name__ == "__main__":
