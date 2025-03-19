@@ -34,7 +34,7 @@
                 "Htr3a"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('1', 'Htr3a', ''), ('1', 'Htr3a', '475585413'))": {
                     "name": "(('1', 'Htr3a', ''), ('1', 'Htr3a', '475585413'))",
                     "target_model_id": "475585413",
@@ -108,7 +108,7 @@
                 "Htr3a"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Cux2', ''), ('1', 'Htr3a', '482654108'))": {
                     "name": "(('2/3', 'Cux2', ''), ('1', 'Htr3a', '482654108'))",
                     "target_model_id": "482654108",
@@ -154,7 +154,7 @@
                 "Htr3a"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Vip', ''), ('1', 'Htr3a', '482654108'))": {
                     "name": "(('2/3', 'Vip', ''), ('1', 'Htr3a', '482654108'))",
                     "target_model_id": "482654108",
@@ -200,7 +200,7 @@
                 "Htr3a"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Pvalb', ''), ('1', 'Htr3a', '475585413'))": {
                     "name": "(('2/3', 'Pvalb', ''), ('1', 'Htr3a', '475585413'))",
                     "target_model_id": "475585413",
@@ -274,7 +274,7 @@
                 "Htr3a"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Sst', ''), ('1', 'Htr3a', '475585413'))": {
                     "name": "(('2/3', 'Sst', ''), ('1', 'Htr3a', '475585413'))",
                     "target_model_id": "475585413",
@@ -348,7 +348,7 @@
                 "Htr3a"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('4', 'Scnn1a', ''), ('1', 'Htr3a', '482654108'))": {
                     "name": "(('4', 'Scnn1a', ''), ('1', 'Htr3a', '482654108'))",
                     "target_model_id": "482654108",
@@ -394,7 +394,7 @@
                 "Htr3a"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('4', 'Rorb', ''), ('1', 'Htr3a', '482654108'))": {
                     "name": "(('4', 'Rorb', ''), ('1', 'Htr3a', '482654108'))",
                     "target_model_id": "482654108",
@@ -440,7 +440,7 @@
                 "Htr3a"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('4', 'Vip', ''), ('1', 'Htr3a', '482654108'))": {
                     "name": "(('4', 'Vip', ''), ('1', 'Htr3a', '482654108'))",
                     "target_model_id": "482654108",
@@ -486,7 +486,7 @@
                 "Htr3a"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('4', 'Pvalb', ''), ('1', 'Htr3a', '482654108'))": {
                     "name": "(('4', 'Pvalb', ''), ('1', 'Htr3a', '482654108'))",
                     "target_model_id": "482654108",
@@ -532,7 +532,7 @@
                 "Htr3a"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('4', 'Sst', ''), ('1', 'Htr3a', '475585413'))": {
                     "name": "(('4', 'Sst', ''), ('1', 'Htr3a', '475585413'))",
                     "target_model_id": "475585413",

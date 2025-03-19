@@ -56,7 +56,7 @@
                 "Cux2"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('1', 'Htr3a', ''), ('2/3', 'Cux2', '484509440'))": {
                     "name": "(('1', 'Htr3a', ''), ('2/3', 'Cux2', '484509440'))",
                     "target_model_id": "484509440",
@@ -186,7 +186,7 @@
                 "Vip"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('1', 'Htr3a', ''), ('2/3', 'Vip', '501736631'))": {
                     "name": "(('1', 'Htr3a', ''), ('2/3', 'Vip', '501736631'))",
                     "target_model_id": "501736631",
@@ -358,7 +358,7 @@
                 "Pvalb"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('1', 'Htr3a', ''), ('2/3', 'Pvalb', '341016267'))": {
                     "name": "(('1', 'Htr3a', ''), ('2/3', 'Pvalb', '341016267'))",
                     "target_model_id": "341016267",
@@ -558,7 +558,7 @@
                 "Sst"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('1', 'Htr3a', ''), ('2/3', 'Sst', '313862274'))": {
                     "name": "(('1', 'Htr3a', ''), ('2/3', 'Sst', '313862274'))",
                     "target_model_id": "313862274",
@@ -688,7 +688,7 @@
                 "Cux2"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Cux2', ''), ('2/3', 'Cux2', '484509440'))": {
                     "name": "(('2/3', 'Cux2', ''), ('2/3', 'Cux2', '484509440'))",
                     "target_model_id": "484509440",
@@ -818,7 +818,7 @@
                 "Vip"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Cux2', ''), ('2/3', 'Vip', '501736631'))": {
                     "name": "(('2/3', 'Cux2', ''), ('2/3', 'Vip', '501736631'))",
                     "target_model_id": "501736631",
@@ -990,7 +990,7 @@
                 "Pvalb"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Cux2', ''), ('2/3', 'Pvalb', '341016267'))": {
                     "name": "(('2/3', 'Cux2', ''), ('2/3', 'Pvalb', '341016267'))",
                     "target_model_id": "341016267",
@@ -1190,7 +1190,7 @@
                 "Sst"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Cux2', ''), ('2/3', 'Sst', '313862274'))": {
                     "name": "(('2/3', 'Cux2', ''), ('2/3', 'Sst', '313862274'))",
                     "target_model_id": "313862274",
@@ -1320,7 +1320,7 @@
                 "Cux2"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Vip', ''), ('2/3', 'Cux2', '484509440'))": {
                     "name": "(('2/3', 'Vip', ''), ('2/3', 'Cux2', '484509440'))",
                     "target_model_id": "484509440",
@@ -1450,7 +1450,7 @@
                 "Vip"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Vip', ''), ('2/3', 'Vip', '501736631'))": {
                     "name": "(('2/3', 'Vip', ''), ('2/3', 'Vip', '501736631'))",
                     "target_model_id": "501736631",
@@ -1622,7 +1622,7 @@
                 "Pvalb"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Vip', ''), ('2/3', 'Pvalb', '341016267'))": {
                     "name": "(('2/3', 'Vip', ''), ('2/3', 'Pvalb', '341016267'))",
                     "target_model_id": "341016267",
@@ -1822,7 +1822,7 @@
                 "Sst"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Vip', ''), ('2/3', 'Sst', '313862274'))": {
                     "name": "(('2/3', 'Vip', ''), ('2/3', 'Sst', '313862274'))",
                     "target_model_id": "313862274",
@@ -1952,7 +1952,7 @@
                 "Cux2"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Pvalb', ''), ('2/3', 'Cux2', '484509440'))": {
                     "name": "(('2/3', 'Pvalb', ''), ('2/3', 'Cux2', '484509440'))",
                     "target_model_id": "484509440",
@@ -2082,7 +2082,7 @@
                 "Vip"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Pvalb', ''), ('2/3', 'Vip', '501736631'))": {
                     "name": "(('2/3', 'Pvalb', ''), ('2/3', 'Vip', '501736631'))",
                     "target_model_id": "501736631",
@@ -2254,7 +2254,7 @@
                 "Pvalb"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Pvalb', ''), ('2/3', 'Pvalb', '341016267'))": {
                     "name": "(('2/3', 'Pvalb', ''), ('2/3', 'Pvalb', '341016267'))",
                     "target_model_id": "341016267",
@@ -2454,7 +2454,7 @@
                 "Sst"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Pvalb', ''), ('2/3', 'Sst', '313862274'))": {
                     "name": "(('2/3', 'Pvalb', ''), ('2/3', 'Sst', '313862274'))",
                     "target_model_id": "313862274",
@@ -2584,7 +2584,7 @@
                 "Cux2"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Sst', ''), ('2/3', 'Cux2', '484509440'))": {
                     "name": "(('2/3', 'Sst', ''), ('2/3', 'Cux2', '484509440'))",
                     "target_model_id": "484509440",
@@ -2714,7 +2714,7 @@
                 "Vip"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Sst', ''), ('2/3', 'Vip', '501736631'))": {
                     "name": "(('2/3', 'Sst', ''), ('2/3', 'Vip', '501736631'))",
                     "target_model_id": "501736631",
@@ -2886,7 +2886,7 @@
                 "Pvalb"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Sst', ''), ('2/3', 'Pvalb', '341016267'))": {
                     "name": "(('2/3', 'Sst', ''), ('2/3', 'Pvalb', '341016267'))",
                     "target_model_id": "341016267",
@@ -3086,7 +3086,7 @@
                 "Sst"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('2/3', 'Sst', ''), ('2/3', 'Sst', '313862274'))": {
                     "name": "(('2/3', 'Sst', ''), ('2/3', 'Sst', '313862274'))",
                     "target_model_id": "313862274",
@@ -3216,7 +3216,7 @@
                 "Cux2"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('4', 'Scnn1a', ''), ('2/3', 'Cux2', '484509440'))": {
                     "name": "(('4', 'Scnn1a', ''), ('2/3', 'Cux2', '484509440'))",
                     "target_model_id": "484509440",
@@ -3346,7 +3346,7 @@
                 "Vip"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('4', 'Scnn1a', ''), ('2/3', 'Vip', '501736631'))": {
                     "name": "(('4', 'Scnn1a', ''), ('2/3', 'Vip', '501736631'))",
                     "target_model_id": "501736631",
@@ -3518,7 +3518,7 @@
                 "Pvalb"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('4', 'Scnn1a', ''), ('2/3', 'Pvalb', '341016267'))": {
                     "name": "(('4', 'Scnn1a', ''), ('2/3', 'Pvalb', '341016267'))",
                     "target_model_id": "341016267",
@@ -3718,7 +3718,7 @@
                 "Sst"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('4', 'Scnn1a', ''), ('2/3', 'Sst', '313862274'))": {
                     "name": "(('4', 'Scnn1a', ''), ('2/3', 'Sst', '313862274'))",
                     "target_model_id": "313862274",
@@ -3848,7 +3848,7 @@
                 "Cux2"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('4', 'Rorb', ''), ('2/3', 'Cux2', '484509440'))": {
                     "name": "(('4', 'Rorb', ''), ('2/3', 'Cux2', '484509440'))",
                     "target_model_id": "484509440",
@@ -3978,7 +3978,7 @@
                 "Vip"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('4', 'Rorb', ''), ('2/3', 'Vip', '501736631'))": {
                     "name": "(('4', 'Rorb', ''), ('2/3', 'Vip', '501736631'))",
                     "target_model_id": "501736631",
@@ -4150,7 +4150,7 @@
                 "Pvalb"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('4', 'Rorb', ''), ('2/3', 'Pvalb', '341016267'))": {
                     "name": "(('4', 'Rorb', ''), ('2/3', 'Pvalb', '341016267'))",
                     "target_model_id": "341016267",
@@ -4350,7 +4350,7 @@
                 "Sst"
             ],
             "probability": 0.0,
-            "models": {
+            "connect_models": {
                 "(('4', 'Rorb', ''), ('2/3', 'Sst', '313862274'))": {
                     "name": "(('4', 'Rorb', ''), ('2/3', 'Sst', '313862274'))",
                     "target_model_id": "313862274",

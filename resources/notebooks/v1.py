@@ -1,6 +1,15 @@
 import logging
+from typing import NamedTuple
 import pydantic
+import nest
+#
 from pathlib import Path
+#
+from nest.lib.hl_api_sonata import SonataNetwork
+from nest.lib.hl_api_nodes import Create as NestCreate
+from nest.lib.hl_api_connections import Connect as NestConnect
+from nest.lib.hl_api_types import NodeCollection
+#
 import mousev1.model as v1model
 import mousev1.operations as v1ops
 from airavata_cerebrum.model.setup import RecipeSetup
@@ -8,6 +17,12 @@ from airavata_cerebrum.model.recipe import ModelRecipe
 from airavata_cerebrum.model.structure import Network
 
 logging.basicConfig(level=logging.INFO)
+
+# Declaring namedtuple()
+class NestSonata(NamedTuple):
+    net : SonataNetwork | None = None
+    spike_rec: NodeCollection | None = None
+    multi_meter: NodeCollection | None = None
 
 
 class RcpSettings(pydantic.BaseModel):
@@ -71,25 +86,47 @@ def struct_bmtk(rcp_set: RcpSettings):
 def build_bmtk(rcp_set: RcpSettings):
     md_dex = model_recipe(rcp_set)
     md_dex.download_db_data()
-    md_dex.db_post_ops()
+    md_dex.run_db_post_ops()
     md_dex.map_source_data()
     md_dex.build_net_struct()
     md_dex.apply_mod()
     md_dex.build_network()
 
-def run_nest():
-    import nest
-    config_file = "./v1/config_nest.json"
+def load_nest_sonata(
+    nest_config_file: str = "./v1/config_nest.json",
+):
     # Instantiate SonataNetwork
-    sonata_net = nest.SonataNetwork(config_file)
+    sonata_net = SonataNetwork(nest_config_file)
 
     # Create and connect nodes
     node_collections = sonata_net.BuildNetwork()
     print("Node Collections", node_collections.keys())
-    # Connect spike recorder to a population
-    spike_rec = nest.Create("spike_recorder")
-    nest.Connect(node_collections["v1"], spike_rec)
 
+    # Connect spike recorder to a population
+    spike_rec = NestCreate("spike_recorder")
+    NestConnect(node_collections["v1"], spike_rec)
+
+    # Attach Multimeter
+    multi_meter = NestCreate(
+        "multimeter",
+        params={
+            # "interval": 0.05,
+            "record_from": [
+                "V_m",
+                "I",
+                "I_syn",
+                "threshold",
+                "threshold_spike",
+                "threshold_voltage",
+                "ASCurrents_sum",
+            ],
+        },
+    )
+    NestConnect(multi_meter, node_collections["v1l4"])
+
+    # Simulate the network
+    # sonata_net.Simulate()
+    return NestSonata(sonata_net, spike_rec, multi_meter)
 
 
 def convert_models_to_nest(cfg_set: RcpSettings):

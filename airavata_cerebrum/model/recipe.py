@@ -72,7 +72,7 @@ class ModelRecipe(pydantic.BaseModel):
         _log().info("Completed Query and Download Data")
         return db_connect_output
 
-    def db_post_ops(self):
+    def run_db_post_ops(self):
         db_connect_data = cbmio.load(
             self.output_location(RecipeKeys.DB_CONNECT)
         )
@@ -91,9 +91,9 @@ class ModelRecipe(pydantic.BaseModel):
         _log().info("Completed Post ops")
         return db_post_op_data
 
-    def run_db_workflows(self):
+    def acquire_source_data(self):
         db_connection_output = self.download_db_data()
-        db_post_op_data = self.db_post_ops()
+        db_post_op_data = self.run_db_post_ops()
         return db_connection_output, db_post_op_data
 
     def map_source_data(self):
@@ -136,6 +136,10 @@ class ModelRecipe(pydantic.BaseModel):
                 self.connection_mapper,
             )
             return self.network_struct
+
+    def source_data2model_struct(self):
+        self.map_source_data()
+        return self.build_net_struct()
 
     def apply_mod(self):
         if self.mod_structure:
