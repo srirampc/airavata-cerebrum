@@ -21,6 +21,7 @@ dependencies:
   - openpyxl
   - pandas
   - pydantic
+  - pyarrow
   - pyqtgraph
   - python-dateutil
   - python-jsonpath
