@@ -184,6 +184,7 @@ def _(mo):
 @app.cell
 def _():
     import duckdb
+
     db_conn = duckdb.connect("./v1/recipe/db_connect_output.db")
     return db_conn, duckdb
 
