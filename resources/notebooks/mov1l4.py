@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.11.17"
+__generated_with = "0.11.21"
 app = marimo.App(width="full")
 
 
@@ -32,7 +32,7 @@ def _():
     )
 
     tree_view_widths = [0.4, 0.6]
-    cmod_struct = cbm_structure.Network.from_json(custom_mod_file)
+    cmod_struct = cbm_structure.Network.from_file(custom_mod_file)
 
     integ_explorer = cbm_motree.RecipeExplorer(mdr_setup, cmod_struct).build("V1L4")
     integ_tree, integ_panels = integ_explorer.view_components()

@@ -83,6 +83,7 @@
                 "label": "Layers of Interest",
                 "doc": "Layers of interest",
                 "allowed": [
+                    "L1",
                     "L23",
                     "L5",
                     "L6",
@@ -140,6 +141,7 @@
                 "doc": "Selected Layer",
                 "options": [
                     "",
+                    "1",
                     "4",
                     "3",
                     "5",
@@ -165,6 +167,8 @@
                 "doc": "Line",
                 "options": [
                     "",
+                    "Htr3a",
+                    "Cux2-",
                     "Scnn1a",
                     "Rorb",
                     "Vip-",

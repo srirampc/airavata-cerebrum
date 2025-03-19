@@ -177,22 +177,24 @@ class DBWorkflowSidePanel(MoPanelBaseType):
         self,
         template_map: dict[str, t.Any],
         elt_traits: traitlets.HasTraits | None = None,
-    ) -> list[UIElement[t.Any, t.Any]]:
+    ) -> list[MoUIElement]:
         trait_vals = elt_traits.trait_values() if elt_traits else {}
-        return [
-            self.params_widget(
-                template_map,
-                trait_vals,
-                RecipeKeys.INIT_PARAMS,
-                RecipeLabels.INIT_PARAMS,
-            ),
-            self.params_widget(
-                template_map,
-                trait_vals,
-                RecipeKeys.EXEC_PARAMS,
-                RecipeLabels.EXEC_PARAMS,
-            ),
-        ]
+        return list(itertools.chain.from_iterable(
+            (
+                self.params_widget(
+                    template_map,
+                    trait_vals,
+                    RecipeKeys.INIT_PARAMS,
+                    RecipeLabels.INIT_PARAMS,
+                ),
+                self.params_widget(
+                    template_map,
+                    trait_vals,
+                    RecipeKeys.EXEC_PARAMS,
+                    RecipeLabels.EXEC_PARAMS,
+                ),
+            )
+        ))
 
     def params_widget(
         self,
@@ -200,17 +202,22 @@ class DBWorkflowSidePanel(MoPanelBaseType):
         trait_vals: dict[str, t.Any],
         params_key: str,
         params_label: str,
-    ):
+    ) -> Iterable[MoUIElement]:
         if template_map[params_key]:
             wd_itr: Iterable[UIElement[t.Any, t.Any] | None] = (
                 self.property_widget(trait_vals, ekey, vmap)
                 for ekey, vmap in template_map[params_key].items()
             )
-            return mo.ui.array(
-                [wx for wx in wd_itr if wx is not None], label=params_label
-            )
+            # wd_list = [wx for wx in wd_itr if wx is not None]
+            # return wd_list
+            return (wx for wx in wd_itr if wx is not None)
+            # return mo.ui.array(
+            #     [wx for wx in wd_itr if wx is not None],
+            #     label=params_label
+            # )
         else:
-            return mo.ui.array([], label=params_label)
+            return []
+        # return mo.ui.array([], label=params_label)
 
     def property_widget(
         self,
@@ -607,7 +614,7 @@ class RecipeExplorer(TreeBase[MoPanelBaseType]):
         self._d2m: Data2ModelRecipeView = Data2ModelRecipeView(
             mdr_setup, left_width, **kwargs
         )
-        self._struct: NetworkStructureView[MoPanelBaseType, MoPanelBaseType] = NetworkStructureView(
+        self._struct: NetworkStructureView = NetworkStructureView(
             net_struct, left_width, **kwargs
         )
         self.left_width: float = left_width

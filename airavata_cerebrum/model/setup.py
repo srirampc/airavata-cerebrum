@@ -90,7 +90,7 @@ class RecipeSetup(pydantic.BaseModel):
 
     def load_templates(self):
         if RecipeKeys.TEMPLATES in self.recipe_files:
-            _log().warning("Loading View Templates")
+            # _log().warning("Loading View Templates")
             for t_file in self.recipe_files[RecipeKeys.TEMPLATES]:
                 t_dict = cbmio.load(self.recipe_file_path(t_file))
                 if t_dict:
@@ -152,13 +152,13 @@ class RecipeSetup(pydantic.BaseModel):
 
 def init_model_setup(
     name: str,
-    model_base_dir: str| Path,
+    base_dir: str| Path,
     recipe_files: dict[str, list[str | Path]],
     recipe_dir: str| Path,
 ) -> RecipeSetup:
     return RecipeSetup(
             name=name,
-            base_dir=model_base_dir,
+            base_dir=base_dir,
             recipe_files=recipe_files,
             recipe_dir=recipe_dir,
     )

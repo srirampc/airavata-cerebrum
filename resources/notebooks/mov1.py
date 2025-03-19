@@ -1,0 +1,203 @@
+import marimo
+
+__generated_with = "0.11.21"
+app = marimo.App()
+
+
+@app.cell
+def _():
+    import json
+    import airavata_cerebrum.model.setup as cbm_setup
+    import airavata_cerebrum.model.recipe as cbm_recipe
+    import airavata_cerebrum.view.motree as cbm_motree
+    import airavata_cerebrum.model.structure as cbm_structure
+    import airavata_cerebrum.util as cbm_utils
+    import marimo as mo
+    return (
+        cbm_motree,
+        cbm_recipe,
+        cbm_setup,
+        cbm_structure,
+        cbm_utils,
+        json,
+        mo,
+    )
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        """
+        # Recipe for a data-driven model
+        A data-driven Model consists of three parts
+
+        1. Source Data : Data Providers and the workflow to access data.
+        2. Data to Model Mapping: A Mapping Function to map that funnels the appropriate data to different parts of the model.
+        3. Custom Modifications: Description of the model that fills in the details not found in the dataset.
+
+
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ## Model Recipe
+
+        Model recipe is defined by a set of recipe files and template files. Recipe and Template files are described in __json__ files, and are expected to be placed in the __Recipe Directory__, which is canonically under the base directory of the model.
+
+        The Recipe contains two sections:
+
+        - Source Data
+        - Data2Model Section 
+
+        **Source Data** section describes how the source databases are connected and different operations such as filters are applied to the data available from the specific database.
+
+        **Data2Model** section describes how the different parts of the model map to the source data.
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ## Source Data Section 
+
+        Data provider module includes:
+
+          - Methods for defining the querying from the database and filter the data based on specific criteria. 
+          - Utilities to visualize the data provider configurations in easy-to-understand explorer view inside Jupyter/marimo notebook with the relevant parameters displayed in the side panel.
+
+        Construction of Mouse V1 is shown below with three different data providers: 
+
+          - Allen Cell Types database,
+          - Allen Brain Cell Atlas and
+          - AI Synaptic Physiology Database.
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        """
+        ## Data2Model Map
+
+        For the V1 model, definitions for data2model includes two parts:
+
+        1. *Locations:* Cell types database and the MERFISH atlas data map to neuron models and the distribution of neuron types, respectively
+        2. *Connections:* AI synaptic physiology data is mapped to the connection probabilities between the pairs of neuron classes.
+        """
+    )
+    return
+
+
+@app.cell
+def _(cbm_setup, cbm_structure):
+    m_name = "V1"
+    m_base_dir = "./"
+    m_rcp_dir = "./v1/recipe/"
+    m_rcp_files = {
+        "recipe": [
+            "recipe.json",
+            "recipe_data.json",
+            "recipe_dm_l1.json",
+            "recipe_dm_l23.json",
+            "recipe_dm_l4.json"
+        ],
+        "templates": [
+            "recipe_template.json"
+        ]
+    }
+    cmod_files = [
+        "./v1/recipe/custom_mod.json",
+        "./v1/recipe/custom_mod_l1.json",
+        "./v1/recipe/custom_mod_l23.json",
+        "./v1/recipe/custom_mod_l4.json",
+        "./v1/recipe/custom_mod_ext.json",
+    ] 
+
+    # recipe_dict = cbm_utils.io.load_json(main_rcp_file)
+    # cmod_dict = cbm_utils.io.load_json(custom_mod_file)
+    mdr_setup = cbm_setup.RecipeSetup(
+        name=m_name,
+        base_dir=m_base_dir,
+        recipe_dir=m_rcp_dir,
+        recipe_files=m_rcp_files,
+    )
+
+    tree_view_widths = [0.4, 0.6]
+    cmod_struct = cbm_structure.Network.from_file_list(cmod_files)
+    return (
+        cmod_files,
+        cmod_struct,
+        m_base_dir,
+        m_name,
+        m_rcp_dir,
+        m_rcp_files,
+        mdr_setup,
+        tree_view_widths,
+    )
+
+
+@app.cell
+def _(cbm_motree, cmod_struct, mdr_setup, mo):
+    #
+    integ_explorer = cbm_motree.RecipeExplorer(mdr_setup, cmod_struct).build(root_pfx="V1")
+    integ_tree,integ_panels = integ_explorer.view_components()
+    integ_motree = mo.ui.anywidget(integ_tree)
+    return integ_explorer, integ_motree, integ_panels, integ_tree
+
+
+@app.cell
+def _(cbm_motree, integ_motree, integ_panels, mo, tree_view_widths):
+    #
+    integ_selected = cbm_motree.TreeBase.panel_selector(integ_motree, integ_panels)
+    mo.hstack(
+        [
+            integ_motree,
+            integ_selected.layout if integ_selected else None
+        ],
+        widths=tree_view_widths
+    )
+    return (integ_selected,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ## Downloaded data as a database
+
+        The downloaded data by default is stored as json file. Optionally, it can be saved to a duckdb database, which can be queried within the notebook.
+        """
+    )
+    return
+
+
+@app.cell
+def _():
+    import duckdb
+    db_conn = duckdb.connect("./v1/recipe/db_connect_output.db")
+    return db_conn, duckdb
+
+
+@app.cell
+def _(abm_mouse, db_conn, mo):
+    abm_mouse_df = mo.sql(
+        f"""
+        SELECT * FROM abm_mouse LIMIT 100
+        """,
+        engine=db_conn
+    )
+    return (abm_mouse_df,)
+
+
+if __name__ == "__main__":
+    app.run()
