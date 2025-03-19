@@ -12,6 +12,7 @@ def _():
     import airavata_cerebrum.view.motree as cbm_motree
     import airavata_cerebrum.model.structure as cbm_structure
     import airavata_cerebrum.util as cbm_utils
+    import mousev1.model as v1model
     import marimo as mo
     return (
         cbm_motree,
@@ -21,6 +22,7 @@ def _():
         cbm_utils,
         json,
         mo,
+        v1model,
     )
 
 
@@ -98,7 +100,7 @@ def _(mo):
 
 @app.cell
 def _():
-    m_name = "V1"
+    m_name = "v1"
     m_base_dir = "./"
     m_rcp_dir = "./v1/recipe/"
     m_rcp_files = {
@@ -119,7 +121,7 @@ def _():
         "./v1/recipe/custom_mod_l23.json",
         "./v1/recipe/custom_mod_l4.json",
         "./v1/recipe/custom_mod_ext.json",
-    ] 
+    ]
     return cmod_files, m_base_dir, m_name, m_rcp_dir, m_rcp_files
 
 
@@ -156,7 +158,7 @@ def _(cbm_motree, cmod_struct, mdr_setup, mo):
     return integ_explorer, integ_motree, integ_panels, integ_tree
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(cbm_motree, integ_motree, integ_panels, mo, tree_view_widths):
     #
     integ_selected = cbm_motree.TreeBase.panel_selector(integ_motree, integ_panels)
@@ -180,6 +182,24 @@ def _(mo):
         """
     )
     return
+
+
+@app.cell
+def _(cbm_recipe, cmod_struct, mdr_setup, v1model):
+    #
+    mdrecipe = cbm_recipe.ModelRecipe(
+        recipe_setup=mdr_setup,
+        region_mapper=v1model.V1RegionMapper,
+        neuron_mapper=v1model.V1NeuronMapper,
+        connection_mapper=v1model.V1ConnectionMapper,
+        network_builder=v1model.V1BMTKNetworkBuilder,
+        mod_structure=cmod_struct,
+        save_flag=True,
+    )
+    #
+    #
+    # mdrecipe.acquire_source_data()
+    return (mdrecipe,)
 
 
 @app.cell
@@ -215,6 +235,151 @@ def _(abm_celltypes_ct, db_conn, mo):
     )
     quak.Widget(abm_ct_df)
     return abm_ct_df, cols, quak
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ## Map Data, Apply Mods, and Build Network Representation
+
+        After the soruce data is acquired, the data is mapped to the locations and connection to create an intermediate representation.
+        """
+    )
+    return
+
+
+@app.cell
+def _(cbm_motree, mdrecipe, mo):
+    mdrecipe.source_data2model_struct()
+    mdrecipe.apply_mod()
+    final_net_view = cbm_motree.NetworkStructureView(mdrecipe.network_struct).build("Final-V1")
+
+    fnet_tree,fnet_panels = final_net_view.view_components()
+    fnet_motree = mo.ui.anywidget(fnet_tree)
+    #final_net_view.tree
+    return final_net_view, fnet_motree, fnet_panels, fnet_tree
+
+
+@app.cell(hide_code=True)
+def _(cbm_motree, fnet_motree, fnet_panels, mo, tree_view_widths):
+    #
+    fnet_selected = cbm_motree.TreeBase.panel_selector(fnet_motree, fnet_panels)
+    mo.hstack(
+        [
+            fnet_motree,
+            fnet_selected.layout if fnet_selected else None
+        ],
+        widths=tree_view_widths
+    )
+    return (fnet_selected,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ### Generate Network using BMTK
+
+        Using the following helper classes, the above structure is translated into SONATA file:
+
+        - v1model.V1RegionMapper
+        - v1model.V1NeuronMapper
+        - v1model.V1ConnectionMapper
+        - v1model.V1BMTKNetworkBuilder
+        """
+    )
+    return
+
+
+@app.cell
+def _(mdrecipe):
+    #
+    #
+    mdrecipe.build_network()
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
+        ### Run with Nest
+
+        Finally, Simulation can be run using nest as below
+        """
+    )
+    return
+
+
+@app.cell
+def _():
+    from typing import NamedTuple
+    from nest.lib.hl_api_sonata import SonataNetwork
+    from nest.lib.hl_api_nodes import Create as NestCreate
+    from nest.lib.hl_api_connections import Connect as NestConnect
+    from nest.lib.hl_api_types import NodeCollection
+
+    class NestSonata(NamedTuple):
+        net : SonataNetwork | None = None
+        spike_rec: NodeCollection | None = None
+        multi_meter: NodeCollection | None = None
+
+
+    def load_nest_sonata(
+        nest_config_file: str = "./v1/config_nest.json",
+    ):
+        # Instantiate SonataNetwork
+        sonata_net = SonataNetwork(nest_config_file)
+
+        # Create and connect nodes
+        node_collections = sonata_net.BuildNetwork()
+        print("Node Collections", node_collections.keys())
+
+        # Connect spike recorder to a population
+        spike_rec = NestCreate("spike_recorder")
+        NestConnect(node_collections["v1"], spike_rec)
+
+        # Attach Multimeter
+        multi_meter = NestCreate(
+            "multimeter",
+            params={
+                # "interval": 0.05,
+                "record_from": [
+                    "V_m",
+                    "I",
+                    "I_syn",
+                    "threshold",
+                    "threshold_spike",
+                    "threshold_voltage",
+                    "ASCurrents_sum",
+                ],
+            },
+        )
+        NestConnect(multi_meter, node_collections["v1"])
+
+        # Simulate the network
+        # sonata_net.Simulate()
+        return NestSonata(sonata_net, spike_rec, multi_meter)
+
+    nest_net = load_nest_sonata()
+    return (
+        NamedTuple,
+        NestConnect,
+        NestCreate,
+        NestSonata,
+        NodeCollection,
+        SonataNetwork,
+        load_nest_sonata,
+        nest_net,
+    )
+
+
+@app.cell
+def _(nest_net):
+    #
+    nest_net.net.Simulate()
+    return
 
 
 if __name__ == "__main__":
