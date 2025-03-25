@@ -1,9 +1,9 @@
 import logging
 import typing as t
+from pydantic import Field
 from typing_extensions import override
-import traitlets
 #
-from ..base import OpXFormer, XformItr, XformElt, DbQuery
+from ..base import OpXFormer, BaseParams, XformItr, XformElt, DbQuery
 
 
 def _log():
@@ -11,9 +11,8 @@ def _log():
 
 
 class IterAttrMapper(OpXFormer):
-    @t.final
-    class MapperTraits(traitlets.HasTraits):
-        attribute = traitlets.Unicode()
+    class MapperParams(BaseParams):
+        attribute : t.Annotated[str, Field(title='Attribute Selected to Map')]
 
     def __init__(self, **params: t.Any):
         """
@@ -54,20 +53,19 @@ class IterAttrMapper(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls):
-        return cls.MapperTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.MapperParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.MapperTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.MapperParams.model_validate(param_dict)
 
 
 class IterAttrFilter(OpXFormer):
-    @t.final
-    class FilterTraits(traitlets.HasTraits):
-        key = traitlets.Unicode()
-        filters = traitlets.List()
+    class FilterParams(BaseParams):
+        key     : t.Annotated[str, Field(title='Key')]
+        filters : t.Annotated[list[tuple[t.Any]], Field(title='Filters')]
 
     def __init__(self, **params: t.Any):
         self.name : str = __name__ + ".IterAttrFilter"
@@ -116,13 +114,13 @@ class IterAttrFilter(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.FilterParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.FilterTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.FilterParams.model_validate(param_dict)
 
 
 #

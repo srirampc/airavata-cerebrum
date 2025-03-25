@@ -7,10 +7,12 @@ dependencies:
   - pip
 
   # Requirements for airavata cerebrum
+  - anndata
   - anywidget
   - duckdb
   - ipywidgets
   - ipytree
+  - leidenalg
   - jupyter
   - nest-simulator
   - numba
@@ -24,10 +26,12 @@ dependencies:
   - pydantic
   - pyqtgraph
   - python-dateutil
+  - python-igraph
   - python-jsonpath
   - pyyaml
   - requests
   - scikit-learn
+  - scanpy
   - scipy
   - sqlglot
   - sqlalchemy
@@ -36,14 +40,12 @@ dependencies:
 
   # PIP dependencies
   - pip:
-      - anndata
       - allensdk
       - bmtk
       - mpi4py
       - parse
       - polars
       - pylightxl
-      - scanpy
       - git+https://github.com/alleninstitute/abc_atlas_access
       - git+https://github.com/alleninstitute/neuroanalysis
       - git+https://github.com/alleninstitute/aisynphys

@@ -1,16 +1,16 @@
-import traitlets
 import typing as t
-from typing_extensions import override
 #
-from ..base import OpXFormer, XformItr, DbQuery
+from typing_extensions import override
+from pydantic import Field
+#
+from ..base import OpXFormer, BaseParams, XformItr, DbQuery
 from .json_filter import IterJPatchFilter, IterJPointerFilter
 from .dict_filter import IterAttrFilter
 
 
 class CTModelNameFilter(OpXFormer):
-    @t.final
-    class FilterTraits(traitlets.HasTraits):
-        model_name = traitlets.Unicode()
+    class FilterParams(BaseParams):
+        model_name :t.Annotated[str, Field(title='Model Name')]
 
     def __init__(self, **params: t.Any):
         self.name : str = __name__ + ".CTModelNameFilter"
@@ -32,19 +32,18 @@ class CTModelNameFilter(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.FilterParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.FilterTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.FilterParams.model_validate(param_dict)
 
 
 class CTExplainedRatioFilter(OpXFormer):
-    @t.final
-    class FilterTraits(traitlets.HasTraits):
-        ratio = traitlets.Float()
+    class FilterParams(BaseParams):
+        ratio : t.Annotated[float, Field(title='Min. Ratio')]
 
     def __init__(self, **params: t.Any):
         self.name : str = __name__ + ".CTExplainedRatioFilter"
@@ -70,23 +69,30 @@ class CTExplainedRatioFilter(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.FilterParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.FilterTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.FilterParams.model_validate(param_dict)
 
 
 class CTPropertyFilter(OpXFormer):
-    @t.final
-    class FilterTraits(traitlets.HasTraits):
-        key = traitlets.Unicode()
-        region = traitlets.Unicode()
-        layer = traitlets.Unicode()
-        line = traitlets.Unicode()
-        reporter_status = traitlets.Unicode()
+    class FilterParams(BaseParams):
+        region : t.Annotated[
+            str | None, Field(title="Region (structure_parent__acronym)")
+        ] = None
+        layer  : t.Annotated[
+            str | None, Field(title="Layer (structure__layer)")
+        ] = None
+        line   : t.Annotated[
+            str | None, Field(title="Line (line_name)")
+        ] = None
+        reporter_status : t.Annotated[
+            str | None, Field(title="Reporter Status (cell_reporter_status)")
+        ] = None 
+        key    : t.Annotated[str , Field(title="Output Key")] = ""
 
     QUERY_FILTER_MAP : dict[str, list[str]] = {
         "region": ["structure_parent__acronym", "__eq__"],
@@ -117,13 +123,13 @@ class CTPropertyFilter(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.FilterParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.FilterTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.FilterParams.model_validate(param_dict)
 
 #
 # ------- Query and Xform Registers -----

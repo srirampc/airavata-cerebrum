@@ -1,16 +1,16 @@
-import traitlets
 import typing as t
-from typing_extensions import override
 #
-from ..base import OpXFormer, XformItr, DbQuery
+from typing_extensions import override
+from pydantic import Field
+#
+from ..base import OpXFormer, BaseParams, XformItr, DbQuery
 from .json_filter import JPointerFilter
 
 
 class ABCDbMERFISH_CCFLayerRegionFilter(OpXFormer):
-    @t.final
-    class FilterTraits(traitlets.HasTraits):
-        region = traitlets.Unicode()
-        sub_region = traitlets.Unicode()
+    class FilterParams(BaseParams):
+        region     : t.Annotated[str, Field(title="Region")]
+        sub_region : t.Annotated[str, Field(title="Sub-region")]
 
     def __init__(self, **params: t.Any):
         self.jptr_filter : JPointerFilter = JPointerFilter(**params)
@@ -33,20 +33,19 @@ class ABCDbMERFISH_CCFLayerRegionFilter(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.FilterParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.FilterTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.FilterParams.model_validate(param_dict)
 
 
 class ABCDbMERFISH_CCFFractionFilter(OpXFormer):
-    @t.final
-    class FilterTraits(traitlets.HasTraits):
-        region = traitlets.Unicode()
-        cell_type = traitlets.Unicode()
+    class FilterParams(BaseParams):
+        region   : t.Annotated[str, Field(title="Region")]
+        cell_type : t.Annotated[str, Field(title="Cell Type")] = ""
 
     def __init__(self, **params: t.Any):
         self.jptr_filter : JPointerFilter = JPointerFilter(**params)
@@ -78,13 +77,13 @@ class ABCDbMERFISH_CCFFractionFilter(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.FilterParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.FilterTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.FilterParams.model_validate(param_dict)
 
 
 #

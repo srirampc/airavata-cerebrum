@@ -18,9 +18,9 @@
             "neurons": {
                 "('1', 'Htr3a')": {
                     "name": "('1', 'Htr3a')",
+                    "ei": "i",
                     "N": 2089,
                     "fraction": 1.0,
-                    "ei": "i",
                     "dims": {
                         "nsyn_lognorm_shape": 0.856,
                         "nsyn_lognorm_scale": 2808.682
@@ -91,9 +91,9 @@
             "neurons": {
                 "('2/3', 'Cux2')": {
                     "name": "('2/3', 'Cux2')",
+                    "ei": "e",
                     "N": 9635,
                     "fraction": 1.0,
-                    "ei": "e",
                     "dims": {
                         "nsyn_lognorm_shape": 0.363,
                         "nsyn_lognorm_scale": 3815.682
@@ -253,9 +253,9 @@
                 },
                 "('2/3', 'Vip')": {
                     "name": "('2/3', 'Vip')",
+                    "ei": "i",
                     "N": 260,
                     "fraction": 0.3166904422253923,
-                    "ei": "i",
                     "dims": {
                         "nsyn_lognorm_shape": 0.537,
                         "nsyn_lognorm_scale": 2355.279
@@ -415,9 +415,9 @@
                 },
                 "('2/3', 'Pvalb')": {
                     "name": "('2/3', 'Pvalb')",
+                    "ei": "i",
                     "N": 273,
                     "fraction": 0.33238231098430815,
-                    "ei": "i",
                     "dims": {
                         "nsyn_lognorm_shape": 0.433,
                         "nsyn_lognorm_scale": 7432.587
@@ -607,9 +607,9 @@
                 },
                 "('2/3', 'Sst')": {
                     "name": "('2/3', 'Sst')",
+                    "ei": "i",
                     "N": 273,
                     "fraction": 0.33238231098430815,
-                    "ei": "i",
                     "dims": {
                         "nsyn_lognorm_shape": 0.55,
                         "nsyn_lognorm_scale": 5305.151
@@ -755,9 +755,9 @@
             "neurons": {
                 "('4', 'Scnn1a')": {
                     "name": "('4', 'Scnn1a')",
+                    "ei": "e",
                     "N": 2793,
                     "fraction": 0.5,
-                    "ei": "e",
                     "dims": {
                         "nsyn_lognorm_shape": 0.345,
                         "nsyn_lognorm_scale": 2188.765
@@ -902,9 +902,9 @@
                 },
                 "('4', 'Rorb')": {
                     "name": "('4', 'Rorb')",
+                    "ei": "e",
                     "N": 2793,
                     "fraction": 0.5,
-                    "ei": "e",
                     "dims": {
                         "nsyn_lognorm_shape": 0.345,
                         "nsyn_lognorm_scale": 2188.765
@@ -1289,9 +1289,9 @@
                 },
                 "('4', 'Vip')": {
                     "name": "('4', 'Vip')",
+                    "ei": "i",
                     "N": 92,
                     "fraction": 0.1319327731092437,
-                    "ei": "i",
                     "dims": {
                         "nsyn_lognorm_shape": 0.537,
                         "nsyn_lognorm_scale": 2355.279
@@ -1391,9 +1391,9 @@
                 },
                 "('4', 'Pvalb')": {
                     "name": "('4', 'Pvalb')",
+                    "ei": "i",
                     "N": 374,
                     "fraction": 0.5327731092436975,
-                    "ei": "i",
                     "dims": {
                         "nsyn_lognorm_shape": 0.433,
                         "nsyn_lognorm_scale": 7432.587
@@ -1628,9 +1628,9 @@
                 },
                 "('4', 'Sst')": {
                     "name": "('4', 'Sst')",
+                    "ei": "i",
                     "N": 374,
                     "fraction": 0.5327731092436975,
-                    "ei": "i",
                     "dims": {
                         "nsyn_lognorm_shape": 0.55,
                         "nsyn_lognorm_scale": 5305.151
@@ -16348,9 +16348,9 @@
                     "neurons": {
                         "sON_TF1": {
                             "name": "sON_TF1",
+                            "ei": "e",
                             "N": 7,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -16374,9 +16374,9 @@
                         },
                         "sON_TF2": {
                             "name": "sON_TF2",
+                            "ei": "e",
                             "N": 5,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -16400,9 +16400,9 @@
                         },
                         "sON_TF4": {
                             "name": "sON_TF4",
+                            "ei": "e",
                             "N": 7,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -16426,9 +16426,9 @@
                         },
                         "sON_TF8": {
                             "name": "sON_TF8",
+                            "ei": "e",
                             "N": 15,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -16452,9 +16452,9 @@
                         },
                         "sOFF_TF1": {
                             "name": "sOFF_TF1",
+                            "ei": "e",
                             "N": 8,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -16478,9 +16478,9 @@
                         },
                         "sOFF_TF2": {
                             "name": "sOFF_TF2",
+                            "ei": "e",
                             "N": 8,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -16504,9 +16504,9 @@
                         },
                         "sOFF_TF4": {
                             "name": "sOFF_TF4",
+                            "ei": "e",
                             "N": 15,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -16530,9 +16530,9 @@
                         },
                         "sOFF_TF8": {
                             "name": "sOFF_TF8",
+                            "ei": "e",
                             "N": 8,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -16556,9 +16556,9 @@
                         },
                         "sOFF_TF15": {
                             "name": "sOFF_TF15",
+                            "ei": "e",
                             "N": 7,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -16582,9 +16582,9 @@
                         },
                         "tOFF_TF4": {
                             "name": "tOFF_TF4",
+                            "ei": "e",
                             "N": 10,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -16608,9 +16608,9 @@
                         },
                         "tOFF_TF8": {
                             "name": "tOFF_TF8",
+                            "ei": "e",
                             "N": 5,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -16634,9 +16634,9 @@
                         },
                         "tOFF_TF15": {
                             "name": "tOFF_TF15",
+                            "ei": "e",
                             "N": 8,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -16660,9 +16660,9 @@
                         },
                         "sONsOFF_001": {
                             "name": "sONsOFF_001",
+                            "ei": "e",
                             "N": 8,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     6
@@ -16685,9 +16685,9 @@
                         },
                         "sONtOFF_001": {
                             "name": "sONtOFF_001",
+                            "ei": "e",
                             "N": 5,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     9
@@ -17451,9 +17451,9 @@
                     "neurons": {
                         "bkg": {
                             "name": "bkg",
+                            "ei": "e",
                             "N": 0,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {},
                             "neuron_models": {
                                 "bkg": {

@@ -1,14 +1,13 @@
 import logging
 import abc
 import typing as t
-
-import traitlets
-
 import awitree
+#
+from typing_extensions import Self
 
-from ..base import DbQuery, OpXFormer
+#
+from ..base import BaseStruct, CerebrumBaseModel, DbQuery, OpXFormer, BaseParams
 from ..model.setup import RecipeKeys
-from ..model.structure import StructBase
 from ..register import find_type
 
 def _log():
@@ -41,93 +40,91 @@ class StructTreeNames:
     D2M_CONNECION =  "d2m_map.connection"
 
 
-
-class PayLoad:
-    def __init__(
-        self,
-        node_key: str,
-        node_traits: traitlets.HasTraits | None = None
-    ) -> None:
-        self.node_key: str = node_key
-        self.node_traits: traitlets.HasTraits | None = node_traits
-
-
-def struct_payload(
-    struct_obj: StructBase,
-    node_key: str | None = None,
-) -> PayLoad:
-    return PayLoad(
-        node_key=node_key if node_key else struct_obj.name,
-        node_traits=struct_obj.trait_instance(
-            **struct_obj.model_dump(exclude=struct_obj.exclude()),
-        ),
-    )
-
-def workflow_params(
+def workflow_params_dict(
     wf_step: dict[str, t.Any],
-    node_key: str | None = None,
 ) -> dict[str, t.Any]:
     return (
         {
             RecipeKeys.NAME: wf_step[RecipeKeys.LABEL],
-            RecipeKeys.NODE_KEY: (
-                node_key if node_key else wf_step[RecipeKeys.NAME]
-            ),
         }
         | wf_step[RecipeKeys.INIT_PARAMS]
         | wf_step[RecipeKeys.EXEC_PARAMS]
     )
 
-def recipe_traits(
+
+def workflow_params(
     wf_step: dict[str, t.Any],
     node_key: str | None = None,
-) -> tuple[dict[str, t.Any], traitlets.HasTraits | None]:
+) -> tuple[str | None,  BaseParams | None]:
+
+    node_key = node_key if node_key else wf_step[RecipeKeys.NAME]
     src_class: type[DbQuery] | type[OpXFormer] | None = find_type(
         wf_step[RecipeKeys.NAME]
     )
-    wf_dict: dict[str, t.Any] = workflow_params(wf_step, node_key)
+    wf_dict = workflow_params_dict(wf_step)
     if src_class:
-        return wf_dict, src_class.trait_instance(**wf_dict)
+        return node_key, src_class.params_instance(wf_dict)
     else:
-        return wf_dict, None
+        return node_key, None
 
-def recipe_step_payload(
-    wf_step: dict[str, t.Any],
-    node_key: str | None = None,
-) -> PayLoad | None:
-    wf_dict,  rcp_traits = recipe_traits(wf_step, node_key)
-    if RecipeKeys.NODE_KEY in wf_dict:
-        if rcp_traits:
-            nkey=wf_dict[RecipeKeys.NODE_KEY]
-            plx = PayLoad(
-                node_key=nkey,
-                node_traits=rcp_traits,
-            )
-            # _log().warning(
-            #     "Data [%s %s %s %s %s]",
-            #     str(wf_dict),
-            #     str(src_class),
-            #     str(nkey),
-            #     str(ntraits.trait_names()),
-            #     str(plx.node_traits.trait_names()),
-            # )
-            return plx
+
+class PayLoad:
+    def __init__(
+        self,
+        node_key: str,
+        node_props: CerebrumBaseModel  | None = None
+    ) -> None:
+        self.node_key: str = node_key
+        self.node_props: CerebrumBaseModel | None = node_props
+
+    @classmethod
+    def from_struct(
+        cls,
+        struct_obj: BaseStruct,
+        node_key: str | None = None,
+    )-> Self:
+        return cls(
+            node_key=node_key if node_key else struct_obj.name,
+        )
+  
+    @classmethod
+    def from_recipe_step(
+        cls,
+        wf_step: dict[str, t.Any],
+        node_key: str | None = None,
+    ) -> Self | None:
+        node_key,  wf_params = workflow_params(wf_step, node_key)
+        if node_key:
+            if wf_params:
+                plx = cls(
+                    node_key=node_key,
+                    node_props=wf_params,
+                )
+                # _log().warning(
+                #     "Data [%s %s %s %s %s]",
+                #     str(wf_dict),
+                #     str(src_class),
+                #     str(nkey),
+                #     str(ntraits.trait_names()),
+                #     str(plx.node_traits.trait_names()),
+                # )
+                return plx
+            else:
+                _log().warning(
+                    "Default Data [%s %s]",
+                    str(wf_params),
+                    str(wf_params)
+                )
+                return cls(node_key, **workflow_params_dict(wf_step))
         else:
-            _log().warning(
-                "Default Data [%s %s]",
-                str(wf_dict),
-                str(rcp_traits)
-            )
-            return PayLoad(**wf_dict)
-    else:
-        return None
+            return None
 
 
 # Base class for side panel
 # NOTE: Features of update and clearing links not included
 LayoutType = t.TypeVar('LT')
 UIEltType = t.TypeVar('UT')
-class PanelBase(t.Generic[LayoutType, UIEltType]):
+class BasePanel(t.Generic[LayoutType, UIEltType]):
     def __init__(self, layout: LayoutType | None = None):
         self._layout: LayoutType | None = layout
         self.ui_elements: list[UIEltType] = []
@@ -152,8 +149,10 @@ class PanelBase(t.Generic[LayoutType, UIEltType]):
         self._layout = value
 
 
-PanelType = t.TypeVar('PBT', bound=PanelBase[LayoutType, UIEltType])
-class TreeBase(abc.ABC, t.Generic[PanelType]):
+PanelType = t.TypeVar('PBT', bound=BasePanel[LayoutType, UIEltType])
+
+
+class BaseTree(abc.ABC, t.Generic[PanelType]):
     def __init__(
         self,
         **kwargs: t.Any,
@@ -163,7 +162,7 @@ class TreeBase(abc.ABC, t.Generic[PanelType]):
         self.panel_dict: dict[str, PanelType] = {}
 
     @abc.abstractmethod
-    def build(self, root_pfx: str = "") -> "TreeBase[PanelType]":
+    def build(self, root_pfx: str = "") -> "BaseTree[PanelType]":
         pass
     
     @abc.abstractmethod
@@ -243,19 +242,21 @@ class CBTreeNode:
     @classmethod
     def from_struct(
         cls,
-        struct_obj: StructBase,
+        struct_obj: BaseStruct,
         node_key: str | None = None,
-    ) -> "CBTreeNode":
+    ) -> Self:
         return cls(
             name=struct_obj.name,
-            payload=struct_payload(struct_obj, node_key)
+            payload=PayLoad.from_struct(struct_obj, node_key)
         )
 
     @classmethod
     def from_recipe_step(
-        cls, wf_step: dict[str, t.Any], node_key: str | None = None
-    ) -> "CBTreeNode":
+        cls,
+        wf_step: dict[str, t.Any],
+        node_key: str | None = None,
+    ) -> Self:
         return cls(
             name=wf_step[RecipeKeys.LABEL],
-            payload=recipe_step_payload(wf_step, node_key),
+            payload=PayLoad.from_recipe_step(wf_step, node_key),
         )

@@ -1,10 +1,10 @@
 import logging
 import typing as t
+from pydantic import Field
 from typing_extensions import override
 import jsonpath
-import traitlets
 #
-from ..base import OpXFormer, XformElt, XformItr, XformSeq
+from ..base import OpXFormer, BaseParams, XformElt, XformItr, XformSeq
 
 
 def _log():
@@ -12,10 +12,9 @@ def _log():
 
 
 class JPointerFilter(OpXFormer):
-    @t.final
-    class FilterTraits(traitlets.HasTraits):
-        paths = traitlets.List()
-        keys = traitlets.List()
+    class FilterParams(BaseParams):
+        paths : t.Annotated[list[str], Field(title="JSON Pointer Paths")]
+        keys  : t.Annotated[list[str], Field(title="Keys")]
 
     def __init__(self, **params: t.Any):
         self.name : str = __name__ + ".JPointerFilter"
@@ -63,20 +62,19 @@ class JPointerFilter(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.FilterParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.FilterTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.FilterParams.model_validate(param_dict)
 
 
 class IterJPatchFilter(OpXFormer):
-    @t.final
-    class FilterTraits(traitlets.HasTraits):
-        filter_exp = traitlets.Bytes()
-        dest_path = traitlets.Bytes()
+    class FilterParams(BaseParams):
+        filter_exp : t.Annotated[str, Field(title="Filter Expression")] # = traitlets.Bytes()
+        dest_path  : t.Annotated[str, Field(title="Dest. Path")] # = traitlets.Bytes()
 
     def __init__(self, **init_params: t.Any):
         self.name : str = __name__ + ".IterJPatchFilter"
@@ -136,19 +134,18 @@ class IterJPatchFilter(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.FilterParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.FilterTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.FilterParams.model_validate(param_dict)
 
 
 class IterJPointerFilter(OpXFormer):
-    @t.final
-    class FilterTraits(traitlets.HasTraits):
-        path = traitlets.Unicode()
+    class FilterParams(BaseParams):
+        path : t.Annotated[str, Field(title="JSON Path")]
 
     def __init__(self, **params: t.Any):
         self.name : str = __name__ + ".IterJPointerFilter"
@@ -187,13 +184,13 @@ class IterJPointerFilter(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.FilterParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.FilterTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.FilterParams.model_validate(param_dict)
 
 
 #

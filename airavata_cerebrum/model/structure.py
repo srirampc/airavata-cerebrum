@@ -1,411 +1,116 @@
-import ast
-import pydantic
-import traitlets
 import abc
-import typing as t
 #
 from pathlib import Path
-from typing_extensions import override
-
+from typing import Annotated, Any, Literal, TypeAlias
+from typing_extensions import Self, override
+from pydantic import Field
+#
+from ..base import BaseStruct
 from ..util import io as uio, merge_dict_inplace
 
 
-class TraitDef(pydantic.BaseModel):
-    value_type: t.Literal["text", "textarea", "int", "float", "dict"]
-    label: str
-    default: t.Any
-    from_ui: t.Callable[[str], t.Any] = lambda x: x
-    to_ui: t.Callable[[t.Any], t.Any] = lambda x: x
-
-
-class StructBase(pydantic.BaseModel, metaclass=abc.ABCMeta):
-    name: str = ""
-
-    def get(self, field: str) -> t.Any:
-        try:
-            return getattr(self, field)
-        except AttributeError:
-            return None
-
-    @t.final
-    class StructBaseTrait(traitlets.HasTraits):
-        name = traitlets.Unicode()
-
-    @classmethod
-    @abc.abstractmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.StructBaseTrait
-
-    @classmethod
-    @abc.abstractmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.StructBaseTrait(**trait_values)
-
-    @abc.abstractmethod
-    def exclude(self) -> set[str]:
-        return set([])
-
-    @classmethod
-    @abc.abstractmethod
-    def trait_ui(cls) -> dict[str, TraitDef]:
-        return {}
-
-
-class DataFile(StructBase):
+class DataFile(BaseStruct):
     # path: pathlib.Path
-    path: str 
-
-    class TraitDefMapper:
-        map: dict[str, TraitDef] = {
-            "name": TraitDef(value_type="text", label="Key", default=""),
-            "path": TraitDef(
-                value_type="text", 
-                label="File Path",
-                default="",
-                # from_ui=pathlib.Path,
-                # to_ui=str,
-            ),
-        }
-
-    @t.final
-    class DataTrait(StructBase.StructBaseTrait):
-        # property_map = traitlets.Dict()
-        path  = traitlets.Unicode()
+    path : Annotated[str, Field(title="File Path")]
 
     @override
     def exclude(self) -> set[str]:
         return set([])
 
     @override
-    @classmethod
-    def trait_ui(cls) -> dict[str, TraitDef]:
-        return cls.TraitDefMapper.map
-
-    @override
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    @override
-    @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.DataTrait(**trait_values)
+    def apply_mod(self, mod_struct: Self) -> Self:
+        self.path = mod_struct.path
+        return self
 
 
-class DataLink(StructBase):
-    property_map: dict[str, t.Any] = {}
-
-    class TraitDefMapper:
-        map: dict[str, TraitDef] = {
-            "name": TraitDef(value_type="text", label="Name", default=""),
-            "property_map": TraitDef(
-                value_type="dict",
-                label="Property Map",
-                default={},
-                # from_ui=lambda x: ast.literal_eval(x),
-                # to_ui=lambda x: json.dumps(x, indent=4),
-            ),
-        }
-
-    @t.final
-    class DataTrait(StructBase.StructBaseTrait):
-        property_map = traitlets.Dict()
-        # property_map = traitlets.Unicode()
-
-        def __init__(
-            self,
-            property_map: dict[str, t.Any]={}, #pyright:ignore[reportCallInDefaultInitializer]
-            **kwargs: t.Any
-        ):
-            super().__init__(
-                property_map=property_map,
-                **kwargs,
-            )
+class DataLink(BaseStruct):
+    property_map: Annotated[dict[str, Any], Field(title="Property Map")] = {}
 
     @override
     def exclude(self) -> set[str]:
         return set([])
 
     @override
-    @classmethod
-    def trait_ui(cls) -> dict[str, TraitDef]:
-        return cls.TraitDefMapper.map
-
-    @override
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    @override
-    @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.DataTrait(**trait_values)
+    def apply_mod(self, mod_struct: Self) -> Self:
+        merge_dict_inplace(self.property_map, mod_struct.property_map)
+        return self
 
 
-class ComponentModel(StructBase):
-    property_map: dict[str, t.Any] = {}
-
-    class TraitDefMapper:
-        map: dict[str, TraitDef] = {
-            "name": TraitDef(
-                value_type="text",
-                label="Name",
-                default="",
-            ),
-            "property_map": TraitDef(
-                value_type="dict",
-                label="Property Map",
-                default={},
-                # from_ui=lambda x: ast.literal_eval(x),
-                # to_ui=lambda x: json.dumps(x, indent=4),
-            ),
-        }
-
-    @t.final
-    class DataTrait(StructBase.StructBaseTrait):
-        property_map = traitlets.Dict()
-        # property_map = traitlets.Unicode()
-
-        def __init__(
-            self,
-            property_map: dict[str, t.Any]={}, #pyright:ignore[reportCallInDefaultInitializer]
-            **kwargs : t.Any
-        ):
-            super().__init__(
-                property_map=property_map,
-                **kwargs,
-            )
+class ComponentModel(BaseStruct):
+    property_map: Annotated[dict[str, Any], Field(title="Property Map")] = {}
 
     @override
     def exclude(self) -> set[str]:
         return set([])
 
     @override
-    @classmethod
-    def trait_ui(cls) -> dict[str, TraitDef]:
-        return cls.TraitDefMapper.map
-
-    @override
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    @override
-    @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.DataTrait(**trait_values)
+    def apply_mod(self, mod_struct: Self) -> Self:
+        merge_dict_inplace(self.property_map, mod_struct.property_map)
+        return self
 
 
-class NeuronModel(StructBase):
-    N: int = 0
-    id: str = ""
-    proportion: float = 0.0
-    name: str = ""
-    m_type: str = ""
-    template: str = ""
-    dynamics_params: str = ""
-    morphology: str = ""
-    property_map: dict[str, t.Any] = {}
-    data_connect: list[DataLink] = [] 
-
-    class TraitDefMapper:
-        map: dict[str, TraitDef] = {
-            "N": TraitDef(
-                value_type="int",
-                label="N",
-                default=0,
-            ),
-            "id": TraitDef(
-                value_type="text",
-                label="id",
-                default="",
-            ),
-            "proportion": TraitDef(
-                value_type="float",
-                label="Proportion",
-                default=0.0,
-            ),
-            "name": TraitDef(
-                value_type="text",
-                label="Name",
-                default="",
-            ),
-            "m_type": TraitDef(
-                value_type="text",
-                label="Model Type",
-                default="",
-            ),
-            "template": TraitDef(
-                value_type="text",
-                label="Template",
-                default="",
-            ),
-            "dynamics_params": TraitDef(
-                value_type="text",
-                label="Dynamics Parameters",
-                default="",
-            ),
-            "morphology": TraitDef(
-                value_type="text",
-                label="Morphology",
-                default="",
-            ),
-            "property_map": TraitDef(
-                value_type="dict",
-                label="Property Map",
-                default={},
-                # from_ui=lambda x: ast.literal_eval(x),
-                # to_ui=lambda x: json.dumps(x, indent=4),
-            ),
-        }
-
-    @t.final
-    class DataTrait(StructBase.StructBaseTrait):
-        N = traitlets.Int()
-        id = traitlets.Unicode()
-        proportion = traitlets.Float(0.0)
-        m_type = traitlets.Unicode()
-        template = traitlets.Unicode()
-        dynamics_params = traitlets.Unicode()
-        property_map = traitlets.Dict()
-        # property_map = traitlets.Unicode()
-        morphology = traitlets.Unicode()
-
-        def __init__(
-            self,
-            property_map: dict[str, t.Any]={}, #pyright:ignore[reportCallInDefaultInitializer]
-            **kwargs : t.Any
-        ):
-            super().__init__(
-                property_map=property_map,
-                **kwargs,
-            )
+class NeuronModel(BaseStruct):
+    N: Annotated[int, Field(title="N")] = 0
+    id: Annotated[str, Field(title="ID")] = ""
+    proportion: Annotated[float, Field(title="Proportion")] = 0.0
+    name: Annotated[str, Field(title="Name")] = ""
+    m_type: Annotated[str, Field(title="Model Type")] = ""
+    template: Annotated[str, Field(title="Template")] = ""
+    dynamics_params: Annotated[str, Field(title="Dynamics Parameters")] = ""
+    morphology: Annotated[str, Field(title="Morphology")] = ""
+    property_map: Annotated[dict[str, Any], Field(title="Property Map")] = {}
+    data_connect: Annotated[list[DataLink], Field(title="Data Connections")] = [] 
 
     @override
     def exclude(self) -> set[str]:
         return set(["data_connect"])
 
     @override
-    @classmethod
-    def trait_ui(cls) -> dict[str, TraitDef]:
-        return cls.TraitDefMapper.map
-
-    def apply_mod(self, mod_model: "NeuronModel") -> "NeuronModel":
-        if mod_model.name:
-            self.name = mod_model.name
+    def apply_mod(self, mod_struct: Self) -> Self:
+        if mod_struct.name:
+            self.name = mod_struct.name
         # Model Parameters
-        if mod_model.m_type:
-            self.m_type = mod_model.m_type
-        if mod_model.template:
-            self.template = mod_model.template
-        if mod_model.dynamics_params:
-            self.dynamics_params = mod_model.dynamics_params
+        if mod_struct.m_type:
+            self.m_type = mod_struct.m_type
+        if mod_struct.template:
+            self.template = mod_struct.template
+        if mod_struct.dynamics_params:
+            self.dynamics_params = mod_struct.dynamics_params
         # Model Property Map
-        for pkey, pvalue in mod_model.property_map.items():
+        for pkey, pvalue in mod_struct.property_map.items():
             if pkey not in self.property_map:
                 self.property_map[pkey] = pvalue
             elif pvalue:
                 self.property_map[pkey] = pvalue
         return self
 
-    @override
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
 
-    @override
-    @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.DataTrait(**trait_values)
-
-
-class Neuron(StructBase):
-    N: int = 0
-    fraction: float = 0.0
-    ei: t.Literal["e", "i"]  # Either e or i
-    dims: dict[str, t.Any] = {}
-    neuron_models: dict[str, NeuronModel] = {}
-
-    class TraitDefMapper:
-        map: dict[str, TraitDef] = {
-            "name": TraitDef(
-                    value_type="text",
-                    label="Name",
-                    default= "",
-            ),
-            "N": TraitDef(value_type="int", label="N", default=0),
-            "fraction": TraitDef(
-                value_type="float",
-                label="Proportion",
-                default=0.0
-            ),
-            "ei": TraitDef(
-                value_type="text", label="E/I", default="",
-            ),
-            "dims": TraitDef(
-                value_type="dict",
-                label="Dimensions",
-                default={},
-                # from_ui=lambda x: ast.literal_eval(x),
-                # to_ui=lambda x: json.dumps(x, indent=4),
-            ),
-        }
-
-    @t.final
-    class DataTrait(StructBase.StructBaseTrait):
-        N = traitlets.Int()
-        fraction = traitlets.Float(0.0)
-        ei = traitlets.Unicode()
-        dims = traitlets.Dict(key_trait=traitlets.Unicode())
-        # dims = traitlets.Unicode()
-
-        def __init__(
-            self,
-            # dims={},
-            **kwargs: t.Any
-        ):
-            super().__init__(
-                # dims=json.dumps(kwargs["dims"], indent=4),
-                **kwargs,
-            )
+class Neuron(BaseStruct):
+    ei: Annotated[Literal["e", "i"], Field("E/I")]  # Either e or i
+    N: Annotated[int, Field(title="N")] = 0
+    fraction: Annotated[float, Field(title="Proportion")] = 0.0
+    dims: Annotated[dict[str, Any], Field(title="Dimensions")] = {}
+    neuron_models: Annotated[dict[str, NeuronModel], Field(title="Neuron Models")] = {}
 
     @override
     def exclude(self) -> set[str]:
         return set(["neuron_models"])
 
     @override
-    @classmethod
-    def trait_ui(cls) -> dict[str, TraitDef]:
-        return cls.TraitDefMapper.map
-
-    @override
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    @override
-    def exclude_set(self) -> set[str]:
-        return set(["neuron_models"])
-
-    @override
-    @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.DataTrait(**trait_values)
-
-    def apply_mod(self, mod_neuron: "Neuron") -> "Neuron":
+    def apply_mod(self, mod_struct: Self) -> Self:
         # Fraction and counts
-        if mod_neuron.fraction > 0:
-            self.fraction = mod_neuron.fraction
-        if mod_neuron.N > 0:
-            self.N = mod_neuron.N # pyright: ignore[reportConstantRedefinition]
+        if mod_struct.fraction > 0:
+            self.fraction = mod_struct.fraction
+        if mod_struct.N > 0:
+            self.N = mod_struct.N # pyright: ignore[reportConstantRedefinition]
         # Neuron dimensions
-        for dim_key, dim_value in mod_neuron.dims.items():
+        for dim_key, dim_value in mod_struct.dims.items():
             if dim_key not in self.dims:
                 self.dims[dim_key] = dim_value
             elif dim_value:
                 self.dims[dim_key] = dim_value
         # Neuron models
-        for mx_name, neuron_mx in mod_neuron.neuron_models.items():
+        for mx_name, neuron_mx in mod_struct.neuron_models.items():
             if mx_name not in self.neuron_models:
                 self.neuron_models[mx_name] = neuron_mx
             else:
@@ -413,115 +118,39 @@ class Neuron(StructBase):
         return self
 
 
-class Region(StructBase):
-    inh_fraction: float = 0.0
-    region_fraction: float = 0.0
-    ncells: int = 0
-    inh_ncells: int = 0
-    exc_ncells: int = 0
-    dims: dict[str, t.Any] = {}
-    neurons: dict[str, Neuron] = {}
-
-    class TraitDefMapper:
-        map: dict[str, TraitDef] = {
-            "name": TraitDef(
-                value_type="text",
-                label="Name",
-                default="",
-            ),
-            "ncells": TraitDef(
-                value_type="int",
-                label= "No. Cells",
-                default=0,
-            ),
-            "inh_ncells": TraitDef(
-                value_type= "int",
-                label= "No. Inh. Cells",
-                default= 0
-            ),
-            "exc_ncells": TraitDef(
-                value_type="int",
-                label="No. Exc. Cells",
-                default=0
-            ),
-            "inh_fraction": TraitDef(
-                value_type="float",
-                label="Inh. Fraction",
-                default= 0.0
-            ),
-            "region_fraction": TraitDef(
-                value_type="float",
-                label="Region Fraction",
-                default= 0.0,
-            ),
-            "dims": TraitDef(
-                value_type="dict",
-                label="Dimensions",
-                default={},
-                # from_ui=lambda x: ast.literal_eval(x),
-                # to_ui=lambda x: json.dumps(x, indent=4),
-            ),
-        }
-
-    @t.final
-    class DataTrait(StructBase.StructBaseTrait):
-        traitlets.Sentinel
-        inh_fraction = traitlets.Float(0.0)
-        region_fraction = traitlets.Float(0.0)
-        ncells = traitlets.Int()
-        inh_ncells = traitlets.Int()
-        exc_ncells = traitlets.Int()
-        dims = traitlets.Dict(key_trait=traitlets.Unicode())
-        # dims = traitlets.Unicode()
-
-        def __init__(
-            self,
-            # dims={},
-            **kwargs : t.Any
-        ):
-            super().__init__(
-                # dims=json.dumps(dims, indent=4),
-                **kwargs,
-            )
+class Region(BaseStruct):
+    inh_fraction: Annotated[float, Field(title="Inh Fraction")] = 0.0
+    region_fraction: Annotated[float, Field(title="Region Fraction")] = 0.0
+    ncells: Annotated[int, Field(title="No. Cells")] = 0
+    inh_ncells: Annotated[int, Field(title="No. Inh. Cells")] = 0
+    exc_ncells: Annotated[int , Field(title="No. Ex. Cells")]= 0
+    dims: Annotated[dict[str, Any], Field(title="Dimensions")] = {}
+    neurons: Annotated[dict[str, Neuron], Field(title="Neurons")] = {}
 
     @override
     def exclude(self) -> set[str]:
         return set(["neurons"])
 
     @override
-    @classmethod
-    def trait_ui(cls) -> dict[str, TraitDef]:
-        return cls.TraitDefMapper.map
-
-    @override
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    @override
-    @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.DataTrait(**trait_values)
-
-    def apply_mod(self, mod_region: "Region") -> "Region":
+    def apply_mod(self, mod_struct: Self) -> Self:
         # update fractions
-        if mod_region.inh_fraction > 0:
-            self.inh_fraction = mod_region.inh_fraction
-        if mod_region.region_fraction > 0:
-            self.region_fraction = mod_region.region_fraction
+        if mod_struct.inh_fraction > 0:
+            self.inh_fraction = mod_struct.inh_fraction
+        if mod_struct.region_fraction > 0:
+            self.region_fraction = mod_struct.region_fraction
         # update ncells
-        if mod_region.ncells > 0:
-            self.ncells = mod_region.ncells
-        if mod_region.inh_ncells > 0:
-            self.inh_ncells = mod_region.inh_ncells
-        if mod_region.exc_ncells > 0:
-            self.exc_ncells = mod_region.exc_ncells
+        if mod_struct.ncells > 0:
+            self.ncells = mod_struct.ncells
+        if mod_struct.inh_ncells > 0:
+            self.inh_ncells = mod_struct.inh_ncells
+        if mod_struct.exc_ncells > 0:
+            self.exc_ncells = mod_struct.exc_ncells
         # update dims
-        for dkey, dvalue in mod_region.dims.items():
+        for dkey, dvalue in mod_struct.dims.items():
             if dvalue:
                 self.dims[dkey] = dvalue
         # update neuron details
-        for nx_name, nx_obj in mod_region.neurons.items():
+        for nx_name, nx_obj in mod_struct.neurons.items():
             if nx_name not in self.neurons:
                 self.neurons[nx_name] = nx_obj
             else:
@@ -534,106 +163,31 @@ class Region(StructBase):
         return None
 
 
-class ConnectionModel(StructBase):
-    target_model_id: str = ""
-    source_model_id: str = ""
-    weight_max: float = 0.0
-    delay: float = 0.0
-    dynamics_params: str = ""
-    property_map: dict[str, t.Any] = {}
-
-    class TraitDefMapper:
-        map: dict[str, TraitDef] = {
-            "name": TraitDef(
-                value_type="text",
-                label="Name",
-                default="",
-            ),
-            "source_model_id": TraitDef(
-                value_type="text",
-                label="Source Id.",
-                default="",
-            ),
-            "target_model_id": TraitDef(
-                value_type="text",
-                label="Target Id.",
-                default="",
-            ),
-            "weight_max": TraitDef(
-                value_type="float",
-                label="Max. Weight",
-                default=0.0
-            ),
-            "delay": TraitDef(
-                value_type="float",
-                label="Delay",
-                default=0.0
-            ),
-            "dynamics_params": TraitDef(
-                value_type="text",
-                label="Dynamics Params",
-                default="",
-            ),
-            "property_map": TraitDef(
-                value_type="dict",
-                label="Property Map",
-                default={},
-                # from_ui=lambda x: ast.literal_eval(x),
-                # to_ui=lambda x: json.dumps(x, indent=4),
-            ),
-        }
-
-    @t.final
-    class DataTrait(StructBase.StructBaseTrait):
-        target_model_id = traitlets.Unicode()
-        source_model_id = traitlets.Unicode()
-        weight_max = traitlets.Float(0.0)
-        delay = traitlets.Float(0.0)
-        dynamics_params = traitlets.Unicode()
-        property_map = traitlets.Dict(key_trait=traitlets.Unicode())
-        # property_map = traitlets.Unicode()
-
-        def __init__(
-            self,
-            # property_map={},
-            **kwargs : t.Any
-        ):
-            super().__init__(
-                # property_map=json.dumps(property_map, indent=4),
-                **kwargs,
-            )
+class ConnectionModel(BaseStruct):
+    target_model_id: Annotated[str, Field(title="Target Id.")] = ""
+    source_model_id: Annotated[str, Field(title="Source Id.")] = ""
+    weight_max: Annotated[float, Field(title="Max. Weight")] = 0.0
+    delay: Annotated[float, Field(title="Delay")] = 0.0
+    dynamics_params: Annotated[str, Field(title="Dynamics Parameters")] = ""
+    property_map: Annotated[dict[str, Any], Field(title="Property Map")] = {}
 
     @override
     def exclude(self) -> set[str]:
         return set([])
 
     @override
-    @classmethod
-    def trait_ui(cls) -> dict[str, TraitDef]:
-        return cls.TraitDefMapper.map
-
-    @override
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    @override
-    @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.DataTrait(**trait_values)
-
-    def apply_mod(self, mod_cmd: "ConnectionModel") -> "ConnectionModel":
+    def apply_mod(self, mod_struct: Self) -> Self:
         # Apply modification
-        if mod_cmd.target_model_id:
-            self.target_model_id = mod_cmd.target_model_id
-        if mod_cmd.source_model_id:
-            self.source_model_id = mod_cmd.source_model_id
-        if mod_cmd.delay > 0.0:
-            self.delay = mod_cmd.delay
-        if mod_cmd.weight_max > 0.0:
-            self.weight_max = mod_cmd.weight_max
+        if mod_struct.target_model_id:
+            self.target_model_id = mod_struct.target_model_id
+        if mod_struct.source_model_id:
+            self.source_model_id = mod_struct.source_model_id
+        if mod_struct.delay > 0.0:
+            self.delay = mod_struct.delay
+        if mod_struct.weight_max > 0.0:
+            self.weight_max = mod_struct.weight_max
         # Model Property Map
-        for pkey, pvalue in mod_cmd.property_map.items():
+        for pkey, pvalue in mod_struct.property_map.items():
             if pkey not in self.property_map:
                 self.property_map[pkey] = pvalue
             elif pvalue:
@@ -641,106 +195,35 @@ class ConnectionModel(StructBase):
         return self
 
 
-class Connection(StructBase):
-    pre: tuple[str, str]
-    post: tuple[str, str]
-    probability: float = 0.0
-    connect_models: dict[str, ConnectionModel] = {}
-    property_map: dict[str, t.Any] = {}
-
-    class TraitDefMapper:
-        map: dict[str, TraitDef] = {
-            "name": TraitDef(
-                value_type="text",
-                label="Name",
-                default="",
-            ),
-            "probability": TraitDef(
-                value_type="float",
-                label="Inh. Fraction",
-                default=0.0,
-            ),
-            "pre": TraitDef(
-                value_type="textarea",
-                label="Pre-Synapse",
-                default="()",
-                from_ui=lambda x: ast.literal_eval(x),
-                to_ui=lambda x: repr(x),
-            ),
-            "post": TraitDef(
-                value_type="textarea",
-                label="Post-Synapse",
-                default="()",
-                from_ui=lambda x: ast.literal_eval(x),
-                to_ui=lambda x: repr(x),
-            ),
-            "property_map": TraitDef(
-                value_type="dict",
-                label="Property Map",
-                default={},
-                # from_ui=lambda x: ast.literal_eval(x),
-                # to_ui=lambda x: json.dumps(x, indent=4),
-            ),
-        }
-
-    @t.final
-    class DataTrait(StructBase.StructBaseTrait):
-        # pre = traitlets.Tuple(traitlets.Unicode(), traitlets.Unicode())
-        # post = traitlets.Tuple(traitlets.Unicode(), traitlets.Unicode())
-        pre = traitlets.Unicode()
-        post = traitlets.Unicode()
-        probability = traitlets.Float(0.0)
-        property_map = traitlets.Dict(key_trait=traitlets.Unicode())
-        # property_map = traitlets.Unicode()
-
-        def __init__(
-            self,
-            pre: tuple[str, ...]=(),
-            post: tuple[str, ...]=(),
-            # property_map={},
-            **kwargs : t.Any
-        ):
-            super().__init__(
-                pre=repr(pre),
-                post=repr(post),
-                # property_map=json.dumps(property_map, indent=4),
-                **kwargs,
-            )
+class Connection(BaseStruct):
+    pre: Annotated[tuple[str, str], Field(title="Pre-Synapse")]
+    post: Annotated[tuple[str, str], Field(title="Post-Synapse")]
+    probability: Annotated[float, Field(title="Connection Probability")] = 0.0
+    connect_models: Annotated[
+        dict[str, ConnectionModel], Field(title="Connection Models")
+    ] = {}
+    property_map: Annotated[dict[str, Any], Field(title="Property Map")] = {}
 
     @override
     def exclude(self) -> set[str]:
         return set(["connect_models"])
 
     @override
-    @classmethod
-    def trait_ui(cls) -> dict[str, TraitDef]:
-        return cls.TraitDefMapper.map
-
-    @override
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    @override
-    @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.DataTrait(**trait_values)
-
-    def apply_mod(self, mod_con: "Connection") -> "Connection":
-        if mod_con.pre[0] and mod_con.pre[1]:
-            self.pre = mod_con.pre
-        if mod_con.post[0] and mod_con.post[1]:
-            self.post = mod_con.post
-        if mod_con.probability > 0.0:
-            self.probability = mod_con.probability
+    def apply_mod(self, mod_struct: Self) -> Self:
+        if mod_struct.pre[0] and mod_struct.pre[1]:
+            self.pre = mod_struct.pre
+        if mod_struct.post[0] and mod_struct.post[1]:
+            self.post = mod_struct.post
+        if mod_struct.probability > 0.0:
+            self.probability = mod_struct.probability
         # Model Property Map
-        for pkey, pvalue in mod_con.property_map.items():
+        for pkey, pvalue in mod_struct.property_map.items():
             if pkey not in self.property_map:
                 self.property_map[pkey] = pvalue
             elif pvalue:
                 self.property_map[pkey] = pvalue
         # Models
-        for mx_name, mx_obj in mod_con.connect_models.items():
+        for mx_name, mx_obj in mod_struct.connect_models.items():
             if mx_name not in self.connect_models:
                 self.connect_models[mx_name] = mx_obj
             else:
@@ -748,59 +231,27 @@ class Connection(StructBase):
         return self
 
 
-class ExtNetwork(StructBase):
+class ExtNetwork(BaseStruct):
     ncells: int = 0
     locations: dict[str, Region] = {}
     connections: dict[str, Connection] = {}
-
-    class TraitDefMapper:
-        map: dict[str, TraitDef] = {
-            "name": TraitDef(
-                value_type="text",
-                label= "Name",
-                default="",
-            ),
-            "ncells": TraitDef(
-                value_type="int",
-                label="No. Cells",
-                default=0,
-            ),
-        }
-
-    @t.final
-    class DataTrait(StructBase.StructBaseTrait):
-        ncells = traitlets.Int(0)
 
     @override
     def exclude(self) -> set[str]:
         return set(["locations", "connections"])
 
     @override
-    @classmethod
-    def trait_ui(cls) -> dict[str, TraitDef]:
-        return cls.TraitDefMapper.map
-
-    @override
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    @override
-    @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.DataTrait(**trait_values)
-
-    def apply_mod(self, mod_net: "ExtNetwork") -> "ExtNetwork":
-        if mod_net.ncells > 0:
-            self.ncells = mod_net.ncells
+    def apply_mod(self, mod_struct: Self) -> Self:
+        if mod_struct.ncells > 0:
+            self.ncells = mod_struct.ncells
         # Locations
-        for c_name, o_cnx in mod_net.locations.items():
+        for c_name, o_cnx in mod_struct.locations.items():
             if c_name not in self.locations:
                 self.locations[c_name] = o_cnx
                 continue
             self.locations[c_name].apply_mod(o_cnx)
         # Connections
-        for c_name, o_cnx in mod_net.connections.items():
+        for c_name, o_cnx in mod_struct.connections.items():
             if c_name not in self.connections:
                 self.connections[c_name] = o_cnx
                 continue
@@ -808,86 +259,49 @@ class ExtNetwork(StructBase):
         return self
 
 
-class Network(StructBase):
-    ncells: int = 0
-    locations: dict[str, Region] = {}
-    connections: dict[str, Connection] = {}
-    dims: dict[str, t.Any] = {}
-    ext_networks: dict[str, ExtNetwork] = {}
-    data_connect: list[DataLink] = [] 
-    data_files: list[DataFile] = []
-
-    class TraitDefMapper:
-        map: dict[str, TraitDef] = {
-            "name": TraitDef(
-                value_type="text", label="Name", default="",
-            ),
-            "ncells": TraitDef(
-                value_type="int", label="No. Cells", default=0,
-            ),
-            "dims": TraitDef(
-                value_type="dict",
-                label="Dimensions",
-                default={},
-                # from_ui=lambda x: ast.literal_eval(x),
-                # to_ui=lambda x: json.dumps(x, indent=4),
-            ),
-        }
-
-    @t.final
-    class DataTrait(StructBase.StructBaseTrait):
-        ncells = traitlets.Int(0)
-        dims = traitlets.Dict(key_trait=traitlets.Unicode())
-        # dims = traitlets.Unicode()
-
-        def __init__(
-            self,
-            # dims={},
-            **kwargs : t.Any
-        ):
-            super().__init__(
-                # dims=json.dumps(dims, indent=4),
-                **kwargs,
-            )
+class Network(BaseStruct):
+    ncells: Annotated[int, Field(title = "No. Cells")] = 0
+    locations: Annotated[dict[str, Region], Field(title="Regions")] = {}
+    connections: Annotated[dict[str, Connection], Field(title="Connections")] = {}
+    dims: Annotated[dict[str, Any], Field(title="Dimensions")] = {}
+    ext_networks: Annotated[
+        dict[str, ExtNetwork], Field(title="Ext. Networks")
+    ] = {}
+    data_connect: Annotated[list[DataLink], Field(title="Data Connections")] = [] 
+    data_files: Annotated[list[DataFile], Field(title="Data Files")] = []
 
     @override
     def exclude(self) -> set[str]:
-        return set(["locations", "connections", "ext_networks"])
+        return set(
+            [
+                "locations",
+                "connections",
+                "ext_networks",
+                "data_connect",
+                "data_files"
+            ]
+        )
 
     @override
-    @classmethod
-    def trait_ui(cls) -> dict[str, TraitDef]:
-        return cls.TraitDefMapper.map
-
-    @override
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    @override
-    @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.DataTrait(**trait_values)
-
-    def apply_mod(self, mod_net: "Network") -> "Network":
+    def apply_mod(self, mod_struct: Self) -> Self:
         # Update dims
-        for dkey, dvalue in mod_net.dims.items():
+        for dkey, dvalue in mod_struct.dims.items():
             if dvalue:
                 self.dims[dkey] = dvalue
         # Locations
-        for c_name, o_cnx in mod_net.locations.items():
+        for c_name, o_cnx in mod_struct.locations.items():
             if c_name not in self.locations:
                 self.locations[c_name] = o_cnx
                 continue
             self.locations[c_name].apply_mod(o_cnx)
         # Connections
-        for c_name, o_cnx in mod_net.connections.items():
+        for c_name, o_cnx in mod_struct.connections.items():
             if c_name not in self.connections:
                 self.connections[c_name] = o_cnx
                 continue
             self.connections[c_name].apply_mod(o_cnx)
         # ExtNetwork
-        for e_name, e_net in mod_net.ext_networks.items():
+        for e_name, e_net in mod_struct.ext_networks.items():
             if e_name not in self.ext_networks:
                 self.ext_networks[e_name] = e_net
                 continue
@@ -928,7 +342,7 @@ class Network(StructBase):
 
     @classmethod
     def from_file_list(cls, in_files: list[str | Path]) -> "Network":
-        cust_dict : dict[str, t.Any] = {}
+        cust_dict : dict[str, Any] = {}
         for ifile in in_files:
             f_dict = uio.load_json(ifile)
             if cust_dict and f_dict:
@@ -939,7 +353,7 @@ class Network(StructBase):
 #
 # Mapper Abstract Classes
 #
-MapperDesc : t.TypeAlias = dict[str, dict[str, t.Any]]
+MapperDesc : TypeAlias = dict[str, dict[str, Any]]
 
 class RegionMapper(abc.ABC):
     @abc.abstractmethod
@@ -976,7 +390,7 @@ class ConnectionMapper(abc.ABC):
 
 
 def dict2netstruct(
-    network_struct: dict[str, t.Any], # pyright: ignore[reportExplicitt.Any]
+    network_struct: dict[str, Any], # pyright: ignore[reportExplicitt.Any]
 ) -> Network:
     return Network.model_validate(network_struct)
 
@@ -984,7 +398,7 @@ def dict2netstruct(
 #
 #
 def srcdata2network(
-    network_desc: dict[str, t.Any], # pyright: ignore[reportExplicitt.Any]
+    network_desc: dict[str, Any], # pyright: ignore[reportExplicitt.Any]
     model_name: str,
     desc2region_mapper: type[RegionMapper],
     desc2neuron_mapper: type[NeuronMapper],

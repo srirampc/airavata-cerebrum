@@ -1,4 +1,4 @@
 #
-#
+# Module for accesing databases
 #
 

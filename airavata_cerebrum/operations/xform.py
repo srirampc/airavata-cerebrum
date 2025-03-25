@@ -1,16 +1,16 @@
 import itertools
 import typing as t
-from typing_extensions import override
-import traitlets
 #
-from ..base import DbQuery, OpXFormer, XformItr
+from pydantic import Field
+from typing_extensions import override
+#
+from ..base import DbQuery, OpXFormer, BaseParams, XformItr
 
 #
 # Basic Transformers
 #
 class IdentityXformer(OpXFormer):
-    @t.final
-    class IdTraits(traitlets.HasTraits):
+    class IdParams(BaseParams):
         pass
 
     @override
@@ -23,19 +23,18 @@ class IdentityXformer(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.IdTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.IdParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.IdTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.IdParams.model_validate(param_dict)
 
 
 class TQDMWrapper(OpXFormer):
-    @t.final
-    class TqTraits(traitlets.HasTraits):
-        jupyter = traitlets.Bool()
+    class TQDMParams(BaseParams):
+        jupyter : t.Annotated[bool, Field(title='Run in Jupyter Notebook')]
 
     @override
     def xform(
@@ -50,20 +49,19 @@ class TQDMWrapper(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.TqTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.TQDMParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.TqTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.TQDMParams.model_validate(param_dict)
 
 
 class DataSlicer(OpXFormer):
-    @t.final
-    class SliceTraits(traitlets.HasTraits):
-        stop = traitlets.Int()
-        list = traitlets.Bool()
+    class SliceParams(BaseParams):
+        stop : t.Annotated[int, Field(title='Stop')]
+        list : t.Annotated[bool, Field(title='Produce List Output')]
 
     @override
     def xform(
@@ -79,15 +77,15 @@ class DataSlicer(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.SliceTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.SliceParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.SliceTraits(**trait_values)
-#
-#
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.SliceParams.model_validate(param_dict)
+
+
 def query_register() -> list[type[DbQuery]]:
     return []
 

@@ -5,19 +5,20 @@ import typing as t
 #
 import awitree
 import ipywidgets as iwidgets
-#import ipytree as itree
+from pydantic.fields import FieldInfo
 import traitlets
 
 #
 from collections.abc import Iterable
 from typing_extensions import override
 
+from ..base import CerebrumBaseModel, BaseStruct
 from ..model.setup import RecipeKeys, RecipeLabels, RecipeSetup
 from ..model import structure as structure
-from . import (RcpTreeNames, StructTreeNames, recipe_traits,
-               TreeBase, CBTreeNode, PanelBase)
+from . import (RcpTreeNames, StructTreeNames, workflow_params,
+               BaseTree, CBTreeNode, BasePanel)
 
-IPyPanelType : t.TypeAlias = PanelBase[iwidgets.CoreWidget, iwidgets.Box]
+IPyPanelT : t.TypeAlias = BasePanel[iwidgets.CoreWidget, iwidgets.Box]
 
 def _log():
     return logging.getLogger(__name__)
@@ -80,6 +81,30 @@ class PropertyListLayout(iwidgets.GridspecLayout):
             new_value = change["new"]
             self.value[entry_index] = new_value
 
+class PropertyTupleLayout(iwidgets.GridspecLayout):
+    value : traitlets.Tuple = traitlets.Tuple(
+        help="Tupe values"
+    ).tag(sync=True)
+
+    def __init__(self, value: tuple[t.Any], **kwargs: t.Any):
+        super().__init__(len(value), 2, value=value, **kwargs)
+        for ix, (kx, vx) in enumerate(enumerate(value)):
+            wdx = scalar_widget(type(vx).__name__, default=vx)
+            wdx.add_traits(index=traitlets.Integer(kx))
+            wdx.observe(self.handle_change)
+            self[ix, 0] = iwidgets.Label(str(kx) + " :")
+            self[ix, 1] = wdx
+
+    def handle_change(self, change: dict[str, t.Any]):
+        # print("L:", change)
+        if change["name"] == "value" and change["old"] != change["new"]:
+            _log().info("List CTR Change Value : " + str(change))
+            entry_index = change["owner"].index
+            new_value = change["new"]
+            tlist = list(self.value)
+            tlist[entry_index] = new_value
+            self.value = tuple(tlist)
+
 
 class PropertyMapLayout(iwidgets.GridspecLayout):
     value : traitlets.Dict = traitlets.Dict(
@@ -113,6 +138,8 @@ class PropertyMapLayout(iwidgets.GridspecLayout):
                 return scalar_widget("str", default="None")
             case "list":
                 return PropertyListLayout(vx)
+            case "tuple":
+                return PropertyTupleLayout(vx)
             case _:
                 return scalar_widget(tname, default=vx)
 
@@ -126,22 +153,24 @@ def render_property(
             return PropertyMapLayout(value=kwargs["default"], **kwargs)
         case "list":
             return PropertyListLayout(value=kwargs["default"], **kwargs)
+        case "tuple":
+            return PropertyTupleLayout(value=kwargs["default"], **kwargs)
         case _:
             return scalar_widget(widget_key, **kwargs)
 
 
 # Base class for side panel
-class DBWorkflowSidePanel(IPyPanelType):
+class DBWorkflowSidePanel(IPyPanelT):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
-        workfow_desc: list[dict[str, t.Any]],
+        workflow_desc: list[dict[str, t.Any]],
         delay_build: bool = False,
         **kwargs: t.Any,
     ):
         super().__init__(**kwargs)
         self.mdr_setup: RecipeSetup = mdr_setup
-        self.workfow_desc: list[dict[str, t.Any]] = workfow_desc
+        self.workflow_desc: list[dict[str, t.Any]] = workflow_desc
         # Setup Widgets
         if delay_build:
             self.set_layout(None)
@@ -162,7 +191,7 @@ class DBWorkflowSidePanel(IPyPanelType):
                     self.render_workflow_step(wf_step),
                     layout=iwidgets.Layout(border="solid")
                 )
-                for wf_idx, wf_step in enumerate(self.workfow_desc)
+                for wf_idx, wf_step in enumerate(self.workflow_desc)
             ]
         )
 
@@ -172,7 +201,7 @@ class DBWorkflowSidePanel(IPyPanelType):
         step_key = wf_step[RecipeKeys.NAME]
         # _log().warning("Initializing Panels for [%s]", step_key)
         rcp_template = self.mdr_setup.get_template_for(step_key)
-        _, rcp_traits = recipe_traits(wf_step)
+        _, rcp_traits = workflow_params(wf_step)
         return self.workflow_ui(
             rcp_template,
             rcp_traits,
@@ -181,19 +210,18 @@ class DBWorkflowSidePanel(IPyPanelType):
     def workflow_ui(
         self,
         template_map: dict[str, t.Any],
-        elt_traits: traitlets.HasTraits | None = None,
+        elt_params: CerebrumBaseModel | None,
     ) -> list[iwidgets.CoreWidget]:
-        trait_vals = elt_traits.trait_values() if elt_traits else {}
         return [
             self.params_widget(
                 template_map,
-                trait_vals,
+                elt_params,
                 RecipeKeys.INIT_PARAMS,
                 RecipeLabels.INIT_PARAMS,
             ),
             self.params_widget(
                 template_map,
-                trait_vals,
+                elt_params,
                 RecipeKeys.EXEC_PARAMS,
                 RecipeLabels.EXEC_PARAMS,
             ),
@@ -202,13 +230,13 @@ class DBWorkflowSidePanel(IPyPanelType):
     def params_widget(
         self,
         template_map: dict[str, t.Any],
-        trait_vals: dict[str, t.Any],
+        elt_params: CerebrumBaseModel | None,
         params_key: str,
-        params_label: str,
+        _params_label: str,
     ):
         if template_map[params_key]:
             wd_itr: Iterable[iwidgets.CoreWidget | None] = (
-                self.property_widget(trait_vals, ekey, vmap)
+                self.property_widget(elt_params, ekey, vmap)
                 for ekey, vmap in template_map[params_key].items()
             )
             return iwidgets.VBox(
@@ -219,12 +247,12 @@ class DBWorkflowSidePanel(IPyPanelType):
 
     def property_widget(
         self,
-        traitv_dct: dict[str, t.Any],
+        elt_params: CerebrumBaseModel | None ,
         ekey: str,
         vmap: dict[str, t.Any],
     ):
-        if ekey in traitv_dct:
-            vmap["default"] = traitv_dct[ekey]
+        if elt_params and ekey in elt_params.model_fields:
+            vmap["default"] = elt_params.get(ekey)
         pwidget = render_property(vmap[RecipeKeys.TYPE], **vmap)
         # _log().warning("Rending Prop [%s] [%s]", str(vmap), str(pwidget))
         if pwidget is None:
@@ -237,32 +265,46 @@ class DBWorkflowSidePanel(IPyPanelType):
         )
 
 
-class StructSidePanel(IPyPanelType):
+class StructSidePanel(IPyPanelT):
     def __init__(
         self,
-        struct_comp: structure.StructBase,
+        struct_comp: BaseStruct,
         delay_build: bool = False,
         **kwargs: t.Any,
     ):
         super().__init__(**kwargs)
-        self._struct: structure.StructBase = struct_comp
+        self._struct: BaseStruct = struct_comp
         if delay_build:
             self.set_layout(None)
         else:
             self.set_layout(self.build_layout())
 
+    def wrap_hbox(
+            self,
+            field_info: FieldInfo,
+            rwidget: iwidgets.CoreWidget | None
+    ) -> iwidgets.HBox | None:
+        if rwidget is not None:
+            return iwidgets.HBox([
+                iwidgets.Label(str(field_info.title) + " :"),
+                rwidget
+            ])
+        else:
+            return None
+
     @override
     def build_layout(self):
         # Set Widgets
-        wd_itr: Iterable[iwidgets.CoreWidget | None] = (
-            iwidgets.HBox([
-                iwidgets.Label(vmap.label + " :"),
+        wd_itr: Iterable[iwidgets.HBox | None] = (
+            self.wrap_hbox(
+                field_info,
                 render_property(
-                    vmap.value_type,
-                    default=vmap.to_ui(self._struct.get(ekey)),
+                    field_info.annotation.__name__,
+                    default=self._struct.get(fkey),
                 )
-            ])
-            for ekey, vmap in self._struct.trait_ui().items()
+            )
+            for fkey, field_info in self._struct.model_fields.items()
+            if fkey not in self._struct.exclude()
         )
         ui_elements: list[iwidgets.CoreWidget] = [
             wx for wx in wd_itr if wx is not None
@@ -272,7 +314,7 @@ class StructSidePanel(IPyPanelType):
         )
 
 
-class RecipeTreeBase(TreeBase[IPyPanelType], metaclass=abc.ABCMeta):
+class RecipeTreeBase(BaseTree[IPyPanelT], metaclass=abc.ABCMeta):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
@@ -289,7 +331,7 @@ class RecipeTreeBase(TreeBase[IPyPanelType], metaclass=abc.ABCMeta):
         db_key: str,
         db_desc: dict[str, t.Any],
         delay_build: bool = False,
-    ) -> tuple[CBTreeNode, IPyPanelType]:
+    ) -> tuple[CBTreeNode, IPyPanelT]:
         db_node = CBTreeNode.init(name=db_desc[RecipeKeys.LABEL], key=db_key)
         _log().info("Start Left-side panel construction for [%s]", str(db_key))
         db_panel = DBWorkflowSidePanel(
@@ -299,7 +341,7 @@ class RecipeTreeBase(TreeBase[IPyPanelType], metaclass=abc.ABCMeta):
         return db_node, db_panel
 
     @override
-    def build(self, root_pfx: str = "") -> TreeBase[IPyPanelType]:
+    def build(self, root_pfx: str = "") -> BaseTree[IPyPanelT]:
         self.tree: awitree.Tree | None = self.build_tree(root_pfx)
         self.tree.observe(self.tree_update, names="selected_nodes")
         self.layout: iwidgets.TwoByTwoLayout = iwidgets.TwoByTwoLayout(
@@ -309,7 +351,7 @@ class RecipeTreeBase(TreeBase[IPyPanelType], metaclass=abc.ABCMeta):
         return self
 
     @override
-    def set_layout(self, selected_panel: IPyPanelType) -> None:
+    def set_layout(self, selected_panel: IPyPanelT) -> None:
           self.layout.bottom_right = selected_panel.layout
 
     @override
@@ -445,7 +487,7 @@ class Data2ModelRecipeView(RecipeTreeBase):
         return tree
 
 
-class NetworkStructureView(TreeBase[IPyPanelType]):
+class NetworkStructureView(BaseTree[IPyPanelT]):
     def __init__(
         self,
         net_struct: structure.Network,
@@ -457,7 +499,7 @@ class NetworkStructureView(TreeBase[IPyPanelType]):
         self.left_width : str = left_width
 
     @override
-    def set_layout(self, selected_panel: IPyPanelType) -> None:
+    def set_layout(self, selected_panel: IPyPanelT) -> None:
           self.layout.bottom_right = selected_panel.layout
 
     def region_node(
@@ -600,7 +642,7 @@ class NetworkStructureView(TreeBase[IPyPanelType]):
         return tree
 
     @override
-    def build(self, root_pfx: str = "") -> TreeBase[IPyPanelType]:
+    def build(self, root_pfx: str = "") -> BaseTree[IPyPanelT]:
         self.tree: awitree.Tree | None = self.build_tree(root_pfx)
         self.tree.observe(self.tree_update, names="selected_nodes")  # type:ignore
         self.layout : iwidgets.TwoByTwoLayout = iwidgets.TwoByTwoLayout(

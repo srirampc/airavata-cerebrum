@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.11.21"
+__generated_with = "0.11.26"
 app = marimo.App(width="medium")
 
 
@@ -161,7 +161,7 @@ def _(cbm_motree, cmod_struct, mdr_setup, mo):
 @app.cell(hide_code=True)
 def _(cbm_motree, integ_motree, integ_panels, mo, tree_view_widths):
     #
-    integ_selected = cbm_motree.TreeBase.panel_selector(integ_motree, integ_panels)
+    integ_selected = cbm_motree.BaseTree.panel_selector(integ_motree, integ_panels)
     mo.hstack(
         [
             integ_motree,
@@ -264,7 +264,7 @@ def _(cbm_motree, mdrecipe, mo):
 @app.cell(hide_code=True)
 def _(cbm_motree, fnet_motree, fnet_panels, mo, tree_view_widths):
     #
-    fnet_selected = cbm_motree.TreeBase.panel_selector(fnet_motree, fnet_panels)
+    fnet_selected = cbm_motree.BaseTree.panel_selector(fnet_motree, fnet_panels)
     mo.hstack(
         [
             fnet_motree,

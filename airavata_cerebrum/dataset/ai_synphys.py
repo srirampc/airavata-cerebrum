@@ -5,16 +5,16 @@ import typing as t
 #
 import duckdb
 import polars as pl
-import traitlets
 import aisynphys
 #
 from typing_extensions import override
+from pydantic import Field
 from aisynphys.database import SynphysDatabase
 from aisynphys.database.schema.experiment import PairBase
 from aisynphys.cell_class import CellClass, classify_cells, classify_pairs
 from aisynphys.connectivity import measure_connectivity
 #
-from ..base import DbQuery, OpXFormer, QryDBWriter, QryItr
+from ..base import DbQuery, OpXFormer, BaseParams, QryDBWriter, QryItr
 
 
 class CellClassSelection(t.NamedTuple):
@@ -69,11 +69,47 @@ def _log():
     return logging.getLogger(__name__)
 
 
+class AISynPhysHelper:
+    @staticmethod
+    def select_cell_classes(
+        layer_list: list[str] | None,
+        neuron_list: list[str] | None = None
+    ) -> dict[str, CellClass]:
+        layer_set = CELL_LAYER_SET
+        if layer_list:
+            layer_set = set(layer_list)
+        neuron_set = CELL_NEURON_SET
+        if neuron_list:
+            neuron_set = set(neuron_list)
+        return {
+            cselect.name: CellClass(name=cselect.name, **cselect.criteria)
+            for cselect in CELL_CLASS_SELECT
+            if (cselect.layer in layer_set) and (cselect.neuron in neuron_set)
+        }
+    
+    @staticmethod
+    def get_connectivity(
+        layer_list: list[str] | None,
+        qpairs : list[PairBase]
+    ) -> tuple[dict[t.Any, t.Any], t.Literal[0, 1]]:
+        cell_classes = AISynPhysHelper.select_cell_classes(layer_list)
+        cell_groups = classify_cells(cell_classes.values(), pairs=qpairs)
+        pair_groups = classify_pairs(qpairs, cell_groups)
+        try:
+            return measure_connectivity(
+                pair_groups,
+                sigma=100e-6,
+                dist_measure="lateral_distance",
+            ), 0 
+        except RuntimeWarning as rex:
+            return {}, 1
+
+
 class AISynPhysQuery(DbQuery):
-    @t.final
-    class QryTraits(traitlets.HasTraits):
-        download_base = traitlets.Unicode()
-        layer = traitlets.List()
+    class QryParams(BaseParams):
+        download_base : t.Annotated[str, Field(title="Download Base")]
+        layer : t.Annotated[list[str], Field(title="Layers")]
+        projects: t.Annotated[list[str], Field(title="AI Syn. Projects")] = []
 
     def __init__(self, **params: t.Any):
         """
@@ -94,23 +130,7 @@ class AISynPhysQuery(DbQuery):
         if "projects" in params and params["projects"]:
             self.projects = params["projects"]
         self.qpairs : list[PairBase] = self.sdb.pair_query(project_name=self.projects).all()
-
-    def select_cell_classes(
-        self,
-        layer_list: list[str] | None,
-        neuron_list: list[str] | None = None
-    ) -> dict[str, CellClass]:
-        layer_set = CELL_LAYER_SET
-        if layer_list:
-            layer_set = set(layer_list)
-        neuron_set = CELL_NEURON_SET
-        if neuron_list:
-            neuron_set = set(neuron_list)
-        return {
-            cselect.name: CellClass(name=cselect.name, **cselect.criteria)
-            for cselect in CELL_CLASS_SELECT
-            if (cselect.layer in layer_set) and (cselect.neuron in neuron_set)
-        }
+        self.nwarnings : int = 0
 
     @override
     def run(
@@ -137,20 +157,28 @@ class AISynPhysQuery(DbQuery):
         default_args = {}
         rarg = {**default_args, **params} if params else default_args
         _log().info("AISynPhysQuery Args : %s", rarg)
-        layer_list = rarg["layer"]
-        cell_classes = self.select_cell_classes(layer_list)
-        cell_groups = classify_cells(cell_classes.values(), pairs=self.qpairs)
-        pair_groups = classify_pairs(self.qpairs, cell_groups)
-        nwarnings = 0
-        try:
-            results = measure_connectivity(
-                pair_groups, sigma=100e-6, dist_measure="lateral_distance"
-            ) 
-        except RuntimeWarning:
-            nwarnings += 1
-            results = {}
-            pass
-        _log().info("AISynPhysQuery Args : [%s] ; N warnings [%d]", rarg, nwarnings)
+        results, rerror = AISynPhysHelper.get_connectivity(
+            rarg["layer"],
+            self.qpairs
+        )
+        # cell_classes = self.select_cell_classes(layer_list)
+        # cell_groups = classify_cells(cell_classes.values(), pairs=self.qpairs)
+        # pair_groups = classify_pairs(self.qpairs, cell_groups)
+        # nwarnings = 0
+        # try:
+        #     results = measure_connectivity(
+        #         pair_groups, sigma=100e-6, dist_measure="lateral_distance"
+        #     ) 
+        # except RuntimeWarning:
+        #     nwarnings += 1
+        #     results = {}
+        #     pass
+        self.nwarnings += rerror
+        _log().info(
+            "AISynPhysQuery Args : [%s] ; N warnings [%d]",
+            rarg,
+            self.nwarnings
+        )
         #
         return [
             {
@@ -166,13 +194,13 @@ class AISynPhysQuery(DbQuery):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.QryTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.QryParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.QryTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.QryParams.model_validate(param_dict)
 
 
 class DFBuilder:

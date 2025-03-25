@@ -6,14 +6,14 @@ import os
 import duckdb
 import polars as pl
 import typing as t
-import traitlets
 import allensdk.core.cell_types_cache
 import allensdk.api.queries.cell_types_api
 #
 from typing_extensions import override
+from pydantic import Field
 from allensdk.api.queries.glif_api import GlifApi
 from pathlib import Path
-from ..base import DbQuery, QryDBWriter, QryItr, OpXFormer
+from ..base import DbQuery, BaseParams, QryDBWriter, QryItr, OpXFormer
 from ..util import exclude_keys, prefix_keys
 
 
@@ -22,12 +22,11 @@ def _log():
 
 
 class CTDbCellCacheQuery(DbQuery):
-    @t.final
-    class QryTraits(traitlets.HasTraits):
-        download_base = traitlets.Unicode()
-        species = traitlets.Unicode()
-        manifest = traitlets.Unicode()
-        cells = traitlets.Unicode()
+    class QryParams(BaseParams):
+        download_base : t.Annotated[str, Field(title="Download Base Dir.")]
+        species   : t.Annotated[str, Field(title="Species")]
+        manifest  : t.Annotated[str, Field(title="Manifest File")]
+        cells     : t.Annotated[str, Field(title="Cells json File")]
 
     def __init__(self, **params: t.Any):
         """
@@ -95,19 +94,18 @@ class CTDbCellCacheQuery(DbQuery):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.QryTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.QryParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.QryTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.QryParams.model_validate(param_dict)
 
 
 class CTDbCellApiQuery(DbQuery):
-    @t.final
-    class QryTraits(traitlets.HasTraits):
-        species = traitlets.Unicode()
+    class QryParams(BaseParams):
+        species   : t.Annotated[str, Field(title="Species")]
 
     def __init__(self, **params: t.Any):
         self.name : str = "allensdk.api.queries.cell_types_api.CellTypesApi"
@@ -148,20 +146,19 @@ class CTDbCellApiQuery(DbQuery):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.QryTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.QryParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.QryTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.QryParams.model_validate(param_dict)
 
 
 class CTDbGlifApiQuery(DbQuery):
-    @t.final
-    class QryTraits(traitlets.HasTraits):
-        key = traitlets.Unicode()
-        first = traitlets.Bool()
+    class QryParams(BaseParams):
+        key   : t.Annotated[str, Field(title="Query Key")]
+        first : t.Annotated[bool, Field(title="Select Only First")]
 
     def __init__(self, **params: t.Any):
         self.name : str = "allensdk.api.queries.glif_api.GlifApi"
@@ -221,20 +218,19 @@ class CTDbGlifApiQuery(DbQuery):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.QryTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.QryParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.QryTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.QryParams.model_validate(param_dict)
 
 
 class CTDbGlifApiModelConfigQry(DbQuery):
-    @t.final
-    class QryTraits(traitlets.HasTraits):
-        suffix = traitlets.Unicode()
-        output_dir = traitlets.Unicode()
+    class QryParams(BaseParams):
+        suffix    : t.Annotated[str, Field(title="Output Suffix")]
+        output_dir: t.Annotated[str, Field(title="Output Dir.")]
 
     def __init__(self, **params: t.Any):
         self.name : str = "allensdk.api.queries.glif_api.GlifApi"
@@ -270,13 +266,13 @@ class CTDbGlifApiModelConfigQry(DbQuery):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.QryTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.QryParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.QryTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.QryParams.model_validate(param_dict)
 
 
 class DFBuilder:

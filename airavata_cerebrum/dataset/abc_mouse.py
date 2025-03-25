@@ -12,15 +12,15 @@ import numpy.typing as npt
 import matplotlib.pyplot as plt
 import pandas as pd
 import polars as pl
-import traitlets
 #
 from typing_extensions import override
 from pathlib import Path
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+from pydantic import Field
 from abc_atlas_access.abc_atlas_cache.abc_project_cache import AbcProjectCache
 #
-from ..base import DbQuery, OpXFormer, QryDBWriter, QryItr
+from ..base import DbQuery, OpXFormer, BaseParams, QryDBWriter, QryItr
 
 ProcessResult : t.TypeAlias = subprocess.CompletedProcess[bytes]
 NDFloatArray : t.TypeAlias = npt.NDArray[np.floating[t.Any]]
@@ -1031,10 +1031,9 @@ def region_cell_type_ratios(
 
 
 class ABCDbMERFISH_CCFQuery(DbQuery):
-    @t.final
-    class QryTraits(traitlets.HasTraits):
-        download_base = traitlets.Unicode()
-        region = traitlets.List()
+    class QryParams(BaseParams):
+        download_base : t.Annotated[str, Field(title="Download Base")]
+        region  : t.Annotated[list[str] , Field(title="List of Regions")]
 
     def __init__(self, **params: t.Any):
         """
@@ -1091,14 +1090,14 @@ class ABCDbMERFISH_CCFQuery(DbQuery):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.QryTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.QryParams
 
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.QryTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.QryParams.model_validate(param_dict)
 
 
 class DFBuilder:

@@ -1,6 +1,7 @@
 import abc
 import typing as t
-import traitlets
+from typing_extensions import Self
+from pydantic import BaseModel, Field
 
 from collections.abc import Iterable, Sequence
 
@@ -9,27 +10,53 @@ XformItr : t.TypeAlias = Iterable[XformElt]
 XformSeq: t.TypeAlias = Sequence[XformElt]
 QryElt: t.TypeAlias = dict[str, t.Any]
 QryItr : t.TypeAlias = Iterable[QryElt]
+
+
 #
-# Abstract Base classes
+# pydantic base models
 #
-class EmptyTraits(traitlets.HasTraits):
+class CerebrumBaseModel(BaseModel):
+    name : t.Annotated[str, Field(title="Name")] = ""
+
+    def get(self, field: str) -> t.Any:
+        try:
+            return getattr(self, field)
+        except AttributeError:
+            return None
+
+
+class BaseParams(CerebrumBaseModel):
     pass
 
 
-class TraitInterface(abc.ABC):
+
+class BaseStruct(CerebrumBaseModel, metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def exclude(self) -> set[str]:
+        return set([])
+
+    @abc.abstractmethod
+    def apply_mod(self, mod_struct: Self) -> Self:
+        return self
+
+
+#
+# Abstract Base classes
+#
+class ParamsInterface(abc.ABC):
     @classmethod
     @abc.abstractmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return EmptyTraits
+    def params_type(cls) -> type[BaseParams]:
+        return BaseParams
 
     @classmethod
     @abc.abstractmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return EmptyTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return BaseParams.model_validate(param_dict)
 
 
 # Abstract interface for Database Queries
-class DbQuery(TraitInterface, abc.ABC):
+class DbQuery(ParamsInterface, abc.ABC):
     @abc.abstractmethod
     def run(
         self,
@@ -40,7 +67,7 @@ class DbQuery(TraitInterface, abc.ABC):
 
 
 # Abstract interface for XFormer operations
-class OpXFormer(TraitInterface, abc.ABC):
+class OpXFormer(ParamsInterface, abc.ABC):
     @abc.abstractmethod
     def xform(
         self,

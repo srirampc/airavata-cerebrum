@@ -1,16 +1,16 @@
 import typing as t
-import traitlets
-from typing_extensions import override
 #
-from ..base import OpXFormer, XformItr, DbQuery
+from typing_extensions import override
+from pydantic import Field
+#
+from ..base import OpXFormer, BaseParams, XformItr, DbQuery
 from .json_filter import JPointerFilter
 
 
 class AISynPhysPairFilter(OpXFormer):
-    @t.final
-    class FilterTraits(traitlets.HasTraits):
-        pre = traitlets.Unicode()
-        post = traitlets.Unicode()
+    class FilterParams(BaseParams):
+        pre  : t.Annotated[str, Field(title='Pre-synapse')]
+        post : t.Annotated[str, Field(title='Post-synapse')]
 
     def __init__(self, **params: t.Any):
         self.jptr_filter: JPointerFilter = JPointerFilter(**params)
@@ -29,13 +29,13 @@ class AISynPhysPairFilter(OpXFormer):
 
     @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[BaseParams]:
+        return cls.FilterParams
 
     @override
     @classmethod
-    def trait_instance(cls, **trait_values: t.Any) -> traitlets.HasTraits:
-        return cls.FilterTraits(**trait_values)
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+        return cls.FilterParams.model_validate(param_dict)
 
 #
 # ------- Query and Xform Registers -----

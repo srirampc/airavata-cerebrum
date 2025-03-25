@@ -2,23 +2,25 @@ import abc
 import itertools
 import logging
 import typing as t
-from collections.abc import Iterable
-
-import awitree
 import marimo as mo
-import traitlets
+import awitree
+
+from collections.abc import Iterable
 from marimo._plugins.ui._core.ui_element import UIElement
 from typing_extensions import override
 
+#
+from ..base import CerebrumBaseModel, BaseStruct
 from ..model import structure as structure
 from ..model.setup import RecipeKeys, RecipeLabels, RecipeSetup
-from . import (PanelBase, TreeBase, CBTreeNode, RcpTreeNames, StructTreeNames,
-               recipe_traits)
+from . import (BasePanel, BaseTree, CBTreeNode, RcpTreeNames, StructTreeNames,
+               workflow_params)
 
-
+#
 MoUIElement : t.TypeAlias = UIElement[t.Any, t.Any]
-MoPanelBaseType : t.TypeAlias = PanelBase[mo.Html, MoUIElement]
-MoTreeBase: t.TypeAlias = TreeBase[MoPanelBaseType]
+MoBasePanelT : t.TypeAlias = BasePanel[mo.Html, MoUIElement]
+MoBaseTree: t.TypeAlias = BaseTree[MoBasePanelT]
+
 
 def _log():
     return logging.getLogger(__name__)
@@ -73,13 +75,22 @@ def scalar_widget(
 
 # NOTE: Features of trait setting and change handler not included
 class PropertyListLayout(mo.ui.array):
-    def __init__(self, value: list[t.Any], label: str = "", **kwargs: t.Any):
+    def __init__(
+        self,
+        value: list[t.Any] | tuple[t.Any],
+        label: str = "",
+        **kwargs: t.Any
+    ):
         super().__init__(
             [wx for wx in self.widgets(value, **kwargs) if wx is not None],
             label=label,
         )
 
-    def widgets(self, value: list[t.Any], **_kwargs: t.Any):
+    def widgets(
+        self,
+        value: list[t.Any] | tuple[t.Any],
+        **_kwargs: t.Any
+    ):
         return (
             scalar_widget(type(vx).__name__, label=str(kx) + " :", default=vx)
             for kx, vx in enumerate(value)
@@ -88,7 +99,6 @@ class PropertyListLayout(mo.ui.array):
 
 # NOTE: Features of trait setting and change handler not included
 class PropertyMapLayout(mo.ui.dictionary):
-
     def __init__(
         self,
         value: dict[str, t.Any],
@@ -102,19 +112,24 @@ class PropertyMapLayout(mo.ui.dictionary):
         # print("Value: ", len(value))
 
     def init_widget(
-        self, vx: t.Any, label: str = "", **_kwargs: t.Any
+        self,
+        vx: t.Any,
+        label: str = "",
+        **_kwargs: t.Any
     ) -> MoUIElement | None:
         tname = type(vx).__name__
         match tname:
             case "NoneType":
                 return scalar_widget("str", default="None", label=label)
-            case "list":
-                return PropertyListLayout(vx, label="")
+            case "list" | "tuple":
+                return PropertyListLayout(vx, label=label)
             case _:
                 return scalar_widget(tname, default=vx, label=label)
 
     def widgets(
-        self, value: dict[str, t.Any], **kwargs: t.Any
+        self,
+        value: dict[str, t.Any],
+        **kwargs: t.Any
     ) -> Iterable[tuple[str, MoUIElement | None]]:
         return ((kx, self.init_widget(vx, **kwargs)) for kx, vx in value.items())
 
@@ -125,24 +140,28 @@ def render_property(
     # _log().warning("Render Out [%s]", str(kwargs))
     match widget_key:
         case "dict":
-            return PropertyMapLayout(value=kwargs["default"], label=label, **kwargs)
-        case "list":
-            return PropertyListLayout(value=kwargs["default"], **kwargs)
+            return PropertyMapLayout(
+                value=kwargs["default"], label=label, **kwargs
+            )
+        case "list" | "tuple":
+            return PropertyListLayout(
+                value=kwargs["default"], label=label, **kwargs
+            )
         case _:
             return scalar_widget(widget_key, label=label, **kwargs)
 
 
-class DBWorkflowSidePanel(MoPanelBaseType):
+class DBWorkflowSidePanel(MoBasePanelT):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
-        workfow_desc: list[dict[str, t.Any]],
+        workflow_desc: list[dict[str, t.Any]],
         delay_build: bool = False,
         **kwargs: t.Any,
     ):
         super().__init__(**kwargs)
         self.mdr_setup: RecipeSetup = mdr_setup
-        self.workfow_desc: list[dict[str, t.Any]] = workfow_desc
+        self.workflow_desc: list[dict[str, t.Any]] = workflow_desc
         # Setup Widgets
         if delay_build:
             self.set_layout(None)
@@ -157,7 +176,7 @@ class DBWorkflowSidePanel(MoPanelBaseType):
                     self.render_workflow_step(wf_step),
                     label=f"Step {wf_idx + 1} : {wf_step[RecipeKeys.LABEL]}",
                 )
-                for wf_idx, wf_step in enumerate(self.workfow_desc)
+                for wf_idx, wf_step in enumerate(self.workflow_desc)
             ]
         )
 
@@ -167,45 +186,68 @@ class DBWorkflowSidePanel(MoPanelBaseType):
         step_key = wf_step[RecipeKeys.NAME]
         _log().debug("Initializing Panels for [%s]", step_key)
         rcp_template = self.mdr_setup.get_template_for(step_key)
-        _, rcp_traits = recipe_traits(wf_step)
+        _, rcp_traits = workflow_params(wf_step)
         return self.workflow_ui(
             rcp_template,
             rcp_traits,
         )
 
+    # def workflow_ui_traits(
+    #     self,
+    #     template_map: dict[str, t.Any],
+    #     elt_traits: traitlets.HasTraits | None = None,
+    # ) -> list[MoUIElement]:
+    #     trait_vals = elt_traits.trait_values() if elt_traits else {}
+    #     return list(itertools.chain.from_iterable(
+    #         (
+    #             self.params_widget(
+    #                 template_map,
+    #                 trait_vals,
+    #                 RecipeKeys.INIT_PARAMS,
+    #                 RecipeLabels.INIT_PARAMS,
+    #             ),
+    #             self.params_widget(
+    #                 template_map,
+    #                 trait_vals,
+    #                 RecipeKeys.EXEC_PARAMS,
+    #                 RecipeLabels.EXEC_PARAMS,
+    #             ),
+    #         )
+    #     ))
+
     def workflow_ui(
         self,
         template_map: dict[str, t.Any],
-        elt_traits: traitlets.HasTraits | None = None,
+        elt_params: CerebrumBaseModel | None = None,
     ) -> list[MoUIElement]:
-        trait_vals = elt_traits.trait_values() if elt_traits else {}
         return list(itertools.chain.from_iterable(
             (
                 self.params_widget(
                     template_map,
-                    trait_vals,
+                    elt_params,
                     RecipeKeys.INIT_PARAMS,
                     RecipeLabels.INIT_PARAMS,
                 ),
                 self.params_widget(
                     template_map,
-                    trait_vals,
+                    elt_params,
                     RecipeKeys.EXEC_PARAMS,
                     RecipeLabels.EXEC_PARAMS,
                 ),
             )
         ))
 
+
     def params_widget(
         self,
         template_map: dict[str, t.Any],
-        trait_vals: dict[str, t.Any],
+        elt_params: CerebrumBaseModel | None ,
         params_key: str,
-        params_label: str,
+        _params_label: str,
     ) -> Iterable[MoUIElement]:
         if template_map[params_key]:
             wd_itr: Iterable[UIElement[t.Any, t.Any] | None] = (
-                self.property_widget(trait_vals, ekey, vmap)
+                self.property_widget(elt_params, ekey, vmap)
                 for ekey, vmap in template_map[params_key].items()
             )
             # wd_list = [wx for wx in wd_itr if wx is not None]
@@ -221,24 +263,24 @@ class DBWorkflowSidePanel(MoPanelBaseType):
 
     def property_widget(
         self,
-        traitv_dct: dict[str, t.Any],
+        elt_params: CerebrumBaseModel | None ,
         ekey: str,
         vmap: dict[str, t.Any],
     ):
-        if ekey in traitv_dct:
-            vmap["default"] = traitv_dct[ekey]
+        if elt_params and ekey in elt_params.model_fields:
+            vmap["default"] = elt_params.get(ekey)
         return render_property(vmap[RecipeKeys.TYPE], **vmap)
 
 
-class StructSidePanel(MoPanelBaseType):
+class StructSidePanel(MoBasePanelT):
     def __init__(
         self,
-        struct_comp: structure.StructBase,
+        struct_comp: BaseStruct,
         delay_build: bool = False,
         **kwargs: t.Any,
     ):
         super().__init__(**kwargs)
-        self._struct: structure.StructBase = struct_comp
+        self._struct: BaseStruct = struct_comp
         if delay_build:
             self.set_layout(None)
         else:
@@ -249,11 +291,13 @@ class StructSidePanel(MoPanelBaseType):
         # Set Widgets
         wd_itr: Iterable[UIElement[t.Any, t.Any] | None] = (
             render_property(
-                vmap.value_type,
-                label=vmap.label + " :",
-                default=vmap.to_ui(self._struct.get(ekey)),
+                field_info.annotation.__name__,
+                label=str(field_info.title) + " :",
+                default=self._struct.get(fkey),
             )
-            for ekey, vmap in self._struct.trait_ui().items()
+            for fkey, field_info in self._struct.model_fields.items()
+            if fkey not in self._struct.exclude()
+            # for ekey, vmap in self._struct.trait_ui().items()
         )
         ui_elements: list[UIElement[t.Any, t.Any]] = [
             wx for wx in wd_itr if wx is not None
@@ -261,7 +305,7 @@ class StructSidePanel(MoPanelBaseType):
         return mo.vstack([mo.ui.array(ui_elements, label=self._struct.name)])
 
 
-class RecipeTreeBase(TreeBase[MoPanelBaseType], metaclass=abc.ABCMeta):
+class RecipeTreeBase(BaseTree[MoBasePanelT], metaclass=abc.ABCMeta):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
@@ -279,7 +323,7 @@ class RecipeTreeBase(TreeBase[MoPanelBaseType], metaclass=abc.ABCMeta):
         db_key: str,
         db_desc: dict[str, t.Any],
         delay_build: bool = False,
-    ) -> tuple[CBTreeNode, MoPanelBaseType]:
+    ) -> tuple[CBTreeNode, MoBasePanelT]:
         db_node = CBTreeNode.init(name=db_desc[RecipeKeys.LABEL], key=db_key)
         _log().info("Left-side panel construction for [%s]", str(db_key))
         db_panel = DBWorkflowSidePanel(
@@ -291,11 +335,11 @@ class RecipeTreeBase(TreeBase[MoPanelBaseType], metaclass=abc.ABCMeta):
         return db_node, db_panel
 
     @override
-    def set_layout(self, selected_panel: MoPanelBaseType) -> None:
+    def set_layout(self, selected_panel: MoBasePanelT) -> None:
         self.layout_ = mo.hstack([self.tree, selected_panel.layout])
 
     @override
-    def build(self, root_pfx: str = "") -> TreeBase[MoPanelBaseType]:
+    def build(self, root_pfx: str = "") -> BaseTree[MoBasePanelT]:
         self.tree: awitree.Tree | None = self.build_tree(root_pfx)
         # self.tree.observe(self.tree_update, names="selected_nodes")
         self.layout_: mo.Html | None = mo.hstack(
@@ -430,7 +474,7 @@ class Data2ModelRecipeView(RecipeTreeBase):
         return tree
 
 
-class NetworkStructureView(TreeBase[MoPanelBaseType]):
+class NetworkStructureView(BaseTree[MoBasePanelT]):
     def __init__(
         self,
         net_struct: structure.Network,
@@ -443,7 +487,7 @@ class NetworkStructureView(TreeBase[MoPanelBaseType]):
         self.widths: list[float] = [left_width, 1 - left_width]
 
     @override
-    def set_layout(self, selected_panel: MoPanelBaseType) -> None:
+    def set_layout(self, selected_panel: MoBasePanelT) -> None:
         self.layout_ = mo.hstack([self.tree, selected_panel.layout])
 
     def region_node(
@@ -586,7 +630,7 @@ class NetworkStructureView(TreeBase[MoPanelBaseType]):
         return tree
 
     @override
-    def build(self, root_pfx: str = "") -> TreeBase[MoPanelBaseType]:
+    def build(self, root_pfx: str = "") -> BaseTree[MoBasePanelT]:
         self.tree: awitree.Tree | None = self.build_tree(root_pfx)
         # self.panel_dict : dict[str, PanelBase] = self.build_side_panels()
         # self.tree.observe(self.tree_update, names="selected_nodes")  # type:ignore
@@ -599,7 +643,7 @@ class NetworkStructureView(TreeBase[MoPanelBaseType]):
         pass
 
 
-class RecipeExplorer(TreeBase[MoPanelBaseType]):
+class RecipeExplorer(BaseTree[MoBasePanelT]):
     def __init__(
         self,
         mdr_setup: RecipeSetup,
@@ -621,7 +665,7 @@ class RecipeExplorer(TreeBase[MoPanelBaseType]):
         self.widths: list[float] = [left_width, 1 - left_width]
 
     @override
-    def set_layout(self, selected_panel: MoPanelBaseType) -> None:
+    def set_layout(self, selected_panel: MoBasePanelT) -> None:
         self.layout_ = mo.hstack([self.tree, selected_panel])
 
     def build_tree(self, root_pfx: str = "") -> awitree.Tree:
@@ -648,7 +692,7 @@ class RecipeExplorer(TreeBase[MoPanelBaseType]):
         return tree
 
     @override
-    def build(self, root_pfx: str = "") -> TreeBase[MoPanelBaseType]:
+    def build(self, root_pfx: str = "") -> BaseTree[MoBasePanelT]:
         self.tree: awitree.Tree | None = self.build_tree(root_pfx)
         # self.panel_dict : dict[str, PanelBase] = self.build_side_panels()
         # self.tree.observe(self.tree_update, names="selected_nodes")  # type:ignore
