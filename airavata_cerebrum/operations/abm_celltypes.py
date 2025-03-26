@@ -3,22 +3,20 @@ import typing as t
 from typing_extensions import override
 from pydantic import Field
 #
-from ..base import CerebrumBaseModel, OpXFormer, BaseParams, XformItr, DbQuery
+from ..base import (CerebrumBaseModel, NoneParams, OpXFormer,
+                    BaseParams, XformItr, DbQuery)
 from .json_filter import IterJPatchFilter, IterJPointerFilter
 from .dict_filter import IterAttrFilter
 
 
-class CTMNInitParams(CerebrumBaseModel):
-    pass
-
 class CTMNExecParams(CerebrumBaseModel):
     model_name :t.Annotated[str, Field(title='Model Name')]
 
-CTMNBaseParams : t.TypeAlias = BaseParams[CTMNInitParams, CTMNExecParams]
+CTMNBaseParams : t.TypeAlias = BaseParams[NoneParams, CTMNExecParams]
 
 class CTModelNameFilter(OpXFormer):
     class FilterParams(CTMNBaseParams):
-        init_params: t.Annotated[CTMNInitParams, Field(title='Init Params')]
+        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[CTMNExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
@@ -50,17 +48,15 @@ class CTModelNameFilter(OpXFormer):
         return cls.FilterParams.model_validate(param_dict)
 
 
-class CTERInitParams(CerebrumBaseModel):
-    pass
-
 class CTERExecParams(CerebrumBaseModel):
     ratio : t.Annotated[float, Field(title='Min. Ratio')]
 
-CTERBaseParams : t.TypeAlias = BaseParams[CTERInitParams, CTERExecParams]
+CTERBaseParams : t.TypeAlias = BaseParams[NoneParams, CTERExecParams]
 
 class CTExplainedRatioFilter(OpXFormer):
     class FilterParams(CTERBaseParams):
-        ratio : t.Annotated[float, Field(title='Min. Ratio')]
+        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
+        exec_params: t.Annotated[CTERExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
         self.name : str = __name__ + ".CTExplainedRatioFilter"
@@ -95,10 +91,6 @@ class CTExplainedRatioFilter(OpXFormer):
         return cls.FilterParams.model_validate(param_dict)
 
 
-
-class CTPFInitParams(CerebrumBaseModel):
-    pass
-
 class CTPFExecParams(CerebrumBaseModel):
     region : t.Annotated[
         str | None, Field(title="Region (structure_parent__acronym)")
@@ -114,11 +106,11 @@ class CTPFExecParams(CerebrumBaseModel):
     ] = None 
     key    : t.Annotated[str , Field(title="Output Key")] = ""
 
-CTPFBaseParams : t.TypeAlias = BaseParams[CTPFInitParams, CTPFExecParams]
+CTPFBaseParams : t.TypeAlias = BaseParams[NoneParams, CTPFExecParams]
 
 class CTPropertyFilter(OpXFormer):
     class FilterParams(CTPFBaseParams):
-        init_params: t.Annotated[CTPFInitParams, Field(title='Init Params')]
+        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[CTPFExecParams, Field(title='Exec Params')]
 
     QUERY_FILTER_MAP : dict[str, list[str]] = {

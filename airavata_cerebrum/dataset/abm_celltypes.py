@@ -14,7 +14,7 @@ from pydantic import Field
 from allensdk.api.queries.glif_api import GlifApi
 from pathlib import Path
 #
-from ..base import (CerebrumBaseModel, DbQuery, BaseParams,
+from ..base import (CerebrumBaseModel, DbQuery, BaseParams, NoneParams,
                     QryDBWriter, QryItr, OpXFormer)
 from ..util import exclude_keys, prefix_keys
 
@@ -113,17 +113,14 @@ class CTDbCellCacheQuery(DbQuery):
         return cls.QryParams.model_validate(param_dict)
 
 
-class CellAPIInitParams(CerebrumBaseModel):
-    pass
-
 class CellAPIExecParams(CerebrumBaseModel):
     species   : t.Annotated[str, Field(title="Species")]
 
-CAPIBaseParams : t.TypeAlias = BaseParams[CellAPIInitParams, CellAPIExecParams] 
+CAPIBaseParams : t.TypeAlias = BaseParams[NoneParams, CellAPIExecParams] 
 
 class CTDbCellApiQuery(DbQuery):
     class QryParams(CAPIBaseParams):
-        init_params: t.Annotated[CellAPIInitParams, Field(title='Init Params')]
+        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[CellAPIExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
@@ -175,18 +172,15 @@ class CTDbCellApiQuery(DbQuery):
 
 
 
-class GlifApiInitParams(CerebrumBaseModel):
-    pass
-
 class GlifApiExecParams(CerebrumBaseModel):
     key   : t.Annotated[str, Field(title="Query Key")]
     first : t.Annotated[bool, Field(title="Select Only First")]
 
-GlifApiBaseParams : t.TypeAlias = BaseParams[GlifApiInitParams, GlifApiExecParams] 
+GlifApiBaseParams : t.TypeAlias = BaseParams[NoneParams, GlifApiExecParams] 
 
 class CTDbGlifApiQuery(DbQuery):
     class QryParams(GlifApiBaseParams):
-        init_params: t.Annotated[GlifApiInitParams, Field(title='Init Params')]
+        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[GlifApiExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
@@ -256,18 +250,15 @@ class CTDbGlifApiQuery(DbQuery):
         return cls.QryParams.model_validate(param_dict)
 
 
-class GAMCInitParams(CerebrumBaseModel):
-    pass
-
 class GAMCExecParams(CerebrumBaseModel):
     suffix    : t.Annotated[str, Field(title="Output Suffix")]
     output_dir: t.Annotated[str, Field(title="Output Dir.")]
 
-GAMCBaseParams : t.TypeAlias = BaseParams[GAMCInitParams, GAMCExecParams] 
+GAMCBaseParams : t.TypeAlias = BaseParams[NoneParams, GAMCExecParams] 
 
 class CTDbGlifApiModelConfigQry(DbQuery):
     class QryParams(GAMCBaseParams):
-        init_params: t.Annotated[GAMCInitParams, Field(title='Init Params')]
+        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[GAMCExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):

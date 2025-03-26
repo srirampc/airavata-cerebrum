@@ -1,7 +1,7 @@
 {
     "source_data": {
         "airavata_cerebrum.dataset.abm_celltypes": {
-            "label": "Allen Cell Types Databse",
+            "label": "Allen Cell Types Database",
             "db_connect": {
                 "label": "Query Allen Cell Types Databse",
                 "workflow": [
@@ -79,7 +79,7 @@
             }
         },
         "airavata_cerebrum.dataset.abc_mouse": {
-            "label": "Allen Brain Cell Atlas",
+            "label": "Allen Mouse Brain Cell Atlas",
             "db_connect": {
                 "label": "Query Allen Brain Cell Atlas",
                 "workflow": [
@@ -103,7 +103,7 @@
             }
         },
         "airavata_cerebrum.dataset.ai_synphys": {
-            "label": "AI Syn Phys",
+            "label": "Allen Syn. Phys. Database",
             "db_connect": {
                 "label": "Query Allen Syn Phys Database",
                 "workflow": [

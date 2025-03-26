@@ -3,22 +3,20 @@ import typing as t
 from typing_extensions import override
 from pydantic import Field
 #
-from ..base import CerebrumBaseModel, OpXFormer, BaseParams, XformItr, DbQuery
+from ..base import (CerebrumBaseModel, NoneParams, OpXFormer,
+                    BaseParams, XformItr, DbQuery)
 from .json_filter import JPointerFilter
 
-
-class ABFInitParams(CerebrumBaseModel):
-    pass
 
 class ABFExecParams(CerebrumBaseModel):
     region     : t.Annotated[str, Field(title="Region")]
     sub_region : t.Annotated[str, Field(title="Sub-region")]
 
-ABFBaseParams : t.TypeAlias = BaseParams[ABFInitParams, ABFExecParams]
+ABFBaseParams : t.TypeAlias = BaseParams[NoneParams, ABFExecParams]
 
 class ABCDbMERFISH_CCFLayerRegionFilter(OpXFormer):
     class FilterParams(ABFBaseParams):
-        init_params: t.Annotated[ABFInitParams, Field(title='Init Params')]
+        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[ABFExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
@@ -51,18 +49,15 @@ class ABCDbMERFISH_CCFLayerRegionFilter(OpXFormer):
         return cls.FilterParams.model_validate(param_dict)
 
 
-class ABCCFInitParams(CerebrumBaseModel):
-    pass
-
 class ABCCFExecParams(CerebrumBaseModel):
     region   : t.Annotated[str, Field(title="Region")]
     cell_type : t.Annotated[str, Field(title="Cell Type")] = ""
 
-ABCCFBaseParams : t.TypeAlias = BaseParams[ABCCFInitParams, ABCCFExecParams]
+ABCCFBaseParams : t.TypeAlias = BaseParams[NoneParams, ABCCFExecParams]
 
 class ABCDbMERFISH_CCFFractionFilter(OpXFormer):
     class FilterParams(ABCCFBaseParams):
-        init_params: t.Annotated[ABCCFInitParams, Field(title='Init Params')]
+        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[ABCCFExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):

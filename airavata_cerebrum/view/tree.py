@@ -12,8 +12,8 @@ import traitlets
 from collections.abc import Iterable
 from typing_extensions import override
 
-from ..base import CerebrumBaseModel, BaseStruct
-from ..model.setup import RecipeKeys, RecipeLabels, RecipeSetup
+from ..base import CerebrumBaseModel, BaseStruct, BaseParams, INPGT, EXPGT
+from ..model.setup import RecipeKeys, RecipeSetup
 from ..model import structure as structure
 from . import (RcpTreeNames, StructTreeNames, workflow_params,
                BaseTree, CBTreeNode, BasePanel)
@@ -26,32 +26,33 @@ def _log():
 
 def scalar_widget(
     widget_key: str,
+    value: t.Any,
     **kwargs: t.Any
 ) -> iwidgets.CoreWidget | None:
     match widget_key:
         case "int" | "int32" | "int64":
-            return iwidgets.IntText(value=kwargs["default"], disabled=False)
+            return iwidgets.IntText(value=value, disabled=False)
         case "float" | "float32" | "float64":
-            return iwidgets.FloatText(value=kwargs["default"], disabled=False)
+            return iwidgets.FloatText(value=value, disabled=False)
         case "text":
-            return iwidgets.Text(value=kwargs["default"], disabled=False)
+            return iwidgets.Text(value=value, disabled=False)
         case "textarea" | "str":
-            return iwidgets.Textarea(value=kwargs["default"], disabled=False)
+            return iwidgets.Textarea(value=value, disabled=False)
         case "option":
             return iwidgets.Dropdown(
-                options=kwargs["options"],
                 disabled=False,
-                value=kwargs["default"],
+                value=value,
+                options=kwargs["options"],
             )
         case "check" | "bool":
             return iwidgets.Checkbox(
-                value=bool(kwargs["default"]),
+                value=bool(value),
                 disabled=False,
                 indent=True,
             )
         case "tags":
             return iwidgets.TagsInput(
-                value=kwargs["default"],
+                value=value,
                 allowed_tags=kwargs["allowed"],
                 allowed_duplicates=False,
             )
@@ -67,7 +68,7 @@ class PropertyListLayout(iwidgets.GridspecLayout):
     def __init__(self, value: list[t.Any], **kwargs: t.Any):
         super().__init__(len(value), 2, value=value, **kwargs)
         for ix, (kx, vx) in enumerate(enumerate(value)):
-            wdx = scalar_widget(type(vx).__name__, default=vx)
+            wdx = scalar_widget(type(vx).__name__, vx)
             wdx.add_traits(index=traitlets.Integer(kx))
             wdx.observe(self.handle_change)
             self[ix, 0] = iwidgets.Label(str(kx) + " :")
@@ -83,13 +84,13 @@ class PropertyListLayout(iwidgets.GridspecLayout):
 
 class PropertyTupleLayout(iwidgets.GridspecLayout):
     value : traitlets.Tuple = traitlets.Tuple(
-        help="Tupe values"
+        help="Tuple values"
     ).tag(sync=True)
 
     def __init__(self, value: tuple[t.Any], **kwargs: t.Any):
         super().__init__(len(value), 2, value=value, **kwargs)
         for ix, (kx, vx) in enumerate(enumerate(value)):
-            wdx = scalar_widget(type(vx).__name__, default=vx)
+            wdx = scalar_widget(type(vx).__name__, vx)
             wdx.add_traits(index=traitlets.Integer(kx))
             wdx.observe(self.handle_change)
             self[ix, 0] = iwidgets.Label(str(kx) + " :")
@@ -135,26 +136,27 @@ class PropertyMapLayout(iwidgets.GridspecLayout):
     def init_widget(self, vx: t.Any, tname: str) -> iwidgets.CoreWidget | None:
         match tname:
             case "NoneType":
-                return scalar_widget("str", default="None")
+                return scalar_widget("str", "None")
             case "list":
                 return PropertyListLayout(vx)
             case "tuple":
                 return PropertyTupleLayout(vx)
             case _:
-                return scalar_widget(tname, default=vx)
+                return scalar_widget(tname, vx)
 
 
 def render_property(
     widget_key: str,
+    value: t.Any,
     **kwargs: t.Any
 ) -> iwidgets.CoreWidget | None:
     match widget_key:
         case "dict":
-            return PropertyMapLayout(value=kwargs["default"], **kwargs)
+            return PropertyMapLayout(value=value, **kwargs)
         case "list":
-            return PropertyListLayout(value=kwargs["default"], **kwargs)
+            return PropertyListLayout(value=value, **kwargs)
         case "tuple":
-            return PropertyTupleLayout(value=kwargs["default"], **kwargs)
+            return PropertyTupleLayout(value=value, **kwargs)
         case _:
             return scalar_widget(widget_key, **kwargs)
 
@@ -209,60 +211,72 @@ class DBWorkflowSidePanel(IPyPanelT):
 
     def workflow_ui(
         self,
-        template_map: dict[str, t.Any],
-        elt_params: CerebrumBaseModel | None,
+        rcp_template: dict[str, t.Any],
+        wf_params: BaseParams[INPGT, EXPGT]  | None = None,
     ) -> list[iwidgets.CoreWidget]:
         return [
-            self.params_widget(
-                template_map,
-                elt_params,
-                RecipeKeys.INIT_PARAMS,
-                RecipeLabels.INIT_PARAMS,
+            self.workflow_params_widget(
+                rcp_template[RecipeKeys.INIT_PARAMS],
+                wf_params.init_params if wf_params else None,
             ),
-            self.params_widget(
-                template_map,
-                elt_params,
-                RecipeKeys.EXEC_PARAMS,
-                RecipeLabels.EXEC_PARAMS,
+            self.workflow_params_widget(
+                rcp_template[RecipeKeys.EXEC_PARAMS],
+                wf_params.exec_params if wf_params else None,
             ),
         ]
 
-    def params_widget(
+    def render_widget(
         self,
-        template_map: dict[str, t.Any],
-        elt_params: CerebrumBaseModel | None,
-        params_key: str,
-        _params_label: str,
-    ):
-        if template_map[params_key]:
-            wd_itr: Iterable[iwidgets.CoreWidget | None] = (
-                self.property_widget(elt_params, ekey, vmap)
-                for ekey, vmap in template_map[params_key].items()
-            )
-            return iwidgets.VBox(
-                [wx for wx in wd_itr if wx is not None]
-            )
-        else:
-            return iwidgets.VBox([])
-
-    def property_widget(
-        self,
-        elt_params: CerebrumBaseModel | None ,
-        ekey: str,
-        vmap: dict[str, t.Any],
-    ):
-        if elt_params and ekey in elt_params.model_fields:
-            vmap["default"] = elt_params.get(ekey)
-        pwidget = render_property(vmap[RecipeKeys.TYPE], **vmap)
-        # _log().warning("Rending Prop [%s] [%s]", str(vmap), str(pwidget))
-        if pwidget is None:
-            return None
+        widget_key: str,
+        value: t.Any,
+        **kwargs: t.Any):
         return iwidgets.HBox(
             [
-                iwidgets.Label(vmap[RecipeKeys.LABEL] + " :"),
-                pwidget
+                iwidgets.Label(kwargs[RecipeKeys.LABEL] + " :"),
+                render_property(widget_key, value, **kwargs,),
             ]
         )
+
+    def workflow_params_widget(
+        self,
+        wf_template: dict[str, t.Any] | None,
+        wf_params: CerebrumBaseModel | None ,
+    ) -> iwidgets.CoreWidget:
+        wd_itr: Iterable[iwidgets.CoreWidget | None] = ()
+        if wf_template and wf_params:
+            wd_itr = (
+                self.render_widget(
+                    tdesc[RecipeKeys.TYPE],
+                    wf_params.get(tkey, tdesc["default"]),
+                    **tdesc  
+                )
+                for tkey, tdesc in wf_template.items()
+                if tkey not in wf_params.exclude()
+            )
+        elif wf_template:
+            wd_itr = (
+                self.render_widget(
+                    tdesc[RecipeKeys.TYPE],
+                    tdesc["default"],
+                    **tdesc
+                )
+                for _tkey, tdesc in wf_template.items()
+            )
+        elif wf_params:
+            wd_itr = (
+                self.render_widget(
+                     tdesc.annotation.__name__,
+                     value = wf_params.get(tkey),
+                     label = str(tdesc.title),
+                     options = [wf_params.get(tkey)],
+                     allowed = [wf_params.get(tkey)]
+                )
+                for tkey, tdesc in wf_params.model_fields.items()
+                if tkey not in wf_params.exclude()
+            )
+
+        return iwidgets.VBox(list(wd_itr))
+
 
 
 class StructSidePanel(IPyPanelT):
@@ -300,7 +314,7 @@ class StructSidePanel(IPyPanelT):
                 field_info,
                 render_property(
                     field_info.annotation.__name__,
-                    default=self._struct.get(fkey),
+                    self._struct.get(fkey),
                 )
             )
             for fkey, field_info in self._struct.model_fields.items()

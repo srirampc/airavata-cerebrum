@@ -12,7 +12,7 @@ from typing_extensions import override
 #
 from ..base import CerebrumBaseModel, BaseStruct, BaseParams, INPGT, EXPGT
 from ..model import structure as structure
-from ..model.setup import RecipeKeys, RecipeLabels, RecipeSetup
+from ..model.setup import RecipeKeys, RecipeSetup
 from . import (BasePanel, BaseTree, CBTreeNode, RcpTreeNames, StructTreeNames,
                workflow_params)
 
@@ -28,26 +28,27 @@ def _log():
 
 def scalar_widget(
     widget_key: str,
+    value: t.Any,
     label: str = "",
     **kwargs: t.Any
 ) -> MoUIElement | None:
     match widget_key:
         case "int" | "int32" | "int64":
-            return mo.ui.number(value=kwargs["default"], label=label)
+            return mo.ui.number(value=value, label=label)
         case "float" | "float32" | "float64":
             return mo.ui.number(
-                value=kwargs["default"],
+                value=value,
                 label=label,
             )
         case "text":
             return mo.ui.text(
-                value=kwargs["default"],
+                value=value,
                 disabled=False,
                 label=label,
             )
         case "textarea" | "str":
             return mo.ui.text_area(
-                value=kwargs["default"],
+                value=value,
                 disabled=False,
                 label=label,
             )
@@ -55,18 +56,18 @@ def scalar_widget(
             # _log().warning("options %s",str(kwargs["options"]))
             return mo.ui.dropdown(
                 options=kwargs["options"],
-                value=kwargs["default"],
+                value=value,
                 label=label,
             )
         case "check" | "bool":
             return mo.ui.checkbox(
-                value=bool(kwargs["default"]),
+                value=bool(value),
                 label=label,
             )
         case "tags":
             return mo.ui.multiselect(
                 options=kwargs["allowed"],
-                value=kwargs["default"],
+                value=value,
                 label=label,
             )
         case _:
@@ -92,7 +93,7 @@ class PropertyListLayout(mo.ui.array):
         **_kwargs: t.Any
     ):
         return (
-            scalar_widget(type(vx).__name__, label=str(kx) + " :", default=vx)
+            scalar_widget(type(vx).__name__, value=vx, label=str(kx) + " :")
             for kx, vx in enumerate(value)
         )
 
@@ -120,11 +121,11 @@ class PropertyMapLayout(mo.ui.dictionary):
         tname = type(vx).__name__
         match tname:
             case "NoneType":
-                return scalar_widget("str", default="None", label=label)
+                return scalar_widget("str", value="None", label=label)
             case "list" | "tuple":
                 return PropertyListLayout(vx, label=label)
             case _:
-                return scalar_widget(tname, default=vx, label=label)
+                return scalar_widget(tname, value=vx, label=label)
 
     def widgets(
         self,
@@ -135,20 +136,23 @@ class PropertyMapLayout(mo.ui.dictionary):
 
 
 def render_property(
-    widget_key: str, label: str = "", **kwargs: t.Any
+    widget_key: str,
+    value: t.Any,
+    label: str = "",
+    **kwargs: t.Any
 ) -> MoUIElement | None:
     # _log().warning("Render Out [%s]", str(kwargs))
     match widget_key:
         case "dict":
             return PropertyMapLayout(
-                value=kwargs["default"], label=label, **kwargs
+                value=value, label=label, **kwargs
             )
         case "list" | "tuple":
             return PropertyListLayout(
-                value=kwargs["default"], label=label, **kwargs
+                value=value, label=label, **kwargs
             )
         case _:
-            return scalar_widget(widget_key, label=label, **kwargs)
+            return scalar_widget(widget_key, value, label=label, **kwargs)
 
 
 class DBWorkflowSidePanel(MoBasePanelT):
@@ -192,78 +196,69 @@ class DBWorkflowSidePanel(MoBasePanelT):
             rcp_traits,
         )
 
-    # def workflow_ui_traits(
-    #     self,
-    #     template_map: dict[str, t.Any],
-    #     elt_traits: traitlets.HasTraits | None = None,
-    # ) -> list[MoUIElement]:
-    #     trait_vals = elt_traits.trait_values() if elt_traits else {}
-    #     return list(itertools.chain.from_iterable(
-    #         (
-    #             self.params_widget(
-    #                 template_map,
-    #                 trait_vals,
-    #                 RecipeKeys.INIT_PARAMS,
-    #                 RecipeLabels.INIT_PARAMS,
-    #             ),
-    #             self.params_widget(
-    #                 template_map,
-    #                 trait_vals,
-    #                 RecipeKeys.EXEC_PARAMS,
-    #                 RecipeLabels.EXEC_PARAMS,
-    #             ),
-    #         )
-    #     ))
-
     def workflow_ui(
         self,
-        template_map: dict[str, t.Any],
-        elt_params: BaseParams[INPGT, EXPGT]  | None = None,
+        rcp_template: dict[str, t.Any],
+        wf_params: BaseParams[INPGT, EXPGT]  | None = None,
     ) -> list[MoUIElement]:
         return list(itertools.chain.from_iterable(
             (
-                self.params_widget(
-                    template_map,
-                    elt_params.init_params,
-                    RecipeKeys.INIT_PARAMS,
-                    RecipeLabels.INIT_PARAMS,
+                self.workflow_params_widget(
+                    (
+                        rcp_template[RecipeKeys.INIT_PARAMS]
+                        if RecipeKeys.INIT_PARAMS in rcp_template else None
+                    ),
+                    wf_params.init_params if wf_params else None,
                 ),
-                self.params_widget(
-                    template_map,
-                    elt_params.exec_params,
-                    RecipeKeys.EXEC_PARAMS,
-                    RecipeLabels.EXEC_PARAMS,
+                self.workflow_params_widget(
+                    (
+                        rcp_template[RecipeKeys.EXEC_PARAMS]
+                        if RecipeKeys.EXEC_PARAMS in rcp_template else None
+                    ),
+                    wf_params.exec_params if wf_params else None,
                 ),
             )
         ))
 
-    def params_widget(
-        self,
-        template_map: dict[str, t.Any],
-        elt_params: CerebrumBaseModel | None ,
-        params_key: str,
-        _params_label: str,
-    ) -> Iterable[MoUIElement]:
-        if template_map[params_key]:
-            wd_itr: Iterable[UIElement[t.Any, t.Any] | None] = (
-                self.property_widget(elt_params, ekey, vmap)
-                for ekey, vmap in template_map[params_key].items()
-            )
-            return (wx for wx in wd_itr if wx is not None)
-        else:
-            return []
 
-    def property_widget(
+    def workflow_params_widget(
         self,
-        elt_params: CerebrumBaseModel | None ,
-        ekey: str,
-        vmap: dict[str, t.Any],
-    ):
-        if elt_params:
-            evalue = elt_params.get(ekey)
-            if evalue is not None:
-               vmap["default"] = elt_params.get(ekey)
-        return render_property(vmap[RecipeKeys.TYPE], **vmap)
+        wf_template: dict[str, t.Any] | None,
+        wf_params: CerebrumBaseModel | None ,
+    ) -> Iterable[MoUIElement]:
+        wd_itr: Iterable[MoUIElement | None] = ()
+        if wf_template and wf_params:
+            wd_itr = (
+                render_property(
+                    tdesc[RecipeKeys.TYPE],
+                    value=wf_params.get(tkey, tdesc["default"]),
+                    **tdesc  
+                )
+                for tkey, tdesc in wf_template.items()
+                if tkey not in wf_params.exclude()
+            )
+        elif wf_template:
+            wd_itr = (
+                render_property(
+                    tdesc[RecipeKeys.TYPE],
+                    tdesc["default"],
+                    **tdesc
+                )
+                for _tkey, tdesc in wf_template.items()
+            )
+        elif wf_params:
+            wd_itr = (
+                render_property(
+                     tdesc.annotation.__name__,
+                     value = wf_params.get(tkey),
+                     label = str(tdesc.title),
+                     options = [wf_params.get(tkey)],
+                     allowed = [wf_params.get(tkey)]
+                )
+                for tkey, tdesc in wf_params.model_fields.items()
+                if tkey not in wf_params.exclude()
+            )
+        return (wx for wx in wd_itr if wx is not None)
 
 
 class StructSidePanel(MoBasePanelT):
@@ -286,12 +281,11 @@ class StructSidePanel(MoBasePanelT):
         wd_itr: Iterable[UIElement[t.Any, t.Any] | None] = (
             render_property(
                 field_info.annotation.__name__,
+                value=self._struct.get(fkey),
                 label=str(field_info.title) + " :",
-                default=self._struct.get(fkey),
             )
             for fkey, field_info in self._struct.model_fields.items()
             if fkey not in self._struct.exclude()
-            # for ekey, vmap in self._struct.trait_ui().items()
         )
         ui_elements: list[UIElement[t.Any, t.Any]] = [
             wx for wx in wd_itr if wx is not None

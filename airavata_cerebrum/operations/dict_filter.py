@@ -3,7 +3,8 @@ import typing as t
 from pydantic import Field
 from typing_extensions import override
 #
-from ..base import CerebrumBaseModel, OpXFormer, BaseParams, XformItr, XformElt, DbQuery
+from ..base import (CerebrumBaseModel, NoneParams, OpXFormer,
+                    BaseParams, XformItr, XformElt, DbQuery)
 
 
 def _log():
@@ -13,15 +14,12 @@ def _log():
 class IAMInitParams(CerebrumBaseModel):
     attribute : t.Annotated[str, Field(title='Attribute Selected to Map')]
 
-class IAMExecParams(CerebrumBaseModel):
-    pass
-
-IAMBaseParams : t.TypeAlias = BaseParams[IAMInitParams, IAMExecParams]
+IAMBaseParams : t.TypeAlias = BaseParams[IAMInitParams, NoneParams]
 
 class IterAttrMapper(OpXFormer):
     class MapperParams(IAMBaseParams):
         init_params: t.Annotated[IAMInitParams, Field(title='Init Params')]
-        exec_params: t.Annotated[IAMExecParams, Field(title='Exec Params')]
+        exec_params: t.Annotated[NoneParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
         """
@@ -71,18 +69,15 @@ class IterAttrMapper(OpXFormer):
         return cls.MapperParams.model_validate(param_dict)
 
 
-class IAFInitParams(CerebrumBaseModel):
-    pass
-
 class IAFExecParams(CerebrumBaseModel):
     key     : t.Annotated[str, Field(title='Key')]
     filters : t.Annotated[list[tuple[t.Any]], Field(title='Filters')]
 
-IAFBaseParams : t.TypeAlias = BaseParams[IAFInitParams, IAFExecParams]
+IAFBaseParams : t.TypeAlias = BaseParams[NoneParams, IAFExecParams]
 
 class IterAttrFilter(OpXFormer):
     class FilterParams(IAFBaseParams):
-        init_params: t.Annotated[IAFInitParams, Field(title='Init Params')]
+        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[IAFExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
