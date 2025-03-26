@@ -1,9 +1,10 @@
 import abc
 import typing as t
-from typing_extensions import Self
+#
+from collections.abc import Iterable, Sequence
+from typing_extensions import Self, override
 from pydantic import BaseModel, Field
 
-from collections.abc import Iterable, Sequence
 
 XformElt: t.TypeAlias = dict[str, t.Any]
 XformItr : t.TypeAlias = Iterable[XformElt] 
@@ -13,8 +14,7 @@ QryItr : t.TypeAlias = Iterable[QryElt]
 
 
 #
-# pydantic base models
-#
+# pydantic-based BaseModel for Cerebrum
 class CerebrumBaseModel(BaseModel):
     name : t.Annotated[str, Field(title="Name")] = ""
 
@@ -25,11 +25,26 @@ class CerebrumBaseModel(BaseModel):
             return None
 
 
-class BaseParams(CerebrumBaseModel):
-    pass
+INPGT = t.TypeVar('INPGT', bound='CerebrumBaseModel')
+EXPGT = t.TypeVar('EXPGT', bound='CerebrumBaseModel')
 
 
+class BaseParams(CerebrumBaseModel, t.Generic[INPGT, EXPGT]):
+    init_params: t.Annotated[INPGT, Field(title="Init. Params")]
+    exec_params: t.Annotated[EXPGT, Field(title="Exec. Params")]
 
+    @override
+    def get(self, field: str) -> t.Any:
+        ivalue = self.init_params.get(field)
+        if ivalue is not None:
+            return ivalue 
+        evalue = self.exec_params.get(field)
+        if evalue is not None:
+            return evalue 
+        return super().get(field)
+
+
+# Abstract Base class for network structure components
 class BaseStruct(CerebrumBaseModel, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def exclude(self) -> set[str]:
@@ -40,18 +55,21 @@ class BaseStruct(CerebrumBaseModel, metaclass=abc.ABCMeta):
         return self
 
 
-#
-# Abstract Base classes
-#
+# Abstract Base class for parameter interface
 class ParamsInterface(abc.ABC):
     @classmethod
     @abc.abstractmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(
+        cls
+    ) -> type[BaseParams[INPGT, EXPGT]]:  # pyright:ignore[reportInvalidTypeVarUse]
         return BaseParams
 
     @classmethod
     @abc.abstractmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(
+        cls,
+        param_dict: dict[str, t.Any],
+    ) -> BaseParams[INPGT, EXPGT]:  # pyright:ignore[reportInvalidTypeVarUse]
         return BaseParams.model_validate(param_dict)
 
 
@@ -75,6 +93,7 @@ class OpXFormer(ParamsInterface, abc.ABC):
         **params: t.Any,
     ) -> XformItr | None:
         return None
+
 
 # Abstract interface for DBWrite operations
 class QryDBWriter(abc.ABC):

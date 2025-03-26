@@ -6,12 +6,15 @@ import awitree
 from typing_extensions import Self
 
 #
-from ..base import BaseStruct, CerebrumBaseModel, DbQuery, OpXFormer, BaseParams
+from ..base import BaseStruct, BaseParams, CerebrumBaseModel
+from ..base import OpXFormer, DbQuery
+from ..base import INPGT, EXPGT
 from ..model.setup import RecipeKeys
 from ..register import find_type
 
 def _log():
     return logging.getLogger(__name__)
+
 
 @t.final
 class RcpTreeNames:
@@ -51,19 +54,22 @@ def workflow_params_dict(
         | wf_step[RecipeKeys.EXEC_PARAMS]
     )
 
-
 def workflow_params(
     wf_step: dict[str, t.Any],
     node_key: str | None = None,
-) -> tuple[str | None,  BaseParams | None]:
+) -> tuple[str | None,  BaseParams[INPGT, EXPGT] | None]:
 
     node_key = node_key if node_key else wf_step[RecipeKeys.NAME]
     src_class: type[DbQuery] | type[OpXFormer] | None = find_type(
         wf_step[RecipeKeys.NAME]
     )
-    wf_dict = workflow_params_dict(wf_step)
     if src_class:
-        return node_key, src_class.params_instance(wf_dict)
+        return node_key, src_class.params_instance(
+            wf_step | 
+            {
+                RecipeKeys.NAME: wf_step[RecipeKeys.LABEL],
+            }
+        )
     else:
         return node_key, None
 

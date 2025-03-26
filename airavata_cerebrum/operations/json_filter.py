@@ -4,15 +4,24 @@ from pydantic import Field
 from typing_extensions import override
 import jsonpath
 #
-from ..base import OpXFormer, BaseParams, XformElt, XformItr, XformSeq
+from ..base import CerebrumBaseModel, OpXFormer, BaseParams, XformElt, XformItr, XformSeq
 
 
 def _log():
     return logging.getLogger(__name__)
 
 
+class JPFInitParams(CerebrumBaseModel):
+    pass
+
+class JPFExecParams(CerebrumBaseModel):
+    paths : t.Annotated[list[str], Field(title="JSON Pointer Paths")]
+    keys  : t.Annotated[list[str], Field(title="Keys")]
+
+JPFBaseParams : t.TypeAlias = BaseParams[JPFInitParams, JPFExecParams]
+
 class JPointerFilter(OpXFormer):
-    class FilterParams(BaseParams):
+    class FilterParams(JPFBaseParams):
         paths : t.Annotated[list[str], Field(title="JSON Pointer Paths")]
         keys  : t.Annotated[list[str], Field(title="Keys")]
 
@@ -62,19 +71,29 @@ class JPointerFilter(OpXFormer):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[JPFBaseParams]:
         return cls.FilterParams
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> JPFBaseParams:
         return cls.FilterParams.model_validate(param_dict)
 
 
+
+class IJPInitParams(CerebrumBaseModel):
+    pass
+
+class IJPExecParams(CerebrumBaseModel):
+    filter_exp : t.Annotated[str, Field(title="Filter Expression")] # = traitlets.Bytes()
+    dest_path  : t.Annotated[str, Field(title="Dest. Path")] # = traitlets.Bytes()
+
+IJPBaseParams : t.TypeAlias = BaseParams[IJPInitParams, IJPExecParams]
+
 class IterJPatchFilter(OpXFormer):
-    class FilterParams(BaseParams):
-        filter_exp : t.Annotated[str, Field(title="Filter Expression")] # = traitlets.Bytes()
-        dest_path  : t.Annotated[str, Field(title="Dest. Path")] # = traitlets.Bytes()
+    class FilterParams(IJPBaseParams):
+        init_params: t.Annotated[IJPInitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[IJPExecParams, Field(title='Exec Params')]
 
     def __init__(self, **init_params: t.Any):
         self.name : str = __name__ + ".IterJPatchFilter"
@@ -134,17 +153,25 @@ class IterJPatchFilter(OpXFormer):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[IJPBaseParams]:
         return cls.FilterParams
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> IJPBaseParams:
         return cls.FilterParams.model_validate(param_dict)
+
+class IJPtrInitParams(CerebrumBaseModel):
+    pass
+
+class IJPtrExecParams(CerebrumBaseModel):
+    path : t.Annotated[str, Field(title="JSON Path")]
+
+IJPtrBaseParams : t.TypeAlias = BaseParams[IJPtrInitParams, IJPtrExecParams]
 
 
 class IterJPointerFilter(OpXFormer):
-    class FilterParams(BaseParams):
+    class FilterParams(IJPtrBaseParams):
         path : t.Annotated[str, Field(title="JSON Path")]
 
     def __init__(self, **params: t.Any):
@@ -184,12 +211,12 @@ class IterJPointerFilter(OpXFormer):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[IJPtrBaseParams]:
         return cls.FilterParams
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> IJPtrBaseParams:
         return cls.FilterParams.model_validate(param_dict)
 
 

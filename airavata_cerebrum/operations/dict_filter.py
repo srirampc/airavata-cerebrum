@@ -3,16 +3,25 @@ import typing as t
 from pydantic import Field
 from typing_extensions import override
 #
-from ..base import OpXFormer, BaseParams, XformItr, XformElt, DbQuery
+from ..base import CerebrumBaseModel, OpXFormer, BaseParams, XformItr, XformElt, DbQuery
 
 
 def _log():
     return logging.getLogger(__name__)
 
 
+class IAMInitParams(CerebrumBaseModel):
+    attribute : t.Annotated[str, Field(title='Attribute Selected to Map')]
+
+class IAMExecParams(CerebrumBaseModel):
+    pass
+
+IAMBaseParams : t.TypeAlias = BaseParams[IAMInitParams, IAMExecParams]
+
 class IterAttrMapper(OpXFormer):
-    class MapperParams(BaseParams):
-        attribute : t.Annotated[str, Field(title='Attribute Selected to Map')]
+    class MapperParams(IAMBaseParams):
+        init_params: t.Annotated[IAMInitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[IAMExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
         """
@@ -53,19 +62,28 @@ class IterAttrMapper(OpXFormer):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[IAMBaseParams]:
         return cls.MapperParams
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> IAMBaseParams:
         return cls.MapperParams.model_validate(param_dict)
 
 
+class IAFInitParams(CerebrumBaseModel):
+    pass
+
+class IAFExecParams(CerebrumBaseModel):
+    key     : t.Annotated[str, Field(title='Key')]
+    filters : t.Annotated[list[tuple[t.Any]], Field(title='Filters')]
+
+IAFBaseParams : t.TypeAlias = BaseParams[IAFInitParams, IAFExecParams]
+
 class IterAttrFilter(OpXFormer):
-    class FilterParams(BaseParams):
-        key     : t.Annotated[str, Field(title='Key')]
-        filters : t.Annotated[list[tuple[t.Any]], Field(title='Filters')]
+    class FilterParams(IAFBaseParams):
+        init_params: t.Annotated[IAFInitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[IAFExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
         self.name : str = __name__ + ".IterAttrFilter"
@@ -114,12 +132,12 @@ class IterAttrFilter(OpXFormer):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[IAFBaseParams]:
         return cls.FilterParams
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> IAFBaseParams:
         return cls.FilterParams.model_validate(param_dict)
 
 

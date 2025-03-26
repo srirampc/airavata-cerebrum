@@ -20,7 +20,7 @@ from matplotlib.figure import Figure
 from pydantic import Field
 from abc_atlas_access.abc_atlas_cache.abc_project_cache import AbcProjectCache
 #
-from ..base import DbQuery, OpXFormer, BaseParams, QryDBWriter, QryItr
+from ..base import CerebrumBaseModel, DbQuery, OpXFormer, BaseParams, QryDBWriter, QryItr
 
 ProcessResult : t.TypeAlias = subprocess.CompletedProcess[bytes]
 NDFloatArray : t.TypeAlias = npt.NDArray[np.floating[t.Any]]
@@ -1030,10 +1030,18 @@ def region_cell_type_ratios(
         return region_frac_ccf[region_name]
 
 
+class InitParams(CerebrumBaseModel):
+    download_base : t.Annotated[str, Field(title="Download Base")]
+
+class ExecParams(CerebrumBaseModel):
+    region  : t.Annotated[list[str] , Field(title="List of Regions")]
+
+CCFParamsBase : t.TypeAlias = BaseParams[InitParams,  ExecParams] 
+
 class ABCDbMERFISH_CCFQuery(DbQuery):
-    class QryParams(BaseParams):
-        download_base : t.Annotated[str, Field(title="Download Base")]
-        region  : t.Annotated[list[str] , Field(title="List of Regions")]
+    class QryParams(CCFParamsBase):
+        init_params: t.Annotated[InitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[ExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
         """
@@ -1090,13 +1098,12 @@ class ABCDbMERFISH_CCFQuery(DbQuery):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[CCFParamsBase]:
         return cls.QryParams
-
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> CCFParamsBase:
         return cls.QryParams.model_validate(param_dict)
 
 

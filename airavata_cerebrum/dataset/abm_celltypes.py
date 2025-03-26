@@ -13,7 +13,9 @@ from typing_extensions import override
 from pydantic import Field
 from allensdk.api.queries.glif_api import GlifApi
 from pathlib import Path
-from ..base import DbQuery, BaseParams, QryDBWriter, QryItr, OpXFormer
+#
+from ..base import (CerebrumBaseModel, DbQuery, BaseParams,
+                    QryDBWriter, QryItr, OpXFormer)
 from ..util import exclude_keys, prefix_keys
 
 
@@ -21,12 +23,20 @@ def _log():
     return logging.getLogger(__name__)
 
 
+class CCacheInitParams(CerebrumBaseModel):
+    download_base : t.Annotated[str, Field(title="Download Base Dir.")]
+
+class CCacheExecParams(CerebrumBaseModel):
+    species   : t.Annotated[str, Field(title="Species")]
+    manifest  : t.Annotated[str, Field(title="Manifest File")]
+    cells     : t.Annotated[str, Field(title="Cells json File")]
+
+CCacheBaseParams : t.TypeAlias = BaseParams[CCacheInitParams, CCacheExecParams] 
+
 class CTDbCellCacheQuery(DbQuery):
-    class QryParams(BaseParams):
-        download_base : t.Annotated[str, Field(title="Download Base Dir.")]
-        species   : t.Annotated[str, Field(title="Species")]
-        manifest  : t.Annotated[str, Field(title="Manifest File")]
-        cells     : t.Annotated[str, Field(title="Cells json File")]
+    class QryParams(CCacheBaseParams):
+        init_params: t.Annotated[CCacheInitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[CCacheExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
         """
@@ -94,18 +104,27 @@ class CTDbCellCacheQuery(DbQuery):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[CCacheBaseParams]:
         return cls.QryParams
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> CCacheBaseParams:
         return cls.QryParams.model_validate(param_dict)
 
 
+class CellAPIInitParams(CerebrumBaseModel):
+    pass
+
+class CellAPIExecParams(CerebrumBaseModel):
+    species   : t.Annotated[str, Field(title="Species")]
+
+CAPIBaseParams : t.TypeAlias = BaseParams[CellAPIInitParams, CellAPIExecParams] 
+
 class CTDbCellApiQuery(DbQuery):
-    class QryParams(BaseParams):
-        species   : t.Annotated[str, Field(title="Species")]
+    class QryParams(CAPIBaseParams):
+        init_params: t.Annotated[CellAPIInitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[CellAPIExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
         self.name : str = "allensdk.api.queries.cell_types_api.CellTypesApi"
@@ -146,19 +165,29 @@ class CTDbCellApiQuery(DbQuery):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[CAPIBaseParams]:
         return cls.QryParams
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> CAPIBaseParams:
         return cls.QryParams.model_validate(param_dict)
 
 
+
+class GlifApiInitParams(CerebrumBaseModel):
+    pass
+
+class GlifApiExecParams(CerebrumBaseModel):
+    key   : t.Annotated[str, Field(title="Query Key")]
+    first : t.Annotated[bool, Field(title="Select Only First")]
+
+GlifApiBaseParams : t.TypeAlias = BaseParams[GlifApiInitParams, GlifApiExecParams] 
+
 class CTDbGlifApiQuery(DbQuery):
-    class QryParams(BaseParams):
-        key   : t.Annotated[str, Field(title="Query Key")]
-        first : t.Annotated[bool, Field(title="Select Only First")]
+    class QryParams(GlifApiBaseParams):
+        init_params: t.Annotated[GlifApiInitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[GlifApiExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
         self.name : str = "allensdk.api.queries.glif_api.GlifApi"
@@ -218,19 +247,28 @@ class CTDbGlifApiQuery(DbQuery):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[GlifApiBaseParams]:
         return cls.QryParams
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> GlifApiBaseParams:
         return cls.QryParams.model_validate(param_dict)
 
 
+class GAMCInitParams(CerebrumBaseModel):
+    pass
+
+class GAMCExecParams(CerebrumBaseModel):
+    suffix    : t.Annotated[str, Field(title="Output Suffix")]
+    output_dir: t.Annotated[str, Field(title="Output Dir.")]
+
+GAMCBaseParams : t.TypeAlias = BaseParams[GAMCInitParams, GAMCExecParams] 
+
 class CTDbGlifApiModelConfigQry(DbQuery):
-    class QryParams(BaseParams):
-        suffix    : t.Annotated[str, Field(title="Output Suffix")]
-        output_dir: t.Annotated[str, Field(title="Output Dir.")]
+    class QryParams(GAMCBaseParams):
+        init_params: t.Annotated[GAMCInitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[GAMCExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
         self.name : str = "allensdk.api.queries.glif_api.GlifApi"
@@ -266,12 +304,12 @@ class CTDbGlifApiModelConfigQry(DbQuery):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[GAMCBaseParams]:
         return cls.QryParams
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> GAMCBaseParams:
         return cls.QryParams.model_validate(param_dict)
 
 

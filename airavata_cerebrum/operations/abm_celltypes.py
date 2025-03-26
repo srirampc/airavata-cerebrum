@@ -3,14 +3,23 @@ import typing as t
 from typing_extensions import override
 from pydantic import Field
 #
-from ..base import OpXFormer, BaseParams, XformItr, DbQuery
+from ..base import CerebrumBaseModel, OpXFormer, BaseParams, XformItr, DbQuery
 from .json_filter import IterJPatchFilter, IterJPointerFilter
 from .dict_filter import IterAttrFilter
 
 
+class CTMNInitParams(CerebrumBaseModel):
+    pass
+
+class CTMNExecParams(CerebrumBaseModel):
+    model_name :t.Annotated[str, Field(title='Model Name')]
+
+CTMNBaseParams : t.TypeAlias = BaseParams[CTMNInitParams, CTMNExecParams]
+
 class CTModelNameFilter(OpXFormer):
-    class FilterParams(BaseParams):
-        model_name :t.Annotated[str, Field(title='Model Name')]
+    class FilterParams(CTMNBaseParams):
+        init_params: t.Annotated[CTMNInitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[CTMNExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
         self.name : str = __name__ + ".CTModelNameFilter"
@@ -32,17 +41,25 @@ class CTModelNameFilter(OpXFormer):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[CTMNBaseParams]:
         return cls.FilterParams
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> CTMNBaseParams:
         return cls.FilterParams.model_validate(param_dict)
 
 
+class CTERInitParams(CerebrumBaseModel):
+    pass
+
+class CTERExecParams(CerebrumBaseModel):
+    ratio : t.Annotated[float, Field(title='Min. Ratio')]
+
+CTERBaseParams : t.TypeAlias = BaseParams[CTERInitParams, CTERExecParams]
+
 class CTExplainedRatioFilter(OpXFormer):
-    class FilterParams(BaseParams):
+    class FilterParams(CTERBaseParams):
         ratio : t.Annotated[float, Field(title='Min. Ratio')]
 
     def __init__(self, **params: t.Any):
@@ -69,30 +86,40 @@ class CTExplainedRatioFilter(OpXFormer):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[CTERBaseParams]:
         return cls.FilterParams
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> CTERBaseParams:
         return cls.FilterParams.model_validate(param_dict)
 
 
+
+class CTPFInitParams(CerebrumBaseModel):
+    pass
+
+class CTPFExecParams(CerebrumBaseModel):
+    region : t.Annotated[
+        str | None, Field(title="Region (structure_parent__acronym)")
+    ] = None
+    layer  : t.Annotated[
+        str | None, Field(title="Layer (structure__layer)")
+    ] = None
+    line   : t.Annotated[
+        str | None, Field(title="Line (line_name)")
+    ] = None
+    reporter_status : t.Annotated[
+        str | None, Field(title="Reporter Status (cell_reporter_status)")
+    ] = None 
+    key    : t.Annotated[str , Field(title="Output Key")] = ""
+
+CTPFBaseParams : t.TypeAlias = BaseParams[CTPFInitParams, CTPFExecParams]
+
 class CTPropertyFilter(OpXFormer):
-    class FilterParams(BaseParams):
-        region : t.Annotated[
-            str | None, Field(title="Region (structure_parent__acronym)")
-        ] = None
-        layer  : t.Annotated[
-            str | None, Field(title="Layer (structure__layer)")
-        ] = None
-        line   : t.Annotated[
-            str | None, Field(title="Line (line_name)")
-        ] = None
-        reporter_status : t.Annotated[
-            str | None, Field(title="Reporter Status (cell_reporter_status)")
-        ] = None 
-        key    : t.Annotated[str , Field(title="Output Key")] = ""
+    class FilterParams(CTPFBaseParams):
+        init_params: t.Annotated[CTPFInitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[CTPFExecParams, Field(title='Exec Params')]
 
     QUERY_FILTER_MAP : dict[str, list[str]] = {
         "region": ["structure_parent__acronym", "__eq__"],
@@ -123,12 +150,12 @@ class CTPropertyFilter(OpXFormer):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[CTPFBaseParams]:
         return cls.FilterParams
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> CTPFBaseParams:
         return cls.FilterParams.model_validate(param_dict)
 
 #

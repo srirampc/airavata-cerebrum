@@ -10,7 +10,7 @@ from marimo._plugins.ui._core.ui_element import UIElement
 from typing_extensions import override
 
 #
-from ..base import CerebrumBaseModel, BaseStruct
+from ..base import CerebrumBaseModel, BaseStruct, BaseParams, INPGT, EXPGT
 from ..model import structure as structure
 from ..model.setup import RecipeKeys, RecipeLabels, RecipeSetup
 from . import (BasePanel, BaseTree, CBTreeNode, RcpTreeNames, StructTreeNames,
@@ -218,25 +218,24 @@ class DBWorkflowSidePanel(MoBasePanelT):
     def workflow_ui(
         self,
         template_map: dict[str, t.Any],
-        elt_params: CerebrumBaseModel | None = None,
+        elt_params: BaseParams[INPGT, EXPGT]  | None = None,
     ) -> list[MoUIElement]:
         return list(itertools.chain.from_iterable(
             (
                 self.params_widget(
                     template_map,
-                    elt_params,
+                    elt_params.init_params,
                     RecipeKeys.INIT_PARAMS,
                     RecipeLabels.INIT_PARAMS,
                 ),
                 self.params_widget(
                     template_map,
-                    elt_params,
+                    elt_params.exec_params,
                     RecipeKeys.EXEC_PARAMS,
                     RecipeLabels.EXEC_PARAMS,
                 ),
             )
         ))
-
 
     def params_widget(
         self,
@@ -250,16 +249,9 @@ class DBWorkflowSidePanel(MoBasePanelT):
                 self.property_widget(elt_params, ekey, vmap)
                 for ekey, vmap in template_map[params_key].items()
             )
-            # wd_list = [wx for wx in wd_itr if wx is not None]
-            # return wd_list
             return (wx for wx in wd_itr if wx is not None)
-            # return mo.ui.array(
-            #     [wx for wx in wd_itr if wx is not None],
-            #     label=params_label
-            # )
         else:
             return []
-        # return mo.ui.array([], label=params_label)
 
     def property_widget(
         self,
@@ -267,8 +259,10 @@ class DBWorkflowSidePanel(MoBasePanelT):
         ekey: str,
         vmap: dict[str, t.Any],
     ):
-        if elt_params and ekey in elt_params.model_fields:
-            vmap["default"] = elt_params.get(ekey)
+        if elt_params:
+            evalue = elt_params.get(ekey)
+            if evalue is not None:
+               vmap["default"] = elt_params.get(ekey)
         return render_property(vmap[RecipeKeys.TYPE], **vmap)
 
 

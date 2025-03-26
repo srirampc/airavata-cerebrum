@@ -14,7 +14,8 @@ from aisynphys.database.schema.experiment import PairBase
 from aisynphys.cell_class import CellClass, classify_cells, classify_pairs
 from aisynphys.connectivity import measure_connectivity
 #
-from ..base import DbQuery, OpXFormer, BaseParams, QryDBWriter, QryItr
+from ..base import (CerebrumBaseModel, DbQuery, OpXFormer,
+                    BaseParams, QryDBWriter, QryItr)
 
 
 class CellClassSelection(t.NamedTuple):
@@ -101,15 +102,23 @@ class AISynPhysHelper:
                 sigma=100e-6,
                 dist_measure="lateral_distance",
             ), 0 
-        except RuntimeWarning as rex:
+        except RuntimeWarning as _rex:
             return {}, 1
 
 
+class AISynInitParams(CerebrumBaseModel):
+    download_base : t.Annotated[str, Field(title="Download Base Dir.")]
+
+class AISynExecParams(CerebrumBaseModel):
+    layer : t.Annotated[list[str], Field(title="Layers")]
+    projects: t.Annotated[list[str], Field(title="AI Syn. Projects")] = []
+
+AISynBaseParams : t.TypeAlias = BaseParams[AISynInitParams, AISynExecParams]
+
 class AISynPhysQuery(DbQuery):
-    class QryParams(BaseParams):
-        download_base : t.Annotated[str, Field(title="Download Base")]
-        layer : t.Annotated[list[str], Field(title="Layers")]
-        projects: t.Annotated[list[str], Field(title="AI Syn. Projects")] = []
+    class QryParams(AISynBaseParams):
+        init_params: t.Annotated[AISynInitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[AISynExecParams, Field(title='Exec Params')]
 
     def __init__(self, **params: t.Any):
         """
@@ -194,12 +203,12 @@ class AISynPhysQuery(DbQuery):
 
     @override
     @classmethod
-    def params_type(cls) -> type[BaseParams]:
+    def params_type(cls) -> type[AISynBaseParams]:
         return cls.QryParams
 
     @override
     @classmethod
-    def params_instance(cls, param_dict: dict[str, t.Any]) -> BaseParams:
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> AISynBaseParams:
         return cls.QryParams.model_validate(param_dict)
 
 
