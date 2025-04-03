@@ -1,4 +1,4 @@
-model_id population "Unitary PSP" syn_weight dynamics_params syn_weight_psp
+target_model_id population unitary_PSP syn_weight dynamics_params syn_weight_psp
 475585413 i1Htr3a 0.09999999999999432 0.345 exc_to_vip.json 3.450000000000196
 482649712 i1Htr3a 0.09099999999999397 0.345 exc_to_vip.json 3.791208791209042
 482654108 i1Htr3a 0.057999999999992724 0.345 exc_to_vip.json 5.948275862069711

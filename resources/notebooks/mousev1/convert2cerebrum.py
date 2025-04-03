@@ -91,12 +91,12 @@ def build_connections(conn_file: str, model_file: str):
 
 def bkg_conn_model(
     m_entry: dict[str, t.Any]
-)-> tuple[tuple[str, str], dict[str, t.Any]]:
+)-> tuple[tuple[tuple[str, str], tuple[str, str]], dict[str, t.Any]]:
     _, lx, neuronx = parse.parse("{}{:d}{}", m_entry["population"])  # type:ignore
-    rkeyx = (str(lx), neuronx)
+    rkeyx = (('bkg', ''), (str(lx), neuronx))
     stgt_mid = str(m_entry["target_model_id"])
     cx_dict = {}
-    cx_dict["name"] = repr(((str(lx), neuronx), stgt_mid))
+    cx_dict["name"] = repr((('bkg', ''), (str(lx), neuronx), stgt_mid))
     cx_dict["target_model_id"] = stgt_mid
     cx_dict["dynamics_params"] = m_entry["dynamics_params"]
     cx_dict["property_map"] = {
@@ -113,7 +113,7 @@ def bkg_connections(
     bkg_weights_file: str,
     out_file: str,
 ) -> dict[str, t.Any]:
-    wdf = pd.read_csv(bkg_weights_file, sep=" ")
+    wdf : pd.DataFrame = pd.read_csv(bkg_weights_file, sep=" ")
     bkg_mdl_lst = wdf.to_dict(orient="records")
     bkg_mx_lst = [bkg_conn_model(x) for x in bkg_mdl_lst]
     bkg_mx_dict = collections.defaultdict(list)
@@ -123,7 +123,7 @@ def bkg_connections(
         repr(kb): {
             "name": repr(kb),
             "pre": ("bkg", ""),
-            "post": kb,
+            "post": kb[1],
             "property_map": {"n_conn": 4},
             "connect_models": {vbx["name"]: vbx for vbx in vb},
         }
@@ -187,17 +187,17 @@ def v1_main():
 
 def prep_l4():
     lgn_connections(
-        "./lgn_weights_model_l4.csv",
-        "./lgn_conn_net_l4.json"
+        "./props/lgn_weights_model.csv",
+        "./props/lgn_conn_net.json"
     )
     bkg_connections(
-        "./bkg_weights_model_l4.csv",
-        "./bkg_conn_net_l4.json"
+        "./props/bkg_weights_model.csv",
+        "./props/bkg_weights_model.json"
     )
 
 
 def main():
-    pass
+    prep_l4()
 
 
 if __name__ == "__main__":
