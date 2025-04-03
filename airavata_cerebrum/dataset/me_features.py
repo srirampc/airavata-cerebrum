@@ -1,0 +1,126 @@
+import typing as t
+import duckdb
+import polars as pl
+
+from typing_extensions import override
+from pydantic import Field
+
+from ..base import CerebrumBaseModel, BaseParams, DbQuery, OpXFormer, QryDBWriter, QryItr
+
+class InitParams(CerebrumBaseModel):
+    file_url : t.Annotated[str, Field(title="Download Base")]
+
+class ExecParams(CerebrumBaseModel):
+    key           : t.Annotated[str , Field(title="Input Key")] = ""
+    attribute     : t.Annotated[str | None, Field(title="Attribute")] = None
+    mef_attribute  : t.Annotated[str | None , Field(title="MEF Property")] = None
+
+
+MEFParamsBase : t.TypeAlias = BaseParams[InitParams,  ExecParams] 
+
+class MEFDataQuery(DbQuery):
+    class QryParams(MEFParamsBase):
+        init_params: t.Annotated[InitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[ExecParams, Field(title='Exec Params')]
+    
+    def __init__(self, **params: t.Any):
+        self.file_url : str = params["file_url"]
+
+    def find_in_def(
+        self,
+        medf: pl.DataFrame,
+        column: str | None,
+        cvalue: t.Any
+    ) -> dict[str, t.Any]:
+        if column is None:
+            return {}
+        fdf = medf.filter(medf.get_column(column) == cvalue).head(1)
+        if fdf.shape[0] == 0:
+            return {}
+        return fdf.to_dicts()[0]
+
+    @override
+    def run(
+        self,
+        in_iter: QryItr | None,
+        key: str = '',
+        attribute: str | None = None,
+        mef_attribute: str | None = None,
+        **params: t.Any,
+    ) -> QryItr | None:
+        edf = pl.read_excel(self.file_url)
+        if in_iter is None:
+            return ( {"mef": rcdx} for rcdx in edf.to_dicts() )
+        #
+        def select_fn(initx: t.Any):
+            return initx[key][attribute] if key else initx[attribute]
+        #
+        return (
+            inx | {
+                "mef" : self.find_in_def(
+                    edf,
+                    mef_attribute,
+                    select_fn(inx)
+                )
+            }
+            for inx in in_iter
+        )
+        
+
+    @override
+    @classmethod
+    def params_type(cls) -> type[MEFParamsBase]:
+        return cls.QryParams
+
+    @override
+    @classmethod
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> MEFParamsBase:
+        return cls.QryParams.model_validate(param_dict)
+
+
+class DFBuilder:
+    @staticmethod
+    def build(
+        in_iter: QryItr | None,
+        **_params: t.Any,
+    ) -> pl.DataFrame | None:
+        if in_iter is None:
+            return None
+        return pl.DataFrame(qrst['mef'] for qrst in in_iter)
+
+
+class DuckDBWriter(QryDBWriter):
+    def __init__(self, db_conn: duckdb.DuckDBPyConnection):
+        self.conn : duckdb.DuckDBPyConnection = db_conn
+
+    @override
+    def write(
+        self,
+        in_iter: QryItr | None,
+        **_params: t.Any,
+    ) -> None:
+        result_df = DFBuilder.build(in_iter)  # pyright: ignore[reportUnusedVariable]
+        tb_name = f"mef_features"
+        self.conn.execute(
+            f"CREATE OR REPLACE TABLE {tb_name} AS SELECT * FROM result_df"
+        )
+        self.conn.commit()
+
+
+
+
+#
+# ------- Query and Xform Registers -----
+#
+def query_register() -> list[type[DbQuery]]:
+    return [
+        MEFDataQuery,
+    ]
+
+
+def xform_register() -> list[type[OpXFormer]]:
+    return []
+
+
+def dbwriter_register() -> type[QryDBWriter]:
+    return DuckDBWriter

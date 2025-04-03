@@ -158,7 +158,7 @@ def render_property(
         case "tuple":
             return PropertyTupleLayout(value=value, **kwargs)
         case _:
-            return scalar_widget(widget_key, **kwargs)
+            return scalar_widget(widget_key, value, **kwargs)
 
 
 # Base class for side panel

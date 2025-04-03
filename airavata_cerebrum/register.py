@@ -6,6 +6,7 @@ from .base import OpXFormer, DbQuery, QryDBWriter
 from .dataset import abc_mouse as abc_mouse_db
 from .dataset import abm_celltypes as abm_celltypes_db
 from .dataset import ai_synphys as ai_synphys_db
+from .dataset import me_features as me_features_db
 from .operations import abc_mouse as abc_mouse_ops
 from .operations import abm_celltypes as abm_celltypes_ops
 from .operations import ai_synphys as ai_synphys_ops
@@ -65,6 +66,7 @@ QUERY_REGISTER: TypeRegister[DbQuery] = TypeRegister(
         abc_mouse_db.query_register(),
         abm_celltypes_db.query_register(),
         ai_synphys_db.query_register(),
+        me_features_db.quer_register(),
         xform.query_register(),
         json_filter.query_register(),
         dict_filter.query_register(),
@@ -80,6 +82,7 @@ XFORM_REGISTER: TypeRegister[OpXFormer] = TypeRegister(
         abc_mouse_db.xform_register(),
         abm_celltypes_db.xform_register(),
         ai_synphys_db.xform_register(),
+        me_features_db.xform_register()
         xform.xform_register(),
         json_filter.xform_register(),
         dict_filter.xform_register(),
@@ -95,6 +98,7 @@ QRY_DBWIRTER_REGISTER: TypeRegister[QryDBWriter] = TypeRegister(
         abm_celltypes_db.dbwriter_register(),
         abc_mouse_db.dbwriter_register(),
         ai_synphys_db.dbwriter_register(),
+        me_features_db.dbwriter_register(),
     ],
     QryDBWriter,
     key_source='module'

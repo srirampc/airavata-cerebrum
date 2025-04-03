@@ -1,4 +1,5 @@
 import typing as t
+import functools
 #
 
 def class_qual_name(src_class: type):
@@ -33,3 +34,16 @@ def merge_dict_inplace(
             merge_dict_inplace(dest_dct[k], from_dct[k])
         else:
             dest_dct[k] = from_dct[k]
+
+
+def flip_args(bin_func: t.Callable[[t.Any, t.Any], t.Any]):
+    def flip_fn(arg_a: t.Any, arg_b: t.Any) -> t.Any:
+        return bin_func(arg_b, arg_a)
+    return flip_fn
+
+
+def flip_function(func: t.Callable[[t.Any, ], t.Any]):
+    @functools.wraps
+    def flip_fn(*args: t.Any):
+        return func(*args[::-1])
+    return flip_fn

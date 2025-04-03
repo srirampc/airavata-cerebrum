@@ -46,6 +46,7 @@ class ModelRecipe(pydantic.BaseModel):
         self,
         db_connect_output: dict[str, typing.Any] | None ,
         db_out_loc: str | pathlib.Path,
+        write_duck: bool,
     ) -> None:
         if db_connect_output is None: 
             return
@@ -55,7 +56,7 @@ class ModelRecipe(pydantic.BaseModel):
                 db_out_loc,
                 indent=4,
             )
-        if self.write_duck:
+        if write_duck:
             duck_out_loc = str(db_out_loc).replace(self.out_format, 'db')
             workflow.write_db_connect_duck(
                 db_connect_output,
@@ -68,7 +69,7 @@ class ModelRecipe(pydantic.BaseModel):
         db_connect_output = workflow.run_db_connect_workflows(db_src_config)
         #
         db_out_loc = self.output_location(RecipeKeys.DB_CONNECT)
-        self.save_db_out(db_connect_output, db_out_loc)
+        self.save_db_out(db_connect_output, db_out_loc, self.write_duck)
         _log().info("Completed Query and Download Data")
         return db_connect_output
 
@@ -87,7 +88,7 @@ class ModelRecipe(pydantic.BaseModel):
             )
             #
             db_out_loc = self.output_location(RecipeKeys.SRC_DATA)
-            self.save_db_out(db_post_op_data, db_out_loc)
+            self.save_db_out(db_post_op_data, db_out_loc, False)
         _log().info("Completed Post ops")
         return db_post_op_data
 
@@ -141,12 +142,12 @@ class ModelRecipe(pydantic.BaseModel):
         self.map_source_data()
         return self.build_net_struct()
 
-    def apply_mod(self):
+    def apply_mod(self, ncells: int=30000):
         if self.mod_structure:
             # Update user preference
             self.network_struct = self.network_struct.apply_mod(self.mod_structure)
         # Estimate NCells from the fractions
-        self.network_struct.populate_ncells(30000)
+        self.network_struct.populate_ncells(ncells)
         if self.save_flag and self.network_struct:
             cbmio.dump(
                 self.network_struct.model_dump(),

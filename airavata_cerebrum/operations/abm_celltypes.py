@@ -1,4 +1,5 @@
 import typing as t
+import operator
 #
 from typing_extensions import override
 from pydantic import Field
@@ -7,10 +8,11 @@ from ..base import (CerebrumBaseModel, NoneParams, OpXFormer,
                     BaseParams, XformItr, DbQuery)
 from .json_filter import IterJPatchFilter, IterJPointerFilter
 from .dict_filter import IterAttrFilter
+from ..util import flip_args
 
 
 class CTMNExecParams(CerebrumBaseModel):
-    model_name :t.Annotated[str, Field(title='Model Name')]
+    name :t.Annotated[str, Field(title='Model Name')]
 
 CTMNBaseParams : t.TypeAlias = BaseParams[NoneParams, CTMNExecParams]
 
@@ -31,8 +33,8 @@ class CTModelNameFilter(OpXFormer):
         in_iter: XformItr | None,
         **params: t.Any,
     ) -> XformItr | None:
-        model_name = params["model_name"]
-        filter_exp = self.filter_fmt.format(model_name)
+        name = params["name"]
+        filter_exp = self.filter_fmt.format(name)
         return self.jpatch_filter.xform(in_iter,
                                         filter_exp=filter_exp,
                                         dest_path=self.dest_path)
@@ -101,6 +103,9 @@ class CTPFExecParams(CerebrumBaseModel):
     line   : t.Annotated[
         str | None, Field(title="Line (line_name)")
     ] = None
+    line_start : t.Annotated[
+        tuple[str] | None, Field(title="Lines Starts With (line_name)")
+    ]
     reporter_status : t.Annotated[
         str | None, Field(title="Reporter Status (cell_reporter_status)")
     ] = None 
@@ -113,11 +118,15 @@ class CTPropertyFilter(OpXFormer):
         init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[CTPFExecParams, Field(title='Exec Params')]
 
-    QUERY_FILTER_MAP : dict[str, list[str]] = {
-        "region": ["structure_parent__acronym", "__eq__"],
-        "layer": ["structure__layer", "__eq__"],
-        "line": ["line_name", "__contains__"],
-        "reporter_status": ["cell_reporter_status", "__eq__"]
+    PredicateT : t.TypeAlias = t.Callable[[t.Any, t.Any], bool]
+
+    QUERY_FILTER_MAP : dict[str, tuple[str, PredicateT, type]] = {
+        "region"     : ("structure_parent__acronym", operator.eq, str),
+        "layer"      : ("structure__layer", operator.eq, str),
+        "line"       : ("line_name", operator.contains, str),
+        "line_start" : ("line_name", str.startswith, tuple),
+        "donor_in"   : ("donor__id", flip_args(operator.contains), list),
+        "reporter_status" : ("cell_reporter_status", operator.eq, str),
     }
 
     def __init__(self, **params: t.Any):
@@ -129,16 +138,17 @@ class CTPropertyFilter(OpXFormer):
         in_iter: XformItr | None,
         **params: t.Any
     ) -> XformItr | None:
-        key = params["key"] if "key" in params else None
+        key = params["key"] if "key" in params and params["key"] else None
         filters = []
         for pkey, valx in params.items():
             if pkey in CTPropertyFilter.QUERY_FILTER_MAP:
-                filter_attr = CTPropertyFilter.QUERY_FILTER_MAP[pkey].copy()
-                filter_attr.append(str(valx))
-                filters.append(filter_attr)
-        return self.cell_attr_filter.xform(in_iter,
-                                           key=key,
-                                           filters=filters)
+                attr, bin_op, rvtype = CTPropertyFilter.QUERY_FILTER_MAP[pkey]
+                filters.append([attr, bin_op, rvtype(valx)])
+        return self.cell_attr_filter.xform(
+            in_iter,
+            key=key,
+            filters=filters
+        )
 
     @override
     @classmethod
