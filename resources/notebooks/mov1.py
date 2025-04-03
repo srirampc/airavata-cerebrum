@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.11.26"
+__generated_with = "0.12.0"
 app = marimo.App(width="medium")
 
 
@@ -121,6 +121,8 @@ def _():
         "./v1/recipe/custom_mod_l23.json",
         "./v1/recipe/custom_mod_l4.json",
         "./v1/recipe/custom_mod_ext.json",
+        "./v1/recipe/custom_mod_ext_lgn.json",
+        "./v1/recipe/custom_mod_ext_bkg.json",
     ]
     return cmod_files, m_base_dir, m_name, m_rcp_dir, m_rcp_files
 
@@ -147,6 +149,21 @@ def _(
     tree_view_widths = [0.4, 0.6]
     cmod_struct = cbm_structure.Network.from_file_list(cmod_files)
     return cmod_struct, mdr_setup, tree_view_widths
+
+
+@app.cell
+def _(cbm_structure):
+    tx = cbm_structure.Network.from_file_list( [
+        "./v1/recipe/custom_mod.json",
+        "./v1/recipe/custom_mod_l1.json",
+        "./v1/recipe/custom_mod_l23.json",
+        "./v1/recipe/custom_mod_l4.json",
+        "./v1/recipe/custom_mod_ext.json",
+        "./v1/recipe/custom_mod_ext_lgn.json",
+        "./v1/recipe/custom_mod_ext_bkg.json",
+    ])
+    tx.ext_networks['bkg']
+    return (tx,)
 
 
 @app.cell

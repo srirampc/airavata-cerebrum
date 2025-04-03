@@ -448,7 +448,7 @@
                         "name": "airavata_cerebrum.operations.abm_celltypes.CTModelNameFilter",
                         "init_params": {},
                         "exec_params": {
-                            "model_name": "3 LIF + Afterspike Currents"
+                            "name": "3 LIF + Afterspike Currents"
                         }
                     },
                     {

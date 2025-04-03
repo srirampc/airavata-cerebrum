@@ -7968,7 +7968,7 @@
         "(('4', 'Pvalb'), ('4', 'Sst'))": {
             "airavata_cerebrum.dataset.ai_synphys": [
                 {
-                    "probability": 0.06535395384325071
+                    "probability": 0.0653539538432507
                 }
             ]
         },
@@ -7982,7 +7982,7 @@
         "(('4', 'Sst'), ('4', 'Pvalb'))": {
             "airavata_cerebrum.dataset.ai_synphys": [
                 {
-                    "probability": 0.39212372305950427
+                    "probability": 0.3921237230595042
                 }
             ]
         },
@@ -8003,14 +8003,14 @@
         "(('4', 'Vip'), ('4', 'Pvalb'))": {
             "airavata_cerebrum.dataset.ai_synphys": [
                 {
-                    "probability": 0.02541201725863476
+                    "probability": 0.02541201725863477
                 }
             ]
         },
         "(('4', 'Vip'), ('4', 'Sst'))": {
             "airavata_cerebrum.dataset.ai_synphys": [
                 {
-                    "probability": 0.1885601126012824
+                    "probability": 0.18856011260128236
                 }
             ]
         },

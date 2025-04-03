@@ -192,7 +192,7 @@
         "doc": "Filter CT by Model Name",
         "init_params": {},
         "exec_params": {
-            "model_name": {
+            "name": {
                 "type": "text",
                 "label": "Model Name",
                 "doc": "Model Name",

@@ -18,9 +18,9 @@
             "neurons": {
                 "('4', 'Scnn1a')": {
                     "name": "('4', 'Scnn1a')",
+                    "ei": "e",
                     "N": 2793,
                     "fraction": 0.5,
-                    "ei": "e",
                     "dims": {
                         "nsyn_lognorm_shape": 0.345,
                         "nsyn_lognorm_scale": 2188.765
@@ -34,14 +34,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "501023852_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566570502",
                                 "explained_variance_ratio": 0.804979117861908
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "323838579": {
                             "name": "323838579",
@@ -51,14 +49,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "323838579_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566299577",
                                 "explained_variance_ratio": 0.842759937212809
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "500964358": {
                             "name": "500964358",
@@ -68,14 +64,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "500964358_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566579924",
                                 "explained_variance_ratio": 0.739306396272682
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "395785266": {
                             "name": "395785266",
@@ -85,14 +79,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "395785266_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566314373",
                                 "explained_variance_ratio": 0.701215125255988
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "476266853": {
                             "name": "476266853",
@@ -102,14 +94,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "476266853_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566330591",
                                 "explained_variance_ratio": 0.806758572784535
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "320207387": {
                             "name": "320207387",
@@ -119,14 +109,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "320207387_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566297026",
                                 "explained_variance_ratio": 0.894046170447377
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "517647182": {
                             "name": "517647182",
@@ -136,14 +124,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "517647182_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566620822",
                                 "explained_variance_ratio": 0.775717089564003
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "325464516": {
                             "name": "325464516",
@@ -153,14 +139,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "325464516_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566305755",
                                 "explained_variance_ratio": 0.715142463427643
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "476218657": {
                             "name": "476218657",
@@ -170,22 +154,20 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "476218657_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566329940",
                                 "explained_variance_ratio": 0.762371556431909
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         }
                     }
                 },
                 "('4', 'Rorb')": {
                     "name": "('4', 'Rorb')",
+                    "ei": "e",
                     "N": 2793,
                     "fraction": 0.5,
-                    "ei": "e",
                     "dims": {
                         "nsyn_lognorm_shape": 0.345,
                         "nsyn_lognorm_scale": 2188.765
@@ -199,14 +181,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "322723785_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566297752",
                                 "explained_variance_ratio": 0.730559151838995
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "478586425": {
                             "name": "478586425",
@@ -216,14 +196,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "478586425_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566380630",
                                 "explained_variance_ratio": 0.85897655024411
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "329557305": {
                             "name": "329557305",
@@ -233,14 +211,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "329557305_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566304465",
                                 "explained_variance_ratio": 0.721676656574107
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "500859045": {
                             "name": "500859045",
@@ -250,14 +226,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "500859045_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566567858",
                                 "explained_variance_ratio": 0.829506626310277
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "479179020": {
                             "name": "479179020",
@@ -267,14 +241,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "479179020_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "497548728",
                                 "explained_variance_ratio": 0.758271215777737
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "324065524": {
                             "name": "324065524",
@@ -284,14 +256,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "324065524_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566304278",
                                 "explained_variance_ratio": 0.708766298377708
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "322761772": {
                             "name": "322761772",
@@ -301,14 +271,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "322761772_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "496894069",
                                 "explained_variance_ratio": 0.726505130574454
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "467357834": {
                             "name": "467357834",
@@ -318,14 +286,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "467357834_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566311880",
                                 "explained_variance_ratio": 0.79250686439359
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "329550277": {
                             "name": "329550277",
@@ -335,14 +301,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "329550277_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "496949295",
                                 "explained_variance_ratio": 0.751050938768346
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "476562817": {
                             "name": "476562817",
@@ -352,14 +316,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "476562817_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566332823",
                                 "explained_variance_ratio": 0.84880767775926
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "466378900": {
                             "name": "466378900",
@@ -369,14 +331,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "466378900_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566310968",
                                 "explained_variance_ratio": 0.735910261016811
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "486472847": {
                             "name": "486472847",
@@ -386,14 +346,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "486472847_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "500984330",
                                 "explained_variance_ratio": 0.716120226522019
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "480648382": {
                             "name": "480648382",
@@ -403,14 +361,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "480648382_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "500827836",
                                 "explained_variance_ratio": 0.831730489197925
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "490626827": {
                             "name": "490626827",
@@ -420,14 +376,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "490626827_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "501150279",
                                 "explained_variance_ratio": 0.715790575862436
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "479508018": {
                             "name": "479508018",
@@ -437,14 +391,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "479508018_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "497614572",
                                 "explained_variance_ratio": 0.772669354878466
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "490626718": {
                             "name": "490626718",
@@ -454,14 +406,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "490626718_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "501479576",
                                 "explained_variance_ratio": 0.944237983422562
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "484770879": {
                             "name": "484770879",
@@ -471,14 +421,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "484770879_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "500944400",
                                 "explained_variance_ratio": 0.87327900747196
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "500894271": {
                             "name": "500894271",
@@ -488,14 +436,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "500894271_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566579552",
                                 "explained_variance_ratio": 0.807813345706338
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "485836906": {
                             "name": "485836906",
@@ -505,14 +451,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "485836906_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "501472487",
                                 "explained_variance_ratio": 0.752461995519786
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "480124551": {
                             "name": "480124551",
@@ -522,14 +466,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "480124551_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "500824719",
                                 "explained_variance_ratio": 0.83278810485052
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "469763389": {
                             "name": "469763389",
@@ -539,14 +481,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "469763389_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566309561",
                                 "explained_variance_ratio": 0.79168896832167
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "473020156": {
                             "name": "473020156",
@@ -556,14 +496,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "473020156_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566324902",
                                 "explained_variance_ratio": 0.701788785706704
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "486500736": {
                             "name": "486500736",
@@ -573,14 +511,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "486500736_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "500981952",
                                 "explained_variance_ratio": 0.764108892138634
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "484679812": {
                             "name": "484679812",
@@ -590,14 +526,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "484679812_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "500943857",
                                 "explained_variance_ratio": 0.70786372893082
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "467003163": {
                             "name": "467003163",
@@ -607,22 +541,20 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "467003163_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566308583",
                                 "explained_variance_ratio": 0.876284202390628
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         }
                     }
                 },
                 "('4', 'Vip')": {
                     "name": "('4', 'Vip')",
+                    "ei": "i",
                     "N": 92,
                     "fraction": 0.1319327731092437,
-                    "ei": "i",
                     "dims": {
                         "nsyn_lognorm_shape": 0.537,
                         "nsyn_lognorm_scale": 2355.279
@@ -636,14 +568,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "501570114_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566595100",
                                 "explained_variance_ratio": 0.762023175017636
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "560690291": {
                             "name": "560690291",
@@ -653,14 +583,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "560690291_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "587926533",
                                 "explained_variance_ratio": 0.758546494577953
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "562540395": {
                             "name": "562540395",
@@ -670,14 +598,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "562540395_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "564106308",
                                 "explained_variance_ratio": 0.838448656050432
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "535728342": {
                             "name": "535728342",
@@ -687,14 +613,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "535728342_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566628250",
                                 "explained_variance_ratio": 0.803567153411781
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "531121585": {
                             "name": "531121585",
@@ -704,14 +628,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "531121585_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566627135",
                                 "explained_variance_ratio": 0.762310789928741
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "561934585": {
                             "name": "561934585",
@@ -721,22 +643,20 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "561934585_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "587956298",
                                 "explained_variance_ratio": 0.767161080439515
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         }
                     }
                 },
                 "('4', 'Pvalb')": {
                     "name": "('4', 'Pvalb')",
+                    "ei": "i",
                     "N": 374,
                     "fraction": 0.5327731092436975,
-                    "ei": "i",
                     "dims": {
                         "nsyn_lognorm_shape": 0.433,
                         "nsyn_lognorm_scale": 7432.587
@@ -750,14 +670,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "487405644_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "501076865",
                                 "explained_variance_ratio": 0.978978117495363
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "478793814": {
                             "name": "478793814",
@@ -767,14 +685,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "478793814_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566386663",
                                 "explained_variance_ratio": 0.907489641426623
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "475894121": {
                             "name": "475894121",
@@ -784,14 +700,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "475894121_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566332803",
                                 "explained_variance_ratio": 0.9447642075115
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "571314481": {
                             "name": "571314481",
@@ -801,14 +715,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "571314481_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "573449797",
                                 "explained_variance_ratio": 0.943814110004914
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "478958894": {
                             "name": "478958894",
@@ -818,14 +730,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "478958894_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566405808",
                                 "explained_variance_ratio": 0.973188133614132
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "569997187": {
                             "name": "569997187",
@@ -835,14 +745,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "569997187_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "571028835",
                                 "explained_variance_ratio": 0.94704553927869
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "579414994": {
                             "name": "579414994",
@@ -852,14 +760,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "579414994_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "588053649",
                                 "explained_variance_ratio": 0.95450859752368
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "481127348": {
                             "name": "481127348",
@@ -869,14 +775,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "481127348_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "500844225",
                                 "explained_variance_ratio": 0.964346353652542
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "491038812": {
                             "name": "491038812",
@@ -886,14 +790,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "491038812_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "501296659",
                                 "explained_variance_ratio": 0.94232928843393
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "579672464": {
                             "name": "579672464",
@@ -903,14 +805,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "579672464_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "588063946",
                                 "explained_variance_ratio": 0.862093814005756
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "488708322": {
                             "name": "488708322",
@@ -920,14 +820,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "488708322_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566533821",
                                 "explained_variance_ratio": 0.9031829756375
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "341459814": {
                             "name": "341459814",
@@ -937,14 +835,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "341459814_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566306223",
                                 "explained_variance_ratio": 0.973365261508795
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "481127173": {
                             "name": "481127173",
@@ -954,14 +850,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "481127173_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "500844975",
                                 "explained_variance_ratio": 0.970692905005722
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "487667205": {
                             "name": "487667205",
@@ -971,14 +865,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "487667205_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "501068104",
                                 "explained_variance_ratio": 0.973413750410277
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "572375809": {
                             "name": "572375809",
@@ -988,22 +880,20 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "572375809_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "574081226",
                                 "explained_variance_ratio": 0.968937459774255
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         }
                     }
                 },
                 "('4', 'Sst')": {
                     "name": "('4', 'Sst')",
+                    "ei": "i",
                     "N": 374,
                     "fraction": 0.5327731092436975,
-                    "ei": "i",
                     "dims": {
                         "nsyn_lognorm_shape": 0.55,
                         "nsyn_lognorm_scale": 5305.151
@@ -1017,14 +907,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "476099282_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566325850",
                                 "explained_variance_ratio": 0.836228193535525
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "501282204": {
                             "name": "501282204",
@@ -1034,14 +922,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "501282204_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566591366",
                                 "explained_variance_ratio": 0.828843777723135
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "485061364": {
                             "name": "485061364",
@@ -1051,14 +937,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "485061364_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "500944130",
                                 "explained_variance_ratio": 0.959548172369774
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "501280518": {
                             "name": "501280518",
@@ -1068,14 +952,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "501280518_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566568687",
                                 "explained_variance_ratio": 0.75889226352667
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "573622646": {
                             "name": "573622646",
@@ -1085,14 +967,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "573622646_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "588050495",
                                 "explained_variance_ratio": 0.959060586790662
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         },
                         "476753465": {
                             "name": "476753465",
@@ -1102,14 +982,12 @@
                             "m_type": "point_process",
                             "template": "nest:glif_psc",
                             "dynamics_params": "476753465_glif_lif_asc_config.json",
+                            "morphology": "",
                             "property_map": {
                                 "id": "566330421",
                                 "explained_variance_ratio": 0.830756478743994
                             },
-                            "data_connect": {
-                                "name": "",
-                                "property_map": {}
-                            }
+                            "data_connect": []
                         }
                     }
                 }
@@ -5613,9 +5491,9 @@
                     "neurons": {
                         "sON_TF1": {
                             "name": "sON_TF1",
+                            "ei": "e",
                             "N": 7,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -5631,19 +5509,17 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         },
                         "sON_TF2": {
                             "name": "sON_TF2",
+                            "ei": "e",
                             "N": 5,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -5659,19 +5535,17 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         },
                         "sON_TF4": {
                             "name": "sON_TF4",
+                            "ei": "e",
                             "N": 7,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -5687,19 +5561,17 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         },
                         "sON_TF8": {
                             "name": "sON_TF8",
+                            "ei": "e",
                             "N": 15,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -5715,19 +5587,17 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         },
                         "sOFF_TF1": {
                             "name": "sOFF_TF1",
+                            "ei": "e",
                             "N": 8,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -5743,19 +5613,17 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         },
                         "sOFF_TF2": {
                             "name": "sOFF_TF2",
+                            "ei": "e",
                             "N": 8,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -5771,19 +5639,17 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         },
                         "sOFF_TF4": {
                             "name": "sOFF_TF4",
+                            "ei": "e",
                             "N": 15,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -5799,19 +5665,17 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         },
                         "sOFF_TF8": {
                             "name": "sOFF_TF8",
+                            "ei": "e",
                             "N": 8,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -5827,19 +5691,17 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         },
                         "sOFF_TF15": {
                             "name": "sOFF_TF15",
+                            "ei": "e",
                             "N": 7,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -5855,19 +5717,17 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         },
                         "tOFF_TF4": {
                             "name": "tOFF_TF4",
+                            "ei": "e",
                             "N": 10,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -5883,19 +5743,17 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         },
                         "tOFF_TF8": {
                             "name": "tOFF_TF8",
+                            "ei": "e",
                             "N": 5,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -5911,19 +5769,17 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         },
                         "tOFF_TF15": {
                             "name": "tOFF_TF15",
+                            "ei": "e",
                             "N": 8,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     2,
@@ -5939,19 +5795,17 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         },
                         "sONsOFF_001": {
                             "name": "sONsOFF_001",
+                            "ei": "e",
                             "N": 8,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     6
@@ -5966,19 +5820,17 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         },
                         "sONtOFF_001": {
                             "name": "sONtOFF_001",
+                            "ei": "e",
                             "N": 5,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {
                                 "size_range": [
                                     9
@@ -5993,11 +5845,9 @@
                                     "m_type": "",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         }
@@ -6744,9 +6594,9 @@
                     "neurons": {
                         "bkg": {
                             "name": "bkg",
+                            "ei": "e",
                             "N": 0,
                             "fraction": 0.0,
-                            "ei": "e",
                             "dims": {},
                             "neuron_models": {
                                 "bkg": {
@@ -6757,11 +6607,9 @@
                                     "m_type": "virtual",
                                     "template": "",
                                     "dynamics_params": "",
+                                    "morphology": "",
                                     "property_map": {},
-                                    "data_connect": {
-                                        "name": "",
-                                        "property_map": {}
-                                    }
+                                    "data_connect": []
                                 }
                             }
                         }
@@ -7483,7 +7331,7 @@
                     }
                 },
                 "(('bkg', ''), ('4', 'Sst'))": {
-                    "name": "('4', 'Sst')",
+                    "name": "(('bkg', ''), ('4', 'Sst'))",
                     "pre": [
                         "bkg",
                         ""
@@ -7591,5 +7439,7 @@
                 }
             }
         }
-    }
+    },
+    "data_connect": [],
+    "data_files": []
 }
