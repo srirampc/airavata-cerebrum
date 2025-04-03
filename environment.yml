@@ -10,10 +10,11 @@ dependencies:
   - anndata
   - anywidget
   - duckdb
+  - fastexcel
   - ipywidgets
   - ipytree
-  - leidenalg
   - jupyter
+  - leidenalg
   - nest-simulator
   - numba
   - numpy
@@ -22,6 +23,7 @@ dependencies:
   - openmpi-mpicc
   - openpyxl
   - pandas
+  - polars
   - pyarrow
   - pydantic
   - pyqtgraph
@@ -30,11 +32,11 @@ dependencies:
   - python-jsonpath
   - pyyaml
   - requests
-  - scikit-learn
   - scanpy
+  - scikit-learn
   - scipy
-  - sqlglot
   - sqlalchemy
+  - sqlglot
   - traitlets
   - tqdm
 
@@ -49,3 +51,4 @@ dependencies:
       - git+https://github.com/alleninstitute/abc_atlas_access
       - git+https://github.com/alleninstitute/neuroanalysis
       - git+https://github.com/alleninstitute/aisynphys
+      - git+https://github.com/srirampc/awitree

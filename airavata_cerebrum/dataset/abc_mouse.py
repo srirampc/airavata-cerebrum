@@ -1,3 +1,4 @@
+import collections.abc
 import logging
 import os
 import subprocess
@@ -1109,14 +1110,24 @@ class ABCDbMERFISH_CCFQuery(DbQuery):
 
 class DFBuilder:
     @staticmethod
+    def has_sub_region(region_dct: dict[str, t.Any]) -> bool:
+        return any(
+            isinstance(subregion_dct, collections.abc.Mapping)
+            for subregion_dct in region_dct.values()
+        )
+
+    @staticmethod
     def qry2dict(
         in_iter: QryItr,
     ) -> list[dict[str, t.Any]]:
         subr_stats = []
         for qry_result in in_iter:
             for _rx, region_dct in qry_result.items():
-                for _sr, subregion_dct in region_dct.items():
-                    subr_stats.append(subregion_dct)
+                if DFBuilder.has_sub_region(region_dct):
+                    for subregion_dct in region_dct.values():
+                        subr_stats.append(subregion_dct)
+                else:
+                    subr_stats.append(region_dct)
         return subr_stats
 
     @staticmethod

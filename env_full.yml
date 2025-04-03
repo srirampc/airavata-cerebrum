@@ -10,6 +10,7 @@ dependencies:
   - anndata
   - anywidget
   - duckdb
+  - fastexcel
   - ipywidgets
   - ipytree
   - jupyter
@@ -22,8 +23,9 @@ dependencies:
   - openmpi-mpicc
   - openpyxl
   - pandas
-  - pydantic
+  - polars
   - pyarrow
+  - pydantic
   - pyqtgraph
   - python-dateutil
   - python-igraph

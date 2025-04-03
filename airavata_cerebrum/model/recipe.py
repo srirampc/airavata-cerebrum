@@ -88,7 +88,7 @@ class ModelRecipe(pydantic.BaseModel):
             )
             #
             db_out_loc = self.output_location(RecipeKeys.SRC_DATA)
-            self.save_db_out(db_post_op_data, db_out_loc, False)
+            self.save_db_out(db_post_op_data, db_out_loc, self.write_duck)
         _log().info("Completed Post ops")
         return db_post_op_data
 
