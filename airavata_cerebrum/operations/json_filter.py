@@ -4,8 +4,12 @@ from pydantic import Field
 from typing_extensions import override
 import jsonpath
 #
-from ..base import (CerebrumBaseModel, NoneParams, OpXFormer, BaseParams,
-                    XformElt, XformItr, XformSeq)
+from ..base import (
+    CerebrumBaseModel,
+    NoneParams, BaseParams,
+    OpXFormer, XformItr,
+    XformElt, XformSeq
+)
 
 
 def _log():
@@ -16,14 +20,14 @@ class JPFExecParams(CerebrumBaseModel):
     paths : t.Annotated[list[str], Field(title="JSON Pointer Paths")]
     keys  : t.Annotated[list[str], Field(title="Keys")]
 
-JPFBaseParams : t.TypeAlias = BaseParams[NoneParams, JPFExecParams]
+JPFBaseParams    : t.TypeAlias = BaseParams[NoneParams, JPFExecParams]
 
-class JPointerFilter(OpXFormer):
+class JPointerFilter(OpXFormer[NoneParams, JPFExecParams]):
     class FilterParams(JPFBaseParams):
         init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[JPFExecParams, Field(title='Exec Params')]
 
-    def __init__(self, **params: t.Any):
+    def __init__(self, init_params: NoneParams, **params: t.Any):
         self.name : str = __name__ + ".JPointerFilter"
         self.patch_out : str | None = None
 
@@ -37,8 +41,10 @@ class JPointerFilter(OpXFormer):
     @override
     def xform(
         self,
-        in_iter: XformItr | None,
-        **params: t.Any,
+        exec_params: JPFExecParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
+        **_params: t.Any,
     ) -> XformItr | None:
         """
         Filter the output only if the destination path is present in dctx.
@@ -58,12 +64,12 @@ class JPointerFilter(OpXFormer):
         dctx: dict | None
            dict or None
         """
-        fp_lst = params["paths"]
-        key_lst = params["keys"]
+        fp_lst = exec_params.paths
+        key_lst = exec_params.keys
         return [
             {key: self.resolve(
                 fpath,
-                in_iter  # pyright: ignore[reportArgumentType]
+                first_iter  # pyright: ignore[reportArgumentType]
             ) for fpath, key in zip(fp_lst, key_lst)}
         ]
 
@@ -85,24 +91,25 @@ class IJPExecParams(CerebrumBaseModel):
 
 IJPBaseParams : t.TypeAlias = BaseParams[NoneParams, IJPExecParams]
 
-class IterJPatchFilter(OpXFormer):
+class IterJPatchFilter(OpXFormer[NoneParams, IJPExecParams]):
     class FilterParams(IJPBaseParams):
         init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[IJPExecParams, Field(title='Exec Params')]
 
-    def __init__(self, **init_params: t.Any):
+    def __init__(self, init_params: NoneParams, **_params: t.Any):
         self.name : str = __name__ + ".IterJPatchFilter"
         self.patch_out : str | None = None
 
-    def patch(self, ctx: XformElt, filter_exp: str, dest_path: str):
+    def patch(self, ctx: XformElt, filter_exp: str, dest_path: str) -> XformElt:
         fx = jsonpath.findall(filter_exp, ctx)
         try:
             if jsonpath.JSONPointer(dest_path).exists(ctx):
                 return jsonpath.patch.apply(
-                    [{"op": "replace", "path": dest_path, "value": fx}], ctx
-                )
+                    [{"op": "replace", "path": dest_path, "value": fx}],
+                    ctx
+                ) # pyright: ignore[reportReturnType] TODO::Type match
             else:
-                return None
+                return {}
         except jsonpath.JSONPatchError as jpex:
             _log().error("Jpatch error : ", jpex)
             _log().debug(
@@ -111,13 +118,15 @@ class IterJPatchFilter(OpXFormer):
                 dest_path,
                 str(ctx),
             )
-            return None
+            return {}
 
     @override
     def xform(
         self,
-        in_iter: XformItr | None,
-        **params: t.Any,
+        exec_params: IJPExecParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
+        **_params: t.Any,
     ) -> XformItr | None:
         """
         Select the output matching the filter expression and place in
@@ -138,13 +147,13 @@ class IterJPatchFilter(OpXFormer):
         ct_iter: iterator
            iterator of cell type descriptions
         """
-        filter_exp = params["filter_exp"]
-        dest_path = params["dest_path"]
         return (
-            iter(self.patch(x, filter_exp, dest_path) for x in in_iter if x)
-            if in_iter
-            else None
-        ) # pyright: ignore[reportReturnType]
+            iter(
+                self.patch(x, exec_params.filter_exp, exec_params.dest_path)
+                for x in first_iter if x
+            )
+            if first_iter else {}
+        )
 
     @override
     @classmethod
@@ -162,12 +171,12 @@ class IJPtrExecParams(CerebrumBaseModel):
 
 IJPtrBaseParams : t.TypeAlias = BaseParams[NoneParams, IJPtrExecParams]
 
-class IterJPointerFilter(OpXFormer):
+class IterJPointerFilter(OpXFormer[NoneParams, IJPtrExecParams]):
     class FilterParams(IJPtrBaseParams):
         init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[IJPtrExecParams, Field(title='Exec Params')]
 
-    def __init__(self, **params: t.Any):
+    def __init__(self, init_params: NoneParams, **_params: t.Any):
         self.name : str = __name__ + ".IterJPointerFilter"
         self.patch_out : str | None = None
 
@@ -177,8 +186,10 @@ class IterJPointerFilter(OpXFormer):
     @override
     def xform(
         self,
-        in_iter: XformItr | None,
-        **params: t.Any,
+        exec_params: IJPtrExecParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
+        **_params: t.Any,
     ) -> XformItr | None:
         """
         Filter the output only if the destination path is present.
@@ -197,9 +208,9 @@ class IterJPointerFilter(OpXFormer):
         ct_iter: iterator
            iterator of cell type descriptions
         """
-        fpath = params["path"]
         return (
-            iter(x for x in in_iter if x and self.exists(x, fpath)) if in_iter else None
+            iter(x for x in first_iter if x and self.exists(x, exec_params.path))
+            if first_iter else None
         )
 
     @override
@@ -211,18 +222,3 @@ class IterJPointerFilter(OpXFormer):
     @classmethod
     def params_instance(cls, param_dict: dict[str, t.Any]) -> IJPtrBaseParams:
         return cls.FilterParams.model_validate(param_dict)
-
-
-#
-# ----- Mapper, Filter and Query Registers ------
-#
-def query_register() -> list[type]:
-    return []
-
-
-def xform_register():
-    return [
-        IterJPointerFilter,
-        IterJPatchFilter,
-        JPointerFilter,
-    ]

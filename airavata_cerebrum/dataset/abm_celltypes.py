@@ -14,8 +14,14 @@ from pydantic import Field
 from allensdk.api.queries.glif_api import GlifApi
 from pathlib import Path
 #
-from ..base import (CerebrumBaseModel, DbQuery, BaseParams, NoneParams,
-                    QryDBWriter, QryItr, OpXFormer)
+from ..base import (
+    CerebrumBaseModel,
+    DbQuery,
+    BaseParams,
+    NoneParams,
+    QryDBWriter,
+    QryItr,
+)
 from ..util import exclude_keys, prefix_keys
 
 
@@ -27,18 +33,18 @@ class CCacheInitParams(CerebrumBaseModel):
     download_base : t.Annotated[str, Field(title="Download Base Dir.")]
 
 class CCacheExecParams(CerebrumBaseModel):
-    species   : t.Annotated[str, Field(title="Species")]
-    manifest  : t.Annotated[str, Field(title="Manifest File")]
-    cells     : t.Annotated[str, Field(title="Cells json File")]
+    species  : t.Annotated[str | None, Field(title="Species")] = None
+    manifest : t.Annotated[str, Field(title="Manifest File")] = "manifest.json"
+    cells    : t.Annotated[str, Field(title="Cells json File")]  = "cells.json"
 
 CCacheBaseParams : t.TypeAlias = BaseParams[CCacheInitParams, CCacheExecParams] 
 
-class CTDbCellCacheQuery(DbQuery):
+class CTDbCellCacheQuery(DbQuery[CCacheInitParams, CCacheExecParams]):
     class QryParams(CCacheBaseParams):
         init_params: t.Annotated[CCacheInitParams, Field(title='Init Params')]
         exec_params: t.Annotated[CCacheExecParams, Field(title='Exec Params')]
 
-    def __init__(self, **params: t.Any):
+    def __init__(self, init_params: CCacheInitParams, **params: t.Any):
         """
         Initialixe Cache Query
         Parameters
@@ -48,12 +54,14 @@ class CTDbCellCacheQuery(DbQuery):
 
         """
         self.name : str = "allensdk.core.cell_types_cache.CellTypesCache"
-        self.download_base : str = params["download_base"]
+        self.download_base : str = init_params.download_base
 
     @override
     def run(
         self,
-        in_iter: QryItr | None,
+        exec_params: CCacheExecParams,
+        first_iter: QryItr | None,
+        *rest_iter: QryItr | None,
         **params: t.Any,
     ) -> QryItr | None:
         """
@@ -79,26 +87,29 @@ class CTDbCellCacheQuery(DbQuery):
         }
         """
         #
-        default_args = {
-            "species": None,
-            "mainfest": "manifest.json",
-            "cells": "cells.json",
-        }
-        rarg = {**default_args, **params} if params else default_args
+        # default_args = {
+        #     "species": None,
+        #     "mainfest": "manifest.json",
+        #     "cells": "cells.json",
+        # }
+        # rarg = {**default_args, **params} if params else default_args
         #
-        _log().debug("CTDbCellCacheQuery Args : %s", rarg)
+        _log().debug("CTDbCellCacheQuery Args : %s", str(exec_params))
         self.manifest_file: str = os.path.join(
             self.download_base,
-            str(rarg["mainfest"])
+            str(exec_params.manifest)
         )
         self.cells_file : str = os.path.join(
             self.download_base,
-            str(rarg["cells"])
+            str(exec_params.cells)
         )
         ctc = allensdk.core.cell_types_cache.CellTypesCache(
             manifest_file=self.manifest_file
         )
-        ct_list = ctc.get_cells(file_name=self.cells_file, species=rarg["species"])
+        ct_list = ctc.get_cells(
+            file_name=self.cells_file,
+            species=exec_params.species
+        )
         _log().debug("CTDbCellCacheQuery CT List : %d", len(ct_list))
         return ct_list
 
@@ -114,23 +125,25 @@ class CTDbCellCacheQuery(DbQuery):
 
 
 class CellAPIExecParams(CerebrumBaseModel):
-    species   : t.Annotated[str, Field(title="Species")]
+    species   : t.Annotated[str | None, Field(title="Species")] = None
 
 CAPIBaseParams : t.TypeAlias = BaseParams[NoneParams, CellAPIExecParams] 
 
-class CTDbCellApiQuery(DbQuery):
+class CTDbCellApiQuery(DbQuery[NoneParams, CellAPIExecParams]):
     class QryParams(CAPIBaseParams):
         init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[CellAPIExecParams, Field(title='Exec Params')]
 
-    def __init__(self, **params: t.Any):
+    def __init__(self, init_params: NoneParams, **params: t.Any):
         self.name : str = "allensdk.api.queries.cell_types_api.CellTypesApi"
 
     @override
     def run(
         self,
-        in_iter: QryItr | None,
-        **run_params: t.Any
+        exec_params: CellAPIExecParams,
+        first_iter: QryItr | None,
+        *rest_iter: QryItr | None,
+        **params: t.Any
     ) -> QryItr:
         """
         Get the cell types information from allensdk.api.queries.cell_types_api.CellTypesApi
@@ -150,13 +163,13 @@ class CTDbCellApiQuery(DbQuery):
         }
         """
         #
-        default_args = {"species": None}
-        rarg = {**default_args, **run_params} if run_params else default_args
-        sp_arg = [rarg["species"]] if rarg["species"] else None
+        # def_args = {"species": None}
+        # rarg = {**def_args, **run_params} if run_params else default_args
+        # sp_arg = [rarg["species"]] if rarg["species"] else None
         #
-        _log().debug("CTDbCellApiQuery Args : %s", rarg)
+        _log().debug("CTDbCellApiQuery Args : %s", str(exec_params))
         ctxa = allensdk.api.queries.cell_types_api.CellTypesApi()
-        ct_list = ctxa.list_cells_api(species=sp_arg)
+        ct_list = ctxa.list_cells_api(species=exec_params.species)
         _log().debug("CTDbCellApiQuery CT List : %d", len(ct_list))
         return ct_list
 
@@ -178,12 +191,12 @@ class GlifApiExecParams(CerebrumBaseModel):
 
 GlifApiBaseParams : t.TypeAlias = BaseParams[NoneParams, GlifApiExecParams] 
 
-class CTDbGlifApiQuery(DbQuery):
+class CTDbGlifApiQuery(DbQuery[NoneParams, GlifApiExecParams]):
     class QryParams(GlifApiBaseParams):
         init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[GlifApiExecParams, Field(title='Exec Params')]
 
-    def __init__(self, **params: t.Any):
+    def __init__(self, init_params: NoneParams, **params: t.Any):
         self.name : str = "allensdk.api.queries.glif_api.GlifApi"
         self.glif_api : GlifApi = GlifApi()
         self.key_fn : t.Callable[[t.Any], str] = lambda x: x
@@ -191,8 +204,10 @@ class CTDbGlifApiQuery(DbQuery):
     @override
     def run(
         self,
-        in_iter: QryItr | None,
-        **params: t.Any
+        exec_params: GlifApiExecParams,
+        first_iter: QryItr | None,
+        *rest_iter: QryItr | None,
+        **_params: t.Any
     ) -> QryItr | None:
         """
         Get neuronal models using GlifApi for a given iterator of specimen ids
@@ -211,20 +226,20 @@ class CTDbGlifApiQuery(DbQuery):
         dict : {spec_id : model}
           glif neuronal_models
         """
-        if not in_iter:
+        if not first_iter:
             return None
-        default_args = {"first": False, "key": None}
-        rarg = {**default_args, **params} if params else default_args
-        _log().debug("CTDbGlifApiQuery Args : %s", rarg)
-        if rarg["key"]:
-            self.key_fn = lambda x: x[rarg["key"]]
-        if bool(rarg["first"]) is False:
+        # default_args = {"first": False, "key": None}
+        # rarg = {**default_args, **params} if params else default_args
+        _log().debug("CTDbGlifApiQuery Args : %s", str(exec_params))
+        if exec_params.key:
+            self.key_fn = lambda x: x[exec_params.key]
+        if bool(exec_params.first) is False:
             return iter(
                 {
                     "ct": x,
                     "glif": self.glif_api.get_neuronal_models(self.key_fn(x)),
                 }
-                for x in in_iter
+                for x in first_iter
                 if x
             )
         else:
@@ -232,10 +247,11 @@ class CTDbGlifApiQuery(DbQuery):
                 {
                     "ct": x,
                     "glif": next(
-                        iter(self.glif_api.get_neuronal_models(self.key_fn(x))), None
+                        iter(self.glif_api.get_neuronal_models(self.key_fn(x))),
+                        None
                     ),
                 }
-                for x in in_iter
+                for x in first_iter
                 if x
             )
 
@@ -256,12 +272,12 @@ class GAMCExecParams(CerebrumBaseModel):
 
 GAMCBaseParams : t.TypeAlias = BaseParams[NoneParams, GAMCExecParams] 
 
-class CTDbGlifApiModelConfigQry(DbQuery):
+class CTDbGlifApiModelConfigQry(DbQuery[NoneParams, GAMCExecParams]):
     class QryParams(GAMCBaseParams):
         init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[GAMCExecParams, Field(title='Exec Params')]
 
-    def __init__(self, **params: t.Any):
+    def __init__(self, init_params: NoneParams, **params: t.Any):
         self.name : str = "allensdk.api.queries.glif_api.GlifApi"
         self.glif_api : GlifApi = GlifApi()
 
@@ -280,18 +296,20 @@ class CTDbGlifApiModelConfigQry(DbQuery):
     @override
     def run(
         self,
-        in_iter: QryItr | None,
-        **params: t.Any
+        exec_params: GAMCExecParams,
+        first_iter: QryItr | None,
+        *rest_iter: QryItr | None,
+        **_params: t.Any
     ) -> QryItr | None:
-        if not in_iter:
+        if not first_iter:
             return None
-        self.suffix : str= params["suffix"]
-        self.output_dir : str = params["output_dir"]
-        _log().debug("CTDbGlifApiQuery Args : %s", params)
+        self.suffix : str= exec_params.suffix
+        self.output_dir : str = exec_params.output_dir
+        _log().debug("CTDbGlifApiQuery Args : %s", str(exec_params))
         # Create Config
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
-        return iter(self.download_model_config(rcx) for rcx in in_iter if rcx)
+        return iter(self.download_model_config(rcx) for rcx in first_iter if rcx)
 
     @override
     @classmethod
@@ -393,7 +411,7 @@ class DFBuilder:
                 )
 
 
-class DuckDBWriter(QryDBWriter):
+class ABMCTDuckDBWriter(QryDBWriter):
     def __init__(self, db_conn: duckdb.DuckDBPyConnection):
         self.conn : duckdb.DuckDBPyConnection = db_conn
 
@@ -410,24 +428,3 @@ class DuckDBWriter(QryDBWriter):
                 f"CREATE OR REPLACE TABLE {tb_name} AS SELECT * FROM result_df"
             )
         self.conn.commit()
-
-
-
-#
-# ------- Query and Xform Registers -----
-#
-def query_register() -> list[type[DbQuery]]:
-    return [
-        CTDbCellCacheQuery,
-        CTDbCellApiQuery,
-        CTDbGlifApiQuery,
-        CTDbGlifApiModelConfigQry,
-    ]
-
-
-def xform_register() -> list[type[OpXFormer]]:
-    return []
-
-
-def dbwriter_register() -> type[QryDBWriter]:
-    return DuckDBWriter

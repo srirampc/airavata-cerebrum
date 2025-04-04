@@ -2,9 +2,9 @@ import logging
 import pathlib
 import typing
 import os
-
+#
 import pydantic
-
+#
 from ..util import io as cbmio
 from .. import workflow
 from .setup import RecipeSetup, RecipeKeys
@@ -58,7 +58,7 @@ class ModelRecipe(pydantic.BaseModel):
             )
         if write_duck:
             duck_out_loc = str(db_out_loc).replace(self.out_format, 'db')
-            workflow.write_db_connect_duck(
+            workflow.write_to_duck_db(
                 db_connect_output,
                 duck_out_loc,
             )

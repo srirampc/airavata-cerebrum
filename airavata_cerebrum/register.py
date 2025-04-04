@@ -2,17 +2,16 @@ import itertools
 import typing as t
 from collections.abc import Iterable
 
-from .base import OpXFormer, DbQuery, QryDBWriter
-from .dataset import abc_mouse as abc_mouse_db
-from .dataset import abm_celltypes as abm_celltypes_db
-from .dataset import ai_synphys as ai_synphys_db
-from .dataset import me_features as me_features_db
-from .operations import abc_mouse as abc_mouse_ops
-from .operations import abm_celltypes as abm_celltypes_ops
-from .operations import ai_synphys as ai_synphys_ops
-from .operations import json_filter
-from .operations import dict_filter
-from .operations import xform
+from .base import (
+    CerebrumBaseModel, 
+    OpXFormer, DbQuery, QryDBWriter,
+    BaseParamsCBT, DbQueryCBT, OpXFormerCBT
+)
+from .dataset import query_register as db_query_register
+from .dataset import xform_register as db_xform_register
+from .dataset import dbwriter_register
+from .operations import query_register as ops_query_register
+from .operations import xform_register as ops_xform_register
 from .util import class_qual_name
 
 
@@ -24,6 +23,7 @@ RCType = t.TypeVar("RCType")
 
 class TypeRegister(t.Generic[RCType]):
     register_map: dict[str, type[RCType]]
+    base_class: type[RCType]
 
     def __init__(
         self,
@@ -31,6 +31,7 @@ class TypeRegister(t.Generic[RCType]):
         base_class: type[RCType],
         key_source: t.Literal['class', 'module'] = 'class'
     ) -> None:
+        self.base_class = base_class
         self.register_map = {
             self.qual_name(clsx, key_source): clsx
             for clsx in register_lst
@@ -48,12 +49,15 @@ class TypeRegister(t.Generic[RCType]):
             case 'module':
                 return clsx.__module__
 
-    def get_object(
-        self, query_key: str, **init_params: t.Any
-    ) -> RCType | None:
-        if query_key not in self.register_map:
-            return None
-        return self.register_map[query_key](**init_params)
+    def register(
+        self,
+        clsx : type[RCType],
+        key_source: t.Literal['class', 'module'] = 'class'
+    ) -> bool:
+        if issubclass(clsx, self.base_class):
+            self.register_map[self.qual_name(clsx, key_source)] = clsx
+            return True
+        return False
 
     def get_type(self, query_key: str) -> type[RCType] | None:
         if query_key not in self.register_map:
@@ -61,80 +65,96 @@ class TypeRegister(t.Generic[RCType]):
         return self.register_map[query_key]
 
 
-QUERY_REGISTER: TypeRegister[DbQuery] = TypeRegister(
+QUERY_REGISTER: TypeRegister[DbQueryCBT] = TypeRegister(
     itertools.chain(
-        abc_mouse_db.query_register(),
-        abm_celltypes_db.query_register(),
-        ai_synphys_db.query_register(),
-        me_features_db.query_register(),
-        xform.query_register(),
-        json_filter.query_register(),
-        dict_filter.query_register(),
-        abc_mouse_ops.query_register(),
-        abm_celltypes_ops.query_register(),
-        ai_synphys_ops.query_register(),
+        db_query_register(),
+        ops_query_register(),
     ),
     DbQuery,
 )
 
-XFORM_REGISTER: TypeRegister[OpXFormer] = TypeRegister(
+XFORM_REGISTER: TypeRegister[OpXFormerCBT] = TypeRegister(
     itertools.chain(
-        abc_mouse_db.xform_register(),
-        abm_celltypes_db.xform_register(),
-        ai_synphys_db.xform_register(),
-        me_features_db.xform_register(),
-        xform.xform_register(),
-        json_filter.xform_register(),
-        dict_filter.xform_register(),
-        abc_mouse_ops.xform_register(),
-        abm_celltypes_ops.xform_register(),
-        ai_synphys_ops.xform_register(),
+        db_xform_register(),
+        ops_xform_register(),
     ),
     OpXFormer,
 )
 
 QRY_DBWIRTER_REGISTER: TypeRegister[QryDBWriter] = TypeRegister(
-    [
-        abm_celltypes_db.dbwriter_register(),
-        abc_mouse_db.dbwriter_register(),
-        ai_synphys_db.dbwriter_register(),
-        me_features_db.dbwriter_register(),
-    ],
+    dbwriter_register(),
     QryDBWriter,
     key_source='module'
 )
 
 
-def find_type(
+def find_query_type(
     register_key: str,
-) -> type[OpXFormer] | type[DbQuery] | None:
-    reg_type = QUERY_REGISTER.get_type(register_key)
-    if reg_type:
-        return reg_type
+):
+    return QUERY_REGISTER.get_type(register_key)
+
+
+def find_xformer_type(
+    register_key: str,
+):
     return XFORM_REGISTER.get_type(register_key)
 
 
-def get_query_object(
+def find_type(
     register_key: str,
+) -> type[OpXFormerCBT] | type[DbQueryCBT] | None:
+    reg_type = find_query_type(register_key)
+    if reg_type:
+        return reg_type
+    return find_xformer_type(register_key)
+
+
+def get_query_params(
+    register_key: str,
+    params: dict[str, t.Any]
+) -> BaseParamsCBT | None:
+    reg_type = find_query_type(register_key)
+    if reg_type:
+        return reg_type.params_instance(params)
+    return None
+
+
+def get_xformer_params(
+    register_key: str,
+    params: dict[str, t.Any]
+) -> BaseParamsCBT | None:
+    reg_type = find_xformer_type(register_key)
+    if reg_type:
+        return reg_type.params_instance(params)
+    return None
+
+
+def get_query_instance(
+    register_key: str,
+    init_params: CerebrumBaseModel,
     **params: t.Any,
-) -> DbQuery | None:
-    return QUERY_REGISTER.get_object(
-        register_key, **params
+) -> DbQueryCBT | None:
+    qry_type : type[DbQueryCBT] | None = find_query_type(register_key)
+    return (
+        qry_type(init_params, **params)
+        if qry_type else None
     )
 
 
-def get_xform_op_object(
+def get_xformer_instance(
     register_key: str,
+    init_params: CerebrumBaseModel,
     **params: t.Any,
-) -> OpXFormer | None:
-    return XFORM_REGISTER.get_object(
-        register_key, **params
+) -> OpXFormerCBT | None:
+    xformer_type : type[OpXFormerCBT] | None = find_xformer_type(register_key)
+    return (
+        xformer_type(init_params, **params)
+        if xformer_type else None
     )
 
-def get_query_db_writer_object(
+def get_db_writer_instance(
     register_key: str,
     **params: t.Any,
 ) -> QryDBWriter | None:
-    return QRY_DBWIRTER_REGISTER.get_object(
-        register_key, **params
-    )
+    qdb_writer = QRY_DBWIRTER_REGISTER.get_type(register_key)
+    return qdb_writer(**params) if qdb_writer else None

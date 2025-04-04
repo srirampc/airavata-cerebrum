@@ -4,8 +4,8 @@ from typing_extensions import override
 from pydantic import Field
 #
 from ..base import (CerebrumBaseModel, NoneParams, OpXFormer,
-                    BaseParams, XformItr, DbQuery)
-from .json_filter import JPointerFilter
+                    BaseParams, XformItr)
+from .json_filter import JPFExecParams, JPointerFilter
 
 
 class ABFExecParams(CerebrumBaseModel):
@@ -14,28 +14,34 @@ class ABFExecParams(CerebrumBaseModel):
 
 ABFBaseParams : t.TypeAlias = BaseParams[NoneParams, ABFExecParams]
 
-class ABCDbMERFISH_CCFLayerRegionFilter(OpXFormer):
+class ABCDbMERFISH_CCFLayerRegionFilter(OpXFormer[NoneParams, ABFExecParams]):
     class FilterParams(ABFBaseParams):
         init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[ABFExecParams, Field(title='Exec Params')]
 
-    def __init__(self, **params: t.Any):
-        self.jptr_filter : JPointerFilter = JPointerFilter(**params)
+    def __init__(self, init_params: NoneParams, **params: t.Any):
+        self.jptr_filter : JPointerFilter = JPointerFilter(
+            init_params, **params
+        )
         self.path_fmt : str = "/0/{}/{}"
 
     @override
     def xform(
         self,
-        in_iter: XformItr | None,
-        **params : t.Any
+        exec_params: ABFExecParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
+        **_params : t.Any
     ) -> XformItr | None:
-        region = params["region"]
-        sub_region = params["sub_region"]
+        region = exec_params.region
+        sub_region = exec_params.sub_region
         rpath = self.path_fmt.format(region, sub_region)
         return self.jptr_filter.xform(
-            in_iter,
-            paths=[rpath],
-            keys=[sub_region],
+            JPFExecParams(
+                paths=[rpath],
+                keys=[sub_region],
+            ),
+            first_iter,
         )
 
     @override
@@ -55,13 +61,15 @@ class ABCCFExecParams(CerebrumBaseModel):
 
 ABCCFBaseParams : t.TypeAlias = BaseParams[NoneParams, ABCCFExecParams]
 
-class ABCDbMERFISH_CCFFractionFilter(OpXFormer):
+class ABCDbMERFISH_CCFFractionFilter(OpXFormer[NoneParams, ABCCFExecParams]):
     class FilterParams(ABCCFBaseParams):
         init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[ABCCFExecParams, Field(title='Exec Params')]
 
-    def __init__(self, **params: t.Any):
-        self.jptr_filter : JPointerFilter = JPointerFilter(**params)
+    def __init__(self, init_params: NoneParams, **params: t.Any):
+        self.jptr_filter : JPointerFilter = JPointerFilter(
+            init_params, **params
+        )
         self.ifrac_fmt : str = "/0/{}/inhibitory fraction"
         self.fwr_fmt : str = "/0/{}/fraction wi. region"
         self.frac_fmt : str = "/0/{}/{} fraction"
@@ -69,23 +77,27 @@ class ABCDbMERFISH_CCFFractionFilter(OpXFormer):
     @override
     def xform(
         self,
-        in_iter: XformItr | None,
-        **params: t.Any
+        exec_params: ABCCFExecParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
+        **_params: t.Any
     ) -> XformItr | None:
-        region = params["region"]
+        region = exec_params.region
         frac_paths = [
             self.ifrac_fmt.format(region),
             self.fwr_fmt.format(region),
         ]
         frac_keys = ["inh_fraction", "region_fraction"]
-        if "cell_type" in params and params["cell_type"]:
-            cell_type = params["cell_type"]
+        if exec_params.cell_type:
+            cell_type = exec_params.cell_type
             frac_paths.append(self.frac_fmt.format(region, cell_type))
             frac_keys.append("fraction")
         return self.jptr_filter.xform(
-            in_iter,
-            paths=frac_paths,
-            keys=frac_keys,
+            JPFExecParams(
+                paths=frac_paths,
+                keys=frac_keys,
+            ),
+            first_iter,
         )
 
     @override
@@ -97,17 +109,3 @@ class ABCDbMERFISH_CCFFractionFilter(OpXFormer):
     @classmethod
     def params_instance(cls, param_dict: dict[str, t.Any]) -> ABCCFBaseParams:
         return cls.FilterParams.model_validate(param_dict)
-
-
-#
-# ------- Query and Xform Registers -----
-#
-def query_register() -> list[type[DbQuery]]:
-    return []
-
-
-def xform_register() -> list[type[OpXFormer]]:
-    return [
-        ABCDbMERFISH_CCFLayerRegionFilter,
-        ABCDbMERFISH_CCFFractionFilter,
-    ]

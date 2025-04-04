@@ -9,18 +9,24 @@ from ..base import CerebrumBaseModel, DbQuery, NoneParams, OpXFormer, BaseParams
 #
 # Basic Transformers
 #
-class IdentityXformer(OpXFormer):
+class IdentityXformer(OpXFormer[NoneParams, NoneParams]):
     class IdParams(BaseParams[NoneParams, NoneParams]):
         init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[NoneParams, Field(title='Exec Params')]
 
     @override
+    def __init__(self, init_params: NoneParams, **params: t.Any):
+        super().__init__(init_params, **params)
+
+    @override
     def xform(
         self,
-        in_iter: XformItr | None,
+        exec_params: NoneParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
         **params: t.Any,
     ) -> XformItr | None:
-        return in_iter
+        return first_iter
 
     @override
     @classmethod
@@ -36,25 +42,30 @@ class IdentityXformer(OpXFormer):
         return cls.IdParams.model_validate(param_dict)
 
 class TQDExecParams(CerebrumBaseModel):
-    jupyter : t.Annotated[bool, Field(title='Run in Jupyter Notebook')]
+    jupyter : t.Annotated[bool, Field(title='Run in Jupyter Notebook')] = False
 
 TQDMBaseParams : t.TypeAlias = BaseParams[NoneParams, TQDExecParams]
 
-class TQDMWrapper(OpXFormer):
+class TQDMWrapper(OpXFormer[NoneParams, TQDExecParams]):
     class TQDMParams(TQDMBaseParams):
         init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[TQDExecParams, Field(title='Exec Params')]
 
+    def __init__(self, init_params: NoneParams, **params: t.Any):
+        super().__init__(init_params, **params)
+
     @override
     def xform(
         self,
-        in_iter: XformItr | None,
-        **params: t.Any,
+        exec_params: TQDExecParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
+        **_params: t.Any,
     ) -> XformItr | None:
         import tqdm.notebook
-        if "jupyter" in params and params["jupyter"]:
-            return tqdm.notebook.tqdm(in_iter)
-        return tqdm.tqdm(in_iter)
+        if exec_params.jupyter:
+            return tqdm.notebook.tqdm(first_iter)
+        return tqdm.tqdm(first_iter)
 
     @override
     @classmethod
@@ -68,27 +79,30 @@ class TQDMWrapper(OpXFormer):
 
 
 class DSLExecParams(CerebrumBaseModel):
-    stop : t.Annotated[int, Field(title='Stop')]
-    list : t.Annotated[bool, Field(title='Produce List Output')]
+    stop : t.Annotated[int, Field(title='Stop')] = 10
+    list : t.Annotated[bool, Field(title='Produce List Output')] = True
 
 DSLBaseParams : t.TypeAlias = BaseParams[NoneParams, DSLExecParams]
 
-class DataSlicer(OpXFormer):
+class DataSlicer(OpXFormer[NoneParams, DSLExecParams]):
     class SliceParams(DSLBaseParams):
         init_params: t.Annotated[NoneParams, Field(title='Init Params')]
         exec_params: t.Annotated[DSLExecParams, Field(title='Exec Params')]
+    @override
+    def __init__(self, init_params: NoneParams, **params: t.Any):
+        super().__init__(init_params, **params)
 
     @override
     def xform(
         self,
-        in_iter: XformItr | None,
-        **params: t.Any,
+        exec_params: DSLExecParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
+        **_params: t.Any,
     ) -> XformItr | None:
-        default_args = {"stop": 10, "list": True}
-        rarg = default_args | params if params else default_args
-        if in_iter:
-            ditr = itertools.islice(in_iter, rarg["stop"])
-            return list(ditr) if bool(rarg["list"]) else ditr
+        if first_iter:
+            ditr = itertools.islice(first_iter, exec_params.stop)
+            return list(ditr) if exec_params.list else ditr
 
     @override
     @classmethod
@@ -99,15 +113,3 @@ class DataSlicer(OpXFormer):
     @classmethod
     def params_instance(cls, param_dict: dict[str, t.Any]) -> DSLBaseParams:
         return cls.SliceParams.model_validate(param_dict)
-
-
-def query_register() -> list[type[DbQuery]]:
-    return []
-
-
-def xform_register() -> list[type[OpXFormer]]:
-    return [
-        IdentityXformer,
-        TQDMWrapper,
-        DataSlicer
-    ]

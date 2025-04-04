@@ -1,6 +1,6 @@
-import abc
 import typing as t
 #
+from abc import ABC, ABCMeta, abstractmethod
 from collections.abc import Iterable, Sequence
 from typing_extensions import Self, override
 from pydantic import BaseModel, Field
@@ -25,21 +25,31 @@ class CerebrumBaseModel(BaseModel):
             return val_not_found
 
 
-INPGT = t.TypeVar('INPGT', bound='CerebrumBaseModel')
-EXPGT = t.TypeVar('EXPGT', bound='CerebrumBaseModel')
+# Initilization and Execution Parameters
+InitParamsT = t.TypeVar(
+    'InitParamsT',
+    bound='CerebrumBaseModel',
+    covariant=True,
+)
 
+ExecParamsT = t.TypeVar(
+    'ExecParamsT',
+    bound='CerebrumBaseModel',
+    covariant=True,
+)
 
 # pydantic-based BaseModel for Query and Transform paramters
-class BaseParams(CerebrumBaseModel, t.Generic[INPGT, EXPGT]):
-    init_params: t.Annotated[INPGT, Field(title="Init. Params")]
-    exec_params: t.Annotated[EXPGT, Field(title="Exec. Params")]
-
+class BaseParams(CerebrumBaseModel, t.Generic[InitParamsT, ExecParamsT]):
+    init_params: t.Annotated[InitParamsT, Field(title="Init. Params")]
+    exec_params: t.Annotated[ExecParamsT, Field(title="Exec. Params")]
    
     @override
     def is_valid_field(self, field: str) -> bool:
-        return ((field in self.init_params.model_fields) or
-                (field in self.exec_params.model_fields) or 
-                (field in self.model_fields))
+        return (
+            (field in self.init_params.model_fields) or
+            (field in self.exec_params.model_fields) or 
+            (field in self.model_fields)
+        )
 
     @override
     def get(self, field: str, val_not_found: t.Any = None) -> t.Any:
@@ -51,62 +61,89 @@ class BaseParams(CerebrumBaseModel, t.Generic[INPGT, EXPGT]):
             return evalue 
         return super().get(field, val_not_found)
 
+# Base Parameters with CerebrumBaseModel as init and exec parameters
+BaseParamsCBT : t.TypeAlias = BaseParams[CerebrumBaseModel, CerebrumBaseModel]
+
 
 # pydantic-based model for no paramters
 class NoneParams(CerebrumBaseModel):
     pass
 
-
 # Abstract Base class for parameter interface
-class ParamsInterface(abc.ABC):
+class ParamsInterface(ABC, t.Generic[InitParamsT, ExecParamsT]):
     @classmethod
-    @abc.abstractmethod
+    @abstractmethod
     def params_type(
         cls
-    ) -> type[BaseParams[INPGT, EXPGT]]:  # pyright:ignore[reportInvalidTypeVarUse]
-        return BaseParams
+    ) -> type[BaseParamsCBT]:
+        return BaseParamsCBT
 
     @classmethod
-    @abc.abstractmethod
+    @abstractmethod
     def params_instance(
         cls,
         param_dict: dict[str, t.Any],
-    ) -> BaseParams[INPGT, EXPGT]:  # pyright:ignore[reportInvalidTypeVarUse]
-        return BaseParams.model_validate(param_dict)
+    ) -> BaseParamsCBT:
+        return BaseParamsCBT.model_validate(param_dict)
 
 
-XformElt: t.TypeAlias = dict[str, t.Any]
+XformElt : t.TypeAlias = dict[str, t.Any]
 XformItr : t.TypeAlias = Iterable[XformElt] 
-XformSeq: t.TypeAlias = Sequence[XformElt]
-QryElt: t.TypeAlias = dict[str, t.Any]
-QryItr : t.TypeAlias = Iterable[QryElt]
+XformSeq : t.TypeAlias = Sequence[XformElt]
+QryElt   : t.TypeAlias = dict[str, t.Any]
+QryItr   : t.TypeAlias = Iterable[QryElt]
 
 
 # Abstract interface for Database Queries
-class DbQuery(ParamsInterface, abc.ABC):
-    @abc.abstractmethod
+class DbQuery(ParamsInterface[InitParamsT, ExecParamsT], ABC):
+    @abstractmethod
+    def __init__(
+        self,
+        init_params: InitParamsT,
+        **params: t.Any
+    ):
+        pass
+
+    @abstractmethod
     def run(
         self,
-        in_iter: QryItr | None,
+        exec_params: ExecParamsT,
+        first_iter: QryItr | None,
+        *rest_iter: QryItr | None,
         **params: t.Any,
     ) -> QryItr | None:
         return None
 
 
 # Abstract interface for XFormer operations
-class OpXFormer(ParamsInterface, abc.ABC):
-    @abc.abstractmethod
+class OpXFormer(ParamsInterface[InitParamsT, ExecParamsT], ABC):
+    @abstractmethod
+    def __init__(
+        self,
+        init_params: InitParamsT,
+        **params: t.Any
+    ):
+        pass
+
+    @abstractmethod
     def xform(
         self,
-        in_iter: XformItr | None,
+        exec_params: ExecParamsT,
+        first_iter: XformItr | None,
+        *rest_iter: QryItr | None,
         **params: t.Any,
     ) -> XformItr | None:
         return None
 
 
+# Query Types with CerebrumBaseModel as init and exec parameters
+DbQueryCBT   : t.TypeAlias = DbQuery[CerebrumBaseModel, CerebrumBaseModel]
+OpXFormerCBT : t.TypeAlias = OpXFormer[CerebrumBaseModel, CerebrumBaseModel]
+
+
 # Abstract interface for DBWrite operations
-class QryDBWriter(abc.ABC):
-    @abc.abstractmethod
+class QryDBWriter(ABC):
+    @abstractmethod
     def write(
         self,
         in_iter: QryItr | None,
@@ -116,12 +153,12 @@ class QryDBWriter(abc.ABC):
 
 
 # Abstract Base class for network structure components
-class BaseStruct(CerebrumBaseModel, metaclass=abc.ABCMeta):
-    @abc.abstractmethod
+class BaseStruct(CerebrumBaseModel, metaclass=ABCMeta):
+    @abstractmethod
     @override
     def exclude(self) -> set[str]:
         return set([])
 
-    @abc.abstractmethod
+    @abstractmethod
     def apply_mod(self, mod_struct: Self) -> Self:
         return self

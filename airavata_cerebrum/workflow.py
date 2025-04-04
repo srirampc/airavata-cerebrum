@@ -4,8 +4,20 @@ import duckdb
 import tqdm.contrib.logging as tqdm_log
 
 from collections.abc import Iterable
-from . import register, base
+from .base import (
+    BaseParamsCBT,
+    DbQueryCBT,
+    OpXFormerCBT,
+)
+from .register import (
+    get_query_instance,
+    get_query_params,
+    get_xformer_instance,
+    get_db_writer_instance,
+    get_xformer_params,
+)
 from .model.setup import RecipeKeys
+
 
 def _log():
     return logging.getLogger(__name__)
@@ -19,27 +31,41 @@ def run_workflow(
         return None
     for wf_step in workflow_steps:
         sname : str = wf_step[RecipeKeys.NAME]
-        slabel : str = wf_step[RecipeKeys.LABEL] if RecipeKeys.LABEL in wf_step else sname
-        iparams: dict[str, t.Any] = wf_step[RecipeKeys.INIT_PARAMS]
-        eparams: dict[str, t.Any] = wf_step[RecipeKeys.EXEC_PARAMS]
+        slabel : str = (
+            wf_step[RecipeKeys.LABEL]
+            if RecipeKeys.LABEL in wf_step else sname 
+        )
+        # iparams: dict[str, t.Any] = wf_step[RecipeKeys.INIT_PARAMS]
+        # eparams: dict[str, t.Any] = wf_step[RecipeKeys.EXEC_PARAMS]
         match wf_step[RecipeKeys.TYPE]:
             case "query":
                 _log().info("Start Query : [%s]",  slabel)
-                qobj: base.DbQuery | None = register.get_query_object(
-                    sname, **iparams
+                qparam: BaseParamsCBT | None  = get_query_params(sname, wf_step)
+                if qparam is None:
+                    _log().error("Failed to find Params for Qry: [%s]",  sname)
+                    continue
+                qobj: DbQueryCBT | None = get_query_instance(
+                    sname, qparam.init_params
                 )
-                if qobj:
-                    wf_iter = qobj.run(wf_iter, **eparams)
-                    _log().info("Complete Query : [%s]", slabel)
-                else:
+                if qobj is None:
                     _log().error("Failed to find Query : [%s]",  sname)
+                    continue
+                wf_iter = qobj.run(qparam.exec_params, wf_iter)
+                _log().info("Complete Query : [%s]", slabel)
             case "xform":
                 _log().info("Running XFormer : [%s]",  slabel)
-                fobj: base.OpXFormer | None = register.get_xform_op_object(
-                    sname, **iparams
+                xparam: BaseParamsCBT | None  = get_xformer_params(sname, wf_step)
+                if xparam is None:
+                    _log().error("Failed to find Params for Xform: [%s]",  sname)
+                    continue
+                fobj: OpXFormerCBT | None = get_xformer_instance(
+                    sname, xparam.init_params
                 )
-                if fobj and wf_iter:
-                    wf_iter = fobj.xform(wf_iter, **eparams)
+                if fobj is None:
+                    _log().error("Failed to find XFormer : [%s]", sname)
+                    continue
+                if wf_iter:
+                    wf_iter = fobj.xform(xparam.exec_params, wf_iter)
                     _log().info("Complete XForm : [%s]", slabel)
                 else:
                     _log().error("Failed to find XFormer : [%s]", sname)
@@ -114,6 +140,7 @@ def map_srcdata_locations(
         net_locations[location] = neuron_desc_map
     return net_locations
 
+
 def map_srcdata_connections(
     source_data: dict[str, t.Any],
     data2con_map: dict[str, t.Any],
@@ -131,14 +158,15 @@ def map_srcdata_connections(
         net_connections[connx] = conn_desc_map
     return net_connections
 
-def write_db_connect_duck(
+
+def write_to_duck_db(
     db_connect_output: dict[str, t.Any],
     db_name: str,
 ) -> None:
     #
     with duckdb.connect(db_name) as db_conn:
         for db_name, db_wout in db_connect_output.items():
-            db_writer = register.get_query_db_writer_object(
+            db_writer = get_db_writer_instance(
                 db_name,
                 db_conn=db_conn
             )

@@ -10,7 +10,7 @@ from marimo._plugins.ui._core.ui_element import UIElement
 from typing_extensions import override
 
 #
-from ..base import CerebrumBaseModel, BaseStruct, BaseParams, INPGT, EXPGT
+from ..base import CerebrumBaseModel, BaseStruct, BaseParams, InitParamsT, ExecParamsT
 from ..model import structure as structure
 from ..model.setup import RecipeKeys, RecipeSetup
 from . import (BasePanel, BaseTree, CBTreeNode, RcpTreeNames, StructTreeNames,
@@ -199,7 +199,7 @@ class DBWorkflowSidePanel(MoBasePanelT):
     def workflow_ui(
         self,
         rcp_template: dict[str, t.Any],
-        wf_params: BaseParams[INPGT, EXPGT]  | None = None,
+        wf_params: BaseParams[InitParamsT, ExecParamsT]  | None = None,
     ) -> list[MoUIElement]:
         return list(itertools.chain.from_iterable(
             (

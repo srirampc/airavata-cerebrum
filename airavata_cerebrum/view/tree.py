@@ -12,7 +12,7 @@ import traitlets
 from collections.abc import Iterable
 from typing_extensions import override
 
-from ..base import CerebrumBaseModel, BaseStruct, BaseParams, INPGT, EXPGT
+from ..base import CerebrumBaseModel, BaseStruct, BaseParams
 from ..model.setup import RecipeKeys, RecipeSetup
 from ..model import structure as structure
 from . import (RcpTreeNames, StructTreeNames, workflow_params,
@@ -203,16 +203,16 @@ class DBWorkflowSidePanel(IPyPanelT):
         step_key = wf_step[RecipeKeys.NAME]
         # _log().warning("Initializing Panels for [%s]", step_key)
         rcp_template = self.mdr_setup.get_template_for(step_key)
-        _, rcp_traits = workflow_params(wf_step)
+        _, rcp_params = workflow_params(wf_step)
         return self.workflow_ui(
             rcp_template,
-            rcp_traits,
+            rcp_params,
         )
 
     def workflow_ui(
         self,
         rcp_template: dict[str, t.Any],
-        wf_params: BaseParams[INPGT, EXPGT]  | None = None,
+        wf_params: BaseParams[CerebrumBaseModel, CerebrumBaseModel]  | None = None,
     ) -> list[iwidgets.CoreWidget]:
         return [
             self.workflow_params_widget(

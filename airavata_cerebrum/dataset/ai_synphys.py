@@ -14,8 +14,13 @@ from aisynphys.database.schema.experiment import PairBase
 from aisynphys.cell_class import CellClass, classify_cells, classify_pairs
 from aisynphys.connectivity import measure_connectivity
 #
-from ..base import (CerebrumBaseModel, DbQuery, OpXFormer,
-                    BaseParams, QryDBWriter, QryItr)
+from ..base import (
+    CerebrumBaseModel,
+    BaseParams, 
+    DbQuery,
+    QryDBWriter,
+    QryItr,
+)
 
 
 class CellClassSelection(t.NamedTuple):
@@ -108,19 +113,19 @@ class AISynPhysHelper:
 
 class AISynInitParams(CerebrumBaseModel):
     download_base : t.Annotated[str, Field(title="Download Base Dir.")]
+    projects: t.Annotated[list[str], Field(title="AI Syn. Projects")] = []
 
 class AISynExecParams(CerebrumBaseModel):
     layer : t.Annotated[list[str], Field(title="Layers")]
-    projects: t.Annotated[list[str], Field(title="AI Syn. Projects")] = []
 
 AISynBaseParams : t.TypeAlias = BaseParams[AISynInitParams, AISynExecParams]
 
-class AISynPhysQuery(DbQuery):
+class AISynPhysQuery(DbQuery[AISynInitParams, AISynExecParams]):
     class QryParams(AISynBaseParams):
         init_params: t.Annotated[AISynInitParams, Field(title='Init Params')]
         exec_params: t.Annotated[AISynExecParams, Field(title='Exec Params')]
 
-    def __init__(self, **params: t.Any):
+    def __init__(self, init_params: AISynInitParams, **_params: t.Any):
         """
         Initialize AI SynphysDatabase
         Parameters
@@ -131,21 +136,26 @@ class AISynPhysQuery(DbQuery):
            Run the database
 
         """
-        self.name : str = __name__ + ".ABCDbMERFISHQuery"
-        self.download_base : str = params["download_base"]
+        self.name : str = __name__ + ".AIProject"
+        self.download_base : str = init_params.download_base
         aisynphys.config.cache_path = self.download_base
         self.sdb : SynphysDatabase = SynphysDatabase.load_current("small")
-        self.projects : list[str] = self.sdb.mouse_projects
-        if "projects" in params and params["projects"]:
-            self.projects = params["projects"]
-        self.qpairs : list[PairBase] = self.sdb.pair_query(project_name=self.projects).all()
+        self.projects : list[str] =  (
+            init_params.projects
+            if init_params.projects else self.sdb.mouse_projects
+        )
+        self.qpairs : list[PairBase] = self.sdb.pair_query(
+            project_name=self.projects
+        ).all()
         self.nwarnings : int = 0
 
     @override
     def run(
         self,
-        in_iter: QryItr | None,
-        **params: t.Any,
+        exec_params: AISynExecParams,
+        first_iter: QryItr | None,
+        *rest_iter: QryItr | None,
+        **_params: t.Any,
     ) -> QryItr | None:
         """
         Get the connectivity probabilities for given layter
@@ -163,11 +173,11 @@ class AISynPhysQuery(DbQuery):
         }
         """
         #
-        default_args = {}
-        rarg = {**default_args, **params} if params else default_args
-        _log().info("AISynPhysQuery Args : %s", rarg)
+        # default_args = {}
+        # rarg = {**default_args, **params} if params else default_args
+        _log().info("AISynPhysQuery Args : %s", str(exec_params))
         results, rerror = AISynPhysHelper.get_connectivity(
-            rarg["layer"],
+            exec_params.layer,
             self.qpairs
         )
         # cell_classes = self.select_cell_classes(layer_list)
@@ -185,7 +195,7 @@ class AISynPhysQuery(DbQuery):
         self.nwarnings += rerror
         _log().info(
             "AISynPhysQuery Args : [%s] ; N warnings [%d]",
-            rarg,
+            str(exec_params),
             self.nwarnings
         )
         #
@@ -248,7 +258,7 @@ class DFBuilder:
         )
 
 
-class DuckDBWriter(QryDBWriter):
+class AISynDuckDBWriter(QryDBWriter):
     def __init__(self, db_conn: duckdb.DuckDBPyConnection):
         self.conn : duckdb.DuckDBPyConnection = db_conn
 
@@ -263,21 +273,3 @@ class DuckDBWriter(QryDBWriter):
             "CREATE OR REPLACE TABLE ai_synphys AS SELECT * FROM result_df"
         )
         self.conn.commit()
-
-
-
-#
-# ------- Query and Xform Registers -----
-#
-def query_register() -> list[type[DbQuery]]:
-    return [
-        AISynPhysQuery,
-    ]
-
-
-def xform_register() -> list[type[OpXFormer]]:
-    return []
-
-
-def dbwriter_register() -> type[QryDBWriter]:
-    return DuckDBWriter

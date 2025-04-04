@@ -8,7 +8,7 @@ from typing_extensions import Self
 #
 from ..base import BaseStruct, BaseParams, CerebrumBaseModel
 from ..base import OpXFormer, DbQuery
-from ..base import INPGT, EXPGT
+from ..base import InitParamsT, ExecParamsT
 from ..model.setup import RecipeKeys
 from ..register import find_type
 
@@ -57,7 +57,7 @@ def workflow_params_dict(
 def workflow_params(
     wf_step: dict[str, t.Any],
     node_key: str | None = None,
-) -> tuple[str | None,  BaseParams[INPGT, EXPGT] | None]:
+) -> tuple[str | None,  BaseParams[CerebrumBaseModel, CerebrumBaseModel] | None]:
 
     node_key = node_key if node_key else wf_step[RecipeKeys.NAME]
     src_class: type[DbQuery] | type[OpXFormer] | None = find_type(

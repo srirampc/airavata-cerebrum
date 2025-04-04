@@ -21,7 +21,7 @@ from matplotlib.figure import Figure
 from pydantic import Field
 from abc_atlas_access.abc_atlas_cache.abc_project_cache import AbcProjectCache
 #
-from ..base import CerebrumBaseModel, DbQuery, OpXFormer, BaseParams, QryDBWriter, QryItr
+from ..base import CerebrumBaseModel, DbQuery, BaseParams, QryDBWriter, QryItr
 
 ProcessResult : t.TypeAlias = subprocess.CompletedProcess[bytes]
 NDFloatArray : t.TypeAlias = npt.NDArray[np.floating[t.Any]]
@@ -731,7 +731,8 @@ def plot_section(
     """
     Plot a Section of the MERFISH co-ordinates
     """
-    fig, ax = plt.subplots()
+    sub_plots : tuple[Figure, Axes] = plt.subplots()
+    fig, ax = sub_plots
     fig.set_size_inches(fig_width, fig_height)
     if cmap is not None:
         plt.scatter(xx, yy, s=0.5, c=val, marker=".", cmap=cmap)
@@ -791,7 +792,8 @@ def plot_heatmap(
     Plot Heat Map based on the input data frame
     """
     arr = df.to_numpy()
-    fig, ax = plt.subplots()
+    sub_plots : tuple[Figure, Axes] = plt.subplots()
+    fig, ax = sub_plots
     fig.set_size_inches(
         fig_width,
         fig_height
@@ -1039,12 +1041,12 @@ class ExecParams(CerebrumBaseModel):
 
 CCFParamsBase : t.TypeAlias = BaseParams[InitParams,  ExecParams] 
 
-class ABCDbMERFISH_CCFQuery(DbQuery):
+class ABCDbMERFISH_CCFQuery(DbQuery[InitParams, ExecParams]):
     class QryParams(CCFParamsBase):
         init_params: t.Annotated[InitParams, Field(title='Init Params')]
         exec_params: t.Annotated[ExecParams, Field(title='Exec Params')]
 
-    def __init__(self, **params: t.Any):
+    def __init__(self, init_params: InitParams, **params: t.Any):
         """
         Initialize MERFISH Query
         Parameters
@@ -1054,7 +1056,7 @@ class ABCDbMERFISH_CCFQuery(DbQuery):
 
         """
         self.name : str = __name__ + ".ABCDbMERFISHQuery"
-        self.download_base : str = params["download_base"]
+        self.download_base : str = init_params.download_base # params["download_base"]
         self.pcache : AbcProjectCache = AbcProjectCache.from_s3_cache(
             self.download_base
         )
@@ -1067,7 +1069,9 @@ class ABCDbMERFISH_CCFQuery(DbQuery):
     @override
     def run(
         self,
-        in_iter: QryItr | None,
+        exec_params: ExecParams,
+        first_iter: QryItr | None,
+        *rest_iter: QryItr | None,
         **params: t.Any,
     ) -> QryItr | None:
         """
@@ -1086,10 +1090,10 @@ class ABCDbMERFISH_CCFQuery(DbQuery):
         }
         """
         #
-        default_args = {}
-        rarg = {**default_args, **params} if params else default_args
-        _log().info("ABCDbMERFISH_CCFQuery Args : %s", rarg)
-        region_list = rarg["region"]
+        # default_args = {}
+        # rarg = {**default_args, **params} if params else default_args
+        _log().info("ABCDbMERFISH_CCFQuery Args : %s", str(exec_params))
+        region_list =  exec_params.region # rarg["region"]
         #
         mfish_ccf_df = pd.read_csv(self.ccf_meta_file)
         _, _, region_frac_map = region_ccf_cell_types(mfish_ccf_df, region_list)
@@ -1140,7 +1144,7 @@ class DFBuilder:
         return pl.DataFrame(DFBuilder.qry2dict(in_iter))
 
 
-class DuckDBWriter(QryDBWriter):
+class ABCDuckDBWriter(QryDBWriter):
     def __init__(self, db_conn: duckdb.DuckDBPyConnection):
         self.conn : duckdb.DuckDBPyConnection = db_conn
 
@@ -1155,19 +1159,3 @@ class DuckDBWriter(QryDBWriter):
             "CREATE OR REPLACE TABLE abm_mouse AS SELECT * FROM result_df"
         )
         self.conn.commit()
-
-#
-# ------- Query and Xform Registers -----
-#
-def query_register() -> list[type[DbQuery]]:
-    return [
-        ABCDbMERFISH_CCFQuery,
-    ]
-
-
-def xform_register() -> list[type[OpXFormer]]:
-    return []
-
-
-def dbwriter_register() -> type[QryDBWriter]:
-    return DuckDBWriter
