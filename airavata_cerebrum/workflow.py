@@ -35,8 +35,6 @@ def run_workflow(
             wf_step[RecipeKeys.LABEL]
             if RecipeKeys.LABEL in wf_step else sname 
         )
-        # iparams: dict[str, t.Any] = wf_step[RecipeKeys.INIT_PARAMS]
-        # eparams: dict[str, t.Any] = wf_step[RecipeKeys.EXEC_PARAMS]
         match wf_step[RecipeKeys.TYPE]:
             case "query":
                 _log().info("Start Query : [%s]",  slabel)

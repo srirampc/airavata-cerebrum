@@ -12,7 +12,7 @@ from .json_filter import (
     IJPExecParams, IJPtrExecParams,
     IterJPatchFilter, IterJPointerFilter
 )
-from .dict_filter import FilterPredicateT, IAFExecParams, IterAttrFilter
+from .dict_filter import FilterPredicateT, IAFExecParams, IAFInitParams, IterAttrFilter
 from ..util import flip_args
 
 
@@ -153,7 +153,7 @@ class CTPropertyFilter(OpXFormer[NoneParams, CTPFExecParams]):
 
     def __init__(self, init_params: NoneParams, **params: t.Any):
         self.cell_attr_filter : IterAttrFilter = IterAttrFilter(
-            init_params, **params
+            IAFInitParams(combine="all"), **params
         )
 
     def get_filter(

@@ -10,17 +10,17 @@ from ..base import (
     OpXFormer, XformItr
 )
 from ..util import flip_args
-from .dict_filter import FilterPredicateT, IAFExecParams, IterAttrFilter
+from .dict_filter import FilterPredicateT, IAFExecParams, IAFInitParams, IterAttrFilter
 
 
 class MEFExecParams(CerebrumBaseModel):
-    key: t.Annotated[str, Field(title="Key (iter key)")]
-    me_in : t.Annotated[
-        list[str] | None, Field(title="ME Type in (me-type)")
-    ]
-    e_in : t.Annotated[
-        list[str] | None, Field(title="E Type in (me-type)")
-    ]
+    key: t.Annotated[str, Field(title="Key (iter key)")] = "mef"
+    me_contains : t.Annotated[
+        list[str] | None, Field(title="ME Type (me-type)")
+    ] = None
+    e_contains : t.Annotated[
+        list[str] | None, Field(title="E Type (e-type)")
+    ] = None
 
 MEFBaseParams : t.TypeAlias = BaseParams[NoneParams, MEFExecParams]
 
@@ -30,13 +30,13 @@ class MEPropertyFilter(OpXFormer[NoneParams, MEFExecParams]):
         exec_params: t.Annotated[MEFExecParams, Field(title='Exec Params')]
 
     QUERY_FILTER_MAP : dict[str, tuple[str, FilterPredicateT, type]] = {
-        "me_in"   : ("me-type", flip_args(operator.contains), list),
-        "e_in" : ("e-type", flip_args(operator.contains), list),
+        "me_contains"   : ("me-type", flip_args(operator.contains), list),
+        "e_contains" : ("e-type", flip_args(operator.contains), list),
     }
 
     def __init__(self, init_params: NoneParams, **params: t.Any):
         self.cell_attr_filter : IterAttrFilter = IterAttrFilter(
-            init_params, **params
+            IAFInitParams(combine="all"), **params
         )
 
     def get_filter(

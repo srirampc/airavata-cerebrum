@@ -6,7 +6,6 @@ from typing_extensions import override
 from ..base import (
     CerebrumBaseModel, 
     XformItr,
-    XformElt,
     OpXFormer,
     NoneParams, 
     BaseParams,
@@ -89,11 +88,11 @@ class IAFExecParams(CerebrumBaseModel):
         Field(title='Filters')
     ] = []
 
-IAFBaseParams : t.TypeAlias = BaseParams[NoneParams, IAFExecParams]
+IAFBaseParams : t.TypeAlias = BaseParams[IAFInitParams, IAFExecParams]
 
-class IterAttrFilter(OpXFormer[NoneParams, IAFExecParams]):
+class IterAttrFilter(OpXFormer[IAFInitParams, IAFExecParams]):
     class FilterParams(IAFBaseParams):
-        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
+        init_params: t.Annotated[IAFInitParams, Field(title='Init Params')]
         exec_params: t.Annotated[IAFExecParams, Field(title='Exec Params')]
 
     PREDICATE_COMBINE : dict[
@@ -105,14 +104,27 @@ class IterAttrFilter(OpXFormer[NoneParams, IAFExecParams]):
 
     def __init__(
         self,
-        init_params: NoneParams,
-        combine: t.Literal['any', 'all'] = 'all',
+        init_params: IAFInitParams,
         **params: t.Any
     ):
         self.name : str = __name__ + ".IterAttrFilter"
-        self.select_fn : t.Callable[[XformElt], XformElt] = lambda x: x
         self.combine_fn : t.Callable[[t.Any], bool] = (
-            IterAttrFilter.PREDICATE_COMBINE[combine]
+            IterAttrFilter.PREDICATE_COMBINE[init_params.combine]
+        )
+
+    def apply_filter(
+        self,
+        rcdx: dict[str, t.Any],
+        key: str | None,
+        tfilter: tuple[str, FilterPredicateT, t.Any]
+    ) -> bool:
+        if key and key not in rcdx:
+            return False
+        rcdx = rcdx[key] if key else rcdx
+        attr, bin_predicate, val = tfilter
+        return (attr in rcdx) and (
+            bin_predicate(rcdx[attr], val)
+            if key else bin_predicate(rcdx[attr], val)
         )
 
     @override
@@ -150,14 +162,12 @@ class IterAttrFilter(OpXFormer[NoneParams, IAFExecParams]):
             str(exec_params.key),
             str(exec_params.filters)
         )
-        filters_itr : list[tuple[t.Any, ...]] = exec_params.filters
-        self.select_fn = lambda x: x[exec_params.key] if exec_params.key else x
         return iter(
             rcdx
             for rcdx in first_iter
             if rcdx and self.combine_fn(
-                bin_predicate(self.select_fn(rcdx)[attr], val)
-                for attr, bin_predicate, val in filters_itr
+                self.apply_filter(rcdx, exec_params.key, tfilter)
+                for tfilter in exec_params.filters
             )
         ) if first_iter else None
 

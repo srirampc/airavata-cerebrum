@@ -113,7 +113,8 @@ class AISynPhysHelper:
 
 class AISynInitParams(CerebrumBaseModel):
     download_base : t.Annotated[str, Field(title="Download Base Dir.")]
-    projects: t.Annotated[list[str], Field(title="AI Syn. Projects")] = []
+    projects : t.Annotated[list[str], Field(title="AI Syn. Projects")] = []
+    db_size  : t.Annotated[str, Field(title="DB Size")] = "small"
 
 class AISynExecParams(CerebrumBaseModel):
     layer : t.Annotated[list[str], Field(title="Layers")]
@@ -139,7 +140,9 @@ class AISynPhysQuery(DbQuery[AISynInitParams, AISynExecParams]):
         self.name : str = __name__ + ".AIProject"
         self.download_base : str = init_params.download_base
         aisynphys.config.cache_path = self.download_base
-        self.sdb : SynphysDatabase = SynphysDatabase.load_current("small")
+        self.sdb : SynphysDatabase = SynphysDatabase.load_current(
+            init_params.db_size
+        )
         self.projects : list[str] =  (
             init_params.projects
             if init_params.projects else self.sdb.mouse_projects
