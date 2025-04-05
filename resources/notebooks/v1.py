@@ -36,7 +36,7 @@ class RcpSettings(pydantic.BaseModel):
             "recipe_dm_l1.json",
             "recipe_dm_l23.json",
             "recipe_dm_l4.json",
-            # "recipe_dm_l5.json",
+            "recipe_dm_l5.json",
         ],
         "templates": [
             "recipe_template.json"
@@ -48,6 +48,8 @@ class RcpSettings(pydantic.BaseModel):
         Path("./v1/recipe/custom_mod_l23.json"),
         Path("./v1/recipe/custom_mod_l4.json"),
         Path("./v1/recipe/custom_mod_ext.json"),
+        Path("./v1/recipe/custom_mod_ext_lgn.json"),
+        Path("./v1/recipe/custom_mod_ext_bkg.json"),
     ]
     ctdb_models_dir: Path = Path("./v1/components/point_neuron_models/")
     nest_models_dir: Path = Path("./v1/components/cell_models/")

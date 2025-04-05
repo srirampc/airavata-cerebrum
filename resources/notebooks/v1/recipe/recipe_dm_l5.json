@@ -26,6 +26,274 @@
                             ]
                         }
                     }
+                },
+                "('5', 'IT')": {
+                    "property_map": {
+                        "ei": "e"
+                    },
+                    "source_data": {
+                        "airavata_cerebrum.dataset.abm_celltypes": {
+                            "label": "Select Cell Types",
+                            "workflow": [
+                                {
+                                    "type": "xform",
+                                    "label": "Select Layer",
+                                    "name": "airavata_cerebrum.operations.abm_celltypes.CTPropertyFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "key": "ct",
+                                        "layer": "5",
+                                        "reporter_status": "positive"
+                                    }
+                                },
+                                {
+                                    "label": "Select ME Type",
+                                    "type": "xform",
+                                    "name": "airavata_cerebrum.operations.me_features.MEPropertyFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "key": "mef",
+                                        "me_contains": [
+                                            "ME_Exc_5",
+                                            "ME_Exc_13"
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        "airavata_cerebrum.dataset.abc_mouse": {
+                            "label": "Filter Cell Fraction",
+                            "workflow": [
+                                {
+                                    "type": "xform",
+                                    "label": "Select Region/Type",
+                                    "name": "airavata_cerebrum.operations.abc_mouse.ABCDbMERFISH_CCFFractionFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "region": "VISp/VISp5",
+                                        "cell_type": "IT"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                "('5', 'ET')": {
+                    "property_map": {
+                        "ei": "e"
+                    },
+                    "source_data": {
+                        "airavata_cerebrum.dataset.abm_celltypes": {
+                            "label": "Select Cell Types",
+                            "workflow": [
+                                {
+                                    "type": "xform",
+                                    "label": "Select Line",
+                                    "name": "airavata_cerebrum.operations.abm_celltypes.CTPropertyFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "key": "ct",
+                                        "layer": "5",
+                                        "reporter_status": "positive"
+                                    }
+                                },
+                                {
+                                    "label": "Select ME Type",
+                                    "type": "xform",
+                                    "name": "airavata_cerebrum.operations.me_features.MEPropertyFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "key": "mef",
+                                        "me_contains": [
+                                            "ME_Exc_1"
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        "airavata_cerebrum.dataset.abc_mouse": {
+                            "label": "Filter Cell Fraction",
+                            "workflow": [
+                                {
+                                    "type": "xform",
+                                    "label": "Select Region/Type",
+                                    "name": "airavata_cerebrum.operations.abc_mouse.ABCDbMERFISH_CCFFractionFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "region": "VISp/VISp5",
+                                        "cell_type": "ET"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                "('5', 'NP')": {
+                    "property_map": {
+                        "ei": "e"
+                    },
+                    "source_data": {
+                        "airavata_cerebrum.dataset.abm_celltypes": {
+                            "label": "Select Cell Types",
+                            "workflow": [
+                                {
+                                    "type": "xform",
+                                    "label": "Select Line",
+                                    "name": "airavata_cerebrum.operations.abm_celltypes.CTPropertyFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "key": "ct",
+                                        "layer": "5",
+                                        "reporter_status": "positive"
+                                    }
+                                },
+                                {
+                                    "label": "Select ME Type",
+                                    "type": "xform",
+                                    "name": "airavata_cerebrum.operations.me_features.MEPropertyFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "key": "mef",
+                                        "e_contains": [
+                                            "Exc_3"
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        "airavata_cerebrum.dataset.abc_mouse": {
+                            "label": "Filter Cell Fraction",
+                            "workflow": [
+                                {
+                                    "type": "xform",
+                                    "label": "Select Region/Type",
+                                    "name": "airavata_cerebrum.operations.abc_mouse.ABCDbMERFISH_CCFFractionFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "region": "VISp/VISp5",
+                                        "cell_type": "ET"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                "('5', 'Vip')": {
+                    "property_map": {
+                        "ei": "i"
+                    },
+                    "source_data": {
+                        "airavata_cerebrum.dataset.abm_celltypes": {
+                            "label": "Select Cell Types",
+                            "workflow": [
+                                {
+                                    "type": "xform",
+                                    "label": "Select Line",
+                                    "name": "airavata_cerebrum.operations.abm_celltypes.CTPropertyFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "layer": "5",
+                                        "key": "ct",
+                                        "line": "Vip-",
+                                        "reporter_status": "positive"
+                                    }
+                                }
+                            ]
+                        },
+                        "airavata_cerebrum.dataset.abc_mouse": {
+                            "label": "Filter Cell Fraction",
+                            "workflow": [
+                                {
+                                    "type": "xform",
+                                    "label": "Select Region/Type",
+                                    "name": "airavata_cerebrum.operations.abc_mouse.ABCDbMERFISH_CCFFractionFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "region": "VISp/VISp5",
+                                        "cell_type": "Vip"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                "('5', 'Pvalb')": {
+                    "property_map": {
+                        "ei": "i"
+                    },
+                    "source_data": {
+                        "airavata_cerebrum.dataset.abm_celltypes": {
+                            "label": "Select Cell Types",
+                            "workflow": [
+                                {
+                                    "type": "xform",
+                                    "label": "Select Line",
+                                    "name": "airavata_cerebrum.operations.abm_celltypes.CTPropertyFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "layer": "5",
+                                        "key": "ct",
+                                        "line": "Pvalb-IRES",
+                                        "reporter_status": "positive"
+                                    }
+                                }
+                            ]
+                        },
+                        "airavata_cerebrum.dataset.abc_mouse": {
+                            "label": "Filter Cell Fraction",
+                            "workflow": [
+                                {
+                                    "type": "xform",
+                                    "label": "Select Region/Type",
+                                    "name": "airavata_cerebrum.operations.abc_mouse.ABCDbMERFISH_CCFFractionFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "region": "VISp/VISp5",
+                                        "cell_type": "Pvalb"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                "('5', 'Sst')": {
+                    "property_map": {
+                        "ei": "i"
+                    },
+                    "source_data": {
+                        "airavata_cerebrum.dataset.abm_celltypes": {
+                            "label": "Select Cell Types",
+                            "workflow": [
+                                {
+                                    "type": "xform",
+                                    "label": "Select Line",
+                                    "name": "airavata_cerebrum.operations.abm_celltypes.CTPropertyFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "layer": "5",
+                                        "key": "ct",
+                                        "line": "Sst",
+                                        "reporter_status": "positive"
+                                    }
+                                }
+                            ]
+                        },
+                        "airavata_cerebrum.dataset.abc_mouse": {
+                            "label": "Filter Cell Fraction",
+                            "workflow": [
+                                {
+                                    "label": "Select Region/Type",
+                                    "type": "xform",
+                                    "name": "airavata_cerebrum.operations.abc_mouse.ABCDbMERFISH_CCFFractionFilter",
+                                    "init_params": {},
+                                    "exec_params": {
+                                        "region": "VISp/VISp5",
+                                        "cell_type": "Pvalb"
+                                    }
+                                }
+                            ]
+                        }
+                    }
                 }
             }
         },
