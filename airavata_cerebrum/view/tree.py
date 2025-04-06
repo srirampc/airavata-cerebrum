@@ -65,14 +65,17 @@ class PropertyListLayout(iwidgets.GridspecLayout):
         help="List values"
     ).tag(sync=True)
 
-    def __init__(self, value: list[t.Any], **kwargs: t.Any):
-        super().__init__(len(value), 2, value=value, **kwargs)
-        for ix, (kx, vx) in enumerate(enumerate(value)):
-            wdx = scalar_widget(type(vx).__name__, vx)
-            wdx.add_traits(index=traitlets.Integer(kx))
-            wdx.observe(self.handle_change)
-            self[ix, 0] = iwidgets.Label(str(kx) + " :")
-            self[ix, 1] = wdx
+    def __init__(self, value: list[t.Any] | None, **kwargs: t.Any):
+        if value and len(value) > 0:
+            super().__init__(len(value), 2, value=value, **kwargs)
+            for ix, (kx, vx) in enumerate(enumerate(value)):
+                wdx = scalar_widget(type(vx).__name__, vx)
+                wdx.add_traits(index=traitlets.Integer(kx))
+                wdx.observe(self.handle_change)
+                self[ix, 0] = iwidgets.Label(str(kx) + " :")
+                self[ix, 1] = wdx
+        else:
+            super().__init__(1, 1, value=str(value), **kwargs)
 
     def handle_change(self, change: dict[str, t.Any]):
         # print("L:", change)
@@ -87,14 +90,17 @@ class PropertyTupleLayout(iwidgets.GridspecLayout):
         help="Tuple values"
     ).tag(sync=True)
 
-    def __init__(self, value: tuple[t.Any], **kwargs: t.Any):
-        super().__init__(len(value), 2, value=value, **kwargs)
-        for ix, (kx, vx) in enumerate(enumerate(value)):
-            wdx = scalar_widget(type(vx).__name__, vx)
-            wdx.add_traits(index=traitlets.Integer(kx))
-            wdx.observe(self.handle_change)
-            self[ix, 0] = iwidgets.Label(str(kx) + " :")
-            self[ix, 1] = wdx
+    def __init__(self, value: tuple[t.Any] | None, **kwargs: t.Any):
+        if value and len(value) > 0:
+            super().__init__(len(value), 2, value=value, **kwargs)
+            for ix, (kx, vx) in enumerate(enumerate(value)):
+                wdx = scalar_widget(type(vx).__name__, vx)
+                wdx.add_traits(index=traitlets.Integer(kx))
+                wdx.observe(self.handle_change)
+                self[ix, 0] = iwidgets.Label(str(kx) + " :")
+                self[ix, 1] = wdx
+        else:
+            super().__init__(1, 1, value=str(value), **kwargs)
 
     def handle_change(self, change: dict[str, t.Any]):
         # print("L:", change)
@@ -114,7 +120,7 @@ class PropertyMapLayout(iwidgets.GridspecLayout):
 
     def __init__(self, value: dict[str, t.Any], **kwargs: t.Any):
         # print("Value: ", len(value))
-        if len(value) > 0:
+        if value and len(value) > 0:
             super().__init__(len(value), 2, value=value, **kwargs)
             for ix, (kx, vx) in enumerate(value.items()):
                 wdx = self.init_widget(vx, type(vx).__name__)
@@ -123,7 +129,7 @@ class PropertyMapLayout(iwidgets.GridspecLayout):
                 self[ix, 0] = iwidgets.Label(str(kx) + " :")
                 self[ix, 1] = wdx 
         else:
-            super().__init__(1, 1, value=value, **kwargs)
+            super().__init__(1, 1, value=str(value), **kwargs)
 
     def handle_change(self, change: dict[str, t.Any]):
         # print("L:", change)
