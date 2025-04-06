@@ -37,6 +37,7 @@ class RcpSettings(pydantic.BaseModel):
             "recipe_dm_l23.json",
             "recipe_dm_l4.json",
             "recipe_dm_l5.json",
+            "recipe_dm_l6.json",
         ],
         "templates": [
             "recipe_template.json"

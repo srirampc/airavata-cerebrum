@@ -396,6 +396,63 @@
                     }
                 }
             },
+            "(('2/3', 'Cux2'), ('4', 'Pvalb'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L23-Pvalb",
+                                    "post": "L4-Pvalb"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('2/3', 'Cux2'), ('4', 'Sst'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L23-Pyr",
+                                    "post": "L4-Sst"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('2/3', 'Cux2'), ('4', 'Vip'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L23-Pyr",
+                                    "post": "L4-Vip"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
             "(('2/3', 'Pvalb'), ('4', 'Pvalb'))": {
                 "source_data": {
                     "airavata_cerebrum.dataset.ai_synphys": {
@@ -447,6 +504,25 @@
                                 "exec_params": {
                                     "pre": "L23-Pvalb",
                                     "post": "L4-Vip"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('2/3', 'Sst'), ('4', 'Pvalb'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L23-Sst",
+                                    "post": "L4-Pvalb"
                                 }
                             }
                         ]
@@ -541,6 +617,462 @@
                                 "init_params": {},
                                 "exec_params": {
                                     "pre": "L23-Vip",
+                                    "post": "L4-Vip"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'ET'), ('4', 'Pvalb'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-ET",
+                                    "post": "L4-Pvalb"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'ET'), ('4', 'Sst'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-ET",
+                                    "post": "L4-Sst"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'ET'), ('4', 'Vip'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "label": "Filter by Pair",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-ET",
+                                    "post": "L4-Vip"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'IT'), ('4', 'Pvalb'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-IT",
+                                    "post": "L4-Pvalb"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'IT'), ('4', 'Sst'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-IT",
+                                    "post": "L4-Sst"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'IT'), ('4', 'Vip'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "label": "Filter by Pair",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-IT",
+                                    "post": "L4-Vip"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'Pvalb'), ('4', 'Pvalb'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-Pvalb",
+                                    "post": "L4-Pvalb"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'Pvalb'), ('4', 'Sst'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-Pvalb",
+                                    "post": "L4-Sst"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'Pvalb'), ('4', 'Vip'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "label": "Filter by Pair",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-Pvalb",
+                                    "post": "L4-Vip"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'Vip'), ('4', 'Pvalb'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-Vip",
+                                    "post": "L4-Pvalb"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'Vip'), ('4', 'Sst'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-Vip",
+                                    "post": "L4-Sst"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'Vip'), ('4', 'Vip'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "label": "Filter by Pair",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-Vip",
+                                    "post": "L4-Vip"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'Sst'), ('4', 'Pvalb'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-Sst",
+                                    "post": "L4-Pvalb"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'Sst'), ('4', 'Sst'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-Sst",
+                                    "post": "L4-Sst"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('5', 'Sst'), ('4', 'Vip'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "label": "Filter by Pair",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-Sst",
+                                    "post": "L4-Vip"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('6', 'Pvalb'), ('4', 'Pvalb'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L6-Pvalb",
+                                    "post": "L4-Pvalb"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('6', 'Pvalb'), ('4', 'Sst'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L6-Pvalb",
+                                    "post": "L4-Sst"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('6', 'Pvalb'), ('4', 'Vip'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "label": "Filter by Pair",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L5-Pvalb",
+                                    "post": "L4-Vip"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('6', 'Vip'), ('4', 'Pvalb'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L6-Vip",
+                                    "post": "L4-Pvalb"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('6', 'Vip'), ('4', 'Sst'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L6-Vip",
+                                    "post": "L4-Sst"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('6', 'Vip'), ('4', 'Vip'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "label": "Filter by Pair",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L6-Vip",
+                                    "post": "L4-Vip"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('6', 'Sst'), ('4', 'Pvalb'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L6-Sst",
+                                    "post": "L4-Pvalb"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('6', 'Sst'), ('4', 'Sst'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "label": "Filter by Pair",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L6-Sst",
+                                    "post": "L4-Sst"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "(('6', 'Sst'), ('4', 'Vip'))": {
+                "source_data": {
+                    "airavata_cerebrum.dataset.ai_synphys": {
+                        "label": "AI Syn Phys",
+                        "workflow": [
+                            {
+                                "type": "xform",
+                                "name": "airavata_cerebrum.operations.ai_synphys.AISynPhysPairFilter",
+                                "label": "Filter by Pair",
+                                "init_params": {},
+                                "exec_params": {
+                                    "pre": "L6-Sst",
                                     "post": "L4-Vip"
                                 }
                             }
