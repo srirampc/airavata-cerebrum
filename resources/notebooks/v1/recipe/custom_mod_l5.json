@@ -17,52 +17,52 @@
             "nsyn_lognorm_shape": 0.331,
             "nsyn_lognorm_scale": 2552.072
           }
+        },
+        "('5', 'ET')": {
+          "name": "('5', 'ET')",
+          "ei": "e",
+          "fraction": 0.0,
+          "dims": {
+            "nsyn_lognorm_shape": 0.424,
+            "nsyn_lognorm_scale": 7406.546
+          }
+        },
+        "('5', 'NP')": {
+          "name": "('5', 'NP')",
+          "ei": "e",
+          "fraction": 0.0,
+          "dims": {
+            "nsyn_lognorm_shape": 1.376,
+            "nsyn_lognorm_scale": 679.745
+          }
+        },
+        "('5', 'Sst')": {
+          "name": "('5', 'Sst')",
+          "ei": "i",
+          "fraction": 0.0,
+          "dims": {
+            "nsyn_lognorm_shape": 0.55,
+            "nsyn_lognorm_scale": 5305.151
+          }
+        },
+        "('5', 'Pvalb')": {
+          "name": "('5', 'Pvalb')",
+          "ei": "i",
+          "fraction": 0.0,
+          "dims": {
+            "nsyn_lognorm_shape": 0.433,
+            "nsyn_lognorm_scale": 7432.587
+          }
+        },
+        "('5', 'Vip')": {
+          "name": "('5', 'Vip')",
+          "ei": "i",
+          "fraction": 0.0,
+          "dims": {
+            "nsyn_lognorm_shape": 0.537,
+            "nsyn_lognorm_scale": 2355.279
+          }
         }
-      },
-      "('5', 'ET')": {
-        "name": "('5', 'ET')",
-        "ei": "e",
-        "fraction": 0.0,
-        "dims": {
-          "nsyn_lognorm_shape": 0.424,
-          "nsyn_lognorm_scale": 7406.546
-        }
-      }
-    },
-    "('5', 'NP')": {
-      "name": "('5', 'NP')",
-      "ei": "e",
-      "fraction": 0.0,
-      "dims": {
-        "nsyn_lognorm_shape": 1.376,
-        "nsyn_lognorm_scale": 679.745
-      }
-    },
-    "('5', 'Sst')": {
-      "name": "('5', 'Sst')",
-      "ei": "i",
-      "fraction": 0.0,
-      "dims": {
-        "nsyn_lognorm_shape": 0.55,
-        "nsyn_lognorm_scale": 5305.151
-      }
-    },
-    "('5', 'Pvalb')": {
-      "name": "('5', 'Pvalb')",
-      "ei": "i",
-      "fraction": 0.0,
-      "dims": {
-        "nsyn_lognorm_shape": 0.433,
-        "nsyn_lognorm_scale": 7432.587
-      }
-    },
-    "('5', 'Vip')": {
-      "name": "('5', 'Vip')",
-      "ei": "i",
-      "fraction": 0.0,
-      "dims": {
-        "nsyn_lognorm_shape": 0.537,
-        "nsyn_lognorm_scale": 2355.279
       }
     }
   },

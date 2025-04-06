@@ -1,7 +1,7 @@
 {
     "data2model_map": {
         "locations": {
-            "Visp5": {
+            "VISp5": {
                 "property_map": {
                     "neurons": [
                         "('5', 'IT')",

@@ -9,10 +9,7 @@
         "label": "Species",
         "doc": "Species",
         "default": "Mus musculus",
-        "options": [
-          "Homo sapiens",
-          "Mus musculus"
-        ]
+        "options": ["Homo sapiens", "Mus musculus"]
       }
     }
   },
@@ -26,10 +23,7 @@
         "label": "Index Key",
         "doc": "Field to be used as the Output Key",
         "default": "specimen__id",
-        "options": [
-          "",
-          "specimen__id"
-        ]
+        "options": ["", "specimen__id"]
       },
       "first": {
         "type": "check",
@@ -55,14 +49,8 @@
         "type": "tags",
         "label": "Regions of Interest",
         "doc": "Selected Region of interest",
-        "allowed": [
-          "VISp",
-          "AUDp",
-          "MOp"
-        ],
-        "default": [
-          "VISp"
-        ]
+        "allowed": ["VISp", "AUDp", "MOp"],
+        "default": ["VISp"]
       }
     }
   },
@@ -82,25 +70,17 @@
         "type": "tags",
         "label": "Layers of Interest",
         "doc": "Layers of interest",
-        "allowed": [
-          "L1",
-          "L23",
-          "L5",
-          "L6",
-          "L4"
-        ],
-        "default": [
-          "L4"
-        ]
+        "allowed": ["L1", "L23", "L5", "L6", "L4"],
+        "default": ["L4"]
       }
     }
   },
-  "airavata_cerebrum.operations.me_features.MEFDataQuery": {
-    "label": "Query Allen Institute Syn Phys Data",
+  "airavata_cerebrum.dataset.me_features.MEFDataQuery": {
     "type": "query",
+    "label": "Query ME Features Data",
     "init_params": {
-      "download_base": {
-        "file_url": "text",
+      "file_url": {
+        "type": "text",
         "label": "File Location",
         "doc": "File Location",
         "default": ""
@@ -171,26 +151,14 @@
         "type": "option",
         "label": "Selected Layer",
         "doc": "Selected Layer",
-        "options": [
-          "",
-          "1",
-          "4",
-          "3",
-          "5",
-          "2/3",
-          "6"
-        ],
+        "options": ["", "1", "4", "3", "5", "2/3", "6a", "6b"],
         "default": "4"
       },
       "region": {
         "type": "option",
         "label": "Selected Region",
         "doc": "Selected Region of interest",
-        "options": [
-          "",
-          "VISp",
-          "AUDp"
-        ],
+        "options": ["", "VISp", "AUDp"],
         "default": "VISp"
       },
       "line": {
@@ -200,6 +168,7 @@
         "options": [
           "",
           "Htr3a",
+          "Ntsr1",
           "Cux2-",
           "Scnn1a",
           "Rorb",
@@ -213,11 +182,7 @@
         "type": "option",
         "label": "Reporter Status",
         "doc": "Reporter Status",
-        "options": [
-          "",
-          "positive",
-          "negative"
-        ],
+        "options": ["", "positive", "negative"],
         "default": ""
       }
     }
@@ -313,6 +278,32 @@
         "label": "Post-synaptic Type",
         "doc": "Post-synaptic Type",
         "default": "Vip"
+      }
+    }
+  },
+  "airavata_cerebrum.operations.me_features.MEPropertyFilter": {
+    "type": "xform",
+    "label": "Filter ME by ME/E types",
+    "doc": "Filter ME by ME/E types",
+    "init_params": {},
+    "exec_params": {
+      "key": {
+        "type": "text",
+        "label": "Key",
+        "doc": "Key",
+        "default": "ct"
+      },
+      "me_contains": {
+        "type": "list",
+        "label": "Selected ME types",
+        "doc": "Selected ME types",
+        "default": []
+      },
+      "e_contains": {
+        "type": "list",
+        "label": "Selected E types",
+        "doc": "Selected E types",
+        "default": []
       }
     }
   }
