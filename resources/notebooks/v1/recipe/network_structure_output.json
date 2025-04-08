@@ -1,13 +1,13 @@
 {
     "name": "v1",
-    "ncells": 80000,
+    "ncells": 30000,
     "locations": {
         "VISp1": {
             "name": "VISp1",
             "inh_fraction": 1.0,
             "region_fraction": 0.06966259453170448,
-            "ncells": 5573,
-            "inh_ncells": 5573,
+            "ncells": 2089,
+            "inh_ncells": 2089,
             "exc_ncells": 0,
             "dims": {
                 "depth_range": [
@@ -19,7 +19,7 @@
                 "('1', 'Htr3a')": {
                     "name": "('1', 'Htr3a')",
                     "ei": "i",
-                    "N": 5573,
+                    "N": 2089,
                     "fraction": 1.0,
                     "dims": {
                         "nsyn_lognorm_shape": 0.856,
@@ -79,9 +79,9 @@
             "name": "VISp2/3",
             "inh_fraction": 0.07875519604538816,
             "region_fraction": 0.34861999870725874,
-            "ncells": 27889,
-            "inh_ncells": 2196,
-            "exc_ncells": 25693,
+            "ncells": 10458,
+            "inh_ncells": 823,
+            "exc_ncells": 9635,
             "dims": {
                 "depth_range": [
                     169,
@@ -92,7 +92,7 @@
                 "('2/3', 'Cux2')": {
                     "name": "('2/3', 'Cux2')",
                     "ei": "e",
-                    "N": 25693,
+                    "N": 9635,
                     "fraction": 1.0,
                     "dims": {
                         "nsyn_lognorm_shape": 0.363,
@@ -254,7 +254,7 @@
                 "('2/3', 'Vip')": {
                     "name": "('2/3', 'Vip')",
                     "ei": "i",
-                    "N": 695,
+                    "N": 260,
                     "fraction": 0.3166904422253923,
                     "dims": {
                         "nsyn_lognorm_shape": 0.537,
@@ -416,7 +416,7 @@
                 "('2/3', 'Pvalb')": {
                     "name": "('2/3', 'Pvalb')",
                     "ei": "i",
-                    "N": 729,
+                    "N": 273,
                     "fraction": 0.33238231098430815,
                     "dims": {
                         "nsyn_lognorm_shape": 0.433,
@@ -608,7 +608,7 @@
                 "('2/3', 'Sst')": {
                     "name": "('2/3', 'Sst')",
                     "ei": "i",
-                    "N": 729,
+                    "N": 273,
                     "fraction": 0.33238231098430815,
                     "dims": {
                         "nsyn_lognorm_shape": 0.55,
@@ -743,9 +743,9 @@
             "name": "VISp4",
             "inh_fraction": 0.1119157340355497,
             "region_fraction": 0.20969879128692392,
-            "ncells": 16775,
-            "inh_ncells": 1877,
-            "exc_ncells": 14898,
+            "ncells": 6290,
+            "inh_ncells": 703,
+            "exc_ncells": 5587,
             "dims": {
                 "depth_range": [
                     357,
@@ -756,7 +756,7 @@
                 "('4', 'Scnn1a')": {
                     "name": "('4', 'Scnn1a')",
                     "ei": "e",
-                    "N": 7449,
+                    "N": 2793,
                     "fraction": 0.5,
                     "dims": {
                         "nsyn_lognorm_shape": 0.345,
@@ -903,7 +903,7 @@
                 "('4', 'Rorb')": {
                     "name": "('4', 'Rorb')",
                     "ei": "e",
-                    "N": 7449,
+                    "N": 2793,
                     "fraction": 0.5,
                     "dims": {
                         "nsyn_lognorm_shape": 0.345,
@@ -1290,7 +1290,7 @@
                 "('4', 'Vip')": {
                     "name": "('4', 'Vip')",
                     "ei": "i",
-                    "N": 247,
+                    "N": 92,
                     "fraction": 0.1319327731092437,
                     "dims": {
                         "nsyn_lognorm_shape": 0.537,
@@ -1392,7 +1392,7 @@
                 "('4', 'Pvalb')": {
                     "name": "('4', 'Pvalb')",
                     "ei": "i",
-                    "N": 1000,
+                    "N": 374,
                     "fraction": 0.5327731092436975,
                     "dims": {
                         "nsyn_lognorm_shape": 0.433,
@@ -1629,7 +1629,7 @@
                 "('4', 'Sst')": {
                     "name": "('4', 'Sst')",
                     "ei": "i",
-                    "N": 1000,
+                    "N": 374,
                     "fraction": 0.5327731092436975,
                     "dims": {
                         "nsyn_lognorm_shape": 0.55,
@@ -1734,9 +1734,9 @@
             "name": "VISp5",
             "inh_fraction": 0.16542795492687604,
             "region_fraction": 0.17760648956111436,
-            "ncells": 14208,
-            "inh_ncells": 2350,
-            "exc_ncells": 11858,
+            "ncells": 5328,
+            "inh_ncells": 881,
+            "exc_ncells": 4447,
             "dims": {
                 "depth_range": [
                     505,
@@ -1747,7 +1747,7 @@
                 "('5', 'IT')": {
                     "name": "('5', 'IT')",
                     "ei": "e",
-                    "N": 6181,
+                    "N": 2318,
                     "fraction": 0.5212582591209423,
                     "dims": {
                         "nsyn_lognorm_shape": 0.331,
@@ -1834,7 +1834,7 @@
                 "('5', 'ET')": {
                     "name": "('5', 'ET')",
                     "ei": "e",
-                    "N": 3830,
+                    "N": 1436,
                     "fraction": 0.3230393565067509,
                     "dims": {
                         "nsyn_lognorm_shape": 0.424,
@@ -1891,7 +1891,7 @@
                 "('5', 'Pvalb')": {
                     "name": "('5', 'Pvalb')",
                     "ei": "i",
-                    "N": 1146,
+                    "N": 429,
                     "fraction": 0.48768115942028983,
                     "dims": {
                         "nsyn_lognorm_shape": 0.433,
@@ -2143,7 +2143,7 @@
                 "('5', 'Vip')": {
                     "name": "('5', 'Vip')",
                     "ei": "i",
-                    "N": 51,
+                    "N": 19,
                     "fraction": 0.021739130434782608,
                     "dims": {
                         "nsyn_lognorm_shape": 0.537,
@@ -2200,7 +2200,7 @@
                 "('5', 'Sst')": {
                     "name": "('5', 'Sst')",
                     "ei": "i",
-                    "N": 1146,
+                    "N": 429,
                     "fraction": 0.48768115942028983,
                     "dims": {
                         "nsyn_lognorm_shape": 0.55,
@@ -2556,9 +2556,9 @@
             "name": "VISp6",
             "inh_fraction": 0.06277924160843167,
             "region_fraction": 0.16366104324219508,
-            "ncells": 13092,
-            "inh_ncells": 821,
-            "exc_ncells": 12271,
+            "ncells": 4909,
+            "inh_ncells": 308,
+            "exc_ncells": 4601,
             "dims": {
                 "depth_range": [
                     665,
@@ -2569,7 +2569,7 @@
                 "('6', 'Ntsr1')": {
                     "name": "('6', 'Ntsr1')",
                     "ei": "e",
-                    "N": 9317,
+                    "N": 3493,
                     "fraction": 0.7593203764820926,
                     "dims": {
                         "nsyn_lognorm_shape": 0.241,
@@ -2926,7 +2926,7 @@
                 "('6', 'Vip')": {
                     "name": "('6', 'Vip')",
                     "ei": "i",
-                    "N": 31,
+                    "N": 11,
                     "fraction": 0.03832116788321168,
                     "dims": {
                         "nsyn_lognorm_shape": 0.537,
@@ -2998,7 +2998,7 @@
                 "('6', 'Pvalb')": {
                     "name": "('6', 'Pvalb')",
                     "ei": "i",
-                    "N": 461,
+                    "N": 173,
                     "fraction": 0.5620437956204379,
                     "dims": {
                         "nsyn_lognorm_shape": 0.433,
@@ -3085,7 +3085,7 @@
                 "('6', 'Sst')": {
                     "name": "('6', 'Sst')",
                     "ei": "i",
-                    "N": 286,
+                    "N": 107,
                     "fraction": 0.34854014598540145,
                     "dims": {
                         "nsyn_lognorm_shape": 0.55,

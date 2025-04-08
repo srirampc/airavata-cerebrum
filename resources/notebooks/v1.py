@@ -48,6 +48,8 @@ class RcpSettings(pydantic.BaseModel):
         Path("./v1/recipe/custom_mod_l1.json"),
         Path("./v1/recipe/custom_mod_l23.json"),
         Path("./v1/recipe/custom_mod_l4.json"),
+        Path("./v1/recipe/custom_mod_l5.json"),
+        Path("./v1/recipe/custom_mod_l6.json"),
         Path("./v1/recipe/custom_mod_ext.json"),
         Path("./v1/recipe/custom_mod_ext_lgn.json"),
         Path("./v1/recipe/custom_mod_ext_bkg.json"),

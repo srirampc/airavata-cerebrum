@@ -284,7 +284,8 @@ class V1BMTKNetworkBuilder:
                 ).stats(moments="m")
             )
         print(
-            pop_name, neuron_model.name, len(target_sizes), nsyn_size_mean  # type: ignore
+            pop_name, neuron_model.name, int(neuron_model.name),
+            len(target_sizes), nsyn_size_mean  # type: ignore
         )
         node_props = {
             "N": N,
@@ -369,7 +370,6 @@ class V1BMTKNetworkBuilder:
         src_criteria = {"pop_name": repr(src_type)}
         self.net.nodes()  # this line is necessary to activate nodes... (I don't know why.)
         source_nodes = bmtk.builder.node_pool.NodePool(self.net, **src_criteria)
-        print(src_type, trg_type, len(source_nodes), src_trg_params)
         source_nodes_df = pd.DataFrame(
             [{q: s[q] for q in prop_query} for s in source_nodes]
         )
@@ -379,6 +379,8 @@ class V1BMTKNetworkBuilder:
         # TODO: check if these values should be used
         # weight_fnc, weight_sigma = find_direction_rule(src_type, trg_type)
         if src_trg_params["A_new"] > 0.0:
+            print(src_type, trg_type, node_type_id,
+                  len(source_nodes), src_trg_params)
             # if src_type.startswith("LIF"):
             #     net.add_edges(
             #         source={"pop_name": src_type},
