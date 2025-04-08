@@ -1,10 +1,6 @@
 {
     "data2model_map": {
-        "locations": {
-            "VISp1": {},
-            "VISp2/3": {},
-            "VISp4": {}
-        },
+        "locations": {},
         "connections": {}
     },
     "source_data": {}

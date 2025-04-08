@@ -12,6 +12,7 @@ import bmtk.builder.node_pool
 
 #
 from typing_extensions import override
+from pathlib import Path
 from jsonpath import JSONPointer
 from airavata_cerebrum.base import QryItr
 from airavata_cerebrum.operations import netops
@@ -378,7 +379,7 @@ class V1BMTKNetworkBuilder:
 
         # TODO: check if these values should be used
         # weight_fnc, weight_sigma = find_direction_rule(src_type, trg_type)
-        if src_trg_params["A_new"] > 0.0:
+        if src_trg_params["A_new"] > 0.0 and len(source_nodes) > 0:
             print(src_type, trg_type, node_type_id,
                   len(source_nodes), src_trg_params)
             # if src_type.startswith("LIF"):
@@ -613,7 +614,12 @@ class V1BMTKNetworkBuilder:
             for _, bkg_model in bkg_connect.connect_models.items():
                 nmodel_id = int(bkg_model.target_model_id)
                 target_nodes = self.net.nodes(node_type_id=nmodel_id)
-                print("bkg", bkg_connect.name, nmodel_id, bkg_model.property_map, len(bkg_net_nodes), len(target_nodes))
+                if len(target_nodes) == 0:
+                    continue
+                print("bkg", bkg_connect.name, nmodel_id,
+                      bkg_model.property_map,
+                      len(bkg_net_nodes),
+                      len(target_nodes))
                 edge_params = {
                     "source": bkg_net_nodes,
                     "target": target_nodes,
@@ -654,7 +660,7 @@ class V1BMTKNetworkBuilder:
         self.add_bkg_edges()
         return self.net
 
-    def save(self, network_dir):
+    def save(self, network_dir: str | Path):
         self.net.save(str(network_dir))
         self.bkg_net.save(str(network_dir))
 

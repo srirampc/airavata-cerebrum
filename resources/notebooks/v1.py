@@ -29,27 +29,22 @@ class RcpSettings(pydantic.BaseModel):
     name: str = "v1"
     base_dir: Path = Path("./")
     recipe_dir: Path = Path("./v1/recipe/")
-    recipe_files: dict[str, list[str | Path]] = {
-       "recipe": [
-            "recipe.json",
-            "recipe_data.json",
-            "recipe_dm_l1.json",
-            "recipe_dm_l23.json",
-            "recipe_dm_l4.json",
-            "recipe_dm_l5.json",
-            "recipe_dm_l6.json",
-        ],
-        "templates": [
-            "recipe_template.json"
-        ]
+    levels: list[str] = ["L1",  "L23", "L4", "L5", "L6"]
+    recipe_levels: dict[str, str | Path] = {
+        "L1"  : "recipe_dm_l1.json",
+        "L23" : "recipe_dm_l23.json",
+        "L4"  : "recipe_dm_l4.json",
+        "L5"  : "recipe_dm_l5.json",
+        "L6"  : "recipe_dm_l6.json",
     }
-    custom_mod: list[str | Path] = [
-        Path("./v1/recipe/custom_mod.json"),
-        Path("./v1/recipe/custom_mod_l1.json"),
-        Path("./v1/recipe/custom_mod_l23.json"),
-        Path("./v1/recipe/custom_mod_l4.json"),
-        Path("./v1/recipe/custom_mod_l5.json"),
-        Path("./v1/recipe/custom_mod_l6.json"),
+    custom_mod_levels: dict[str, str | Path] = {
+        "L1"  : Path("./v1/recipe/custom_mod_l1.json"),
+        "L23" : Path("./v1/recipe/custom_mod_l23.json"),
+        "L4"  : Path("./v1/recipe/custom_mod_l4.json"),
+        "L5"  : Path("./v1/recipe/custom_mod_l5.json"),
+        "L6"  : Path("./v1/recipe/custom_mod_l6.json"),
+    }
+    ext_mods : list[str | Path] = [
         Path("./v1/recipe/custom_mod_ext.json"),
         Path("./v1/recipe/custom_mod_ext_lgn.json"),
         Path("./v1/recipe/custom_mod_ext_bkg.json"),
@@ -57,6 +52,25 @@ class RcpSettings(pydantic.BaseModel):
     ctdb_models_dir: Path = Path("./v1/components/point_neuron_models/")
     nest_models_dir: Path = Path("./v1/components/cell_models/")
     save_flag: bool = True
+
+    @property
+    def recipe_files(self) -> dict[str, list[str | Path]] :
+        """The recipe_files property."""
+        full_recipe = ["recipe.json", "recipe_data.json"] + [
+            self.recipe_levels[lx] for lx in self.levels
+        ]
+        return {
+            "recipe": full_recipe,
+            "templates": [ "recipe_template.json" ]
+        }
+
+    @property
+    def custom_mod(self) -> list[str | Path] :
+        return [
+            Path("./v1/recipe/custom_mod.json"),
+        ] + [
+            self.custom_mod_levels[lx] for lx in self.levels
+        ] + self.ext_mods
 
 
 def recipe_setup(rcp_set: RcpSettings):
@@ -127,7 +141,7 @@ def load_nest_sonata(
             ],
         },
     )
-    NestConnect(multi_meter, node_collections["v1l4"])
+    NestConnect(multi_meter, node_collections["v1"])
 
     # Simulate the network
     # sonata_net.Simulate()
@@ -137,6 +151,14 @@ def load_nest_sonata(
 def convert_models_to_nest(cfg_set: RcpSettings):
     v1ops.convert_ctdb_models_to_nest(cfg_set.ctdb_models_dir,
                                       cfg_set.nest_models_dir)
+
+def data_mapped_model(levels: tuple[str,...]=("L1", "L23", "L4")):
+    mdrcp = model_recipe(RcpSettings(levels=list(levels)))
+    mdrcp.map_source_data()
+    mdrcp.build_net_struct()
+    mdrcp.apply_mod()
+    mdrcp.build_network()
+    return load_nest_sonata()
 
 if __name__ == "__main__":
     cfg_set = RcpSettings()
