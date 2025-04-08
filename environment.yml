@@ -20,6 +20,7 @@ dependencies:
   - numpy
   - marimo
   - matplotlib
+  - mpi4py
   - openmpi-mpicc
   - openpyxl
   - pandas
@@ -44,11 +45,8 @@ dependencies:
   - pip:
       - allensdk
       - bmtk
-      - mpi4py
+      - neuroanalysis
       - parse
-      - polars
-      - pylightxl
       - git+https://github.com/alleninstitute/abc_atlas_access
-      - git+https://github.com/alleninstitute/neuroanalysis
       - git+https://github.com/alleninstitute/aisynphys
       - git+https://github.com/srirampc/awitree

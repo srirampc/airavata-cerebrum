@@ -21,7 +21,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "airavata-cerebrum"
-version = "0.1"
+version = "0.1.2"
 description = "Apache Airavata Cerebrum : Integrated Data-driver Modeling for Computational Neuroscience"
 authors = ["Sriram P Chockalingam <srirampc@gatech.edu>"]
 maintainers = ["Apache Airavata Developers <dev@apache.airavata.org>"]
@@ -37,7 +37,6 @@ keywords = [
 [tool.poetry.dependencies]
 python = "^3.10"
 abc_atlas_access = { git = "https://github.com/alleninstitute/abc_atlas_access" }
-neuroanalysis = { git = "https://github.com/alleninstitute/neuroanalysis" }
 aisynphys = { git = "https://github.com/alleninstitute/aisynphys" }
 awitree = { git = "https://github.com/srirampc/awitree" }
 anywidget = "^0.9"
@@ -55,8 +54,7 @@ jupyterlab = "^3.5"
 leidenalg = "^0.10"
 marimo = "^0.11"
 matplotlib = "^3.7"
-mpi4py = "^4.0"
-nest-simulator = "^3.8"
+neuroanalysis = "^0.0.7"
 numba = "^0.60"
 numpy = "^1.23"
 openpyxl = "^3.1"
@@ -73,8 +71,8 @@ requests = "^2.31"
 scikit-learn = "^1.5"
 scanpy = "^1.9"
 scipy = "^1.9"
-sqlalchemy = ""
-sqlglot = ""
+sqlalchemy = "^2.0"
+sqlglot = "^26.0"
 statsmodels = "^0.14"
 traitlets = "^5.1"
 tqdm = "^4.66"

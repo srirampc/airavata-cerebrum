@@ -24,7 +24,8 @@ sudo apt install openmpi-bin  libopenmpi-dev
 
 Further, we recommend create a virtual environment using conda as below:
 ```
-conda create -n cerebrum python=3.10 nest-simulator
+conda config --add channels conda-forge
+conda create -n cerebrum python=3.10 nest-simulator mpi4py
 conda activate cerebrum
 ```
 
