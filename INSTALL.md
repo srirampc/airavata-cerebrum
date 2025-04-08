@@ -22,7 +22,7 @@ Following command will download Airavata Cerebrum into your environment.
 pip3 install git+https://github.com/apache/airavata-cerebrum.git
 ```
 
-## Installing Environment For Code Development
+## Installing Environment For Development
 
 Development environment Airavata Cerebrum requires python3.10+ environment. 
 We can create a virtual environment in conda using the `environment.yml` file.
@@ -41,7 +41,7 @@ the versions
 ### MPI Depenency Issue
 
 - NEST and BMTK depends upon MPI -- specifically the python mpi4py package.
-- Latest versionof mpi4py package is only available in the PyPI and hence need to be
+- Latest version of mpi4py package is only available in the PyPI and hence need to be
   installed via pip command.
 - In some cases, the mpi package from conda causes failures during installation
   of mpi4py. This is due to the compilation errors arising from building the 
