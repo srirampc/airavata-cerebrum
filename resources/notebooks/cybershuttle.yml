@@ -17,24 +17,8 @@ workspace:
     gpu_mem: 1024
     gpu_class: ["H100", "A100", "Generic"]
     min_mem: 4096
-    walltime: 60
-    cluster: expanse
-    group: Default
-    queue: shared
-  data_collection:
-    - source: cybershuttle
-      identifier: ~/cybershuttle/airavata-cerebrum/resources/notebooks/v1/
-      mount_point: /data/v1
-    - source: cybershuttle
-      identifier: ~/cybershuttle/airavata-cerebrum/resources/notebooks/v1l4/
-      mount_point: /data/v1l4
-  model_collection:
-    - source: cybershuttle
-      identifier: ~/cybershuttle/airavata-cerebrum/resources/notebooks/
-      mount_point: /data/
-    - source: cybershuttle
-      identifier: ~/cybershuttle/airavata-cerebrum/resources/notebooks/mousev1/
-      mount_point: /data/mousev1/
+  data_collection: []
+  model_collection: []
 
 additional_dependencies:
   conda:
