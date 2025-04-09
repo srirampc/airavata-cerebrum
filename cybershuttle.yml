@@ -42,5 +42,6 @@ additional_dependencies:
     - pip
     - nest-simulator
     - mpi4py
+    - nodejs
   pip: 
     - git+https://github.com/srirampc/airavata-cerebrum

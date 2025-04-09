@@ -16,6 +16,7 @@ dependencies:
   - jupyter
   - leidenalg
   - nest-simulator
+  - nodejs
   - numba
   - numpy
   - marimo

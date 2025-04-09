@@ -20,7 +20,7 @@ conda ([miniforge](https://github.com/conda-forge/miniforge) for a faster
 installation) as below:
 ```
 conda config --add channels conda-forge
-conda create -n cerebrum python=3.10 nest-simulator mpi4py
+conda create -n cerebrum python=3.10 nest-simulator mpi4py nodejs
 conda activate cerebrum
 ```
 nest-simulator should be installed when creating the conda environment
