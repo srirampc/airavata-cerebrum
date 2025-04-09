@@ -56,6 +56,8 @@ def scalar_widget(
                 allowed_tags=kwargs["allowed"],
                 allowed_duplicates=False,
             )
+        case "NoneType":
+            return iwidgets.Text(value="None", disabled=False)
         case _:
             return None
 
@@ -75,7 +77,8 @@ class PropertyListLayout(iwidgets.GridspecLayout):
                 self[ix, 0] = iwidgets.Label(str(kx) + " :")
                 self[ix, 1] = wdx
         else:
-            super().__init__(1, 1, value=str(value), **kwargs)
+            super().__init__(1, 1, value=[], **kwargs)
+            self[0, 0] = iwidgets.Label("[]")
 
     def handle_change(self, change: dict[str, t.Any]):
         # print("L:", change)
@@ -100,7 +103,8 @@ class PropertyTupleLayout(iwidgets.GridspecLayout):
                 self[ix, 0] = iwidgets.Label(str(kx) + " :")
                 self[ix, 1] = wdx
         else:
-            super().__init__(1, 1, value=str(value), **kwargs)
+            super().__init__(1, 1, value=(None), **kwargs)
+            self[0, 0] = iwidgets.Label("()")
 
     def handle_change(self, change: dict[str, t.Any]):
         # print("L:", change)
@@ -129,7 +133,8 @@ class PropertyMapLayout(iwidgets.GridspecLayout):
                 self[ix, 0] = iwidgets.Label(str(kx) + " :")
                 self[ix, 1] = wdx 
         else:
-            super().__init__(1, 1, value=str(value), **kwargs)
+            super().__init__(1, 1, value={}, **kwargs)
+            self[0, 0] = iwidgets.Label("{}")
 
     def handle_change(self, change: dict[str, t.Any]):
         # print("L:", change)
