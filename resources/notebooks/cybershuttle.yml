@@ -24,7 +24,45 @@ additional_dependencies:
   conda:
     - python=3.10
     - pip
-    - mpi4py
+    #
     - nodejs
+    - anndata
+    - anywidget
+    - duckdb
+    - fastexcel
+    - ipywidgets
+    - ipytree
+    - nest-simulator
+    - nodejs
+    - numba
+    - numpy
+    - marimo
+    - matplotlib
+    - mpi4py
+    - openpyxl
+    - pandas
+    - polars
+    - pyarrow
+    - pydantic
+    - pyqtgraph
+    - python-dateutil
+    - python-igraph
+    - python-jsonpath
+    - pyyaml
+    - requests
+    - scanpy
+    - scikit-learn
+    - scipy
+    - sqlalchemy
+    - sqlglot
+    - traitlets
+    - tqdm
+
   pip:
-    - git+https://github.com/srirampc/airavata-cerebrum
+    - allensdk
+    - bmtk
+    - neuroanalysis
+    - parse
+    - git+https://github.com/alleninstitute/abc_atlas_access
+    - git+https://github.com/alleninstitute/aisynphys
+    - git+https://github.com/srirampc/awitree
