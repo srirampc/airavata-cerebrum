@@ -1,7 +1,7 @@
 project:
   name: Build a point-neuron V1 network via Integrated Data-driven Modelling .
   version: 0.1.2
-  description: This repository contains notebooks and configurations to build a full V1 network 
+  description: This repository contains notebooks and configurations to build a full V1 network
   tags:
     - neuroscience
     - visual_cortex
@@ -24,8 +24,7 @@ additional_dependencies:
   conda:
     - python=3.10
     - pip
-    - nest-simulator
     - mpi4py
     - nodejs
-  pip: 
+  pip:
     - git+https://github.com/srirampc/airavata-cerebrum
