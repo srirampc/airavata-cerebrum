@@ -389,6 +389,37 @@ class ConnectionMapper(abc.ABC):
         return None
 
 
+class NoneRegionMapper(RegionMapper):
+    def __init__(self, name: str, desc: MapperDesc):
+        return None
+
+    @override
+    def neuron_names(self) -> list[str]:
+        return []
+
+    @override
+    def map(self, region_neurons: dict[str, Neuron]) -> Region | None:
+        return None
+
+
+class NoneNeuronMapper(NeuronMapper):
+    def __init__(self, name: str, desc: MapperDesc):
+        return None
+
+    @override
+    def map(self) -> Neuron | None:
+        return None
+
+
+class NoneConnectionMapper(ConnectionMapper):
+    def __init__(self, name: str, desc: MapperDesc):
+        return None
+
+    @override
+    def map(self) -> Connection | None:
+        return None
+
+
 def dict2netstruct(
     network_struct: dict[str, Any], # pyright: ignore[reportExplicitt.Any]
 ) -> Network:
