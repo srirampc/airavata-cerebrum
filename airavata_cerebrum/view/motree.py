@@ -34,21 +34,21 @@ def scalar_widget(
 ) -> MoUIElement | None:
     match widget_key:
         case "int" | "int32" | "int64":
-            return mo.ui.number(value=value, label=label)
+            return mo.ui.number(value=int(value), label=label)
         case "float" | "float32" | "float64":
             return mo.ui.number(
-                value=value,
+                value=float(value),
                 label=label,
             )
         case "text":
             return mo.ui.text(
-                value=value,
+                value=str(value),
                 disabled=False,
                 label=label,
             )
         case "textarea" | "str":
             return mo.ui.text_area(
-                value=value,
+                value=str(value),
                 disabled=False,
                 label=label,
             )
@@ -70,6 +70,8 @@ def scalar_widget(
                 value=value,
                 label=label,
             )
+        case "NoneType":
+            return mo.ui.text(value="None", label=label)
         case _:
             return None
 
@@ -78,7 +80,7 @@ def scalar_widget(
 class PropertyListLayout(mo.ui.array):
     def __init__(
         self,
-        value: list[t.Any] | tuple[t.Any],
+        value: list[t.Any] | tuple[t.Any] | None,
         label: str = "",
         **kwargs: t.Any
     ):
@@ -89,20 +91,20 @@ class PropertyListLayout(mo.ui.array):
 
     def widgets(
         self,
-        value: list[t.Any] | tuple[t.Any],
+        value: list[t.Any] | tuple[t.Any] | None,
         **_kwargs: t.Any
     ):
         return (
             scalar_widget(type(vx).__name__, value=vx, label=str(kx) + " :")
             for kx, vx in enumerate(value)
-        )
+        ) if value else [scalar_widget("NoneType", value=None, label="")]
 
 
 # NOTE: Features of trait setting and change handler not included
 class PropertyMapLayout(mo.ui.dictionary):
     def __init__(
         self,
-        value: dict[str, t.Any],
+        value: dict[str, t.Any] | None,
         label: str = "",
         **kwargs: t.Any
     ):
@@ -129,10 +131,12 @@ class PropertyMapLayout(mo.ui.dictionary):
 
     def widgets(
         self,
-        value: dict[str, t.Any],
+        value: dict[str, t.Any] | None,
         **kwargs: t.Any
     ) -> Iterable[tuple[str, MoUIElement | None]]:
-        return ((kx, self.init_widget(vx, **kwargs)) for kx, vx in value.items())
+        return (
+            (kx, self.init_widget(vx, **kwargs)) for kx, vx in value.items()
+        ) if value else [('', self.init_widget(None))]
 
 
 def render_property(

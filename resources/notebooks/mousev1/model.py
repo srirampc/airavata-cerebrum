@@ -95,7 +95,7 @@ class V1NeuronMapper(structure.NeuronMapper):
     def map(self) -> structure.Neuron | None:
         ntype = self.desc["property_map"]["ei"]
         if not self.abc_data:
-            return structure.Neuron(ei=ntype)
+            return structure.Neuron(name=self.name, ei=ntype)
         nfrac = self.abc_data["fraction"]  # type:  ignore
         if not self.ct_data:
             return structure.Neuron(name=self.name, ei=ntype, fraction=float(nfrac))

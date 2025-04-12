@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.12.0"
+__generated_with = "0.12.8"
 app = marimo.App(width="medium")
 
 
@@ -202,6 +202,12 @@ def _(mo):
 
 
 @app.cell
+def _(cmod_struct):
+    cmod_struct
+    return
+
+
+@app.cell
 def _(cbm_recipe, cmod_struct, mdr_setup, v1model):
     #
     mdrecipe = cbm_recipe.ModelRecipe(
@@ -310,10 +316,10 @@ def _(mo):
 
 
 @app.cell
-def _(mdrecipe):
+def _():
     #
     #
-    mdrecipe.build_network()
+    # mdrecipe.build_network()
     return
 
 
@@ -379,7 +385,7 @@ def _():
         # sonata_net.Simulate()
         return NestSonata(sonata_net, spike_rec, multi_meter)
 
-    nest_net = load_nest_sonata()
+    # nest_net = load_nest_sonata()
     return (
         NamedTuple,
         NestConnect,
@@ -388,14 +394,13 @@ def _():
         NodeCollection,
         SonataNetwork,
         load_nest_sonata,
-        nest_net,
     )
 
 
 @app.cell
-def _(nest_net):
+def _():
     #
-    nest_net.net.Simulate()
+    # nest_net.net.Simulate()
     return
 
 

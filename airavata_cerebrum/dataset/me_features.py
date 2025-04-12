@@ -35,7 +35,7 @@ class MEFDataQuery(DbQuery[InitParams, ExecParams]):
         column: str | None,
         cvalue: t.Any
     ) -> dict[str, t.Any]:
-        if column is None:
+        if not column:
             return {}
         fdf = medf.filter(medf.get_column(column) == cvalue).head(1)
         if fdf.shape[0] == 0:
