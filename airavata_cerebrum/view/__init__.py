@@ -3,12 +3,17 @@ import abc
 import typing as t
 import awitree
 #
+from pydantic import Field, model_validator
 from typing_extensions import Self
 
 #
-from ..base import BaseStruct, BaseParams, CerebrumBaseModel
-from ..base import OpXFormer, DbQuery
-from ..base import InitParamsT, ExecParamsT
+from ..base import (
+    BaseStruct,
+    BaseParams,
+    CerebrumBaseModel,
+    DbQueryCBT,
+    OpXFormerCBT
+)
 from ..model.setup import RecipeKeys
 from ..register import find_type
 
@@ -60,7 +65,7 @@ def workflow_params(
 ) -> tuple[str | None,  BaseParams[CerebrumBaseModel, CerebrumBaseModel] | None]:
 
     node_key = node_key if node_key else wf_step[RecipeKeys.NAME]
-    src_class: type[DbQuery] | type[OpXFormer] | None = find_type(
+    src_class: type[DbQueryCBT] | type[OpXFormerCBT] | None = find_type(
         wf_step[RecipeKeys.NAME]
     )
     if src_class:
@@ -266,3 +271,56 @@ class CBTreeNode:
             name=wf_step[RecipeKeys.LABEL],
             payload=PayLoad.from_recipe_step(wf_step, node_key),
         )
+
+
+class PVTemplate(CerebrumBaseModel):
+    label : t.Annotated[str, Field("Label")]
+    type  : t.Annotated[str, Field("Type")]
+    doc   :  t.Annotated[str, Field("Documentation")]
+    default : t.Annotated[t.Any, Field("Documentation")]
+    options : t.Annotated[list[str], Field("Options")] = []
+    allowed : t.Annotated[list[str], Field("Allowed")] = []
+
+    @model_validator(mode='after')
+    def validate_defaults(self) -> Self:
+        err_message  : str= ""
+        match self.type:
+            case "text" | "textarea" | "str":
+                try:
+                    self.default = str(self.default)
+                except Exception as e:
+                    err_message = f'{self.label} : invalid default'
+            case "int" | "int32" | "int64":
+                try:
+                    self.default = int(self.default)
+                except ValueError as e:
+                    err_message = f'{self.label} : {str(e)}'
+            case "float" | "float32" | "float64":
+                try:
+                    self.default = float(self.default)
+                except ValueError as e:
+                    err_message = f'{self.label} : {str(e)}'
+            case "check" | "bool":
+                if not isinstance(self.default, bool):
+                    err_message = f'{self.label} : invalid default'
+            case "options":
+                if self.default not in self.options:
+                    err_message = f'{self.label} : default not in options'
+            case "tags":
+                try:
+                    if not set(self.default).issubset(set(self.allowed)):
+                        err_message = f'{self.label} : default not subet of allowed'
+                except Exception as e:
+                    err_message = f'{self.label} : invalid default'
+            case _:
+                return self
+        if err_message:
+            raise ValueError(err_message)
+        return self
+
+
+class ParamsIfxTemplate(CerebrumBaseModel):
+    label : t.Annotated[str, Field("Label")]
+    type  : t.Annotated[str, Field("Type")]
+    init_params : dict[str, PVTemplate] = {}
+    exec_params : dict[str, PVTemplate] = {}

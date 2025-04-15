@@ -27,7 +27,8 @@ def _log():
 def scalar_widget(
     widget_key: str,
     value: t.Any,
-    **kwargs: t.Any
+    options: list[str] | None = None,
+    allowed: list[str] | None = None,
 ) -> iwidgets.CoreWidget | None:
     match widget_key:
         case "int" | "int32" | "int64":
@@ -42,7 +43,7 @@ def scalar_widget(
             return iwidgets.Dropdown(
                 disabled=False,
                 value=value,
-                options=kwargs["options"],
+                options=options if options else [],
             )
         case "check" | "bool":
             return iwidgets.Checkbox(
@@ -53,7 +54,7 @@ def scalar_widget(
         case "tags":
             return iwidgets.TagsInput(
                 value=value,
-                allowed_tags=kwargs["allowed"],
+                allowed_tags=allowed if allowed else None,
                 allowed_duplicates=False,
             )
         case "NoneType":
@@ -70,12 +71,12 @@ class PropertyListLayout(iwidgets.GridspecLayout):
     def __init__(self, value: list[t.Any] | None, **kwargs: t.Any):
         if value and len(value) > 0:
             super().__init__(len(value), 2, value=value, **kwargs)
-            for ix, (kx, vx) in enumerate(enumerate(value)):
+            for kx, vx in enumerate(value):
                 wdx = scalar_widget(type(vx).__name__, vx)
                 wdx.add_traits(index=traitlets.Integer(kx))
                 wdx.observe(self.handle_change)
-                self[ix, 0] = iwidgets.Label(str(kx) + " :")
-                self[ix, 1] = wdx
+                self[kx, 0] = iwidgets.Label(str(kx) + " :")
+                self[kx, 1] = wdx
         else:
             super().__init__(1, 1, value=[], **kwargs)
             self[0, 0] = iwidgets.Label("[]")
@@ -88,6 +89,7 @@ class PropertyListLayout(iwidgets.GridspecLayout):
             new_value = change["new"]
             self.value[entry_index] = new_value
 
+
 class PropertyTupleLayout(iwidgets.GridspecLayout):
     value : traitlets.Tuple = traitlets.Tuple(
         help="Tuple values"
@@ -96,12 +98,12 @@ class PropertyTupleLayout(iwidgets.GridspecLayout):
     def __init__(self, value: tuple[t.Any] | None, **kwargs: t.Any):
         if value and len(value) > 0:
             super().__init__(len(value), 2, value=value, **kwargs)
-            for ix, (kx, vx) in enumerate(enumerate(value)):
+            for kx, vx in enumerate(value):
                 wdx = scalar_widget(type(vx).__name__, vx)
                 wdx.add_traits(index=traitlets.Integer(kx))
                 wdx.observe(self.handle_change)
-                self[ix, 0] = iwidgets.Label(str(kx) + " :")
-                self[ix, 1] = wdx
+                self[kx, 0] = iwidgets.Label(f"{str(kx)} :")
+                self[kx, 1] = wdx
         else:
             super().__init__(1, 1, value=(None), **kwargs)
             self[0, 0] = iwidgets.Label("()")
@@ -127,10 +129,10 @@ class PropertyMapLayout(iwidgets.GridspecLayout):
         if value and len(value) > 0:
             super().__init__(len(value), 2, value=value, **kwargs)
             for ix, (kx, vx) in enumerate(value.items()):
-                wdx = self.init_widget(vx, type(vx).__name__)
+                wdx = self.init_widget(vx)
                 wdx.add_traits(key=traitlets.Unicode(kx))  # type: ignore
                 wdx.observe(self.handle_change)  # type: ignore
-                self[ix, 0] = iwidgets.Label(str(kx) + " :")
+                self[ix, 0] = iwidgets.Label(f"{str(kx)} :")
                 self[ix, 1] = wdx 
         else:
             super().__init__(1, 1, value={}, **kwargs)
@@ -144,8 +146,8 @@ class PropertyMapLayout(iwidgets.GridspecLayout):
             new_value = change["new"]
             self.value[entry_key] = new_value
  
-    def init_widget(self, vx: t.Any, tname: str) -> iwidgets.CoreWidget | None:
-        match tname:
+    def init_widget(self, vx: t.Any) -> iwidgets.CoreWidget | None:
+        match type(vx).__name__:
             case "NoneType":
                 return scalar_widget("str", "None")
             case "list":
@@ -153,23 +155,23 @@ class PropertyMapLayout(iwidgets.GridspecLayout):
             case "tuple":
                 return PropertyTupleLayout(vx)
             case _:
-                return scalar_widget(tname, vx)
+                return scalar_widget(type(vx).__name__, vx)
 
 
 def render_property(
-    widget_key: str,
+    w_key: str,
     value: t.Any,
     **kwargs: t.Any
 ) -> iwidgets.CoreWidget | None:
-    match widget_key:
+    match w_key:
         case "dict":
-            return PropertyMapLayout(value=value, **kwargs)
+            return PropertyMapLayout(value, **kwargs)
         case "list":
-            return PropertyListLayout(value=value, **kwargs)
+            return PropertyListLayout(value, **kwargs)
         case "tuple":
-            return PropertyTupleLayout(value=value, **kwargs)
+            return PropertyTupleLayout(value, **kwargs)
         case _:
-            return scalar_widget(widget_key, value, **kwargs)
+            return scalar_widget(w_key, value, **kwargs)
 
 
 # Base class for side panel
@@ -238,13 +240,15 @@ class DBWorkflowSidePanel(IPyPanelT):
 
     def render_widget(
         self,
-        widget_key: str,
+        w_key: str,
         value: t.Any,
-        **kwargs: t.Any):
+        label: str,
+        **kwargs: t.Any
+    ):
         return iwidgets.HBox(
             [
-                iwidgets.Label(kwargs[RecipeKeys.LABEL] + " :"),
-                render_property(widget_key, value, **kwargs,),
+                iwidgets.Label(f"{label} : "),
+                render_property(w_key, value, **kwargs,),
             ]
         )
 
@@ -259,6 +263,7 @@ class DBWorkflowSidePanel(IPyPanelT):
                 self.render_widget(
                     tdesc[RecipeKeys.TYPE],
                     wf_params.get(tkey, tdesc["default"]),
+                    tdesc[RecipeKeys.LABEL],
                     **tdesc  
                 )
                 for tkey, tdesc in wf_template.items()
@@ -269,6 +274,7 @@ class DBWorkflowSidePanel(IPyPanelT):
                 self.render_widget(
                     tdesc[RecipeKeys.TYPE],
                     tdesc["default"],
+                    tdesc[RecipeKeys.LABEL],
                     **tdesc
                 )
                 for _tkey, tdesc in wf_template.items()
@@ -277,8 +283,8 @@ class DBWorkflowSidePanel(IPyPanelT):
             wd_itr = (
                 self.render_widget(
                      tdesc.annotation.__name__,
-                     value = wf_params.get(tkey),
-                     label = str(tdesc.title),
+                     wf_params.get(tkey),
+                     str(tdesc.title),
                      options = [wf_params.get(tkey)],
                      allowed = [wf_params.get(tkey)]
                 )
@@ -450,7 +456,10 @@ class Data2ModelRecipeView(RecipeTreeBase):
         )
         for db_key, db_desc in neuron_desc[RecipeKeys.SRC_DATA].items():
             db_loc_key = f"{neuron_pfx}-{db_key}"
-            db_node, db_panel = self.db_workflow_recipe_node(db_loc_key, db_desc)
+            db_node, db_panel = self.db_workflow_recipe_node(
+                db_loc_key,
+                db_desc
+            )
             self.panel_dict[db_loc_key] = db_panel
             neuron_node.add_node(db_node)
         return neuron_node
@@ -465,7 +474,10 @@ class Data2ModelRecipeView(RecipeTreeBase):
         conn_node = CBTreeNode.init(name=connect_name, key=conn_node_key)
         for db_key, db_desc in connect_desc[RecipeKeys.SRC_DATA].items():
             db_conn_key = f"{conn_node_key}-{db_key}"
-            db_node, db_panel = self.db_workflow_recipe_node(db_conn_key, db_desc)
+            db_node, db_panel = self.db_workflow_recipe_node(
+                db_conn_key,
+                db_desc
+            )
             self.panel_dict[db_conn_key] = db_panel
             conn_node.add_node(db_node)
         return conn_node
