@@ -16,7 +16,7 @@ from .register import (
     get_db_writer_instance,
     get_xformer_params,
 )
-from .model.setup import RecipeKeys
+from .const import RecipeKeys
 
 
 def _log():

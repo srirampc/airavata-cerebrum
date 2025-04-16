@@ -13,10 +13,17 @@ from collections.abc import Iterable
 from typing_extensions import override
 
 from ..base import CerebrumBaseModel, BaseStruct, BaseParams
-from ..model.setup import RecipeKeys, RecipeSetup
+from ..const import RecipeKeys
+from ..recipe import RecipeSetup
 from ..model import structure as structure
-from . import (RcpTreeNames, StructTreeNames, workflow_params,
-               BaseTree, CBTreeNode, BasePanel)
+from . import (
+    RcpTreeNames,
+    StructTreeNames,
+    workflow_params,
+    BaseTree,
+    CBTreeNode,
+    BasePanel
+)
 
 IPyPanelT : t.TypeAlias = BasePanel[iwidgets.CoreWidget, iwidgets.Box]
 

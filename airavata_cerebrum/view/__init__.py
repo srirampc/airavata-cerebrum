@@ -14,7 +14,7 @@ from ..base import (
     DbQueryCBT,
     OpXFormerCBT
 )
-from ..model.setup import RecipeKeys
+from ..const import RecipeKeys
 from ..register import find_type
 
 def _log():
@@ -273,10 +273,10 @@ class CBTreeNode:
         )
 
 
-class PVTemplate(CerebrumBaseModel):
+class PViewTemplate(CerebrumBaseModel):
     label : t.Annotated[str, Field("Label")]
     type  : t.Annotated[str, Field("Type")]
-    doc   :  t.Annotated[str, Field("Documentation")]
+    doc   : t.Annotated[str, Field("Documentation")]
     default : t.Annotated[t.Any, Field("Documentation")]
     options : t.Annotated[list[str], Field("Options")] = []
     allowed : t.Annotated[list[str], Field("Allowed")] = []
@@ -319,8 +319,12 @@ class PVTemplate(CerebrumBaseModel):
         return self
 
 
-class ParamsIfxTemplate(CerebrumBaseModel):
+class PIfxTemplate(CerebrumBaseModel):
     label : t.Annotated[str, Field("Label")]
     type  : t.Annotated[str, Field("Type")]
-    init_params : dict[str, PVTemplate] = {}
-    exec_params : dict[str, PVTemplate] = {}
+    init_params : dict[str, PViewTemplate] = {}
+    exec_params : dict[str, PViewTemplate] = {}
+
+
+class PIfxTemplateMap(CerebrumBaseModel):
+    templates : dict[str, PIfxTemplate]

@@ -7,8 +7,7 @@ app = marimo.App(width="medium")
 @app.cell
 def _():
     import json
-    import airavata_cerebrum.model.setup as cbm_setup
-    import airavata_cerebrum.model.recipe as cbm_recipe
+    import airavata_cerebrum.recipe as cbm_recipe
     import airavata_cerebrum.view.motree as cbm_motree
     import airavata_cerebrum.model.structure as cbm_structure
     import airavata_cerebrum.util as cbm_utils
@@ -17,7 +16,6 @@ def _():
     return (
         cbm_motree,
         cbm_recipe,
-        cbm_setup,
         cbm_structure,
         cbm_utils,
         json,
@@ -129,7 +127,7 @@ def _():
 
 @app.cell
 def _(
-    cbm_setup,
+    cbm_recipe,
     cbm_structure,
     cmod_files,
     m_base_dir,
@@ -139,7 +137,7 @@ def _(
 ):
     # recipe_dict = cbm_utils.io.load_json(main_rcp_file)
     # cmod_dict = cbm_utils.io.load_json(custom_mod_file)
-    mdr_setup = cbm_setup.RecipeSetup(
+    mdr_setup = cbm_recipe.RecipeSetup(
         name=m_name,
         base_dir=m_base_dir,
         recipe_dir=m_rcp_dir,

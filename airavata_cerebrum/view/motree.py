@@ -10,11 +10,24 @@ from marimo._plugins.ui._core.ui_element import UIElement
 from typing_extensions import override
 
 #
-from ..base import CerebrumBaseModel, BaseStruct, BaseParams, InitParamsT, ExecParamsT
+from ..base import (
+    CerebrumBaseModel,
+    BaseStruct,
+    BaseParams,
+    InitParamsT,
+    ExecParamsT
+)
+from ..const import RecipeKeys
 from ..model import structure as structure
-from ..model.setup import RecipeKeys, RecipeSetup
-from . import (BasePanel, BaseTree, CBTreeNode, RcpTreeNames, StructTreeNames,
-               workflow_params)
+from ..recipe import RecipeSetup
+from . import (
+    BasePanel,
+    BaseTree,
+    CBTreeNode,
+    RcpTreeNames,
+    StructTreeNames,
+    workflow_params
+)
 
 #
 MoUIElement : t.TypeAlias = UIElement[t.Any, t.Any]
