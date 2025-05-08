@@ -25,6 +25,7 @@ dependencies:
   - openmpi-mpicc
   - openpyxl
   - pandas
+  - pillow
   - polars
   - pyarrow
   - pydantic
