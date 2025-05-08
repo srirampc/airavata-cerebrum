@@ -1,26 +1,29 @@
 project:
-  name: Build a point-neuron V1 network via Integrated Data-driven Modelling .
-  version: 0.1.2
-  description: This repository contains notebooks and configurations to build a full V1 network
-  tags:
-    - neuroscience
-    - visual_cortex
-    - v1
-    - mouse
+  name: "Apache Cerebrum"
+  description: "Constructing computational neuroscience models from large public databases and brain atlases"
   homepage: https://github.com/srirampc/airavata-cerebrum
+  authors:
+    - srirampc@gatech.edu
+    - pjaya001@odu.edu
+  tags:
+    - neurodata25
+    - apache
+    - cerebrum
 
 workspace:
-  location: /workspace
   resources:
     min_cpu: 4
     min_gpu: 0
-    gpu_mem: 1024
-    gpu_class: ["H100", "A100", "Generic"]
     min_mem: 4096
+    gpu_mem: 1024
+  model_collection:
+    - source: cybershuttle
+      identifier: apache-airavata-cerebrum
+      mount_point: /cybershuttle_data/apache-airavata-cerebrum
   data_collection: []
-  model_collection: []
 
 additional_dependencies:
+  modules: []
   conda:
     - python=3.10
     - pip
@@ -59,10 +62,4 @@ additional_dependencies:
     - tqdm
 
   pip:
-    - allensdk
-    - bmtk
-    - neuroanalysis
-    - parse
-    - git+https://github.com/alleninstitute/abc_atlas_access
-    - git+https://github.com/alleninstitute/aisynphys
-    - git+https://github.com/srirampc/awitree
+    - git+https://github.com/srirampc/airavata-cerebrum
