@@ -3,7 +3,8 @@ project:
   description: "Constructing computational neuroscience models from large public databases and brain atlases"
   homepage: https://github.com/srirampc/airavata-cerebrum
   authors:
-    - Sriram Chockalingam
+    - srirampc@gatech.edu
+    - pjaya001@odu.edu
   tags:
     - neurodata25
     - apache
@@ -61,10 +62,4 @@ additional_dependencies:
     - tqdm
 
   pip:
-    - allensdk
-    - bmtk
-    - neuroanalysis
-    - parse
-    - git+https://github.com/alleninstitute/abc_atlas_access
-    - git+https://github.com/alleninstitute/aisynphys
-    - git+https://github.com/srirampc/awitree
+    - git+https://github.com/srirampc/airavata-cerebrum
