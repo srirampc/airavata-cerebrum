@@ -35,7 +35,7 @@ def generate_target_sizes(
         N: int,
         ln_shape: float,
         ln_scale: float
-) -> int:
+) -> npt.NDArray[np.floating[t.Any]]:
     ln_rv = scipy.stats.lognorm(s=ln_shape, loc=0, scale=ln_scale)
     ln_rvs = ln_rv.rvs(N).round()
     return ln_rvs
