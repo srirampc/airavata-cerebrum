@@ -430,12 +430,13 @@ class V1BMTKNetworkBuilder:
             )
             # Get tuning angle for LGN cells
             # tuning_angles = get_tuning_angles(params['N'], X_grids, Y_grids, model)
+            print(f"Region:  {lgn_region.name} ; Node: {lgn_model.name} : {total_N}")
             self.lgn_net.add_nodes(
                 N=total_N,
                 pop_name=lgn_model.name,
                 model_type="virtual",
                 ei="e",
-                location="LGN",
+                location=lgn_region.name,
                 x=positions[:, 0],
                 y=positions[:, 1],
                 spatial_size=filter_sizes,
@@ -471,8 +472,10 @@ class V1BMTKNetworkBuilder:
         lgn_nodes["temporal_freq"] = lgn_nodes["pop_name"].str.extract(r"TF(\d+)")
         # make a complex version beforehand for easy shift/rotation
         lgn_nodes["xy_complex"] = lgn_nodes["x"] + 1j * lgn_nodes["y"]
-        for lgn_conn_name, lgn_connect in self.net_struct.connections.items():
+        lgn_ext_net = self.net_struct.ext_networks["lgn"]
+        for lgn_conn_name, lgn_connect in lgn_ext_net.connections.items():
             _, v1_neuron_name = ast.literal_eval(lgn_conn_name)
+            v1_neuron_name = repr(v1_neuron_name)
             v1_neuron: structure.Neuron | None = self.net_struct.find_neuron(v1_neuron_name)
             if v1_neuron is None:
                 print(f"LGN :: Unknown neuron name: {v1_neuron_name}")
@@ -481,6 +484,8 @@ class V1BMTKNetworkBuilder:
                 # target_pop_name = row["population"]
                 target_model_id = int(lgn_conn_model.target_model_id)
                 e_or_i = v1_neuron.ei
+                lgn_net_nodes = self.lgn_net.nodes()
+                target_nodes = self.net.nodes(node_type_id=target_model_id)
                 if e_or_i == "e":
                     sigma = [0.0, 150.0]
                 elif e_or_i == "i":
@@ -490,6 +495,10 @@ class V1BMTKNetworkBuilder:
                     raise BaseException(
                         f"Unknown e_or_i value: {e_or_i} from {v1_neuron.name}"
                     )
+                print("lgn", lgn_conn_model.name, target_model_id,
+                      lgn_conn_model.property_map,
+                      len(lgn_net_nodes),
+                      len(target_nodes))
                 # LGN is configured based on e4 response. Here we use the mean target sizes of
                 # the e4 neurons and normalize all the cells using these values. By doing this,
                 # we can avoid injecting too much current to the populations with large target
@@ -499,8 +508,8 @@ class V1BMTKNetworkBuilder:
                 lognorm_scale = 2188.765
                 e4_mean_size = np.exp(np.log(lognorm_scale) + (lognorm_shape**2) / 2)
                 edge_params = {
-                    "source": self.lgn_net.nodes(),
-                    "target": self.net.nodes(node_type_id=target_model_id),
+                    "source": lgn_net_nodes,
+                    "target": target_nodes,
                     "iterator": "all_to_one",
                     "connection_rule": select_lgn_sources_powerlaw,
                     "connection_params": {"lgn_mean": lgn_mean, "lgn_nodes": lgn_nodes},
@@ -592,8 +601,8 @@ class V1BMTKNetworkBuilder:
     ) -> NetworkBuilder:
         self.add_nodes()
         self.add_edges()
-        # self.add_lgn_nodes()
-        # self.add_lgn_v1_edges()
+        self.add_lgn_nodes()
+        self.add_lgn_v1_edges()
         self.add_bkg_nodes()
         self.add_bkg_edges()
         return self.net
@@ -601,4 +610,5 @@ class V1BMTKNetworkBuilder:
     def save(self, network_dir: str | Path):
         self.net.save(str(network_dir))
         self.bkg_net.save(str(network_dir))
+        self.lgn_net.save(str(network_dir))
 

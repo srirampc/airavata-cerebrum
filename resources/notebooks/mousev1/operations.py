@@ -523,8 +523,8 @@ def connect_cells(
 def syn_weight_by_experimental_distribution(
     source: dict[str, t.Any],
     target: dict[str, t.Any],
-    _src_type: str,
-    _trg_type: str,
+    src_type: str,  # pyright: ignore[reportUnusedParameter]
+    trg_type: str,  # pyright: ignore[reportUnusedParameter]
     src_ei: str,
     trg_ei: str,
     PSP_correction: float,
@@ -707,7 +707,7 @@ def select_bkg_sources(
 
 
 def lgn_synaptic_weight_rule(
-    _source: t.Any,
+    source: t.Any,
     target: dict[str, t.Any],
     base_weight:float,
     mean_size: float
@@ -1089,10 +1089,17 @@ def gaussian_probability(x, sigma):
 
 
 def pick_from_probs(n: int, prob_dist:npt.NDArray[np.floating[t.Any]]):
-    # pick n item based on prob_dist and return index of the choice
-    return np.random.choice(
-        list(range(len(prob_dist))), size=n, replace=False, p=prob_dist
-    )
+    try:
+        # pick n item based on prob_dist and return index of the choice
+        return np.random.choice(
+            list(range(len(prob_dist))), 
+            size=n,
+            replace=False,
+            p=None if np.isnan(np.sum(prob_dist)) else prob_dist
+        )
+    except ValueError as vex:
+        print(prob_dist)
+        raise vex
 
 
 def select_lgn_sources_powerlaw(sources, target, lgn_mean, lgn_nodes):
@@ -1144,7 +1151,10 @@ def select_lgn_sources_powerlaw(sources, target, lgn_mean, lgn_nodes):
     # circle with radius 40 centered at vis_x, vis_y
     big_circle = (vis_x, vis_y, 1.0, 0.0, 40, 40)
     in_circle = within_ellipse(
-        np.array(lgn_nodes["x"]), np.array(lgn_nodes["y"]), tuning_angle, *big_circle
+        np.array(lgn_nodes["x"]),
+        np.array(lgn_nodes["y"]),
+        tuning_angle,
+        *big_circle
     )
 
     lgn_circle = lgn_nodes[in_circle]
@@ -1208,6 +1218,8 @@ def select_lgn_sources_powerlaw(sources, target, lgn_mean, lgn_nodes):
 
     total_prob = gaussian_prob * subunit_prob
     total_prob = total_prob / sum(total_prob)  # normalize
+    if np.isnan(np.sum(total_prob)):
+        print(f"NaN error {relative_rf_dist}; {gaussian_prob}; {subunit_prob}")
 
     # fraction of LGN synapses in e4's synapses. fixed parameter for this model
     e4_lgn_fraction = 0.2

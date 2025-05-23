@@ -1,7 +1,7 @@
 {
   "ext_networks": {
     "lgn": {
-      "name": "LGN",
+      "name": "lgn",
       "locations": {
         "lgn": {
           "name": "lgn",
@@ -22,7 +22,10 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [2, 10]
+                "size_range": [
+                  2,
+                  10
+                ]
               }
             },
             "sON_TF2": {
@@ -39,7 +42,10 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [2, 10]
+                "size_range": [
+                  2,
+                  10
+                ]
               }
             },
             "sON_TF4": {
@@ -56,7 +62,10 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [2, 10]
+                "size_range": [
+                  2,
+                  10
+                ]
               }
             },
             "sON_TF8": {
@@ -73,7 +82,10 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [2, 10]
+                "size_range": [
+                  2,
+                  10
+                ]
               }
             },
             "sOFF_TF1": {
@@ -90,7 +102,10 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [2, 10]
+                "size_range": [
+                  2,
+                  10
+                ]
               }
             },
             "sOFF_TF2": {
@@ -107,7 +122,10 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [2, 10]
+                "size_range": [
+                  2,
+                  10
+                ]
               }
             },
             "sOFF_TF4": {
@@ -124,7 +142,10 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [2, 10]
+                "size_range": [
+                  2,
+                  10
+                ]
               }
             },
             "sOFF_TF8": {
@@ -141,7 +162,10 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [2, 10]
+                "size_range": [
+                  2,
+                  10
+                ]
               }
             },
             "sOFF_TF15": {
@@ -158,7 +182,10 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [2, 10]
+                "size_range": [
+                  2,
+                  10
+                ]
               }
             },
             "tOFF_TF4": {
@@ -176,7 +203,10 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [2, 10]
+                "size_range": [
+                  2,
+                  10
+                ]
               }
             },
             "tOFF_TF8": {
@@ -193,7 +223,10 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [2, 10]
+                "size_range": [
+                  2,
+                  10
+                ]
               }
             },
             "tOFF_TF15": {
@@ -210,7 +243,10 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [2, 10]
+                "size_range": [
+                  2,
+                  10
+                ]
               }
             },
             "sONsOFF_001": {
@@ -227,7 +263,9 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [6]
+                "size_range": [
+                  6
+                ]
               }
             },
             "sONtOFF_001": {
@@ -244,7 +282,9 @@
                 "level_of_detail": "filter"
               },
               "dims": {
-                "size_range": [9]
+                "size_range": [
+                  9
+                ]
               }
             }
           }
@@ -253,8 +293,14 @@
       "connections": {
         "(('lgn', ''), ('1', 'Htr3a'))": {
           "name": "(('lgn', ''), ('1', 'Htr3a'))",
-          "pre": ["lgn", ""],
-          "post": ["1", "Htr3a"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "1",
+            "Htr3a"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -293,8 +339,14 @@
         },
         "(('lgn', ''), ('2/3', 'Cux2'))": {
           "name": "(('lgn', ''), ('2/3', 'Cux2'))",
-          "pre": ["lgn", ""],
-          "post": ["2/3", "Cux2"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "2/3",
+            "Cux2"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -373,8 +425,14 @@
         },
         "(('lgn', ''), ('2/3', 'Vip'))": {
           "name": "(('lgn', ''), ('2/3', 'Vip'))",
-          "pre": ["lgn", ""],
-          "post": ["2/3", "Vip"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "2/3",
+            "Vip"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -483,8 +541,14 @@
         },
         "(('lgn', ''), ('2/3', 'Pvalb'))": {
           "name": "(('lgn', ''), ('2/3', 'Pvalb'))",
-          "pre": ["lgn", ""],
-          "post": ["2/3", "Pvalb"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "2/3",
+            "Pvalb"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -611,10 +675,16 @@
             }
           }
         },
-        "(('lgn', ''), ('23', 'Sst'))": {
-          "name": "(('lgn', ''), ('23', 'Sst'))",
-          "pre": ["lgn", ""],
-          "post": ["2/3", "Sst"],
+        "(('lgn', ''), ('2/3', 'Sst'))": {
+          "name": "(('lgn', ''), ('2/3', 'Sst'))",
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "2/3",
+            "Sst"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -693,8 +763,14 @@
         },
         "(('lgn', ''), ('4', 'Rorb'))": {
           "name": "(('lgn', ''), ('4', 'Rorb'))",
-          "pre": ["lgn", ""],
-          "post": ["4", "Rorb"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "4",
+            "Rorb"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -913,8 +989,14 @@
         },
         "(('lgn', ''), ('4', 'Scnn1a'))": {
           "name": "(('lgn', ''), ('4', 'Scnn1a'))",
-          "pre": ["lgn", ""],
-          "post": ["4", "Scnn1a"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "4",
+            "Scnn1a"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -973,8 +1055,14 @@
         },
         "(('lgn', ''), ('4', 'Vip'))": {
           "name": "(('lgn', ''), ('4', 'Vip'))",
-          "pre": ["lgn", ""],
-          "post": ["4", "Vip"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "4",
+            "Vip"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -1043,8 +1131,14 @@
         },
         "(('lgn', ''), ('4', 'Pvalb'))": {
           "name": "(('lgn', ''), ('4', 'Pvalb'))",
-          "pre": ["lgn", ""],
-          "post": ["4", "Pvalb"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "4",
+            "Pvalb"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -1163,8 +1257,14 @@
         },
         "(('lgn', ''), ('4', 'Sst'))": {
           "name": "(('lgn', ''), ('4', 'Sst'))",
-          "pre": ["lgn", ""],
-          "post": ["4", "Sst"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "4",
+            "Sst"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -1233,8 +1333,14 @@
         },
         "(('lgn', ''), ('5', 'IT'))": {
           "name": "(('lgn', ''), ('5', 'IT'))",
-          "pre": ["lgn", ""],
-          "post": ["5", "IT"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "5",
+            "IT"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -1283,8 +1389,14 @@
         },
         "(('lgn', ''), ('5', 'ET'))": {
           "name": "(('lgn', ''), ('5', 'ET'))",
-          "pre": ["lgn", ""],
-          "post": ["5", "ET"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "5",
+            "ET"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -1353,8 +1465,14 @@
         },
         "(('lgn', ''), ('5', 'NP'))": {
           "name": "(('lgn', ''), ('5', 'NP'))",
-          "pre": ["lgn", ""],
-          "post": ["5", "NP"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "5",
+            "NP"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -1483,8 +1601,14 @@
         },
         "(('lgn', ''), ('5', 'Vip'))": {
           "name": "(('lgn', ''), ('5', 'Vip'))",
-          "pre": ["lgn", ""],
-          "post": ["5", "Vip"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "5",
+            "Vip"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -1523,8 +1647,14 @@
         },
         "(('lgn', ''), ('5', 'Pvalb'))": {
           "name": "(('lgn', ''), ('5', 'Pvalb'))",
-          "pre": ["lgn", ""],
-          "post": ["5", "Pvalb"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "5",
+            "Pvalb"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -1653,8 +1783,14 @@
         },
         "(('lgn', ''), ('5', 'Sst'))": {
           "name": "(('lgn', ''), ('5', 'Sst'))",
-          "pre": ["lgn", ""],
-          "post": ["5", "Sst"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "5",
+            "Sst"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -1883,8 +2019,14 @@
         },
         "(('lgn', ''), ('6', 'Ntsr1'))": {
           "name": "(('lgn', ''), ('6', 'Ntsr1'))",
-          "pre": ["lgn", ""],
-          "post": ["6", "Ntsr1"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "6",
+            "Ntsr1"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -2123,8 +2265,14 @@
         },
         "(('lgn', ''), ('6', 'Vip'))": {
           "name": "(('lgn', ''), ('6', 'Vip'))",
-          "pre": ["lgn", ""],
-          "post": ["6", "Vip"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "6",
+            "Vip"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -2173,8 +2321,14 @@
         },
         "(('lgn', ''), ('6', 'Pvalb'))": {
           "name": "(('lgn', ''), ('6', 'Pvalb'))",
-          "pre": ["lgn", ""],
-          "post": ["6", "Pvalb"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "6",
+            "Pvalb"
+          ],
           "property_map": {
             "n_conn": 4
           },
@@ -2223,8 +2377,14 @@
         },
         "(('lgn', ''), ('6', 'Sst'))": {
           "name": "(('lgn', ''), ('6', 'Sst'))",
-          "pre": ["lgn", ""],
-          "post": ["6", "Sst"],
+          "pre": [
+            "lgn",
+            ""
+          ],
+          "post": [
+            "6",
+            "Sst"
+          ],
           "property_map": {
             "n_conn": 4
           },
