@@ -1,13 +1,13 @@
 {
     "name": "v1",
-    "ncells": 30000,
+    "ncells": 120000,
     "locations": {
         "VISp1": {
             "name": "VISp1",
             "inh_fraction": 1.0,
             "region_fraction": 0.06966259453170448,
-            "ncells": 2089,
-            "inh_ncells": 2089,
+            "ncells": 8359,
+            "inh_ncells": 8359,
             "exc_ncells": 0,
             "dims": {
                 "depth_range": [
@@ -19,7 +19,7 @@
                 "('1', 'Htr3a')": {
                     "name": "('1', 'Htr3a')",
                     "ei": "i",
-                    "N": 2089,
+                    "N": 8359,
                     "fraction": 1.0,
                     "dims": {
                         "nsyn_lognorm_shape": 0.856,
@@ -79,9 +79,9 @@
             "name": "VISp2/3",
             "inh_fraction": 0.07875519604538816,
             "region_fraction": 0.34861999870725874,
-            "ncells": 10458,
-            "inh_ncells": 823,
-            "exc_ncells": 9635,
+            "ncells": 41834,
+            "inh_ncells": 3294,
+            "exc_ncells": 38540,
             "dims": {
                 "depth_range": [
                     169,
@@ -92,7 +92,7 @@
                 "('2/3', 'Cux2')": {
                     "name": "('2/3', 'Cux2')",
                     "ei": "e",
-                    "N": 9635,
+                    "N": 38540,
                     "fraction": 1.0,
                     "dims": {
                         "nsyn_lognorm_shape": 0.363,
@@ -254,7 +254,7 @@
                 "('2/3', 'Vip')": {
                     "name": "('2/3', 'Vip')",
                     "ei": "i",
-                    "N": 260,
+                    "N": 1043,
                     "fraction": 0.3166904422253923,
                     "dims": {
                         "nsyn_lognorm_shape": 0.537,
@@ -416,7 +416,7 @@
                 "('2/3', 'Pvalb')": {
                     "name": "('2/3', 'Pvalb')",
                     "ei": "i",
-                    "N": 273,
+                    "N": 1094,
                     "fraction": 0.33238231098430815,
                     "dims": {
                         "nsyn_lognorm_shape": 0.433,
@@ -608,7 +608,7 @@
                 "('2/3', 'Sst')": {
                     "name": "('2/3', 'Sst')",
                     "ei": "i",
-                    "N": 273,
+                    "N": 1094,
                     "fraction": 0.33238231098430815,
                     "dims": {
                         "nsyn_lognorm_shape": 0.55,
@@ -743,9 +743,9 @@
             "name": "VISp4",
             "inh_fraction": 0.1119157340355497,
             "region_fraction": 0.20969879128692392,
-            "ncells": 6290,
-            "inh_ncells": 703,
-            "exc_ncells": 5587,
+            "ncells": 25163,
+            "inh_ncells": 2816,
+            "exc_ncells": 22347,
             "dims": {
                 "depth_range": [
                     357,
@@ -756,7 +756,7 @@
                 "('4', 'Scnn1a')": {
                     "name": "('4', 'Scnn1a')",
                     "ei": "e",
-                    "N": 2793,
+                    "N": 11173,
                     "fraction": 0.5,
                     "dims": {
                         "nsyn_lognorm_shape": 0.345,
@@ -903,7 +903,7 @@
                 "('4', 'Rorb')": {
                     "name": "('4', 'Rorb')",
                     "ei": "e",
-                    "N": 2793,
+                    "N": 11173,
                     "fraction": 0.5,
                     "dims": {
                         "nsyn_lognorm_shape": 0.345,
@@ -1290,7 +1290,7 @@
                 "('4', 'Vip')": {
                     "name": "('4', 'Vip')",
                     "ei": "i",
-                    "N": 92,
+                    "N": 371,
                     "fraction": 0.1319327731092437,
                     "dims": {
                         "nsyn_lognorm_shape": 0.537,
@@ -1392,7 +1392,7 @@
                 "('4', 'Pvalb')": {
                     "name": "('4', 'Pvalb')",
                     "ei": "i",
-                    "N": 374,
+                    "N": 1500,
                     "fraction": 0.5327731092436975,
                     "dims": {
                         "nsyn_lognorm_shape": 0.433,
@@ -1629,7 +1629,7 @@
                 "('4', 'Sst')": {
                     "name": "('4', 'Sst')",
                     "ei": "i",
-                    "N": 374,
+                    "N": 1500,
                     "fraction": 0.5327731092436975,
                     "dims": {
                         "nsyn_lognorm_shape": 0.55,
@@ -1734,9 +1734,9 @@
             "name": "VISp5",
             "inh_fraction": 0.16542795492687604,
             "region_fraction": 0.17760648956111436,
-            "ncells": 5328,
-            "inh_ncells": 881,
-            "exc_ncells": 4447,
+            "ncells": 21312,
+            "inh_ncells": 3525,
+            "exc_ncells": 17787,
             "dims": {
                 "depth_range": [
                     505,
@@ -1747,7 +1747,7 @@
                 "('5', 'IT')": {
                     "name": "('5', 'IT')",
                     "ei": "e",
-                    "N": 2318,
+                    "N": 9271,
                     "fraction": 0.5212582591209423,
                     "dims": {
                         "nsyn_lognorm_shape": 0.331,
@@ -1834,7 +1834,7 @@
                 "('5', 'ET')": {
                     "name": "('5', 'ET')",
                     "ei": "e",
-                    "N": 1436,
+                    "N": 5745,
                     "fraction": 0.3230393565067509,
                     "dims": {
                         "nsyn_lognorm_shape": 0.424,
@@ -1891,7 +1891,7 @@
                 "('5', 'Pvalb')": {
                     "name": "('5', 'Pvalb')",
                     "ei": "i",
-                    "N": 429,
+                    "N": 1719,
                     "fraction": 0.48768115942028983,
                     "dims": {
                         "nsyn_lognorm_shape": 0.433,
@@ -2143,7 +2143,7 @@
                 "('5', 'Vip')": {
                     "name": "('5', 'Vip')",
                     "ei": "i",
-                    "N": 19,
+                    "N": 76,
                     "fraction": 0.021739130434782608,
                     "dims": {
                         "nsyn_lognorm_shape": 0.537,
@@ -2200,7 +2200,7 @@
                 "('5', 'Sst')": {
                     "name": "('5', 'Sst')",
                     "ei": "i",
-                    "N": 429,
+                    "N": 1719,
                     "fraction": 0.48768115942028983,
                     "dims": {
                         "nsyn_lognorm_shape": 0.55,
@@ -2556,9 +2556,9 @@
             "name": "VISp6",
             "inh_fraction": 0.06277924160843167,
             "region_fraction": 0.16366104324219508,
-            "ncells": 4909,
-            "inh_ncells": 308,
-            "exc_ncells": 4601,
+            "ncells": 19639,
+            "inh_ncells": 1232,
+            "exc_ncells": 18407,
             "dims": {
                 "depth_range": [
                     665,
@@ -2569,7 +2569,7 @@
                 "('6', 'Ntsr1')": {
                     "name": "('6', 'Ntsr1')",
                     "ei": "e",
-                    "N": 3493,
+                    "N": 13976,
                     "fraction": 0.7593203764820926,
                     "dims": {
                         "nsyn_lognorm_shape": 0.241,
@@ -2926,7 +2926,7 @@
                 "('6', 'Vip')": {
                     "name": "('6', 'Vip')",
                     "ei": "i",
-                    "N": 11,
+                    "N": 47,
                     "fraction": 0.03832116788321168,
                     "dims": {
                         "nsyn_lognorm_shape": 0.537,
@@ -2998,7 +2998,7 @@
                 "('6', 'Pvalb')": {
                     "name": "('6', 'Pvalb')",
                     "ei": "i",
-                    "N": 173,
+                    "N": 692,
                     "fraction": 0.5620437956204379,
                     "dims": {
                         "nsyn_lognorm_shape": 0.433,
@@ -3085,7 +3085,7 @@
                 "('6', 'Sst')": {
                     "name": "('6', 'Sst')",
                     "ei": "i",
-                    "N": 107,
+                    "N": 429,
                     "fraction": 0.34854014598540145,
                     "dims": {
                         "nsyn_lognorm_shape": 0.55,
@@ -61309,7 +61309,7 @@
     },
     "ext_networks": {
         "lgn": {
-            "name": "LGN",
+            "name": "lgn",
             "ncells": 0,
             "locations": {
                 "lgn": {
@@ -61687,6 +61687,598 @@
                 }
             },
             "connections": {
+                "(('lgn', ''), ('1', 'Htr3a'))": {
+                    "name": "(('lgn', ''), ('1', 'Htr3a'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "1",
+                        "Htr3a"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('1', 'Htr3a'), '475585413')": {
+                            "name": "(('lgn', ''), ('1', 'Htr3a'), '475585413')",
+                            "target_model_id": "475585413",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0999999999999943,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.450000000000196
+                            }
+                        },
+                        "(('lgn', ''), ('1', 'Htr3a'), '482649712')": {
+                            "name": "(('lgn', ''), ('1', 'Htr3a'), '482649712')",
+                            "target_model_id": "482649712",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0909999999999939,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.791208791209042
+                            }
+                        },
+                        "(('lgn', ''), ('1', 'Htr3a'), '482654108')": {
+                            "name": "(('lgn', ''), ('1', 'Htr3a'), '482654108')",
+                            "target_model_id": "482654108",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0579999999999927,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.948275862069711
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('2/3', 'Cux2'))": {
+                    "name": "(('lgn', ''), ('2/3', 'Cux2'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "2/3",
+                        "Cux2"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('2/3', 'Cux2'), '484509440')": {
+                            "name": "(('lgn', ''), ('2/3', 'Cux2'), '484509440')",
+                            "target_model_id": "484509440",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e23.json",
+                            "property_map": {
+                                "unitary_PSP": 0.073999999999998,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.662162162162284
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Cux2'), '486262299')": {
+                            "name": "(('lgn', ''), ('2/3', 'Cux2'), '486262299')",
+                            "target_model_id": "486262299",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e23.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0309999999999917,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 11.129032258067497
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Cux2'), '486753754')": {
+                            "name": "(('lgn', ''), ('2/3', 'Cux2'), '486753754')",
+                            "target_model_id": "486753754",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e23.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0910000000000081,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.79120879120845
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Cux2'), '489751692')": {
+                            "name": "(('lgn', ''), ('2/3', 'Cux2'), '489751692')",
+                            "target_model_id": "489751692",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e23.json",
+                            "property_map": {
+                                "unitary_PSP": 0.1050000000000039,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.285714285714161
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Cux2'), '490376252')": {
+                            "name": "(('lgn', ''), ('2/3', 'Cux2'), '490376252')",
+                            "target_model_id": "490376252",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e23.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0780000000000029,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.423076923076756
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Cux2'), '505512874')": {
+                            "name": "(('lgn', ''), ('2/3', 'Cux2'), '505512874')",
+                            "target_model_id": "505512874",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e23.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0620000000000118,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.564516129031197
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Cux2'), '513510227')": {
+                            "name": "(('lgn', ''), ('2/3', 'Cux2'), '513510227')",
+                            "target_model_id": "513510227",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e23.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0310000000000059,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 11.129032258062391
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('2/3', 'Vip'))": {
+                    "name": "(('lgn', ''), ('2/3', 'Vip'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "2/3",
+                        "Vip"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('2/3', 'Vip'), '501736631')": {
+                            "name": "(('lgn', ''), ('2/3', 'Vip'), '501736631')",
+                            "target_model_id": "501736631",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.039999999999992,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 8.625000000001716
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Vip'), '514767977')": {
+                            "name": "(('lgn', ''), ('2/3', 'Vip'), '514767977')",
+                            "target_model_id": "514767977",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0919999999999987,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.75000000000005
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Vip'), '522418855')": {
+                            "name": "(('lgn', ''), ('2/3', 'Vip'), '522418855')",
+                            "target_model_id": "522418855",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0930000000000035,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.7096774193546977
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Vip'), '523478869')": {
+                            "name": "(('lgn', ''), ('2/3', 'Vip'), '523478869')",
+                            "target_model_id": "523478869",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0450000000000017,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.666666666666376
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Vip'), '524689239')": {
+                            "name": "(('lgn', ''), ('2/3', 'Vip'), '524689239')",
+                            "target_model_id": "524689239",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0699999999999931,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.928571428571908
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Vip'), '524693113')": {
+                            "name": "(('lgn', ''), ('2/3', 'Vip'), '524693113')",
+                            "target_model_id": "524693113",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.1039999999999992,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.3173076923077174
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Vip'), '524876305')": {
+                            "name": "(('lgn', ''), ('2/3', 'Vip'), '524876305')",
+                            "target_model_id": "524876305",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0760000000000076,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.539473684210071
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Vip'), '560814288')": {
+                            "name": "(('lgn', ''), ('2/3', 'Vip'), '560814288')",
+                            "target_model_id": "560814288",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.1110000000000042,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.10810810810799
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Vip'), '562539062')": {
+                            "name": "(('lgn', ''), ('2/3', 'Vip'), '562539062')",
+                            "target_model_id": "562539062",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0990000000000037,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.4848484848483525
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Vip'), '575920560')": {
+                            "name": "(('lgn', ''), ('2/3', 'Vip'), '575920560')",
+                            "target_model_id": "575920560",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0630000000000023,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.476190476190268
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('2/3', 'Pvalb'))": {
+                    "name": "(('lgn', ''), ('2/3', 'Pvalb'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "2/3",
+                        "Pvalb"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('2/3', 'Pvalb'), '341016267')": {
+                            "name": "(('lgn', ''), ('2/3', 'Pvalb'), '341016267')",
+                            "target_model_id": "341016267",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0369999999999919,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 9.324324324326358
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Pvalb'), '341442651')": {
+                            "name": "(('lgn', ''), ('2/3', 'Pvalb'), '341442651')",
+                            "target_model_id": "341442651",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0319999999999964,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 10.781250000001188
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Pvalb'), '469614747')": {
+                            "name": "(('lgn', ''), ('2/3', 'Pvalb'), '469614747')",
+                            "target_model_id": "469614747",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0420000000000015,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 8.214285714285403
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Pvalb'), '477490421')": {
+                            "name": "(('lgn', ''), ('2/3', 'Pvalb'), '477490421')",
+                            "target_model_id": "477490421",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0319999999999964,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 10.781250000001188
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Pvalb'), '479298854')": {
+                            "name": "(('lgn', ''), ('2/3', 'Pvalb'), '479298854')",
+                            "target_model_id": "479298854",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.027000000000001,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 12.777777777777292
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Pvalb'), '481018305')": {
+                            "name": "(('lgn', ''), ('2/3', 'Pvalb'), '481018305')",
+                            "target_model_id": "481018305",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0379999999999967,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 9.07894736842184
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Pvalb'), '482444444')": {
+                            "name": "(('lgn', ''), ('2/3', 'Pvalb'), '482444444')",
+                            "target_model_id": "482444444",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0319999999999964,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 10.781250000001188
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Pvalb'), '484635029')": {
+                            "name": "(('lgn', ''), ('2/3', 'Pvalb'), '484635029')",
+                            "target_model_id": "484635029",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0339999999999918,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 10.147058823531854
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Pvalb'), '485184849')": {
+                            "name": "(('lgn', ''), ('2/3', 'Pvalb'), '485184849')",
+                            "target_model_id": "485184849",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0310000000000059,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 11.129032258062391
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Pvalb'), '485245025')": {
+                            "name": "(('lgn', ''), ('2/3', 'Pvalb'), '485245025')",
+                            "target_model_id": "485245025",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0380000000000109,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 9.078947368418444
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Pvalb'), '488501071')": {
+                            "name": "(('lgn', ''), ('2/3', 'Pvalb'), '488501071')",
+                            "target_model_id": "488501071",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0299999999999869,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 11.500000000005013
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Pvalb'), '574992320')": {
+                            "name": "(('lgn', ''), ('2/3', 'Pvalb'), '574992320')",
+                            "target_model_id": "574992320",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0289999999999963,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 11.896551724139425
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('2/3', 'Sst'))": {
+                    "name": "(('lgn', ''), ('2/3', 'Sst'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "2/3",
+                        "Sst"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('2/3', 'Sst'), '313862274')": {
+                            "name": "(('lgn', ''), ('2/3', 'Sst'), '313862274')",
+                            "target_model_id": "313862274",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0480000000000018,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.187499999999727
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Sst'), '324493977')": {
+                            "name": "(('lgn', ''), ('2/3', 'Sst'), '324493977')",
+                            "target_model_id": "324493977",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0510000000000019,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.764705882352684
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Sst'), '476686112')": {
+                            "name": "(('lgn', ''), ('2/3', 'Sst'), '476686112')",
+                            "target_model_id": "476686112",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0549999999999926,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.272727272728115
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Sst'), '485466109')": {
+                            "name": "(('lgn', ''), ('2/3', 'Sst'), '485466109')",
+                            "target_model_id": "485466109",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0560000000000115,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.160714285713009
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Sst'), '488677994')": {
+                            "name": "(('lgn', ''), ('2/3', 'Sst'), '488677994')",
+                            "target_model_id": "488677994",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0559999999999973,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.1607142857145725
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Sst'), '491026389')": {
+                            "name": "(('lgn', ''), ('2/3', 'Sst'), '491026389')",
+                            "target_model_id": "491026389",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0460000000000064,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.499999999998943
+                            }
+                        },
+                        "(('lgn', ''), ('2/3', 'Sst'), '623960880')": {
+                            "name": "(('lgn', ''), ('2/3', 'Sst'), '623960880')",
+                            "target_model_id": "623960880",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.046999999999997,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.340425531915355
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
                 "(('lgn', ''), ('4', 'Rorb'))": {
                     "name": "(('lgn', ''), ('4', 'Rorb'))",
                     "pre": [
@@ -62402,6 +62994,1424 @@
                                 "unitary_PSP": 0.0490000000000065,
                                 "syn_weight": 0.345,
                                 "syn_weight_psp": 7.040816326529664
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('5', 'IT'))": {
+                    "name": "(('lgn', ''), ('5', 'IT'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "5",
+                        "IT"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('5', 'IT'), '314822529')": {
+                            "name": "(('lgn', ''), ('5', 'IT'), '314822529')",
+                            "target_model_id": "314822529",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5it.json",
+                            "property_map": {
+                                "unitary_PSP": 0.061000000000007,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.655737704917379
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'IT'), '468120757')": {
+                            "name": "(('lgn', ''), ('5', 'IT'), '468120757')",
+                            "target_model_id": "468120757",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5it.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0510000000000019,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.764705882352684
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'IT'), '480169178')": {
+                            "name": "(('lgn', ''), ('5', 'IT'), '480169178')",
+                            "target_model_id": "480169178",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5it.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0609999999999928,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.655737704918696
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'IT'), '486110216')": {
+                            "name": "(('lgn', ''), ('5', 'IT'), '486110216')",
+                            "target_model_id": "486110216",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5it.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0660000000000025,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.227272727272529
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('5', 'ET'))": {
+                    "name": "(('lgn', ''), ('5', 'ET'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "5",
+                        "ET"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('5', 'ET'), '485574832')": {
+                            "name": "(('lgn', ''), ('5', 'ET'), '485574832')",
+                            "target_model_id": "485574832",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5et.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0509999999999877,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.764705882354569
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'ET'), '485838981')": {
+                            "name": "(('lgn', ''), ('5', 'ET'), '485838981')",
+                            "target_model_id": "485838981",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5et.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0619999999999976,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.564516129032472
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'ET'), '486111903')": {
+                            "name": "(('lgn', ''), ('5', 'ET'), '486111903')",
+                            "target_model_id": "486111903",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5et.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0619999999999976,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.564516129032472
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'ET'), '488679042')": {
+                            "name": "(('lgn', ''), ('5', 'ET'), '488679042')",
+                            "target_model_id": "488679042",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5et.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0509999999999877,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.764705882354569
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'ET'), '488680917')": {
+                            "name": "(('lgn', ''), ('5', 'ET'), '488680917')",
+                            "target_model_id": "488680917",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5et.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0600000000000022,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.7499999999997815
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'ET'), '488683425')": {
+                            "name": "(('lgn', ''), ('5', 'ET'), '488683425')",
+                            "target_model_id": "488683425",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5et.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0499999999999971,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.900000000000392
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('5', 'NP'))": {
+                    "name": "(('lgn', ''), ('5', 'NP'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "5",
+                        "NP"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('5', 'NP'), '322762730')": {
+                            "name": "(('lgn', ''), ('5', 'NP'), '322762730')",
+                            "target_model_id": "322762730",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5np.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0590000000000117,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.847457627117483
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'NP'), '487445455')": {
+                            "name": "(('lgn', ''), ('5', 'NP'), '487445455')",
+                            "target_model_id": "487445455",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5np.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0550000000000068,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.272727272726494
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'NP'), '487664070')": {
+                            "name": "(('lgn', ''), ('5', 'NP'), '487664070')",
+                            "target_model_id": "487664070",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5np.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0690000000000026,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.99999999999981
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'NP'), '488419491')": {
+                            "name": "(('lgn', ''), ('5', 'NP'), '488419491')",
+                            "target_model_id": "488419491",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5np.json",
+                            "property_map": {
+                                "unitary_PSP": 0.046999999999997,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.340425531915355
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'NP'), '488467273')": {
+                            "name": "(('lgn', ''), ('5', 'NP'), '488467273')",
+                            "target_model_id": "488467273",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5np.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0690000000000026,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.99999999999981
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'NP'), '490263438')": {
+                            "name": "(('lgn', ''), ('5', 'NP'), '490263438')",
+                            "target_model_id": "490263438",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5np.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0510000000000019,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.764705882352684
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'NP'), '505202906')": {
+                            "name": "(('lgn', ''), ('5', 'NP'), '505202906')",
+                            "target_model_id": "505202906",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5np.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0460000000000064,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.499999999998943
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'NP'), '558675748')": {
+                            "name": "(('lgn', ''), ('5', 'NP'), '558675748')",
+                            "target_model_id": "558675748",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5np.json",
+                            "property_map": {
+                                "unitary_PSP": 0.054000000000002,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.388888888888646
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'NP'), '562999984')": {
+                            "name": "(('lgn', ''), ('5', 'NP'), '562999984')",
+                            "target_model_id": "562999984",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5np.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0300000000000011,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 11.499999999999565
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'NP'), '569469018')": {
+                            "name": "(('lgn', ''), ('5', 'NP'), '569469018')",
+                            "target_model_id": "569469018",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5np.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0649999999999977,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.307692307692493
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'NP'), '569477234')": {
+                            "name": "(('lgn', ''), ('5', 'NP'), '569477234')",
+                            "target_model_id": "569477234",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5np.json",
+                            "property_map": {
+                                "unitary_PSP": 0.046999999999997,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.340425531915355
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'NP'), '605141937')": {
+                            "name": "(('lgn', ''), ('5', 'NP'), '605141937')",
+                            "target_model_id": "605141937",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e5np.json",
+                            "property_map": {
+                                "unitary_PSP": 0.054000000000002,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.388888888888646
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('5', 'Vip'))": {
+                    "name": "(('lgn', ''), ('5', 'Vip'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "5",
+                        "Vip"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('5', 'Vip'), '568767467')": {
+                            "name": "(('lgn', ''), ('5', 'Vip'), '568767467')",
+                            "target_model_id": "568767467",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.108000000000004,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.194444444444323
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Vip'), '591627904')": {
+                            "name": "(('lgn', ''), ('5', 'Vip'), '591627904')",
+                            "target_model_id": "591627904",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0719999999999885,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.791666666667431
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Vip'), '592819166')": {
+                            "name": "(('lgn', ''), ('5', 'Vip'), '592819166')",
+                            "target_model_id": "592819166",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0979999999999989,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.520408163265343
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('5', 'Pvalb'))": {
+                    "name": "(('lgn', ''), ('5', 'Pvalb'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "5",
+                        "Pvalb"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('5', 'Pvalb'), '313861608')": {
+                            "name": "(('lgn', ''), ('5', 'Pvalb'), '313861608')",
+                            "target_model_id": "313861608",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0409999999999968,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 8.414634146342117
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Pvalb'), '318556138')": {
+                            "name": "(('lgn', ''), ('5', 'Pvalb'), '318556138')",
+                            "target_model_id": "318556138",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0520000000000067,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.634615384614528
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Pvalb'), '320455763')": {
+                            "name": "(('lgn', ''), ('5', 'Pvalb'), '320455763')",
+                            "target_model_id": "320455763",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0429999999999921,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 8.023255813954952
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Pvalb'), '469801569')": {
+                            "name": "(('lgn', ''), ('5', 'Pvalb'), '469801569')",
+                            "target_model_id": "469801569",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0379999999999967,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 9.07894736842184
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Pvalb'), '478949560')": {
+                            "name": "(('lgn', ''), ('5', 'Pvalb'), '478949560')",
+                            "target_model_id": "478949560",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0499999999999971,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.900000000000392
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Pvalb'), '480952106')": {
+                            "name": "(('lgn', ''), ('5', 'Pvalb'), '480952106')",
+                            "target_model_id": "480952106",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0499999999999971,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.900000000000392
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Pvalb'), '481093525')": {
+                            "name": "(('lgn', ''), ('5', 'Pvalb'), '481093525')",
+                            "target_model_id": "481093525",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.041000000000011,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 8.4146341463392
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Pvalb'), '484742372')": {
+                            "name": "(('lgn', ''), ('5', 'Pvalb'), '484742372')",
+                            "target_model_id": "484742372",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0519999999999925,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.634615384616342
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Pvalb'), '487400838')": {
+                            "name": "(('lgn', ''), ('5', 'Pvalb'), '487400838')",
+                            "target_model_id": "487400838",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0500000000000113,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.899999999998431
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Pvalb'), '487594856')": {
+                            "name": "(('lgn', ''), ('5', 'Pvalb'), '487594856')",
+                            "target_model_id": "487594856",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0529999999999972,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.5094339622644855
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Pvalb'), '488440436')": {
+                            "name": "(('lgn', ''), ('5', 'Pvalb'), '488440436')",
+                            "target_model_id": "488440436",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0499999999999971,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.900000000000392
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Pvalb'), '515305346')": {
+                            "name": "(('lgn', ''), ('5', 'Pvalb'), '515305346')",
+                            "target_model_id": "515305346",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0370000000000061,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 9.324324324322776
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('5', 'Sst'))": {
+                    "name": "(('lgn', ''), ('5', 'Sst'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "5",
+                        "Sst"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('5', 'Sst'), '313862134')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '313862134')",
+                            "target_model_id": "313862134",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0979999999999989,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.520408163265343
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '328015342')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '328015342')",
+                            "target_model_id": "328015342",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0429999999999921,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 8.023255813954952
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '328031983')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '328031983')",
+                            "target_model_id": "328031983",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0560000000000115,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.160714285713009
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '329224678')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '329224678')",
+                            "target_model_id": "329224678",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0549999999999926,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.272727272728115
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '329254830')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '329254830')",
+                            "target_model_id": "329254830",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0559999999999973,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.1607142857145725
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '464212183')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '464212183')",
+                            "target_model_id": "464212183",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0709999999999979,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.859154929577604
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '473011949')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '473011949')",
+                            "target_model_id": "473011949",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0369999999999919,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 9.324324324326358
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '473593847')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '473593847')",
+                            "target_model_id": "473593847",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0559999999999973,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.1607142857145725
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '475057898')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '475057898')",
+                            "target_model_id": "475057898",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0450000000000017,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.666666666666376
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '475542907')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '475542907')",
+                            "target_model_id": "475542907",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0499999999999971,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.900000000000392
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '475580568')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '475580568')",
+                            "target_model_id": "475580568",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.066999999999993,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.1492537313438165
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '482690728')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '482690728')",
+                            "target_model_id": "482690728",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0760000000000076,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.539473684210071
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '485058595')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '485058595')",
+                            "target_model_id": "485058595",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0709999999999979,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.859154929577604
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '485455285')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '485455285')",
+                            "target_model_id": "485455285",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0489999999999923,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.040816326531706
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '486352114')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '486352114')",
+                            "target_model_id": "486352114",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0849999999999937,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.058823529412063
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '490173806')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '490173806')",
+                            "target_model_id": "490173806",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0729999999999932,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.726027397260708
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '491029832')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '491029832')",
+                            "target_model_id": "491029832",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0750000000000028,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.599999999999826
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '491030723')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '491030723')",
+                            "target_model_id": "491030723",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0499999999999971,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.900000000000392
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '497560724')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '497560724')",
+                            "target_model_id": "497560724",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0390000000000014,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 8.846153846153511
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '501730497')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '501730497')",
+                            "target_model_id": "501730497",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0520000000000067,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.634615384614528
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '526785742')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '526785742')",
+                            "target_model_id": "526785742",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0489999999999923,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.040816326531706
+                            }
+                        },
+                        "(('lgn', ''), ('5', 'Sst'), '575637715')": {
+                            "name": "(('lgn', ''), ('5', 'Sst'), '575637715')",
+                            "target_model_id": "575637715",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0459999999999922,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.500000000001259
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('6', 'Ntsr1'))": {
+                    "name": "(('lgn', ''), ('6', 'Ntsr1'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "6",
+                        "Ntsr1"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('6', 'Ntsr1'), '466632464')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '466632464')",
+                            "target_model_id": "466632464",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0590000000000117,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.847457627117483
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '471789504')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '471789504')",
+                            "target_model_id": "471789504",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0789999999999935,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.367088607595295
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '471800189')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '471800189')",
+                            "target_model_id": "471800189",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0489999999999923,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.040816326531706
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '471819401')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '471819401')",
+                            "target_model_id": "471819401",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0510000000000019,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.764705882352684
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '485287944')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '485287944')",
+                            "target_model_id": "485287944",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0529999999999972,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.5094339622644855
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '485905411')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '485905411')",
+                            "target_model_id": "485905411",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0510000000000019,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.764705882352684
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '485938494')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '485938494')",
+                            "target_model_id": "485938494",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0520000000000067,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.634615384614528
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '488426904')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '488426904')",
+                            "target_model_id": "488426904",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0499999999999971,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.900000000000392
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '488430487')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '488430487')",
+                            "target_model_id": "488430487",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0400000000000062,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 8.624999999998652
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '488432250')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '488432250')",
+                            "target_model_id": "488432250",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0690000000000026,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.99999999999981
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '488448839')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '488448839')",
+                            "target_model_id": "488448839",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0570000000000021,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.052631578947139
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '488676149')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '488676149')",
+                            "target_model_id": "488676149",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0719999999999885,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.791666666667431
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '490259231')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '490259231')",
+                            "target_model_id": "490259231",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0489999999999923,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.040816326531706
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '490264167')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '490264167')",
+                            "target_model_id": "490264167",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0510000000000019,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.764705882352684
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '490485142')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '490485142')",
+                            "target_model_id": "490485142",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.054000000000002,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.388888888888646
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '490718897')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '490718897')",
+                            "target_model_id": "490718897",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0409999999999968,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 8.414634146342117
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '501562903')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '501562903')",
+                            "target_model_id": "501562903",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0589999999999975,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.847457627118891
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '501566512')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '501566512')",
+                            "target_model_id": "501566512",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.046999999999997,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.340425531915355
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '503286448')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '503286448')",
+                            "target_model_id": "503286448",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0379999999999967,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 9.07894736842184
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '503814817')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '503814817')",
+                            "target_model_id": "503814817",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0439999999999969,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.840909090909637
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '507914933')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '507914933')",
+                            "target_model_id": "507914933",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0920000000000129,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.749999999999472
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '508980706')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '508980706')",
+                            "target_model_id": "508980706",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0409999999999968,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 8.414634146342117
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Ntsr1'), '539742766')": {
+                            "name": "(('lgn', ''), ('6', 'Ntsr1'), '539742766')",
+                            "target_model_id": "539742766",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_e6.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0570000000000021,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.052631578947139
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('6', 'Vip'))": {
+                    "name": "(('lgn', ''), ('6', 'Vip'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "6",
+                        "Vip"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('6', 'Vip'), '565880475')": {
+                            "name": "(('lgn', ''), ('6', 'Vip'), '565880475')",
+                            "target_model_id": "565880475",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.093999999999994,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 3.6702127659576775
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Vip'), '582917630')": {
+                            "name": "(('lgn', ''), ('6', 'Vip'), '582917630')",
+                            "target_model_id": "582917630",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0590000000000117,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.847457627117483
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Vip'), '585080288')": {
+                            "name": "(('lgn', ''), ('6', 'Vip'), '585080288')",
+                            "target_model_id": "585080288",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.081000000000003,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.259259259259098
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Vip'), '592816620')": {
+                            "name": "(('lgn', ''), ('6', 'Vip'), '592816620')",
+                            "target_model_id": "592816620",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_vip.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0799999999999983,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 4.312500000000092
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('6', 'Pvalb'))": {
+                    "name": "(('lgn', ''), ('6', 'Pvalb'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "6",
+                        "Pvalb"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('6', 'Pvalb'), '471087830')": {
+                            "name": "(('lgn', ''), ('6', 'Pvalb'), '471087830')",
+                            "target_model_id": "471087830",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0450000000000017,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.666666666666376
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Pvalb'), '478058328')": {
+                            "name": "(('lgn', ''), ('6', 'Pvalb'), '478058328')",
+                            "target_model_id": "478058328",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0480000000000018,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.187499999999727
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Pvalb'), '571396942')": {
+                            "name": "(('lgn', ''), ('6', 'Pvalb'), '571396942')",
+                            "target_model_id": "571396942",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.041000000000011,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 8.4146341463392
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Pvalb'), '581404810')": {
+                            "name": "(('lgn', ''), ('6', 'Pvalb'), '581404810')",
+                            "target_model_id": "581404810",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_pv.json",
+                            "property_map": {
+                                "unitary_PSP": 0.059999999999988,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.750000000001144
+                            }
+                        }
+                    },
+                    "property_map": {
+                        "n_conn": 4
+                    }
+                },
+                "(('lgn', ''), ('6', 'Sst'))": {
+                    "name": "(('lgn', ''), ('6', 'Sst'))",
+                    "pre": [
+                        "lgn",
+                        ""
+                    ],
+                    "post": [
+                        "6",
+                        "Sst"
+                    ],
+                    "probability": 0.0,
+                    "connect_models": {
+                        "(('lgn', ''), ('6', 'Sst'), '473564515')": {
+                            "name": "(('lgn', ''), ('6', 'Sst'), '473564515')",
+                            "target_model_id": "473564515",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0579999999999927,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 5.948275862069711
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Sst'), '475512108')": {
+                            "name": "(('lgn', ''), ('6', 'Sst'), '475512108')",
+                            "target_model_id": "475512108",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0490000000000065,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 7.040816326529664
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Sst'), '476104386')": {
+                            "name": "(('lgn', ''), ('6', 'Sst'), '476104386')",
+                            "target_model_id": "476104386",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0499999999999971,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.900000000000392
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Sst'), '502382506')": {
+                            "name": "(('lgn', ''), ('6', 'Sst'), '502382506')",
+                            "target_model_id": "502382506",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0549999999999926,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 6.272727272728115
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Sst'), '534141324')": {
+                            "name": "(('lgn', ''), ('6', 'Sst'), '534141324')",
+                            "target_model_id": "534141324",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0319999999999964,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 10.781250000001188
+                            }
+                        },
+                        "(('lgn', ''), ('6', 'Sst'), '547325858')": {
+                            "name": "(('lgn', ''), ('6', 'Sst'), '547325858')",
+                            "target_model_id": "547325858",
+                            "source_model_id": "",
+                            "weight_max": 0.0,
+                            "delay": 0.0,
+                            "dynamics_params": "exc_to_sst.json",
+                            "property_map": {
+                                "unitary_PSP": 0.0380000000000109,
+                                "syn_weight": 0.345,
+                                "syn_weight_psp": 9.078947368418444
                             }
                         }
                     },

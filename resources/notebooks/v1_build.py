@@ -30,7 +30,7 @@ class RcpSettings(pydantic.BaseModel):
     ncells: int = 120000
     base_dir: Path = Path("./")
     recipe_dir: Path = Path("./v1/recipe/")
-    recipe_output_dir: Path = Path("./v1/recipe/")
+    recipe_output_dir: Path | None = None
     levels: list[str] = ["L1",  "L23", "L4", "L5", "L6"]
     recipe_levels: dict[str, str | Path] = {
         "L1"  : "recipe_dm_l1.json",
@@ -55,6 +55,12 @@ class RcpSettings(pydantic.BaseModel):
     ctdb_models_dir: Path = Path("./v1/components/point_neuron_models/")
     nest_models_dir: Path = Path("./v1/components/cell_models/")
     save_flag: bool = True
+
+    @property
+    def output_dir(self) -> Path:
+        return Path(
+            self.recipe_output_dir if self.recipe_output_dir else self.recipe_dir
+        )
 
     @property
     def recipe_files(self) -> dict[str, list[str | Path]] :
@@ -82,7 +88,7 @@ def recipe_setup(rcp_set: RcpSettings):
         base_dir=rcp_set.base_dir,
         recipe_files=rcp_set.recipe_files,
         recipe_dir=rcp_set.recipe_dir,
-        recipe_output_dir=rcp_set.recipe_output_dir,
+        recipe_output_dir=rcp_set.output_dir,
         create_model_dir=True,
     )
 
