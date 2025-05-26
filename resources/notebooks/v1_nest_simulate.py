@@ -76,14 +76,14 @@ if __name__ == "__main__":
         "-o",
         "--output_dir",
         type=str,
-        default="./v1/output/",
+        default="./model_builds/v1r1/output",
         help="This option will override the output directory specified in the config file.",
     )
     parser.add_argument(
         "config_file",
         type=str,
         nargs="?",
-        default="./v1/config_nest.json",
+        default="./model_builds/v1r1/config_nest.json",
         help="The config file to use for the simulation.",
     )
     parser.add_argument(
