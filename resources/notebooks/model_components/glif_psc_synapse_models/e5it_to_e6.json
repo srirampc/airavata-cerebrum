@@ -1,6 +1,4 @@
 {
-    "tau_syn": 1.7520153147970001,
-    "tau_syn_slow": 2.903220573417,
-    "amp_slow": 0.358321335490053,
-    "receptor_type": 1
+  "tau_syn": 1.7520153147970001,
+  "receptor_type": 1
 }
