@@ -1098,7 +1098,7 @@ def pick_from_probs(n: int, prob_dist:npt.NDArray[np.floating[t.Any]]):
             p=None if np.isnan(np.sum(prob_dist)) else prob_dist
         )
     except ValueError as vex:
-        print(prob_dist)
+        print(n, prob_dist)
         raise vex
 
 

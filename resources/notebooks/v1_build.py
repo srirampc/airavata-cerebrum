@@ -29,8 +29,8 @@ class RcpSettings(pydantic.BaseModel):
     name: str = "v1"
     ncells: int = 120000
     base_dir: Path = Path("./")
-    recipe_dir: Path = Path("./v1/recipe/")
-    recipe_output_dir: Path | None = None
+    recipe_dir: Path = Path("./model_recipes/v1")
+    recipe_output_dir: Path | None = Path("./model_data/v1")
     levels: list[str] = ["L1",  "L23", "L4", "L5", "L6"]
     recipe_levels: dict[str, str | Path] = {
         "L1"  : "recipe_dm_l1.json",
@@ -39,21 +39,21 @@ class RcpSettings(pydantic.BaseModel):
         "L5"  : "recipe_dm_l5.json",
         "L6"  : "recipe_dm_l6.json",
     }
-    custom_mod_main : Path = Path("./v1/recipe/custom_mod.json")
+    custom_mod_main : Path = Path("./model_recipes/v1/custom_mod.json")
     custom_mod_levels: dict[str, str | Path] = {
-        "L1"  : Path("./v1/recipe/custom_mod_l1.json"),
-        "L23" : Path("./v1/recipe/custom_mod_l23.json"),
-        "L4"  : Path("./v1/recipe/custom_mod_l4.json"),
-        "L5"  : Path("./v1/recipe/custom_mod_l5.json"),
-        "L6"  : Path("./v1/recipe/custom_mod_l6.json"),
+        "L1"  : Path("./model_recipes/v1/custom_mod_l1.json"),
+        "L23" : Path("./model_recipes/v1/custom_mod_l23.json"),
+        "L4"  : Path("./model_recipes/v1/custom_mod_l4.json"),
+        "L5"  : Path("./model_recipes/v1/custom_mod_l5.json"),
+        "L6"  : Path("./model_recipes/v1/custom_mod_l6.json"),
     }
     custom_mod_exts : list[str | Path] = [
-        Path("./v1/recipe/custom_mod_ext.json"),
-        Path("./v1/recipe/custom_mod_ext_lgn.json"),
-        Path("./v1/recipe/custom_mod_ext_bkg.json"),
+        Path("./model_recipes/v1/custom_mod_ext.json"),
+        Path("./model_recipes/v1/custom_mod_ext_lgn.json"),
+        Path("./model_recipes/v1/custom_mod_ext_bkg.json"),
     ]
-    ctdb_models_dir: Path = Path("./v1/components/point_neuron_models/")
-    nest_models_dir: Path = Path("./v1/components/cell_models/")
+    ctdb_models_dir: Path = Path("./model_components/point_neuron_models/")
+    nest_models_dir: Path = Path("./model_components/cell_models/")
     save_flag: bool = True
 
     @property
