@@ -47,6 +47,7 @@ dependencies:
   - pip:
       - allensdk
       - bmtk
+      - codetiming
       - neuroanalysis
       - parse
       - git+https://github.com/alleninstitute/abc_atlas_access

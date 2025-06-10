@@ -16,7 +16,7 @@ class CerebrumBaseModel(BaseModel):
         return set(["name"])
  
     def is_valid_field(self, field: str) -> bool:
-        return field in self.model_fields
+        return field in type(self).model_fields
 
     def get(self, field: str, val_not_found: t.Any = None) -> t.Any:
         try:
@@ -46,9 +46,9 @@ class BaseParams(CerebrumBaseModel, t.Generic[InitParamsT, ExecParamsT]):
     @override
     def is_valid_field(self, field: str) -> bool:
         return (
-            (field in self.init_params.model_fields) or
-            (field in self.exec_params.model_fields) or 
-            (field in self.model_fields)
+            (field in type(self.init_params).model_fields) or
+            (field in type(self.exec_params).model_fields) or 
+            (field in type(self).model_fields)
         )
 
     @override
@@ -152,6 +152,8 @@ class QryDBWriter(ABC):
         pass
 
 
+BaseStructType = t.TypeVar('BaseStructType')
+
 # Abstract Base class for network structure components
 class BaseStruct(CerebrumBaseModel, metaclass=ABCMeta):
     @abstractmethod
@@ -160,5 +162,5 @@ class BaseStruct(CerebrumBaseModel, metaclass=ABCMeta):
         return set([])
 
     @abstractmethod
-    def apply_mod(self, mod_struct: Self) -> Self:
+    def apply_mod(self, mod_struct: t.Any) -> Self:
         return self

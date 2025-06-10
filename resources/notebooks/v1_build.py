@@ -1,28 +1,25 @@
 import argparse
 import logging
+import operator
+import typing as t
+import codetiming
 import pydantic
+import pandas as pd
 #
 from pathlib import Path
-from typing import NamedTuple
 #
-from nest.lib.hl_api_sonata import SonataNetwork
-from nest.lib.hl_api_nodes import Create as NestCreate
-from nest.lib.hl_api_connections import Connect as NestConnect
-from nest.lib.hl_api_types import NodeCollection
 #
 import mousev1.model as v1model
 import mousev1.operations as v1ops
+import mousev1.mpi_utils as mpi_utils
 from airavata_cerebrum.recipe import ModelRecipe, RecipeSetup
 from airavata_cerebrum.model.structure import Network
 from airavata_cerebrum.util.io import load as loadio
+#
+from codetiming import Timer
 
-logging.basicConfig(level=logging.INFO)
-
-# Declaring namedtuple()
-class NestSonata(NamedTuple):
-    net : SonataNetwork | None = None
-    spike_rec: NodeCollection | None = None
-    multi_meter: NodeCollection | None = None
+def _log():
+    return logging.getLogger(__name__)
 
 
 class RcpSettings(pydantic.BaseModel):
@@ -112,6 +109,64 @@ def struct_bmtk(rcp_set: RcpSettings):
     md_dex.build_net_struct()
     md_dex.apply_mod(rcp_set.ncells)
     md_dex.build_network()
+    times_df = pd.DataFrame(data=[{
+        "name": name,
+        "ncalls": Timer.timers.count(name),
+        "total_time": ttime,
+        "min_time": Timer.timers.min(name),
+        "max_time": Timer.timers.max(name),
+        "mean_time": Timer.timers.mean(name),
+        "median_time": Timer.timers.median(name),
+        "stdev_time": Timer.timers.stdev(name),
+    } for name, ttime in sorted(
+        Timer.timers.items(),
+        key=operator.itemgetter(1),
+        reverse=True
+    )])
+    # set display options to show all columns and rows
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.max_rows', None)
+    # print the dataframe
+    print(times_df)
+
+def summarize_timeings() -> list[dict[str, t.Any]]:
+    rtimers = codetiming.Timer.timers
+    times_rs = [{
+        "name": name,
+        "proc": mpi_utils.mpi_rank,
+        "ncalls": rtimers.count(name),
+        "total_time": ttime,
+        "min_time": rtimers.min(name),
+        "max_time": rtimers.max(name),
+        "mean_time": rtimers.mean(name),
+        "median_time": rtimers.median(name),
+        "stdev_time": rtimers.stdev(name),
+    } for name, ttime in sorted(
+        rtimers.items(),
+        key=operator.itemgetter(1),
+        reverse=True
+    )]
+    collect_times_rs = mpi_utils.collect_merge_lists_at_root(times_rs)
+    if mpi_utils.mpi_rank > 0 or not collect_times_rs:
+        return [{}]
+    # rtimers = alltimers[0]
+    return collect_times_rs
+
+
+def struct_mpi_bmtk(rcp_set: RcpSettings):
+    rcp_set.save_flag = False
+    md_dex = model_recipe(rcp_set)
+    md_dex.build_net_struct()
+    md_dex.apply_mod(rcp_set.ncells)
+    md_dex.build_network()
+    times_df = pd.DataFrame(data=summarize_timeings())
+    if mpi_utils.mpi_rank == 0:
+        # set display options to show all columns and rows
+        pd.set_option('display.max_columns', None)
+        pd.set_option('display.max_rows', None)
+        # print the dataframe
+        print(times_df)
+
 
 
 def build_bmtk(rcp_set: RcpSettings):
@@ -122,43 +177,6 @@ def build_bmtk(rcp_set: RcpSettings):
     md_dex.build_net_struct()
     md_dex.apply_mod(rcp_set.ncells)
     md_dex.build_network()
-
-
-def load_nest_sonata(
-    nest_config_file: str = "./v1/config_nest.json",
-):
-    # Instantiate SonataNetwork
-    sonata_net = SonataNetwork(nest_config_file)
-
-    # Create and connect nodes
-    node_collections = sonata_net.BuildNetwork()
-    print("Node Collections", node_collections.keys())
-
-    # Connect spike recorder to a population
-    spike_rec = NestCreate("spike_recorder")
-    NestConnect(node_collections["v1"], spike_rec)
-
-    # Attach Multimeter
-    multi_meter = NestCreate(
-        "multimeter",
-        params={
-            # "interval": 0.05,
-            "record_from": [
-                "V_m",
-                "I",
-                "I_syn",
-                "threshold",
-                "threshold_spike",
-                "threshold_voltage",
-                "ASCurrents_sum",
-            ],
-        },
-    )
-    NestConnect(multi_meter, node_collections["v1"])
-
-    # Simulate the network
-    # sonata_net.Simulate()
-    return NestSonata(sonata_net, spike_rec, multi_meter)
 
 def convert_models_to_nest(cfg_set: RcpSettings):
     v1ops.convert_ctdb_models_to_nest(
@@ -173,14 +191,22 @@ def data_mapped_model(levels: tuple[str,...]=("L1", "L23", "L4")):
     mdrcp.build_net_struct()
     mdrcp.apply_mod(rcp_set.ncells)
     mdrcp.build_network()
+    from v1_bmtk_simulate import load_nest_sonata
     return load_nest_sonata()
 
 def main(input_config_file: str):
+    if mpi_utils.mpi_rank == 0:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.CRITICAL)
     cfg_set = RcpSettings.model_validate(loadio(input_config_file))
-    print(cfg_set.model_dump_json(indent=4))
+    _log().info(cfg_set.model_dump_json(indent=4))
     # convert_models_to_nest(cfg_set)
     # build_bmtk(cfg_set)
-    struct_bmtk(cfg_set)
+    if mpi_utils.mpi_size == 1:
+        struct_bmtk(cfg_set)
+    else:
+        struct_mpi_bmtk(cfg_set)
 
 
 if __name__ == "__main__":
@@ -202,4 +228,3 @@ if __name__ == "__main__":
     # )
     rargs = parser.parse_args()
     main(rargs.input_file)
- 

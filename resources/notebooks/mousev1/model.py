@@ -16,7 +16,7 @@ from bmtk.builder import NetworkBuilder
 from bmtk.builder.node_pool import NodePool
 from airavata_cerebrum.operations import netops
 from airavata_cerebrum.dataset import abc_mouse
-from mousev1.operations import (
+from .operations import (
     compute_pair_type_parameters,
     connect_cells,
     syn_weight_by_experimental_distribution,
@@ -27,7 +27,9 @@ from mousev1.operations import (
     select_lgn_sources_powerlaw,
     lgn_synaptic_weight_rule
 )
+from .dm_network import MVDenseNetwork, MVParMethod
 from airavata_cerebrum.model import structure
+from codetiming import Timer
 
 
 def _log():
@@ -214,11 +216,23 @@ class V1BMTKNetworkBuilder:
         self.min_radius: float = 1.0  # to avoid diverging density near 0
         self.radius: float = self.net_struct.dims["radius"] * np.sqrt(self.fraction)
         self.radial_range: list[float] = [self.min_radius, self.radius]
-        self.net: NetworkBuilder = NetworkBuilder(self.net_struct.name)
+        self.net: NetworkBuilder = NetworkBuilder(
+            self.net_struct.name,
+            adaptor_cls=MVDenseNetwork,
+            parallel_method=MVParMethod.ALL_GATHER
+        )
         lgn_struct = self.net_struct.ext_networks["lgn"]
-        self.lgn_net : NetworkBuilder = NetworkBuilder(lgn_struct.name)
+        self.lgn_net : NetworkBuilder = NetworkBuilder(
+            lgn_struct.name,
+            adaptor_cls=MVDenseNetwork,
+            parallel_method=MVParMethod.ALL_GATHER
+        )
         bkg_struct = self.net_struct.ext_networks["bkg"]
-        self.bkg_net : NetworkBuilder = NetworkBuilder(bkg_struct.name)
+        self.bkg_net : NetworkBuilder = NetworkBuilder(
+            bkg_struct.name,
+            adaptor_cls=MVDenseNetwork,
+            parallel_method=MVParMethod.ALL_GATHER
+        )
 
     def add_model_nodes(
         self,
@@ -270,9 +284,8 @@ class V1BMTKNetworkBuilder:
                     s=nsyn_lognorm_shape, loc=0, scale=nsyn_lognorm_scale
                 ).stats(moments="m")
             )
-        print(
-            pop_name, neuron_model.name, int(neuron_model.name),
-            len(target_sizes), nsyn_size_mean  # type: ignore
+        _log().info(
+            f"{pop_name} {neuron_model.name} {int(neuron_model.name)} {len(target_sizes)} {nsyn_size_mean}"
         )
         node_props = {
             "N": pN,
@@ -315,6 +328,7 @@ class V1BMTKNetworkBuilder:
 
         self.net.add_nodes(**node_props)  # pyright: ignore[reportArgumentType]
 
+    @Timer(name="add_nodes", logger=None)
     def add_nodes(
         self,
     ) -> None:
@@ -330,6 +344,7 @@ class V1BMTKNetworkBuilder:
                         location, loc_region.dims, pop_neuron, neuron_model
                     )
 
+    @Timer(name="add_connection_edges", logger=None)
     def add_connection_edges(
         self,
         connex_item: structure.Connection,
@@ -357,8 +372,7 @@ class V1BMTKNetworkBuilder:
         # TODO: check if these values should be used
         # weight_fnc, weight_sigma = find_direction_rule(src_type, trg_type)
         if src_trg_params["A_new"] > 0.0 and len(source_nodes) > 0:
-            print(src_type, trg_type, node_type_id,
-                  len(source_nodes), src_trg_params)
+            _log().info(f"{src_type} {trg_type} {node_type_id} {len(source_nodes)} {src_trg_params}")
             # tentative fix for non-negative inhibitory connections
             if cx_pmap["pre_ei"] == "i":
                 pspsign = -1
@@ -399,6 +413,7 @@ class V1BMTKNetworkBuilder:
                 dtypes=[float, np.int64],
             )
 
+    @Timer(name="add_lgn_nodes", logger=None)
     def add_lgn_nodes(
         self, X_grids:int=15, Y_grids:int=10,
         x_block:float=8.0, y_block:float=8.0
@@ -430,7 +445,7 @@ class V1BMTKNetworkBuilder:
             )
             # Get tuning angle for LGN cells
             # tuning_angles = get_tuning_angles(params['N'], X_grids, Y_grids, model)
-            print(f"Region:  {lgn_region.name} ; Node: {lgn_model.name} : {total_N}")
+            _log().info(f"Region:  {lgn_region.name} ; Node: {lgn_model.name} : {total_N}")
             self.lgn_net.add_nodes(
                 N=total_N,
                 pop_name=lgn_model.name,
@@ -457,6 +472,7 @@ class V1BMTKNetworkBuilder:
             )
         return self.lgn_net
 
+    @Timer(name="add_lgn_v1_edges", logger=None)
     def add_lgn_v1_edges(
         self, x_len:float=240.0, y_len:float=120.0
     ):
@@ -478,7 +494,7 @@ class V1BMTKNetworkBuilder:
             v1_neuron_name = repr(v1_neuron_name)
             v1_neuron: structure.Neuron | None = self.net_struct.find_neuron(v1_neuron_name)
             if v1_neuron is None:
-                print(f"LGN :: Unknown neuron name: {v1_neuron_name}")
+                _log().error(f"LGN :: Unknown neuron name: {v1_neuron_name}")
                 continue
             for _, lgn_conn_model in lgn_connect.connect_models.items():
                 # target_pop_name = row["population"]
@@ -495,10 +511,7 @@ class V1BMTKNetworkBuilder:
                     raise BaseException(
                         f"Unknown e_or_i value: {e_or_i} from {v1_neuron.name}"
                     )
-                print("lgn", lgn_conn_model.name, target_model_id,
-                      lgn_conn_model.property_map,
-                      len(lgn_net_nodes),
-                      len(target_nodes))
+                _log().info(f"lgn {lgn_conn_model.name} {target_model_id} {lgn_conn_model.property_map} {len(lgn_net_nodes)} {len(target_nodes)}")
                 # LGN is configured based on e4 response. Here we use the mean target sizes of
                 # the e4 neurons and normalize all the cells using these values. By doing this,
                 # we can avoid injecting too much current to the populations with large target
@@ -531,6 +544,7 @@ class V1BMTKNetworkBuilder:
                 )
         return self.lgn_net
 
+    @Timer(name="add_bkg_nodes", logger=None)
     def add_bkg_nodes(self):
         bkg_struct = self.net_struct.ext_networks["bkg"]
         bkg_region = bkg_struct.locations["bkg"]
@@ -550,6 +564,7 @@ class V1BMTKNetworkBuilder:
         )
         return self.bkg_net
 
+    @Timer(name="add_bkg_edges", logger=None)
     def add_bkg_edges(self):
         bkg_struct: structure.ExtNetwork = self.net_struct.ext_networks["bkg"]
         # this file should contain the following parameters:
@@ -561,10 +576,7 @@ class V1BMTKNetworkBuilder:
                 target_nodes = self.net.nodes(node_type_id=nmodel_id)
                 if len(target_nodes) == 0:
                     continue
-                print("bkg", bkg_connect.name, nmodel_id,
-                      bkg_model.property_map,
-                      len(bkg_net_nodes),
-                      len(target_nodes))
+                _log().info(f"bkg {bkg_connect.name} {nmodel_id} {bkg_model.property_map} {len(bkg_net_nodes)} {len(target_nodes)}")
                 edge_params = {
                     "source": bkg_net_nodes,
                     "target": target_nodes,
@@ -588,6 +600,7 @@ class V1BMTKNetworkBuilder:
                 self.bkg_net.add_edges(**edge_params) # pyright: ignore[reportArgumentType]
         return self.bkg_net
 
+    @Timer(name="add_edges", logger=None)
     def add_edges(
         self,
     ):
@@ -596,6 +609,7 @@ class V1BMTKNetworkBuilder:
                 # Build model from connection information
                 self.add_connection_edges(connex_item, connex_md)
 
+    @Timer(name="build", logger=None)
     def build(
         self,
     ) -> NetworkBuilder:
@@ -607,8 +621,20 @@ class V1BMTKNetworkBuilder:
         self.add_bkg_edges()
         return self.net
 
-    def save(self, network_dir: str | Path):
+    @Timer(name="save_net", logger=None)
+    def save_net(self, network_dir: str | Path):
         self.net.save(str(network_dir))
+
+    @Timer(name="save_bkg_net", logger=None)
+    def save_bkg_net(self, network_dir: str | Path):
         self.bkg_net.save(str(network_dir))
+
+    @Timer(name="save_lgn_net", logger=None)
+    def save_lgn_net(self, network_dir: str | Path):
         self.lgn_net.save(str(network_dir))
 
+    @Timer(name="save", logger=None)
+    def save(self, network_dir: str | Path):
+        self.save_net(str(network_dir))
+        self.save_lgn_net(str(network_dir))
+        self.save_bkg_net(str(network_dir))

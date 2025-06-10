@@ -8,7 +8,7 @@ from pathlib import Path
 from . import workflow
 from .util import io as cbmio, merge_dict_inplace
 from .model import structure
-from .const import RecipeKeys, RecipePaths
+from .const import RecipeKeys
 
 
 def _log():
@@ -19,6 +19,7 @@ def _log():
 # Class for structure of Recipes
 class RecipeSetup(pydantic.BaseModel):
     recipe_dir: str | Path = Path(".")
+    recipe_output_dir: str | Path | None = None
     recipe_sections: dict[str, t.Any] = {}
     recipe_templates: dict[str, t.Any] = {}
     recipe_files: dict[str, list[str | Path]]
@@ -30,6 +31,12 @@ class RecipeSetup(pydantic.BaseModel):
     @property
     def model_dir(self) -> Path:
         return Path(self.base_dir, self.name)
+
+    @property
+    def output_dir(self) -> Path:
+        return Path(
+            self.recipe_output_dir if self.recipe_output_dir else self.recipe_dir
+        )
 
     @property
     def network_dir(self) -> Path:
@@ -136,7 +143,7 @@ class ModelRecipe(pydantic.BaseModel):
     def output_location(self, recipe_key: str) -> Path:
         file_name = self.recipe_setup.recipe_output_prefix(recipe_key)
         out_path = Path(
-            self.recipe_setup.model_dir, RecipePaths.RECIPE_IO_DIR, file_name
+            self.recipe_setup.output_dir, file_name
         )
         if not os.path.exists(out_path.parent):
             os.makedirs(out_path.parent)

@@ -1,0 +1,3 @@
+ncells: 60000
+name: "v1"
+base_dir: "./model_builds/v1060"

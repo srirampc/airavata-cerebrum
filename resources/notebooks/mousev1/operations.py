@@ -17,7 +17,7 @@ from scipy.stats import yulesimon, multivariate_normal
 from scipy.special import erfinv
 # from numba import njit, jit
 #
-import bmtk.simulator.pointnet.glif_utils as glif_utils
+from codetiming import Timer
 
 LGN_SHIFT = {
     "sON_TF1": -1.0,
@@ -242,6 +242,7 @@ def delta_theta_cdf(intercept: float, d_theta: float):
         raise Exception("d_theta must be <= 180, but was {}".format(d_theta))
 
 
+@Timer(name="compute_pair_type_parameters",logger=None)
 def compute_pair_type_parameters(
     source_type: str,
     target_type: str,
@@ -352,6 +353,7 @@ def compute_pair_type_parameters(
     }
 
 
+@Timer(name="connect_cells",logger=None)
 def connect_cells(
     _sources,
     target,
@@ -520,6 +522,7 @@ def connect_cells(
     return nsyns_ret
 
 
+@Timer(name="syn_weight_by_experimental_distribution",logger=None)
 def syn_weight_by_experimental_distribution(
     source: dict[str, t.Any],
     target: dict[str, t.Any],
@@ -706,6 +709,7 @@ def select_bkg_sources(
     return nsyns_ret
 
 
+@Timer(name="lgn_synaptic_weight_rule",logger=None)
 def lgn_synaptic_weight_rule(
     source: t.Any,
     target: dict[str, t.Any],
@@ -834,6 +838,8 @@ def generate_bkg_spikes(base_dir: str, bkg_file: str, bkg_dir_name : str="bkg"):
 
 
 def convert_ctdb_models_to_nest(input_dir:str, output_dir:str):
+    import bmtk.simulator.pointnet.glif_utils as glif_utils
+    #
     cfg_fnames = os.listdir(input_dir)
     for fxname in cfg_fnames:
         in_fxname = pathlib.Path(input_dir, fxname)
@@ -852,6 +858,7 @@ def convert_ctdb_models_to_nest(input_dir:str, output_dir:str):
             json.dump(n_dict, ofx, indent=4)
 
 
+@Timer(name="get_filter_temporal_params",logger=None)
 def get_filter_temporal_params(N:int, X_grids:int, Y_grids:int, model:str):
     # Total number of cells
     N_total = N * X_grids * Y_grids
@@ -1102,6 +1109,7 @@ def pick_from_probs(n: int, prob_dist:npt.NDArray[np.floating[t.Any]]):
         raise vex
 
 
+@Timer(name="select_lgn_sources_powerlaw",logger=None)
 def select_lgn_sources_powerlaw(sources, target, lgn_mean, lgn_nodes):
     target_id = target.node_id
     pop_name = target["pop_name"]
