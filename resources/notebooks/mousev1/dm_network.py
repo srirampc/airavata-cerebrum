@@ -1,4 +1,4 @@
-# Copyright 2017. Allen Institute. All rights reserved
+# Copyright 217. Allen Institute. All rights reserved
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
 # following conditions are met:
@@ -31,6 +31,7 @@ import pandas as pd
 
 from typing_extensions import override
 from collections.abc import Iterable
+from enum import Enum
 
 from bmtk.builder.node_pool import NodePool
 from bmtk.builder.node_set import NodeSet
@@ -39,23 +40,20 @@ from bmtk.builder.edge import Edge
 from bmtk.utils import sonata
 
 from bmtk.builder.index_builders import create_index_in_memory
-from bmtk.builder.builder_utils import mpi_rank, mpi_size, barrier
 from bmtk.builder.edges_sorter import sort_edges
 from bmtk.builder.connection_map import ConnectionMap
 
-from .mpi_utils import (
-    accumulate_counts,
-    collect_counts,
-    collect_merge_lists,
-    collect_zipmerge_lists_at_root,
-    log_at_root,
+from codetiming import Timer
+
+from .comm_interface import (
+    default_comm,
+    CommInterface,
 )
 
 from .edge_props_table import MVEdgeTypesTable
 from .network import MVNetwork
 from .edge_collator import MVEdgesCollator
 
-from codetiming import Timer
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +64,7 @@ def add_hdf5_attrs(hdf5_handle: h5py.File):
     hdf5_handle['/'].attrs['version'] = [np.uint32(0), np.uint32(1)]
 
 
-@Timer(name="_sort_on_disk", logger=None) 
+@Timer(name="dm_network._sort_on_disk", logger=None) 
 def _sort_on_disk(
     pop_name: str,
     edges_file_name: str,
@@ -88,10 +86,10 @@ def _sort_on_disk(
         logger.debug('Deleting intermediate edges file {}.'.format(edges_file_name))
         os.remove(edges_file_name)
     except OSError as e:  # pragma: no cover
-        logger.warning('Unable to remove intermediate edges file {}.'.format(edges_file_name)) 
+        logger.warning(f"Failed to remove intermediate edges file {edges_file_name} :: {str(e)}.") 
 
 
-@Timer(name="_index_on_disk", logger=None) 
+@Timer(name="dm_network._index_on_disk", logger=None) 
 def _index_on_disk(
     index_by: list[t.Any] | tuple[t.Any] | object,
     pop_name: str,
@@ -144,7 +142,7 @@ class NodesCollator:
                 prop_ds.append(node.params[key])
 
 
-@Timer(name="_write_nodes_h5", logger=None) 
+@Timer(name="dm_network._write_nodes_h5", logger=None) 
 def _write_nodes_h5(
     nsh: NodesCollator,
     name: str,
@@ -156,23 +154,33 @@ def _write_nodes_h5(
          # Add magic and version attribute
          add_hdf5_attrs(hf)
          pop_grp = hf.create_group('/nodes/{}'.format(name))
-         pop_grp.create_dataset('node_id', data=nsh.node_gid_table, dtype='uint64', compression=compression)
-         pop_grp.create_dataset('node_type_id', data=nsh.node_type_id_table, dtype='uint64', compression=compression)
-         pop_grp.create_dataset('node_group_id', data=nsh.node_group_table, dtype='uint32', compression=compression)
-         pop_grp.create_dataset('node_group_index', data=nsh.node_group_index_tables, dtype='uint64', compression=compression)
+         pop_grp.create_dataset('node_id', data=nsh.node_gid_table,
+                                dtype='uint64', compression=compression)
+         pop_grp.create_dataset('node_type_id', data=nsh.node_type_id_table,
+                                dtype='uint64', compression=compression)
+         pop_grp.create_dataset('node_group_id', data=nsh.node_group_table,
+                                dtype='uint32', compression=compression)
+         pop_grp.create_dataset('node_group_index',
+                                data=nsh.node_group_index_tables,
+                                dtype='uint64',
+                                compression=compression)
   
          for grp_id, props in nsh.group_props.items():
              model_grp = pop_grp.create_group('{}'.format(grp_id))
   
              for key, dataset in props.items():
                  try:
-                     model_grp.create_dataset(key, data=dataset, compression=compression)
+                     model_grp.create_dataset(key,
+                                              data=dataset,
+                                              compression=compression)
                  except TypeError:  # pragma: no cover
                      str_list = [str(d) for d in dataset]
-                     hf.create_dataset(key, data=str_list, compression=compression)
+                     hf.create_dataset(key,
+                                       data=str_list,
+                                       compression=compression)
 
 
-@Timer(name="_write_edge_h5", logger=None) 
+@Timer(name="dm_network._write_edge_h5", logger=None) 
 def _write_edges_h5(
     merged_edges: MVEdgesCollator,
     pop_name: str,
@@ -208,21 +216,21 @@ def _write_edges_h5(
         #  * For very large networks it won't always be possible to store all the data in memory.
         #  * When using MPI/multi-node the chunks can represent data from different ranks.
         for chunk_id, idx_beg, idx_end in merged_edges.itr_chunks():
-            pop_grp['source_node_id'][idx_beg:idx_end] = merged_edges.get_source_node_ids(chunk_id)
-            pop_grp['target_node_id'][idx_beg:idx_end] = merged_edges.get_target_node_ids(chunk_id)
-            pop_grp['edge_type_id'][idx_beg:idx_end] = merged_edges.get_edge_type_ids(chunk_id)
-            pop_grp['edge_group_id'][idx_beg:idx_end] = merged_edges.get_edge_group_ids(chunk_id)
-            pop_grp['edge_group_index'][idx_beg:idx_end] = merged_edges.get_edge_group_indices(chunk_id)
+            pop_grp['source_node_id'][idx_beg:idx_end] = merged_edges.get_source_node_ids(chunk_id) # pyright: ignore[reportIndexIssue]
+            pop_grp['target_node_id'][idx_beg:idx_end] = merged_edges.get_target_node_ids(chunk_id) # pyright: ignore[reportIndexIssue]
+            pop_grp['edge_type_id'][idx_beg:idx_end] = merged_edges.get_edge_type_ids(chunk_id) # pyright: ignore[reportIndexIssue]
+            pop_grp['edge_group_id'][idx_beg:idx_end] = merged_edges.get_edge_group_ids(chunk_id) # pyright: ignore[reportIndexIssue]
+            pop_grp['edge_group_index'][idx_beg:idx_end] = merged_edges.get_edge_group_indices(chunk_id) # pyright: ignore[reportIndexIssue]
 
             for group_id, prop_name, grp_idx_beg, grp_idx_end in merged_edges.get_group_data(chunk_id):
                 prop_array = merged_edges.get_group_property(prop_name, group_id, chunk_id)
-                pop_grp[str(group_id)][prop_name][grp_idx_beg:grp_idx_end] = prop_array
+                pop_grp[str(group_id)][prop_name][grp_idx_beg:grp_idx_end] = prop_array # pyright: ignore[reportIndexIssue]
 
-from enum import Enum
-class MVParMethod(Enum):
-    NONE = 0
-    ALL_GATHER = 1
-    DISTRIBUTED = 2
+class MVParMethod(str, Enum):
+    NONE = 'NONE'
+    ALL_GATHER = 'ALL_GATHER'
+    ALL_GATHER_BY_SND_RCV = 'ALL_GATHER_BY_SND_RCV'
+    DISTRIBUTED = 'DISTRIBUTED'
 
 @t.final
 class MVDenseNetwork(MVNetwork):
@@ -230,16 +238,17 @@ class MVDenseNetwork(MVNetwork):
         self,
         name:str,
         parallel_method: MVParMethod=MVParMethod.NONE,
-        **network_props: t.Any):
+        **network_props: t.Any
+    ):
         super(MVDenseNetwork, self).__init__(name, **network_props or {})
         # self.__edges_types = {}
         # self.__src_mapping = {}
         # self.__networks = {}
         # self.__node_count = 0
+        self._comm : CommInterface = default_comm()
         self.parallel_method : MVParMethod = parallel_method
         self._nodes : list[Node] = []
         self.__edges_tables : list[MVEdgeTypesTable] = []
-        self.__all_edges_tables: list[MVEdgeTypesTable] = [] 
         # self._target_networks = {}
         self.__id_map = []
         self.__lookup = []
@@ -255,11 +264,7 @@ class MVDenseNetwork(MVNetwork):
         self._nnodes : int = len(self._nodes)
 
     def edges_table(self):
-        return (
-            self.__all_edges_tables
-            if self.__all_edges_tables
-            else self.__edges_tables
-        )
+        return self.__edges_tables
     
     @override
     def _save_nodes(self,
@@ -273,10 +278,10 @@ class MVDenseNetwork(MVNetwork):
         nsh5 = NodesCollator(self._nnodes)
         nsh5.build_from_nodesets(self._node_sets, self.nodes())
 
-        if mpi_rank == 0:
+        if self._comm.rank == 0:
             _write_nodes_h5(nsh5, self.name, nodes_file_name, mode, compression)
 
-        barrier()
+        self._comm.barrier()
 
     @override
     def nodes_iter(self, nids: Iterable[int]|None=None) -> Iterable[Node]:
@@ -321,11 +326,7 @@ class MVDenseNetwork(MVNetwork):
             self._nodes.append(Node(node.node_id, node.group_props, node.node_type_properties))
 
     @override
-    def _build_edges_pre_process(self):
-        pass
-
-    @override
-    @Timer(name="M1DenseNetwork__add_edges", logger=None) 
+    @Timer(name="MVDenseNetwork::_build_cmap_edges", logger=None) 
     def _build_cmap_edges(self, connection_map: ConnectionMap, i: int):
         """
 
@@ -334,9 +335,7 @@ class MVDenseNetwork(MVNetwork):
         """
         edge_type_id = connection_map.edge_type_properties['edge_type_id']
         logger.debug('Generating edges data for edge_types_id {}.'.format(edge_type_id))
-        edges_table = MVEdgeTypesTable(connection_map,
-                                       network_name=self.name,
-                                       set_props=True)
+        edges_table = MVEdgeTypesTable(self.name, i, connection_map, None)
         edges_table.save()
         logger.debug('Edge-types {} data built with {} connection ({} synapses)'.format(
             edge_type_id, edges_table.n_edges, edges_table.n_syns)
@@ -350,23 +349,66 @@ class MVDenseNetwork(MVNetwork):
         self.increment_edges(edges_table.n_syns)  # edges_table.n_edges
 
     @override
+    @Timer(name="MVDenseNetwork::_edge_table_summary", logger=None) 
     def _edge_table_summary(self):
-        list_nedges = collect_counts(self._nedges)
-        log_at_root(logger, logging.INFO, "NEDGES [%s]", str(list_nedges))
+        list_nedges = self._comm.collect_objects_at_root(self._nedges)
+        self._comm.log_at_root(logger, logging.INFO,
+                               "ET NEDGES [%s]", str(list_nedges))
+    
+    @override
+    @Timer(name="MVDenseNetwork::_build_edges_pre_process", logger=None) 
+    def _build_edges_pre_process(self, conn_maps: list[ConnectionMap]):
+        pass
+        # cm_nedges = sum(cm.max_connections() for cm in conn_maps)
+        # log_at_root(logger, logging.INFO, "CMAP NEDGES [%s]", str(cm_nedges))
+        # if mpi_rank == 0:
+        #     dump_pickle("tmp/conn_maps.pickle", conn_maps)
+
+    @Timer(name="MVDenseNetwork::gather_edge_tables", logger=None) 
+    def gather_edge_tables(
+        self,
+        ett_list: list[MVEdgeTypesTable],
+        use_send_rcv: bool,
+    ):
+        self._comm.log_ps_profile(logger, logging.DEBUG)
+        rett_list = self._comm.collect_zipmerge_lists_at_root(ett_list, use_send_rcv)
+        for etx in ett_list:
+            del etx
+        self._comm.log_at_root(logger, logging.DEBUG, f"Lengths :: {len(rett_list)}")
+        self._comm.log_ps_profile(logger, logging.DEBUG)
+        return rett_list
+    
+    @Timer(name="MVDenseNetwork::_accumulate_edges", logger=None) 
+    def __accumulate_edges(self):
+        self._nedges = self._comm.accumulate_counts(self._nedges)
 
     @override
-    def _build_edges_post_process(self):
-        self._edge_table_summary()
-        if self.parallel_method == MVParMethod.ALL_GATHER:
-            self.__all_edges_tables = collect_zipmerge_lists_at_root(
-                self.__edges_tables
-            )
-            self._nedges = accumulate_counts(self._nedges)
-            # self._target_networks = dict(
-            #     collect_merge_lists(list(self._target_networks.items()))
-            # )
-        else:
-            pass
+    @Timer(name="MVDenseNetwork::_build_edges_post_process", logger=None) 
+    def _build_edges_post_process(self, conn_maps: list[ConnectionMap]):
+        # self._edge_table_summary()
+        self.__accumulate_edges()
+        match self.parallel_method:
+            case MVParMethod.ALL_GATHER:
+                # for et in self.__edges_tables:
+                #    et.deflate()
+                self.__edges_tables = self.gather_edge_tables(
+                    self.__edges_tables,
+                    False
+                )
+                # for et in self.__edges_tables:
+                #    et.inflate(conn_maps[et.cmap_index])
+                # self._target_networks = dict(
+                #     collect_merge_lists(list(self._target_networks.items()))
+                # )
+            case MVParMethod.ALL_GATHER_BY_SND_RCV:
+                self.__edges_tables = self.gather_edge_tables(
+                    self.__edges_tables, 
+                    True,
+                )
+            case MVParMethod.DISTRIBUTED:
+                raise NotImplementedError("Distributed not implemented yet")
+            case MVParMethod.NONE:
+                pass
 
     @override
     def _save_gap_junctions(self, gj_file_name: str, compression: str|None='gzip', **opts: t.Any):
@@ -387,7 +429,7 @@ class MVDenseNetwork(MVNetwork):
                 if et.source_network != et.target_network:
                     raise Exception("All gap junctions must be two cells in the same network builder.")
                 table = et.to_dataframe()
-                for index, row in table.iterrows():
+                for _index, row in table.iterrows():
                     for _ in range(row["nsyns"]): # pyright: ignore[reportArgumentType]
                         source_ids.append(row["source_node_id"])
                         target_ids.append(row["target_node_id"])
@@ -396,28 +438,36 @@ class MVDenseNetwork(MVNetwork):
             else:
                 continue
 
-        if mpi_rank == 0 and len(source_ids) > 0:
+        if self._comm.rank == 0 and len(source_ids) > 0:
             with h5py.File(gj_file_name, 'w') as f:
                 add_hdf5_attrs(f)
-                f.create_dataset('source_ids', data=np.array(source_ids), compression=compression)
-                f.create_dataset('target_ids', data=np.array(target_ids), compression=compression)
-                f.create_dataset('src_gap_ids', data=np.array(src_gap_ids), compression=compression)
-                f.create_dataset('trg_gap_ids', data=np.array(trg_gap_ids), compression=compression)
+                f.create_dataset('source_ids',
+                                 data=np.array(source_ids),
+                                 compression=compression)
+                f.create_dataset('target_ids',
+                                 data=np.array(target_ids),
+                                 compression=compression)
+                f.create_dataset('src_gap_ids',
+                                 data=np.array(src_gap_ids),
+                                 compression=compression)
+                f.create_dataset('trg_gap_ids',
+                                 data=np.array(trg_gap_ids),
+                                 compression=compression)
 
-    @Timer(name="_collate_edges", logger=None) 
+    @Timer(name="MVDenseNetwork::_collate_edges", logger=None) 
     def _collate_edges(
         self,
-        filtered_edge_types: list[MVEdgeTypesTable]
+        filtered_edge_types: list[MVEdgeTypesTable],
     ):
-        seq_flag = self.parallel_method==MVParMethod.ALL_GATHER or mpi_size == 1
+        distributed_flag = self.parallel_method==MVParMethod.DISTRIBUTED
         return MVEdgesCollator(
             filtered_edge_types,
             network_name=self.name,
-            sequential=seq_flag
+            distributed=distributed_flag
         )
 
     @override
-    @Timer(name="_save_edges", logger=None) 
+    @Timer(name="MVDenseNetwork::_save_edges", logger=None) 
     def _save_edges(
         self,
         edges_file_name: str,
@@ -428,15 +478,14 @@ class MVDenseNetwork(MVNetwork):
         index_by: tuple[t.Any, t.Any]=('target_node_id', 'source_node_id'),
         compression: str|None='gzip',
         sort_on_disk: bool=False,
-        **opts: t.Any
+        **opts: t.Any,
     ) -> None:
-        barrier()
+        self._comm.barrier()
 
         if compression == 'none':
             compression = None  # legit option for h5py for no compression
-
-        if mpi_rank == 0:
-            logger.debug('Saving {} --> {} edges to {}.'.format(src_network, trg_network, edges_file_name))
+        pop_name = pop_name if pop_name else f"{src_network}_to_{trg_network}"
+        edges_file_name_final = edges_file_name
 
         filtered_edge_types = [
             # Some edges may not match the source/target population
@@ -446,21 +495,27 @@ class MVDenseNetwork(MVNetwork):
         ]
         merged_edges = self._collate_edges(filtered_edge_types)
         n_total_conns = merged_edges.n_total_edges
-        barrier()
-
-
+        #
+        n_total_conns = self._comm.broadcast(n_total_conns)
         if n_total_conns == 0:
-            if mpi_rank == 0:
-                logger.warning(
-                    'Was not able to generate any edges using the "connection_rule". Not saving.'
-                )
+            self._comm.log_at_root(
+                logger,
+                logging.WARNING,
+                'Was not able to generate any edges using the "connection_rule". Not saving.'
+            )
+            print("EXIT")
             return
+
+        self._comm.log_at_root(
+            logger,
+            logging.DEBUG,
+            'Saving {} --> {} edges to {}.'.format(src_network, trg_network, edges_file_name)
+        )
 
         # Try to sort before writing file, If edges are split across ranks/files for MPI/size issues then we need to
         # write to disk first then sort the hdf5 file
         # sort_on_disk = opts.get('sort_on_disk', False)
-        edges_file_name_final = edges_file_name
-        if mpi_rank == 0 and sort_by:
+        if self._comm.rank == 0 and sort_by:
             if merged_edges.can_sort and not sort_on_disk:
                 merged_edges.sort(sort_by=sort_by)
             else:
@@ -476,8 +531,7 @@ class MVDenseNetwork(MVNetwork):
                 logger.debug(
                         'Unable to sort edges in memory, will temporarly save to {}'.format(edges_file_name) + ' before sorting hdf5 file.')
         #
-        pop_name = pop_name if pop_name else f"{src_network}_to_{trg_network}"
-        if mpi_rank == 0:
+        if self._comm.rank == 0:
             logger.debug('Saving {} edges to disk'.format(n_total_conns))
             _write_edges_h5(
                 merged_edges, pop_name, n_total_conns,
@@ -494,10 +548,10 @@ class MVDenseNetwork(MVNetwork):
                 _index_on_disk(index_by, pop_name,
                                edges_file_name_final,
                                compression)
-        barrier()
+        self._comm.barrier()
         del merged_edges
         #
-        if mpi_rank == 0:
+        if self._comm.rank == 0:
             logger.debug('Saving completed.')
 
     @override

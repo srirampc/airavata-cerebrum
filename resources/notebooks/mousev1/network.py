@@ -8,21 +8,20 @@ import typing as t
 from collections.abc import Iterable
 from abc import abstractmethod, ABCMeta
 
+from codetiming import Timer
+
 from bmtk.builder.node_pool import NodePool
 from bmtk.builder.connection_map import ConnectionMap
 from bmtk.builder.node_set import NodeSet
 from bmtk.builder.node import Node
 from bmtk.builder.edge import Edge
 from bmtk.builder.id_generator import IDGenerator
-from bmtk.builder.builder_utils import mpi_rank, mpi_size, barrier, check_properties_across_ranks
 
-from codetiming import Timer
-
-from .mpi_utils import broadcast_props
-
-logger = logging.getLogger(__name__)
+from .comm_interface import default_comm, CommInterface
 
 NodesT : t.TypeAlias  = int | list[int] | dict[str, t.Any] | NodePool
+
+LOGGER = logging.getLogger(__name__)
 
 
 class MVNetwork(object, metaclass=ABCMeta):
@@ -92,6 +91,7 @@ class MVNetwork(object, metaclass=ABCMeta):
     def __init__(self, name: str | None, **network_props: t.Any):
         if name is None or len(name) == 0:
             raise ValueError('Network name missing.')
+        self._comm : CommInterface = default_comm()
         #
         self._network_name: str = name
         self._nnodes: int = 0
@@ -169,6 +169,7 @@ class MVNetwork(object, metaclass=ABCMeta):
         props['node_type_id'] = node_type_id
         self._node_types_properties[node_type_id] = props
 
+    @Timer(name="MVNetwork::add_nodes", logger=None) 
     def add_nodes(self, N: int=1, **properties: t.Any):
         """Used to add nodes (eg cells) to a network. User should specify the number of Nodes (N) and can use any
         properties/attributes they require to define the nodes. By default all individual cells will be assigned a
@@ -190,8 +191,8 @@ class MVNetwork(object, metaclass=ABCMeta):
         :param properties: Individual and group properties of given nodes
         """
         self._clear()
-        properties = broadcast_props(properties)
-        check_properties_across_ranks(properties)
+        properties = self._comm.broadcast(properties)
+        self._comm.check_properties_across_ranks(properties)
 
         # categorize properties as either a node-params (for nodes file) or node-type-property (for node_types files)
         node_params = {}
@@ -227,6 +228,7 @@ class MVNetwork(object, metaclass=ABCMeta):
         self._add_node_type(node_properties)
         self._node_sets.append(NodeSet(N, node_params, node_properties))
 
+    @Timer(name="MVNetwork::add_edges", logger=None) 
     def add_edges(
         self,
         source: dict[str, t.Any] | NodePool | None=None,
@@ -328,8 +330,8 @@ class MVNetwork(object, metaclass=ABCMeta):
         :param edge_type_properties: properties/attributes of the given edge type
         :return: A ConnectionMap object
         """
-        edge_type_properties = broadcast_props(edge_type_properties)
-        check_properties_across_ranks(edge_type_properties)
+        edge_type_properties = self._comm.broadcast(edge_type_properties)
+        self._comm.check_properties_across_ranks(edge_type_properties)
 
         if not isinstance(source, NodePool):
             source = NodePool(self, **source or {})
@@ -388,7 +390,7 @@ class MVNetwork(object, metaclass=ABCMeta):
         :param conductance: gap junction conductance (microsiemens). If specified, resistance is ignored.
         """
         if target_sections is not None:
-            logger.warning(
+            LOGGER.warning(
                 'For gap junctions, the target sections variable is used for both the source and target sections.'
             )
 
@@ -475,7 +477,7 @@ class MVNetwork(object, metaclass=ABCMeta):
                 nodes = self._connected_networks[network].nodes(**nodes)
             if isinstance(nodes, NodePool):
                 if network is not None and nodes.network_name != network:
-                    logger.warning('Nodes and network do not match')
+                    LOGGER.warning('Nodes and network do not match')
                 return [n.node_id for n in nodes], nodes.network_name
             else:
                 raise Exception('Couldnt convert nodes')
@@ -556,9 +558,10 @@ class MVNetwork(object, metaclass=ABCMeta):
         self._edges_built = False
         self._clear()
 
+    @Timer(name="MVNetwork::_build_nodes", logger=None) 
     def _build_nodes(self):
         """Builds or rebuilds all the nodes, clear out both node and edge sets."""
-        logger.debug('Building nodes for population {}.'.format(self.name))
+        LOGGER.debug('Building nodes for population {}.'.format(self.name))
         self._clear()
         self._initialize()
 
@@ -569,34 +572,36 @@ class MVNetwork(object, metaclass=ABCMeta):
             n_node_types += 1
 
         self._nodes_built = True
-        logger.debug('Nodes {} built with {} nodes, {} node-types'.format(self.name, self.nnodes, n_node_types))
+        LOGGER.debug('Nodes {} built with {} nodes, {} node-types'.format(self.name, self.nnodes, n_node_types))
     
 
+    @Timer(name="MVNetwork::_build_edges", logger=None) 
     def _build_edges(self):
         """Builds network edges"""
         if not self.nodes_built:
             # only rebuild nodes if necessary.
             self._build_nodes()
 
-        self._build_edges_pre_process()
-        logger.debug('Building edges.')
-        # nmaps = len(self._connection_maps)
+        LOGGER.debug('Building edges. from [%d] ConnectionMaps', len(self._connection_maps))
+        self._build_edges_pre_process(self._connection_maps)
+        nmaps = len(self._connection_maps)
         # for i, conn_map in enumerate(self._connection_maps):
         # for i, conn_map in enumerate(self._connection_maps[mpi_rank::mpi_size]):
         # for i in block_range(nmaps):
         #   conn_map = self._connection_maps[i]
         #   self._build_cmap_edges(conn_map, i)
-        for i, conn_map in enumerate(self._connection_maps[mpi_rank::mpi_size]):
+        for i in range(self._comm.rank, nmaps, self._comm.size):
+            conn_map = self._connection_maps[i]
             self._build_cmap_edges(conn_map, i)
 
-        self._build_edges_post_process()
+        self._build_edges_post_process(self._connection_maps)
 
         self._edges_built = True
 
-    def _build_edges_pre_process(self):
+    def _build_edges_pre_process(self, conn_maps: list[ConnectionMap]):
         pass
 
-    def _build_edges_post_process(self):
+    def _build_edges_post_process(self, conn_maps: list[ConnectionMap]):
         pass
 
     def build(self, force:bool=False):
@@ -624,7 +629,7 @@ class MVNetwork(object, metaclass=ABCMeta):
         else:
             return os.path.join(path_dir, filename)
 
-    @Timer(name="MVNetwork_save_nodes", logger=None) 
+    @Timer(name="MVNetwork::save", logger=None) 
     def save(
         self,
         output_dir: str='.',
@@ -651,8 +656,11 @@ class MVNetwork(object, metaclass=ABCMeta):
                         mode=mode,
                         compression=compression,
                         **opts)
+        self._comm.log_at_root(LOGGER, logging.DEBUG, 'MVNetwork::save before barrier.')
+        self._comm.barrier()
+        self._comm.log_at_root(LOGGER, logging.DEBUG, 'MVNetwork::save completed.')
 
-    @Timer(name="MVNetwork_save_nodes", logger=None) 
+    @Timer(name="MVNetwork::save_nodes", logger=None) 
     def save_nodes(
         self,
         nodes_file_name: str | None=None,
@@ -675,17 +683,17 @@ class MVNetwork(object, metaclass=ABCMeta):
         if not force_overwrite and os.path.exists(nodes_file):
             raise Exception('File {} already exists. Please delete existing file, use a different name, or use force_overwrite.'.format(nodes_file))
         nf_dir = os.path.dirname(nodes_file)
-        if not os.path.exists(nf_dir) and mpi_rank == 0:
+        if not os.path.exists(nf_dir) and self._comm.rank == 0:
             os.makedirs(nf_dir)
-        barrier()
+        self._comm.barrier()
 
         node_types_file = self.__get_path(node_types_file_name, output_dir, 'node_types.csv')
         if not force_overwrite and os.path.exists(node_types_file):
             raise Exception('File {} exists. Please use different name or use force_overwrite'.format(node_types_file))
         ntf_dir = os.path.dirname(node_types_file)
-        if not os.path.exists(ntf_dir) and mpi_rank == 0:
+        if not os.path.exists(ntf_dir) and self._comm.rank == 0:
             os.makedirs(ntf_dir)
-        barrier()
+        self._comm.barrier()
 
         self._save_nodes(nodes_file, mode=mode, compression=compression)
         self._save_node_types(node_types_file)
@@ -695,8 +703,8 @@ class MVNetwork(object, metaclass=ABCMeta):
         raise NotImplementedError
 
     def _save_node_types(self, node_types_file_name: str):
-        if mpi_rank == 0:
-            logger.debug('Saving {} node-types to {}.'.format(self.name, node_types_file_name))
+        if self._comm.rank == 0:
+            LOGGER.debug('Saving {} node-types to {}.'.format(self.name, node_types_file_name))
 
             node_types_cols = ['node_type_id'] + [col for col in self._node_types_columns if col != 'node_type_id']
             with open(node_types_file_name, 'w') as csvfile:
@@ -704,7 +712,7 @@ class MVNetwork(object, metaclass=ABCMeta):
                 csvw.writerow(node_types_cols)
                 for node_type in self._node_types_properties.values():
                     csvw.writerow([node_type.get(cname, 'NULL') for cname in node_types_cols])
-        barrier()
+        self._comm.barrier()
 
     @abstractmethod
     def import_nodes(
@@ -715,7 +723,7 @@ class MVNetwork(object, metaclass=ABCMeta):
     ) -> None:
         raise NotImplementedError
 
-    @Timer(name="MVNetwork_save_edges", logger=None) 
+    @Timer(name="MVNetwork::save_edges", logger=None) 
     def save_edges(
         self,
         edges_file_name: str|None=None,
@@ -756,29 +764,28 @@ class MVNetwork(object, metaclass=ABCMeta):
             network_params = [p for p in network_params if p[1] == trg_network]
 
         if len(network_params) == 0:
-            logger.warning("Warning: couldn't find connections. Skip saving.")
+            LOGGER.warning("Warning: couldn't find connections. Skip saving.")
             return
 
         if (edges_file_name or edge_types_file_name) is not None:
             network_params = [(network_params[0][0], network_params[0][1],
                                edges_file_name, edge_types_file_name)]
 
-        if not os.path.exists(output_dir) and mpi_rank == 0:
+        if not os.path.exists(output_dir) and self._comm.rank == 0:
             os.mkdir(output_dir)
  
         if self._edges_built is False:
             if force_build:
                 self._build_edges()
             else:
-                logger.warning("Edges are not built. Either call build() or use force_build parameter. Skip saving of edges file.")
+                LOGGER.warning("Edges are not built. Either call build() or use force_build parameter. Skip saving of edges file.")
                 return
 
         for p in network_params:
             if p[3] is not None:
                 self._save_edge_types(os.path.join(output_dir, p[3]), p[0], p[1])
 
-
-        barrier()
+        self._comm.barrier()
 
         # TODO:: gap junctions
         # self._save_gap_junctions(os.path.join(output_dir, self._network_name + '_gap_juncs.h5'), **opts)
@@ -792,7 +799,7 @@ class MVNetwork(object, metaclass=ABCMeta):
         src_network: str,
         trg_network: str
     ):
-        if mpi_rank == 0:
+        if self._comm.rank == 0:
             # Get edge-type properties for connections with matching source/target networks
             matching_et = [
                 c.edge_type_properties
@@ -805,6 +812,7 @@ class MVNetwork(object, metaclass=ABCMeta):
             merged_keys = [k for et in matching_et for k in et.keys() if k not in cols]
             cols += list(set(merged_keys))
 
+            LOGGER.debug('Saving {} node-types to {}.'.format(self.name, edge_types_file_name))
             # Write to csv
             with open(edge_types_file_name, 'w') as csvfile:
                 csvw = csv.writer(csvfile, delimiter=' ')
@@ -812,8 +820,6 @@ class MVNetwork(object, metaclass=ABCMeta):
                 for edge_type in matching_et:
                     csvw.writerow([edge_type.get(cname, 'NULL') if edge_type.get(cname, 'NULL') is not None else 'NULL'
                                    for cname in cols])
-
-        barrier()
 
     @abstractmethod
     def _save_edges(

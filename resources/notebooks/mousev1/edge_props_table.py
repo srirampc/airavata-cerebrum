@@ -4,12 +4,19 @@ import numpy.typing as npt
 import hashlib
 import pandas as pd
 
+from typing import NamedTuple
 from bmtk.builder.connection_map import ConnectionMap
 from bmtk.builder.node import Node
 
 from codetiming import Timer
 
 NPIntArray = npt.NDArray[np.integer[t.Any]]
+
+class EdgesData(NamedTuple):
+    nsyn_table : NPIntArray
+    prop_vals: dict[str, t.Any]
+    prop_node_ids : NPIntArray
+
 
 class MVEdgeTypesTable(object):
     """A class for creating and storing the actual connectivity matrix plus all the possible (hdf5 bound) properties
@@ -23,65 +30,79 @@ class MVEdgeTypesTable(object):
     """
     def __init__(
         self,
-        conn_map: ConnectionMap,
         network_name: str,
-        set_props: bool = False,
-        set_node_maps: bool = True,
+        cmap_index: int,
+        conn_map: ConnectionMap,
+        edge_data: EdgesData | None = None
     ):
-        # self._connection_map : ConnectionMap = connection_map
+        #
+        self._cm_index: int = cmap_index
         self._network_name : str = network_name
         self.source_network : str = conn_map.source_nodes.network_name
         self.target_network : str = conn_map.target_nodes.network_name
+        #
         self.edge_type_id : int = conn_map.edge_type_properties['edge_type_id']
+        self._edge_type_properties: dict[str, t.Any] = conn_map.edge_type_properties
         self.edge_group_id : int = -1  # Will be assigned later during save_edges
-        # Create the nsyns table to store the num of synapses/edges between
-        # each possible source/target node pair
-        self._nsyns_idx2src: list[int] = (
-            [n.node_id for n in conn_map.source_nodes]
-            if conn_map.source_nodes else []
-        )
-        self._nsyns_src2idx: dict[int, int] = {
-            node_id: i for i, node_id in enumerate(self._nsyns_idx2src)
-        }
-        self._nsyns_idx2trg: list[int] = (
-            [n.node_id for n in conn_map.target_nodes]
-            if conn_map.target_nodes else []
-        )
-        self._nsyns_trg2idx: dict[int, int] = {
-            node_id: i for i, node_id in enumerate(self._nsyns_idx2trg)
-        }
+        self._property_hash: str = ""
+        #
         self._nsyns_updated : bool= False
         self._n_syns : int = 0
-        self.nsyn_table: NPIntArray = np.zeros(
-            (len(self._nsyns_idx2src), len(self._nsyns_idx2trg)),
-            dtype=np.uint32
-        )
-        self._edge_type_properties: dict[str, t.Any] = conn_map.edge_type_properties
+        # Indices
+        self._nsyns_idx2src: list[int] = []
+        self._nsyns_src2idx: dict[int, int] = {}
+        self._nsyns_idx2trg: list[int] = []
+        self._nsyns_trg2idx: dict[int, int] = {}
+        #
+        self._source_nodes_map: dict[int, Node]= {} # map source_node_id --> Node object
+        self._target_nodes_map : dict[int, Node]= {} # map target_node_id --> Node object
+        # Synapse Tables
+        self.nsyn_table: NPIntArray | None = None
         #
         self._prop_vals: dict[str, t.Any] = {}  # used to store the arrays for each property
         self._prop_node_ids : NPIntArray | None = None  # used to save the source_node_id and target_node_id for each edge
         #
-        self._source_nodes_map: dict[int, Node]= {} # map source_node_id --> Node object
-        self._target_nodes_map : dict[int, Node]= {} # map target_node_id --> Node object
-        self._property_hash: str = ""
-        if set_node_maps:
+        if edge_data is None:
+            self.__init_indices(conn_map)
+            self.__init_nsyn_table()
             self.__init_node_maps(conn_map)
-        if set_props: 
-            self.__set_nsys(conn_map)
-            self.__set_prop_data(conn_map)
-            self.__set_property_hash()
+            #
+            self.__build_nsys_table(conn_map)
+            self.__build_prop_data(conn_map)
+            self.__compute_property_hash()
+        else:
+            self.__init_indices(conn_map)
+            self.__init_node_maps(conn_map)
+            self.nsyn_table = edge_data.nsyn_table
+            self._nsyns_updated = True
+            #
+            self._prop_vals = edge_data.prop_vals
+            self._prop_node_ids = edge_data.prop_node_ids
+            self.__compute_property_hash()
 
-    def __set_property_hash(self):
-        """Creates a hash key for edge-types based on their (hdf5) properties, for grouping together properties of
-        different edge-types. If two edge-types have the same (hdf5) properties they should have the same hash value.
-        """
-        prop_keys = ['{}({})'.format(p['name'], p['dtype']) for p in self.get_property_metatadata()]
-        prop_keys.sort()
-        #
-        # NOTE: python's hash() function is randomized which is a problem
-        # when using MPI to process different edge types across different ranks.
-        prop_keys = ':'.join(prop_keys).encode('utf-8')
-        self._property_hash = hashlib.md5(prop_keys).hexdigest()[:9]
+    def __init_nsyn_table(self):
+        self.nsyn_table= np.zeros(
+            (len(self._nsyns_idx2src), len(self._nsyns_idx2trg)),
+            dtype=np.uint32
+        )
+
+    def __init_indices(self, conn_map: ConnectionMap):
+        # Create the nsyns table to store the num of synapses/edges between
+        # each possible source/target node pair
+        self._nsyns_idx2src = (
+            [n.node_id for n in conn_map.source_nodes]
+            if conn_map.source_nodes else []
+        )
+        self._nsyns_src2idx = {
+            node_id: i for i, node_id in enumerate(self._nsyns_idx2src)
+        }
+        self._nsyns_idx2trg = (
+            [n.node_id for n in conn_map.target_nodes]
+            if conn_map.target_nodes else []
+        )
+        self._nsyns_trg2idx = {
+            node_id: i for i, node_id in enumerate(self._nsyns_idx2trg)
+        }
 
     def __init_node_maps(self, connection_map: ConnectionMap):
         self._source_nodes_map = { # map source_node_id --> Node object
@@ -91,52 +112,40 @@ class MVEdgeTypesTable(object):
             t.node_id: t for t in connection_map.target_nodes
         } if connection_map.target_nodes else {}
 
-    @property
-    def n_syns(self):
-        """Number of synapses."""
-        if self._nsyns_updated:
-            self._nsyns_updated = False
-            self._n_syns = int(np.sum(self.nsyn_table))
-        return self._n_syns
-
-    @property
-    def n_edges(self):
-        """Number of unque edges/connections (eg rows in SONATA edges file). When multiple synapse can be safely
-        represented with just one edge it will have n_edges < n_syns.
-        """
-        if self._prop_vals:
-            return self.n_syns
+    def __set_prop_node_ids(self):
+        if len(self._prop_vals) == 0:
+            # Get the source and target node ids from the rows/columns of nsyns table cells that are greater than 0
+            nsyn_table_flat = self.nsyn_table.ravel()
+            src_trg_prods = np.array(np.meshgrid(self._nsyns_idx2src, self._nsyns_idx2trg)).T.reshape(-1, 2)
+            nonzero_idxs = np.argwhere(nsyn_table_flat > 0).flatten()
+            self._prop_node_ids = src_trg_prods[nonzero_idxs, :].astype(np.uint64)
         else:
-            return np.count_nonzero(self.nsyn_table)
+            # If there are synaptic properties go through each source/target pair and add their node-ids N times,
+            # where N is the number of synapses between the two nodes
+            self._prop_node_ids = np.zeros((self.n_edges, 2), dtype=np.int64)
+            idx = 0
+            for r, src_id in enumerate(self._nsyns_idx2src):
+                for c, trg_id in enumerate(self._nsyns_idx2trg):
+                    nsyns = self.nsyn_table[r, c]
 
-    @property
-    def edge_type_node_ids(self):
-        """Returns a table n_edges x 2, first column containing source_node_ids and second target_node_ids."""
-        if self._prop_node_ids is None or self._nsyns_updated:
-            if len(self._prop_vals) == 0:
-                # Get the source and target node ids from the rows/columns of nsyns table cells that are greater than 0
-                nsyn_table_flat = self.nsyn_table.ravel()
-                src_trg_prods = np.array(np.meshgrid(self._nsyns_idx2src, self._nsyns_idx2trg)).T.reshape(-1, 2)
-                nonzero_idxs = np.argwhere(nsyn_table_flat > 0).flatten()
-                self._prop_node_ids = src_trg_prods[nonzero_idxs, :].astype(np.uint64)
+                    self._prop_node_ids[idx:(idx + nsyns), 0] = src_id
+                    self._prop_node_ids[idx:(idx + nsyns), 1] = trg_id
+                    idx += nsyns
 
-            else:
-                # If there are synaptic properties go through each source/target pair and add their node-ids N times,
-                # where N is the number of synapses between the two nodes
-                self._prop_node_ids = np.zeros((self.n_edges, 2), dtype=np.int64)
-                idx = 0
-                for r, src_id in enumerate(self._nsyns_idx2src):
-                    for c, trg_id in enumerate(self._nsyns_idx2trg):
-                        nsyns = self.nsyn_table[r, c]
+    def __compute_property_hash(self):
+        """Creates a hash key for edge-types based on their (hdf5) properties, for grouping together properties of
+        different edge-types. If two edge-types have the same (hdf5) properties they should have the same hash value.
+        """
+        prop_keys = ['{}({})'.format(p['name'], p['dtype']) for p in self.get_property_metadata()]
+        prop_keys.sort()
+        #
+        # NOTE: python's hash() function is randomized which is a problem
+        # when using MPI to process different edge types across different ranks.
+        prop_keys = ':'.join(prop_keys).encode('utf-8')
+        self._property_hash = hashlib.md5(prop_keys).hexdigest()[:9]
 
-                        self._prop_node_ids[idx:(idx + nsyns), 0] = src_id
-                        self._prop_node_ids[idx:(idx + nsyns), 1] = trg_id
-                        idx += nsyns
-
-        return self._prop_node_ids
-
-    @Timer(name="MVEdgeTypesTable__set_nsys", logger=None) 
-    def __set_nsys(self, connection_map : ConnectionMap):
+    @Timer(name="MVEdgeTypesTable::__set_nsys", logger=None) 
+    def __build_nsys_table(self, connection_map : ConnectionMap):
         valid_conn_itr = (
             (s, t, ns)
             for s,t,ns in connection_map.connection_itr() if ns
@@ -155,8 +164,8 @@ class MVEdgeTypesTable(object):
         #         edges_table.set_nsyns(source_id=conn[0], target_id=conn[1], nsyns=conn[2])
         return self
 
-    @Timer(name="MVEdgeTypesTable__set_params", logger=None) 
-    def __set_prop_data(self, connection_map : ConnectionMap):
+    @Timer(name="MVEdgeTypesTable::__set_prop_data", logger=None) 
+    def __build_prop_data(self, connection_map : ConnectionMap):
         # For when the user specified individual edge properties to be put in the hdf5 (syn_weight, syn_location, etc),
         # get prop value and add it to the edge-types table. Need to fetch and store SxTxN value (where N is the avg
         # num of nsyns between each source/target pair) and it is necessary that the nsyns table be finished.
@@ -186,6 +195,68 @@ class MVEdgeTypesTable(object):
                     for pname, pval in zip(pnames, pvals):
                         self.set_property_value(prop_name=pname, edge_index=edge_index, prop_value=pval)
 
+    def deflate(self):
+        # eliminate properties dependant on cmap
+        del self._edge_type_properties
+        del self._source_nodes_map # map source_node_id --> Node object
+        del self._target_nodes_map # map target_node_id --> Node object
+        del self._nsyns_idx2src
+        del self._nsyns_src2idx
+        del self._nsyns_idx2trg
+        del self._nsyns_trg2idx
+        #
+        self._edge_type_properties = {}
+        self._source_nodes_map = {} # map source_node_id --> Node object
+        self._target_nodes_map = {} # map target_node_id --> Node object
+        self._nsyns_idx2src = []
+        self._nsyns_src2idx = {}
+        self._nsyns_idx2trg = []
+        self._nsyns_trg2idx = {}
+
+    def inflate(self, conn_map: ConnectionMap):
+        self.source_network = conn_map.source_nodes.network_name
+        self.target_network = conn_map.target_nodes.network_name
+        #
+        self.edge_type_id = conn_map.edge_type_properties['edge_type_id']
+        self._edge_type_properties = conn_map.edge_type_properties
+        #
+        self.__init_node_maps(conn_map)
+        self.__init_indices(conn_map)
+
+    @property
+    def cmap_index(self):
+        return self._cm_index
+    
+    @property
+    def prop_vals(self):
+        return self._prop_vals
+
+    @property
+    def n_syns(self):
+        """Number of synapses."""
+        if self._nsyns_updated:
+            self._nsyns_updated = False
+            if self.nsyn_table is not None:
+                self._n_syns = int(np.sum(self.nsyn_table))
+        return self._n_syns
+
+    @property
+    def n_edges(self):
+        """Number of unque edges/connections (eg rows in SONATA edges file). When multiple synapse can be safely
+        represented with just one edge it will have n_edges < n_syns.
+        """
+        if self._prop_vals:
+            return self.n_syns
+        else:
+            return np.count_nonzero(self.nsyn_table) if self.nsyn_table is not None else 0
+
+    @property
+    def edge_type_node_ids(self):
+        """Returns a table n_edges x 2, first column containing source_node_ids and second target_node_ids."""
+        if self._prop_node_ids is None or self._nsyns_updated:
+            self.__set_prop_node_ids()
+            
+        return self._prop_node_ids
 
     @property
     def source_nodes_map(self):
@@ -198,14 +269,14 @@ class MVEdgeTypesTable(object):
     @property
     def hash_key(self):
         if not self._property_hash:
-            self.__set_property_hash()
+            self.__compute_property_hash()
         return self._property_hash
 
     @property
     def edge_type_properties(self) -> dict[str, t.Any]:
         return self._edge_type_properties
 
-    def get_property_metatadata(self) -> list[dict[str, str | np.dtype[t.Any]]]:
+    def get_property_metadata(self) -> list[dict[str, str | np.dtype[t.Any]]]:
         if not self._prop_vals:
             return [{'name': 'nsyns', 'dtype': self.nsyn_table.dtype}]
         else:
@@ -283,7 +354,7 @@ class MVEdgeTypesTable(object):
             'target_node_id': src_trg_ids[:, 1],
             # 'edge_type_id': self.edge_type_id
         })
-        for edge_prop in self.get_property_metatadata():
+        for edge_prop in self.get_property_metadata():
             pname: str = str(edge_prop['name'])
             ret_df[pname] = self.get_property_value(prop_name=pname)
         #

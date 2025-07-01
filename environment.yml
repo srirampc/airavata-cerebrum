@@ -47,9 +47,10 @@ dependencies:
   - pip:
       - allensdk
       - bmtk
-      - codetiming
       - neuroanalysis
       - parse
+      - psutil
       - git+https://github.com/alleninstitute/abc_atlas_access
       - git+https://github.com/alleninstitute/aisynphys
       - git+https://github.com/srirampc/awitree
+      - git+https://github.com/srirampc/codetiming

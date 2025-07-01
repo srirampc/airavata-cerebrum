@@ -3,16 +3,7 @@ import logging
 import typing as t
 import numpy.typing as npt
 
-from .mpi_utils import (
-    accumulate_counts,
-    collect_merge_lists,
-    # collect_merge_lists_at_root,
-    # collect_zipmerge_lists_at_root,
-    # distributed_count_indices,
-    counts_start_index,
-    gather_np_counts_2d,
-    # gather_np_counts_1d,
-)
+from .comm_interface import default_comm, CommInterface
 
 from .edge_props_table import MVEdgeTypesTable
 
@@ -30,10 +21,11 @@ class MVEdgesCollator(object):
         self,
         edge_types_tables: list[MVEdgeTypesTable],
         network_name: str,
-        sequential: bool
+        distributed: bool = False,
     ):
         #
         # self._edge_types_tables: list[MVEdgeTypesTable] = edge_types_tables
+        self._comm : CommInterface = default_comm()
         self._network_name: str = network_name
         self._model_groups_md: dict[int, t.Any] = {}
         self._ngroups: int = 0
@@ -57,15 +49,16 @@ class MVEdgesCollator(object):
         self.edge_group_index: NPIntArray | None = None
         self._prop_data: dict[int , t.Any] = {}
         #
-        if sequential:
+        if distributed:
+            raise NotImplementedError("Distributed Implemented not complete.")
+            self._start_index = self._comm.counts_start_index(self._n_edges) 
+            self.n_total_edges = self._comm.accumulate_counts(self._n_edges)
+            self.__assign_groups_distr(edge_types_tables)
+            self.__process_distr(edge_types_tables)
+        else:
             self.__assign_groups_seq(edge_types_tables)
             self.__process_seq(edge_types_tables)
             self.__log();
-        else:
-            self._start_index = counts_start_index(self._n_edges) 
-            self.n_total_edges = accumulate_counts(self._n_edges)
-            self.__assign_groups(edge_types_tables)
-            self.__process(edge_types_tables)
 
     def __log(self):
         rshape = str(0 if self.source_ids is None else self.source_ids.shape)
@@ -82,7 +75,7 @@ class MVEdgesCollator(object):
             if edge_types_hash not in self._group_ids_lu:
                 self._group_ids_lu[edge_types_hash] = grp_id_itr
 
-                group_metadata = et.get_property_metatadata()
+                group_metadata = et.get_property_metadata()
                 self._model_groups_md[grp_id_itr] = {
                     'prop_names': [p['name'] for p in group_metadata],
                     'prop_type': [p['dtype'] for p in group_metadata],
@@ -133,10 +126,11 @@ class MVEdgesCollator(object):
 
             et.free_data()
 
-    def __assign_groups(self, edge_types_tables: list[MVEdgeTypesTable]):
+    def __assign_groups_distr(self, edge_types_tables: list[MVEdgeTypesTable]):
         # get unique has and its meta data
         grp_hash_keys = sorted(set([et.hash_key for et in edge_types_tables]))
-        srt_hash_keys = sorted(set(collect_merge_lists(grp_hash_keys)))
+        grp_hash_keys = self._comm.collect_merge_lists(grp_hash_keys)
+        srt_hash_keys = sorted(set(grp_hash_keys)) if grp_hash_keys else []
         self._ngroups = len(srt_hash_keys)
         self._group_ids_lu  = dict(zip(srt_hash_keys, range(self._ngroups)))
         self._group_starts = np.zeros(self._ngroups, dtype=np.uint32)
@@ -145,7 +139,9 @@ class MVEdgesCollator(object):
             g_id = self._group_ids_lu[ret.hash_key]
             # number of rows in each model group
             self._local_gid_counts[g_id] += ret.n_edges
-        self._all_gid_counts, self._group_sizes = gather_np_counts_2d(self._local_gid_counts)
+        self._all_gid_counts, self._group_sizes = self._comm.gather_np_counts_2d(
+            self._local_gid_counts
+        )
         self._group_starts[0] = 0
         #
         for ix in range(1, self._ngroups):
@@ -159,14 +155,14 @@ class MVEdgesCollator(object):
             edge_types_hash = ret.hash_key
             g_id = self._group_ids_lu[edge_types_hash]
             if g_id not in self._model_groups_md:
-                group_metadata = ret.get_property_metatadata()
+                group_metadata = ret.get_property_metadata()
                 self._model_groups_md[g_id] = {
                     'prop_names': [p['name'] for p in group_metadata],
                     'prop_type': [p['dtype'] for p in group_metadata],
                     'prop_size': self._group_sizes[g_id]
                 }
 
-    def __process(self, edge_types_tables: list[MVEdgeTypesTable]):
+    def __process_distr(self, edge_types_tables: list[MVEdgeTypesTable]):
         logger.debug('Processing and collating {:,} edges.'.format(self.n_total_edges))
         self.source_ids = np.zeros(self._n_edges, dtype=np.uint)
         self.target_ids = np.zeros(self._n_edges, dtype=np.uint)
@@ -208,7 +204,7 @@ class MVEdgesCollator(object):
         #         pdata[group_idx_beg:group_idx_end] = ret.get_property_value(pname)
         #     group_idx[et_group_id] += ret.n_edges 
         #
-        # TODO:: fi
+        # TODO:: fix
         # for ret in edge_types_tables:
         #    self.edge_group_index[idx_beg:idx_end] = np.arange(group_idx_beg,
         #                                                       group_idx_end,
@@ -242,22 +238,22 @@ class MVEdgesCollator(object):
 
         yield chunk_id, idx_beg, idx_end
 
-    def get_target_node_ids(self, chunk_id):
+    def get_target_node_ids(self, chunk_id: int):
         return self.target_ids
 
-    def get_source_node_ids(self, chunk_id):
+    def get_source_node_ids(self, chunk_id: int):
         return self.source_ids
 
-    def get_edge_type_ids(self, chunk_id):
+    def get_edge_type_ids(self, chunk_id: int):
         return self.edge_type_ids
 
-    def get_edge_group_ids(self, chunk_id):
+    def get_edge_group_ids(self, chunk_id: int):
         return self.edge_group_ids
 
-    def get_edge_group_indices(self, chunk_id):
+    def get_edge_group_indices(self, chunk_id: int):
         return self.edge_group_index
 
-    def get_group_data(self, chunk_id):
+    def get_group_data(self, chunk_id: int):
         ret_val = []
         for group_id in self._prop_data.keys():
             for group_name in self._prop_data[group_id].keys():

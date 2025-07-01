@@ -263,9 +263,9 @@ class ModelRecipe(pydantic.BaseModel):
             )
         return self.network_struct
 
-    def build_network(self, save_flag: bool=True):
+    def build_network(self, save_flag: bool=True, **kwargs: t.Any):
         # Construct model
-        net_builder = self.network_builder(self.network_struct)
+        net_builder = self.network_builder(self.network_struct, **kwargs)
         net_builder.build()
         if save_flag:
             net_builder.save(self.recipe_setup.network_dir)

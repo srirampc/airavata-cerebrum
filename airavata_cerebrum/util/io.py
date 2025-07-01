@@ -1,4 +1,5 @@
 import json
+import pickle
 import yaml
 import typing as t
 from pathlib import Path
@@ -62,3 +63,12 @@ def dump(
             return dump_json(json_obj, file_name, indent=indent)
         case _:
             return None
+
+# Pickle
+def dump_pickle(fname: str, pyobject: object):
+    with open(fname, 'wb') as handle:
+        pickle.dump(
+            pyobject,
+            handle,
+            protocol=pickle.HIGHEST_PROTOCOL
+        )

@@ -3,6 +3,7 @@ import logging
 import typing as t
 
 #
+from bmtk.builder.network_adaptors.dm_network import DenseNetwork
 import numpy as np
 import scipy
 import scipy.stats
@@ -27,7 +28,9 @@ from .operations import (
     select_lgn_sources_powerlaw,
     lgn_synaptic_weight_rule
 )
-from .dm_network import MVDenseNetwork, MVParMethod
+from .dm_network import MVParMethod
+from .comm_interface import default_comm
+
 from airavata_cerebrum.model import structure
 from codetiming import Timer
 
@@ -203,6 +206,8 @@ class V1BMTKNetworkBuilder:
     def __init__(
         self,
         net_struct: structure.Network,
+        adaptor_cls: type = DenseNetwork,
+        parallel_method: MVParMethod =MVParMethod.ALL_GATHER_BY_SND_RCV,
         **kwargs: t.Any,
     ):
         self.net_struct: structure.Network = net_struct
@@ -218,20 +223,20 @@ class V1BMTKNetworkBuilder:
         self.radial_range: list[float] = [self.min_radius, self.radius]
         self.net: NetworkBuilder = NetworkBuilder(
             self.net_struct.name,
-            adaptor_cls=MVDenseNetwork,
-            parallel_method=MVParMethod.ALL_GATHER
+            adaptor_cls=adaptor_cls,
+            parallel_method=parallel_method
         )
         lgn_struct = self.net_struct.ext_networks["lgn"]
         self.lgn_net : NetworkBuilder = NetworkBuilder(
             lgn_struct.name,
-            adaptor_cls=MVDenseNetwork,
-            parallel_method=MVParMethod.ALL_GATHER
+            adaptor_cls=adaptor_cls,
+            parallel_method=parallel_method
         )
         bkg_struct = self.net_struct.ext_networks["bkg"]
         self.bkg_net : NetworkBuilder = NetworkBuilder(
             bkg_struct.name,
-            adaptor_cls=MVDenseNetwork,
-            parallel_method=MVParMethod.ALL_GATHER
+            adaptor_cls=adaptor_cls,
+            parallel_method=parallel_method
         )
 
     def add_model_nodes(
@@ -325,10 +330,10 @@ class V1BMTKNetworkBuilder:
         #             "morphology": model["morphology"],
         #         }
         #     )
+        node_props = default_comm().broadcast(node_props)
+        self.net.add_nodes(**node_props)
 
-        self.net.add_nodes(**node_props)  # pyright: ignore[reportArgumentType]
-
-    @Timer(name="add_nodes", logger=None)
+    @Timer(name="V1BMTKNetworkBuilder::add_nodes", logger=None)
     def add_nodes(
         self,
     ) -> None:
@@ -344,7 +349,7 @@ class V1BMTKNetworkBuilder:
                         location, loc_region.dims, pop_neuron, neuron_model
                     )
 
-    @Timer(name="add_connection_edges", logger=None)
+    @Timer(name="V1BMTKNetworkBuilder::add_connection_edges", logger=None)
     def add_connection_edges(
         self,
         connex_item: structure.Connection,
@@ -378,25 +383,32 @@ class V1BMTKNetworkBuilder:
                 pspsign = -1
             else:
                 pspsign = 1
-            cm = self.net.add_edges(
-                source=src_criteria,
-                target={"node_type_id": node_type_id},
-                iterator="all_to_one",
-                connection_rule=connect_cells,  # pyright: ignore[reportArgumentType]
-                connection_params={
+            edge_params = {
+                "dynamics_params":md_pmap["params_file"],
+                "delay":connex_md.delay,
+                "weight_function":"weight_function_recurrent",
+                "PSP_correction":np.abs(md_pmap["PSP_scale_factor"]) * pspsign,
+                "PSP_lognorm_shape":md_pmap["lognorm_shape"],
+                "PSP_lognorm_scale":md_pmap["lognorm_scale"],
+                "model_template":"static_synapse",
+            }
+
+            # Need to make sure all 
+            edge_params = default_comm().broadcast(edge_params)
+            edge_params = {
+                "source":src_criteria,
+                "target":{"node_type_id": node_type_id},
+                "iterator":"all_to_one",
+                "connection_rule":connect_cells,
+                "connection_params":{
                     "params": src_trg_params,
                     "source_nodes": source_nodes_df,
                     "core_radius": self.net_struct.dims["core_radius"],
                 },
-                dynamics_params=md_pmap["params_file"],
-                delay=connex_md.delay,
-                weight_function="weight_function_recurrent",
-                PSP_correction=np.abs(md_pmap["PSP_scale_factor"]) * pspsign,
-                PSP_lognorm_shape=md_pmap["lognorm_shape"],
-                PSP_lognorm_scale=md_pmap["lognorm_scale"],
-                model_template="static_synapse",
-            )
+            } | edge_params
 
+            cm = self.net.add_edges(**edge_params)
+            #
             cm.add_properties(
                 ["syn_weight", "n_syns_"],
                 rule=syn_weight_by_experimental_distribution,
@@ -413,7 +425,7 @@ class V1BMTKNetworkBuilder:
                 dtypes=[float, np.int64],
             )
 
-    @Timer(name="add_lgn_nodes", logger=None)
+    @Timer(name="V1BMTKNetworkBuilder::add_lgn_nodes", logger=None)
     def add_lgn_nodes(
         self, X_grids:int=15, Y_grids:int=10,
         x_block:float=8.0, y_block:float=8.0
@@ -446,33 +458,35 @@ class V1BMTKNetworkBuilder:
             # Get tuning angle for LGN cells
             # tuning_angles = get_tuning_angles(params['N'], X_grids, Y_grids, model)
             _log().info(f"Region:  {lgn_region.name} ; Node: {lgn_model.name} : {total_N}")
-            self.lgn_net.add_nodes(
-                N=total_N,
-                pop_name=lgn_model.name,
-                model_type="virtual",
-                ei="e",
-                location=lgn_region.name,
-                x=positions[:, 0],
-                y=positions[:, 1],
-                spatial_size=filter_sizes,
-                kpeaks_dom_0=filter_params[:, 0],
-                kpeaks_dom_1=filter_params[:, 1],
-                weight_dom_0=filter_params[:, 2],
-                weight_dom_1=filter_params[:, 3],
-                delay_dom_0=filter_params[:, 4],
-                delay_dom_1=filter_params[:, 5],
-                kpeaks_non_dom_0=filter_params[:, 6],
-                kpeaks_non_dom_1=filter_params[:, 7],
-                weight_non_dom_0=filter_params[:, 8],
-                weight_non_dom_1=filter_params[:, 9],
-                delay_non_dom_0=filter_params[:, 10],
-                delay_non_dom_1=filter_params[:, 11],
-                tuning_angle=filter_params[:, 12],
-                sf_sep=filter_params[:, 13],
-            )
+            node_props = {
+                "N":total_N,
+                "pop_name":lgn_model.name,
+                "model_type":"virtual",
+                "ei":"e",
+                "location":lgn_region.name,
+                "x":positions[:, 0],
+                "y":positions[:, 1],
+                "spatial_size":filter_sizes,
+                "kpeaks_dom_0":filter_params[:, 0],
+                "kpeaks_dom_1":filter_params[:, 1],
+                "weight_dom_0":filter_params[:, 2],
+                "weight_dom_1":filter_params[:, 3],
+                "delay_dom_0":filter_params[:, 4],
+                "delay_dom_1":filter_params[:, 5],
+                "kpeaks_non_dom_0":filter_params[:, 6],
+                "kpeaks_non_dom_1":filter_params[:, 7],
+                "weight_non_dom_0":filter_params[:, 8],
+                "weight_non_dom_1":filter_params[:, 9],
+                "delay_non_dom_0":filter_params[:, 10],
+                "delay_non_dom_1":filter_params[:, 11],
+                "tuning_angle":filter_params[:, 12],
+                "sf_sep":filter_params[:, 13],
+            }
+            node_props = default_comm().broadcast(node_props)
+            self.lgn_net.add_nodes(**node_props)
         return self.lgn_net
 
-    @Timer(name="add_lgn_v1_edges", logger=None)
+    @Timer(name="V1BMTKNetworkBuilder::add_lgn_v1_edges", logger=None)
     def add_lgn_v1_edges(
         self, x_len:float=240.0, y_len:float=120.0
     ):
@@ -521,18 +535,21 @@ class V1BMTKNetworkBuilder:
                 lognorm_scale = 2188.765
                 e4_mean_size = np.exp(np.log(lognorm_scale) + (lognorm_shape**2) / 2)
                 edge_params = {
-                    "source": lgn_net_nodes,
-                    "target": target_nodes,
-                    "iterator": "all_to_one",
-                    "connection_rule": select_lgn_sources_powerlaw,
-                    "connection_params": {"lgn_mean": lgn_mean, "lgn_nodes": lgn_nodes},
-                    "dynamics_params": lgn_conn_model.dynamics_params,
                     "delay": 1.7,
                     "weight_function": "weight_function_lgn",
                     "weight_sigma": sigma,
+                    "dynamics_params": lgn_conn_model.dynamics_params,
                     "model_template": "static_synapse",
                 }
-                cm = self.lgn_net.add_edges(**edge_params)  # pyright: ignore[reportArgumentType]
+                edge_params = default_comm().broadcast(edge_params)
+                edge_params =  {
+                    "source": lgn_net_nodes,
+                    "target": target_nodes,
+                    "connection_rule": select_lgn_sources_powerlaw,
+                    "connection_params": {"lgn_mean": lgn_mean, "lgn_nodes": lgn_nodes},
+                    "iterator": "all_to_one",
+                } | edge_params 
+                cm = self.lgn_net.add_edges(**edge_params)
                 cm.add_properties(
                     "syn_weight",
                     rule=lgn_synaptic_weight_rule,
@@ -544,27 +561,29 @@ class V1BMTKNetworkBuilder:
                 )
         return self.lgn_net
 
-    @Timer(name="add_bkg_nodes", logger=None)
+    @Timer(name="V1BMTKNetworkBuilder::add_bkg_nodes", logger=None)
     def add_bkg_nodes(self):
         bkg_struct = self.net_struct.ext_networks["bkg"]
         bkg_region = bkg_struct.locations["bkg"]
         bkg_neuron = bkg_region.neurons["bkg"]
         n_bkg = bkg_struct.ncells
-        self.bkg_net.add_nodes(
+        node_props = {
             # N=1,
-            N=n_bkg,
-            pop_name=bkg_neuron.name,
-            ei=bkg_neuron.ei,
-            location=bkg_region.name,
-            model_type=bkg_neuron.neuron_models["bkg"].m_type,
-            x=np.zeros(n_bkg),
-            y=np.zeros(n_bkg),  # are these necessary?
+            "N":n_bkg,
+            "pop_name":bkg_neuron.name,
+            "ei":bkg_neuron.ei,
+            "location":bkg_region.name,
+            "model_type":bkg_neuron.neuron_models["bkg"].m_type,
+            "x":np.zeros(n_bkg),
+            "y":np.zeros(n_bkg),  # are these necessary?
             # x=[-91.23767151810344],
             # y=[233.43548226294524],
-        )
+        }
+        node_props = default_comm().broadcast(node_props)
+        self.bkg_net.add_nodes(**node_props)
         return self.bkg_net
 
-    @Timer(name="add_bkg_edges", logger=None)
+    @Timer(name="V1BMTKNetworkBuilder::add_bkg_edges", logger=None)
     def add_bkg_edges(self):
         bkg_struct: structure.ExtNetwork = self.net_struct.ext_networks["bkg"]
         # this file should contain the following parameters:
@@ -577,6 +596,17 @@ class V1BMTKNetworkBuilder:
                 if len(target_nodes) == 0:
                     continue
                 _log().info(f"bkg {bkg_connect.name} {nmodel_id} {bkg_model.property_map} {len(bkg_net_nodes)} {len(target_nodes)}")
+                edge_params = {                    "dynamics_params": bkg_model.dynamics_params,  # row["dynamics_params"],
+                    # "syn_weight": row["syn_weight_psp"],
+                    "syn_weight": bkg_model.property_map[
+                        "syn_weight"
+                    ],  # row["syn_weight"],
+                    "delay": 1.0,
+                    "model_template": "static_synapse",
+                    # "weight_function": "ConstantMultiplier_BKG",
+                    "weight_function": "weight_function_bkg",
+                }
+                edge_params = default_comm().broadcast(edge_params)
                 edge_params = {
                     "source": bkg_net_nodes,
                     "target": target_nodes,
@@ -587,20 +617,11 @@ class V1BMTKNetworkBuilder:
                         "n_syns": bkg_model.property_map["nsyns"],
                         "n_conn": bkg_connect.property_map["n_conn"],
                     },
-                    "dynamics_params": bkg_model.dynamics_params,  # row["dynamics_params"],
-                    # "syn_weight": row["syn_weight_psp"],
-                    "syn_weight": bkg_model.property_map[
-                        "syn_weight"
-                    ],  # row["syn_weight"],
-                    "delay": 1.0,
-                    "model_template": "static_synapse",
-                    # "weight_function": "ConstantMultiplier_BKG",
-                    "weight_function": "weight_function_bkg",
-                }
-                self.bkg_net.add_edges(**edge_params) # pyright: ignore[reportArgumentType]
+                } | edge_params
+                self.bkg_net.add_edges(**edge_params)
         return self.bkg_net
 
-    @Timer(name="add_edges", logger=None)
+    @Timer(name="V1BMTKNetworkBuilder::add_edges", logger=None)
     def add_edges(
         self,
     ):
@@ -609,7 +630,7 @@ class V1BMTKNetworkBuilder:
                 # Build model from connection information
                 self.add_connection_edges(connex_item, connex_md)
 
-    @Timer(name="build", logger=None)
+    @Timer(name="V1BMTKNetworkBuilder::build", logger=None)
     def build(
         self,
     ) -> NetworkBuilder:
@@ -621,20 +642,25 @@ class V1BMTKNetworkBuilder:
         self.add_bkg_edges()
         return self.net
 
-    @Timer(name="save_net", logger=None)
+    @Timer(name="V1BMTKNetworkBuilder::save_v1_net", logger=None)
     def save_net(self, network_dir: str | Path):
         self.net.save(str(network_dir))
 
-    @Timer(name="save_bkg_net", logger=None)
+    @Timer(name="V1BMTKNetworkBuilder::save_bkg_net", logger=None)
     def save_bkg_net(self, network_dir: str | Path):
         self.bkg_net.save(str(network_dir))
 
-    @Timer(name="save_lgn_net", logger=None)
+    @Timer(name="V1BMTKNetworkBuilder::save_lgn_net", logger=None)
     def save_lgn_net(self, network_dir: str | Path):
         self.lgn_net.save(str(network_dir))
 
-    @Timer(name="save", logger=None)
+    @Timer(name="V1BMTKNetworkBuilder::save", logger=None)
     def save(self, network_dir: str | Path):
         self.save_net(str(network_dir))
         self.save_lgn_net(str(network_dir))
         self.save_bkg_net(str(network_dir))
+        default_comm().log_at_root(
+            _log(),
+            logging.DEBUG,
+            'V1BMTKNetworkBuilder::save completed.'
+        )

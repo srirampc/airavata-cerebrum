@@ -39,12 +39,12 @@ python = "^3.10"
 abc_atlas_access = { git = "https://github.com/alleninstitute/abc_atlas_access" }
 aisynphys = { git = "https://github.com/alleninstitute/aisynphys" }
 awitree = { git = "https://github.com/srirampc/awitree" }
+codetiming = { git = "https://github.com/srirampc/codetiming" }
 anywidget = "^0.9"
 allensdk = "^2.16"
 anndata = "^0.10"
 airavata-python-sdk = "^1.1.6"
 bmtk = "^1.1"
-codetiming = "^1.4.0"
 duckdb = "^1.2"
 fastexcel = "^0.13"
 flake8 = "^7.1"
@@ -63,6 +63,7 @@ parse = "^1.20"
 pandas = "^1.5"
 polars = "1.26"
 pillow = "^10.4"
+psutil = "^7.0"
 pydantic = "^2.7"
 python-jsonpath = "^1.2.0"
 pyyaml = "^6.0"

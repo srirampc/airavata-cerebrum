@@ -1,30 +1,56 @@
 import argparse
 import logging
-import operator
 import typing as t
-import codetiming
 import pydantic
-import pandas as pd
 #
 from pathlib import Path
+from codetiming import Timer, TimerConfig
+from bmtk.builder.network_adaptors.dm_network import DenseNetwork
 #
-#
-import mousev1.model as v1model
-import mousev1.operations as v1ops
-import mousev1.mpi_utils as mpi_utils
 from airavata_cerebrum.recipe import ModelRecipe, RecipeSetup
 from airavata_cerebrum.model.structure import Network
 from airavata_cerebrum.util.io import load as loadio
 #
-from codetiming import Timer
+from mousev1.model import (
+    V1BMTKNetworkBuilder,
+    V1ConnectionMapper,
+    V1NeuronMapper,
+    V1RegionMapper
+)
+from mousev1.operations import (
+    convert_ctdb_models_to_nest
+)
+from mousev1.comm_interface import (
+    default_comm,
+    CommInterface
+)
+from mousev1.dm_network import(
+    MVParMethod,
+    MVDenseNetwork
+)
+
 
 def _log():
     return logging.getLogger(__name__)
 
+NetworkConstructor: t.TypeAlias = t.Literal['DenseNetwork', 'MVDenseNetwork'] 
 
-class RcpSettings(pydantic.BaseModel):
+def get_build_adaptor(nc: NetworkConstructor):
+    match nc:
+        case 'DenseNetwork':
+            return DenseNetwork
+        case "MVDenseNetwork":
+            return MVDenseNetwork
+
+
+class CerebrumRecipeRunner(pydantic.BaseModel):
     name: str = "v1"
     ncells: int = 120000
+    enable_timing: bool = True
+    logging_level: int = logging.DEBUG
+    root_logging_level: int = logging.DEBUG
+    build_adaptor_class: t.Literal['DenseNetwork', 'MVDenseNetwork'] = 'DenseNetwork'
+    build_parallel_method: MVParMethod = MVParMethod.ALL_GATHER_BY_SND_RCV
     base_dir: Path = Path("./")
     recipe_dir: Path = Path("./model_recipes/v1")
     recipe_output_dir: Path | None = Path("./model_data/v1")
@@ -78,135 +104,106 @@ class RcpSettings(pydantic.BaseModel):
             self.custom_mod_levels[lx] for lx in self.levels
         ] + self.custom_mod_exts
 
+    def recipe_setup(self):
+        return RecipeSetup(
+            name=self.name,
+            base_dir=self.base_dir,
+            recipe_files=self.recipe_files,
+            recipe_dir=self.recipe_dir,
+            recipe_output_dir=self.output_dir,
+            create_model_dir=True,
+        )
 
-def recipe_setup(rcp_set: RcpSettings):
-    return RecipeSetup(
-        name=rcp_set.name,
-        base_dir=rcp_set.base_dir,
-        recipe_files=rcp_set.recipe_files,
-        recipe_dir=rcp_set.recipe_dir,
-        recipe_output_dir=rcp_set.output_dir,
-        create_model_dir=True,
+    def model_recipe(self) -> ModelRecipe:
+        md_recipe_setup = self.recipe_setup()
+        custom_mod_struct = Network.from_file_list(self.custom_mod) 
+        return ModelRecipe(
+            recipe_setup=md_recipe_setup,
+            region_mapper=V1RegionMapper,
+            neuron_mapper=V1NeuronMapper,
+            connection_mapper=V1ConnectionMapper,
+            network_builder=V1BMTKNetworkBuilder,
+            mod_structure=custom_mod_struct,
+            save_flag=self.save_flag,
+        )
+
+    @Timer(name="RecipeSetupConfig.cerebrum_struct", logger=None)
+    def cerebrum_struct(self) -> ModelRecipe:
+        mdr = self.model_recipe()
+        mdr.build_net_struct()
+        mdr.apply_mod(self.ncells)
+        return mdr
+
+    def cerebrum_workflow(self):
+        md_dex = self.model_recipe()
+        md_dex.download_db_data()
+        md_dex.run_db_post_ops()
+        md_dex.map_source_data()
+        md_dex.build_net_struct()
+        md_dex.apply_mod(self.ncells)
+        md_dex.build_network(
+            adaptor_cls=get_build_adaptor(self.build_adaptor_class),
+            parallel_method=self.build_parallel_method,
+        )
+
+    def convert_models_to_nest(self):
+        convert_ctdb_models_to_nest(
+            str(self.ctdb_models_dir), 
+            str(self.nest_models_dir)
+        )
+
+
+@Timer(name="v1_build.mdr_build", logger=None)
+def mdr_build(mdr:ModelRecipe, rcp_set: CerebrumRecipeRunner):
+    mdr.build_network(
+        adaptor_cls=get_build_adaptor(rcp_set.build_adaptor_class),
+        parallel_method=rcp_set.build_parallel_method,
     )
 
 
-def model_recipe(rcp_set: RcpSettings):
-    md_recipe_setup = recipe_setup(rcp_set)
-    custom_mod_struct = Network.from_file_list(rcp_set.custom_mod) 
-    return ModelRecipe(
-        recipe_setup=md_recipe_setup,
-        region_mapper=v1model.V1RegionMapper,
-        neuron_mapper=v1model.V1NeuronMapper,
-        connection_mapper=v1model.V1ConnectionMapper,
-        network_builder=v1model.V1BMTKNetworkBuilder,
-        mod_structure=custom_mod_struct,
-        save_flag=rcp_set.save_flag,
+def struct_bmtk(rcp_set: CerebrumRecipeRunner, comm: CommInterface):
+    # Dont save it to db when running with MPI
+    if comm.size > 0:
+        rcp_set.save_flag = False
+    mdrcp = rcp_set.cerebrum_struct()
+    mdr_build(mdrcp, rcp_set)
+    comm.log_profile_summary(
+        _log(),
+        logging.DEBUG, 
+        f"{mdrcp.recipe_setup.base_dir}/runtimes_{comm.size}.csv",
+        f"{mdrcp.recipe_setup.base_dir}/mem_used_{comm.size}.csv",
     )
 
-
-def struct_bmtk(rcp_set: RcpSettings):
-    md_dex = model_recipe(rcp_set)
-    md_dex.build_net_struct()
-    md_dex.apply_mod(rcp_set.ncells)
-    md_dex.build_network()
-    times_df = pd.DataFrame(data=[{
-        "name": name,
-        "ncalls": Timer.timers.count(name),
-        "total_time": ttime,
-        "min_time": Timer.timers.min(name),
-        "max_time": Timer.timers.max(name),
-        "mean_time": Timer.timers.mean(name),
-        "median_time": Timer.timers.median(name),
-        "stdev_time": Timer.timers.stdev(name),
-    } for name, ttime in sorted(
-        Timer.timers.items(),
-        key=operator.itemgetter(1),
-        reverse=True
-    )])
-    # set display options to show all columns and rows
-    pd.set_option('display.max_columns', None)
-    pd.set_option('display.max_rows', None)
-    # print the dataframe
-    print(times_df)
-
-def summarize_timeings() -> list[dict[str, t.Any]]:
-    rtimers = codetiming.Timer.timers
-    times_rs = [{
-        "name": name,
-        "proc": mpi_utils.mpi_rank,
-        "ncalls": rtimers.count(name),
-        "total_time": ttime,
-        "min_time": rtimers.min(name),
-        "max_time": rtimers.max(name),
-        "mean_time": rtimers.mean(name),
-        "median_time": rtimers.median(name),
-        "stdev_time": rtimers.stdev(name),
-    } for name, ttime in sorted(
-        rtimers.items(),
-        key=operator.itemgetter(1),
-        reverse=True
-    )]
-    collect_times_rs = mpi_utils.collect_merge_lists_at_root(times_rs)
-    if mpi_utils.mpi_rank > 0 or not collect_times_rs:
-        return [{}]
-    # rtimers = alltimers[0]
-    return collect_times_rs
-
-
-def struct_mpi_bmtk(rcp_set: RcpSettings):
-    rcp_set.save_flag = False
-    md_dex = model_recipe(rcp_set)
-    md_dex.build_net_struct()
-    md_dex.apply_mod(rcp_set.ncells)
-    md_dex.build_network()
-    times_df = pd.DataFrame(data=summarize_timeings())
-    if mpi_utils.mpi_rank == 0:
-        # set display options to show all columns and rows
-        pd.set_option('display.max_columns', None)
-        pd.set_option('display.max_rows', None)
-        # print the dataframe
-        print(times_df)
-
-
-
-def build_bmtk(rcp_set: RcpSettings):
-    md_dex = model_recipe(rcp_set)
-    md_dex.download_db_data()
-    md_dex.run_db_post_ops()
-    md_dex.map_source_data()
-    md_dex.build_net_struct()
-    md_dex.apply_mod(rcp_set.ncells)
-    md_dex.build_network()
-
-def convert_models_to_nest(cfg_set: RcpSettings):
-    v1ops.convert_ctdb_models_to_nest(
-        str(cfg_set.ctdb_models_dir), 
-        str(cfg_set.nest_models_dir)
-    )
 
 def data_mapped_model(levels: tuple[str,...]=("L1", "L23", "L4")):
-    rcp_set = RcpSettings(levels=list(levels))
-    mdrcp = model_recipe(rcp_set)
+    rcp_set = CerebrumRecipeRunner(levels=list(levels))
+    mdrcp = rcp_set.model_recipe()
     mdrcp.map_source_data()
     mdrcp.build_net_struct()
     mdrcp.apply_mod(rcp_set.ncells)
     mdrcp.build_network()
+
+
+def run_sonata():
     from v1_bmtk_simulate import load_nest_sonata
     return load_nest_sonata()
 
 def main(input_config_file: str):
-    if mpi_utils.mpi_rank == 0:
-        logging.basicConfig(level=logging.DEBUG)
+    cfg_set = CerebrumRecipeRunner.model_validate(loadio(input_config_file))
+    comm = default_comm()
+    if comm.rank == 0:
+        logging.basicConfig(level=cfg_set.root_logging_level)
     else:
-        logging.basicConfig(level=logging.CRITICAL)
-    cfg_set = RcpSettings.model_validate(loadio(input_config_file))
-    _log().info(cfg_set.model_dump_json(indent=4))
-    # convert_models_to_nest(cfg_set)
+        logging.basicConfig(level=cfg_set.logging_level)
+    comm.log_at_root(_log(), logging.INFO, cfg_set.model_dump_json(indent=4))
+    # cfg_set.convert_models_to_nest()
     # build_bmtk(cfg_set)
-    if mpi_utils.mpi_size == 1:
-        struct_bmtk(cfg_set)
+    if cfg_set.enable_timing:
+        TimerConfig.enable_timers()
     else:
-        struct_mpi_bmtk(cfg_set)
+        TimerConfig.disable_timers()
+    #
+    struct_bmtk(cfg_set, comm)
 
 
 if __name__ == "__main__":
@@ -217,7 +214,7 @@ if __name__ == "__main__":
         "-i",
         "--input_file",
         required=True,
-        help="SONATA network configuration.",
+        help="YAML netork setup.",
     )
     # parser.add_argument(
     #     "-t",

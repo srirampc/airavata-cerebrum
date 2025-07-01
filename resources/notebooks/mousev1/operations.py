@@ -5,6 +5,7 @@
 import os
 import json
 import math
+import logging
 import pathlib
 import typing as t
 import numpy as np
@@ -18,6 +19,15 @@ from scipy.special import erfinv
 # from numba import njit, jit
 #
 from codetiming import Timer
+
+from airavata_cerebrum.util.profile import log_with_timestamp
+
+NPIntArray: t.TypeAlias = npt.NDArray[np.integer[t.Any]]
+NPFloatArray: t.TypeAlias = npt.NDArray[np.floating[t.Any]]
+
+def _log():
+    return logging.getLogger(__name__)
+
 
 LGN_SHIFT = {
     "sON_TF1": -1.0,
@@ -242,7 +252,7 @@ def delta_theta_cdf(intercept: float, d_theta: float):
         raise Exception("d_theta must be <= 180, but was {}".format(d_theta))
 
 
-@Timer(name="compute_pair_type_parameters",logger=None)
+@Timer(name="mousev1.operations.compute_pair_type_parameters",logger=None)
 def compute_pair_type_parameters(
     source_type: str,
     target_type: str,
@@ -280,7 +290,8 @@ def compute_pair_type_parameters(
     # possible for A_new to go slightly above 1.0 in which case we rescale it to 1.0. We confirmed that if this
     # does happen, it is for a few cases and is not much higher than 1.0.
     if A_new > 1.0:
-        # print('WARNING: Adjusted calculated probability based on distance dependence is coming out to be ' \
+        # log_with_timestamp( _log(), logging.WARNING,
+        #   'WARNING: Adjusted calculated probability based on distance dependence is coming out to be ' \
         #       'greater than 1 for ' + source_type + ' and ' + target_type + '. Setting to 1.0')
         A_new = 1.0
 
@@ -323,7 +334,7 @@ def compute_pair_type_parameters(
                 B1 = B1 + delta # pyright: ignore[reportConstantRedefinition]
 
             B_ratio = B2 / B1
-            print(
+            log_with_timestamp(_log(), logging.WARNING ,
                 "WARNING: Could not satisfy the desired B_ratio "
                 + "(probability of connectivity would become "
                 + "greater than one in some cases). Rescaled and now for "
@@ -353,14 +364,14 @@ def compute_pair_type_parameters(
     }
 
 
-@Timer(name="connect_cells",logger=None)
+@Timer(name="mousev1.operations.connect_cells",logger=None)
 def connect_cells(
-    _sources,
-    target,
+    _sources: pd.DataFrame,
+    target: pd.Series,
     params: dict[str, t.Any],
-    source_nodes,
+    source_nodes: pd.DataFrame,
     core_radius: float
-):
+) -> list[int | None]:
     """This function determined which nodes are connected based on the parameters in the dictionary params. The
     function iterates through every cell pair when called and hence no for loop is seen iterating pairwise
     although this is still happening.
@@ -381,7 +392,8 @@ def connect_cells(
     # special handing of the empty sources
     if source_nodes.empty:
         # since there is no sources, no edges will be created.
-        print("Warning: no sources for target: {}".format(target.node_id))
+        log_with_timestamp(_log(), logging.WARNING ,
+            "Warning: no sources for target: {}".format(target.node_id))
         return []
 
     # TODO: remove list comprehension
@@ -393,9 +405,10 @@ def connect_cells(
     sources_tuning_angle = np.array(source_nodes["tuning_angle"])
 
     # Get target id
-    tid = target.node_id
+    # tid = target.node_id
     # if tid % 1000 == 0:
-    #     print('target {}'.format(tid))
+    #     log_with_timestamp(0, _log(), logging.WARNING,
+    #                       'target {}'.format(tid))
 
     # size of target cell (total syn number) will modulate connection probability
     target_size = target["target_sizes"]
@@ -452,7 +465,8 @@ def connect_cells(
     Rossi_mvNorm = multivariate_normal(Rossi_mean, Rossi_cov)  # pyright: ignore[reportArgumentType] 
 
     # if target.node_id % 10000 == 0:
-    #     print("Working on tid: ", target.node_id)
+    #     log_with_timestamp(0, _log(), logging.WARNING,
+    #                     "  Working on tid: {target.node_id}", )
 
     # Check if there is orientation dependence
     if not np.isnan(gradient):
@@ -491,10 +505,10 @@ def connect_cells(
 
     # # Sanity check warning
     # if p_connect > 1:
-    #    print(
+    #     log_with_timestamp(0, _log(), logging.WARNING,
     #        " WARNING: p_connect is greater that 1.0 it is: "
     #        + str(p_connect)
-    #    )
+    #     )
 
     # If not the same cell (no self-connections)
     if 0.0 in intersomatic_distance:
@@ -522,7 +536,7 @@ def connect_cells(
     return nsyns_ret
 
 
-@Timer(name="syn_weight_by_experimental_distribution",logger=None)
+# @Timer(name="mousev1.operations.syn_weight_by_experimental_distribution",logger=None)
 def syn_weight_by_experimental_distribution(
     source: dict[str, t.Any],
     target: dict[str, t.Any],
@@ -709,9 +723,9 @@ def select_bkg_sources(
     return nsyns_ret
 
 
-@Timer(name="lgn_synaptic_weight_rule",logger=None)
+# @Timer(name="mousev1.operations.lgn_synaptic_weight_rule",logger=None)
 def lgn_synaptic_weight_rule(
-    source: t.Any,
+    _source: t.Any,
     target: dict[str, t.Any],
     base_weight:float,
     mean_size: float
@@ -858,7 +872,7 @@ def convert_ctdb_models_to_nest(input_dir:str, output_dir:str):
             json.dump(n_dict, ofx, indent=4)
 
 
-@Timer(name="get_filter_temporal_params",logger=None)
+# @Timer(name="mousev1.operations.get_filter_temporal_params",logger=None)
 def get_filter_temporal_params(N:int, X_grids:int, Y_grids:int, model:str):
     # Total number of cells
     N_total = N * X_grids * Y_grids
@@ -1060,8 +1074,8 @@ def get_filter_temporal_params(N:int, X_grids:int, Y_grids:int, model:str):
 
 # @njit
 def within_ellipse(
-    x: npt.NDArray[np.floating[t.Any]],
-    y: npt.NDArray[np.floating[t.Any]],
+    x: NPFloatArray,
+    y: NPFloatArray,
     tuning_angle: float | None,
     e_x: float, e_y: float,
     e_cos: float, e_sin: float,
@@ -1079,7 +1093,7 @@ def within_ellipse(
     return ((x_rot / e_a) ** 2 + (y_rot / e_b) ** 2) <= 1.0
 
 
-def calculate_subunit_probs(cell_TF, tf_list):
+def calculate_subunit_probs(cell_TF: float, tf_list: list[float]):
     tf_array = np.array(tf_list)
     tf_sum = np.sum(abs(cell_TF - tf_array))
     p = (1 - abs(cell_TF - tf_array) / tf_sum) / (len(tf_array) - 1)
@@ -1091,7 +1105,7 @@ def delta_ori(angle: float):
     return np.abs(np.abs(angle - 90) % 180 - 90)
 
 
-def gaussian_probability(x, sigma):
+def gaussian_probability(x: NPFloatArray, sigma: float):
     return np.exp(-(x**2 / (2 * sigma**2)))
 
 
@@ -1102,31 +1116,40 @@ def pick_from_probs(n: int, prob_dist:npt.NDArray[np.floating[t.Any]]):
             list(range(len(prob_dist))), 
             size=n,
             replace=False,
-            p=None if np.isnan(np.sum(prob_dist)) else prob_dist
+            p=None if (np.isnan(np.sum(prob_dist)) or np.sum(prob_dist) == 0) else prob_dist
         )
     except ValueError as vex:
-        print(n, prob_dist)
+        log_with_timestamp(_log(), logging.ERROR,
+                           f"Value Error :: {n}, {prob_dist}")
         raise vex
 
 
-@Timer(name="select_lgn_sources_powerlaw",logger=None)
-def select_lgn_sources_powerlaw(sources, target, lgn_mean, lgn_nodes):
+# @Timer(name="mousev1.operations.select_lgn_sources_powerlaw",logger=None)
+def select_lgn_sources_powerlaw(_sources: pd.DataFrame,
+                                target: pd.Series,
+                                lgn_mean: tuple[float, float],
+                                lgn_nodes: pd.DataFrame):
     target_id = target.node_id
     pop_name = target["pop_name"]
 
     if target_id % 250 == 0:
-        print("connection LGN cells to V1 cell #", target_id)
+        log_with_timestamp(
+            _log(),
+            logging.DEBUG,
+            f"Connection LGN cells -> V1 cell #{target_id}"
+        )
+
 
     # the coordinates are already in visual field space, so simple multiplication is all you need.
-    x_position_lin_degrees = target["x"] * 0.07
-    y_position_lin_degrees = target["z"] * 0.04
+    x_position_lin_degrees: float = float(target["x"] * 0.07)
+    y_position_lin_degrees: float = float(target["z"] * 0.04)
 
     # center of the visual RF
-    vis_x = lgn_mean[0] + x_position_lin_degrees
-    vis_y = lgn_mean[1] + y_position_lin_degrees
+    vis_x: float = lgn_mean[0] + x_position_lin_degrees
+    vis_y: float = lgn_mean[1] + y_position_lin_degrees
     rf_center = vis_x + 1j * vis_y
 
-    tuning_angle = float(target["tuning_angle"])
+    tuning_angle: float | None = float(target["tuning_angle"])
     tuning_angle = None if math.isnan(tuning_angle) else tuning_angle
     testing = False
     cell_ignore_unit = None
@@ -1158,17 +1181,20 @@ def select_lgn_sources_powerlaw(sources, target, lgn_mean, lgn_nodes):
 
     # circle with radius 40 centered at vis_x, vis_y
     big_circle = (vis_x, vis_y, 1.0, 0.0, 40, 40)
+    lgn_x : NPFloatArray  =  np.array(lgn_nodes["x"])
+    lgn_y : NPFloatArray  =  np.array(lgn_nodes["y"])
     in_circle = within_ellipse(
-        np.array(lgn_nodes["x"]),
-        np.array(lgn_nodes["y"]),
+        lgn_x,
+        lgn_y,
         tuning_angle,
         *big_circle
     )
 
-    lgn_circle = lgn_nodes[in_circle]
+    lgn_circle: pd.DataFrame = lgn_nodes[in_circle] # pyright: ignore[reportAssignmentType]
     # if there is no candidate LGN cells, return with no connectinos.
     if lgn_circle.empty:
-        # print("Warning: no candidate LGN cells for V1 cell id: ", target_id)
+        # log_with_timestamp(0, _log(), logging.ERROR,
+        #     "Warning: no candidate LGN cells for V1 cell id: {target_id}", )
         return [None] * len(lgn_nodes)
 
     # RF center of LGN cell as a complex number
@@ -1215,7 +1241,7 @@ def select_lgn_sources_powerlaw(sources, target, lgn_mean, lgn_nodes):
             subunit_dict_values.append(probs[i])
 
     subunit_dict = dict(zip(subunit_dict_keys, subunit_dict_values))
-    subunit_prob = np.array(lgn_circle["pop_name"].map(subunit_dict).fillna(0.0))
+    subunit_prob : NPFloatArray = np.array(lgn_circle["pop_name"].map(subunit_dict).fillna(0.0))
 
     # treatments for sONsOFF and sONtOFF cells
     # tuning_angles are defined only for sONsOFF and sONtOFF cells, so this should be fine.
@@ -1224,10 +1250,12 @@ def select_lgn_sources_powerlaw(sources, target, lgn_mean, lgn_nodes):
     )
     subunit_prob[lgn_ori_eligible] = 1.0
 
-    total_prob = gaussian_prob * subunit_prob
-    total_prob = total_prob / sum(total_prob)  # normalize
+    total_prob : NPFloatArray = gaussian_prob * subunit_prob
+    if sum(total_prob) != 0:
+        total_prob = total_prob / sum(total_prob)  # normalize
     if np.isnan(np.sum(total_prob)):
-        print(f"NaN error {relative_rf_dist}; {gaussian_prob}; {subunit_prob}")
+        log_with_timestamp(_log(), logging.ERROR,
+            f"NaN error {relative_rf_dist}; {gaussian_prob}; {subunit_prob}")
 
     # fraction of LGN synapses in e4's synapses. fixed parameter for this model
     e4_lgn_fraction = 0.2
@@ -1260,11 +1288,12 @@ def select_lgn_sources_powerlaw(sources, target, lgn_mean, lgn_nodes):
         gaussian_prob = gaussian_probability(
             selected_lgn_dist, gauss_radius / np.sqrt(num_syns[i])
         )
-        gaussian_prob = gaussian_prob / sum(gaussian_prob)
+        if sum(gaussian_prob) != 0:
+            gaussian_prob = gaussian_prob / sum(gaussian_prob)
         syn_selected = pick_from_probs(num_neurons[i], gaussian_prob)
         nsyns_ret[selected_lgn_inds[syn_selected]] = num_syns[i]
 
-        selected_lgn_inds = np.delete(selected_lgn_inds, syn_selected)
+        selected_lgn_inds = np.delete(selected_lgn_inds, syn_selected) # pyright: ignore[reportArgumentType, reportCallIssue]
         selected_lgn_dist = np.delete(selected_lgn_dist, syn_selected)
 
     # there should be 1 synapse connections remaining
