@@ -36,6 +36,7 @@ def scalar_widget(
     value: t.Any,
     options: list[str] | None = None,
     allowed: list[str] | None = None,
+    **_kwargs: t.Any,
 ) -> iwidgets.CoreWidget | None:
     match widget_key:
         case "int" | "int32" | "int64":
@@ -249,12 +250,12 @@ class DBWorkflowSidePanel(IPyPanelT):
         self,
         w_key: str,
         value: t.Any,
-        label: str,
+        prop_label: str,
         **kwargs: t.Any
     ):
         return iwidgets.HBox(
             [
-                iwidgets.Label(f"{label} : "),
+                iwidgets.Label(f"{prop_label} : "),
                 render_property(w_key, value, **kwargs,),
             ]
         )

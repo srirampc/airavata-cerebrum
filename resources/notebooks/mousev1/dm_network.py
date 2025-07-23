@@ -31,7 +31,6 @@ import pandas as pd
 
 from typing_extensions import override
 from collections.abc import Iterable
-from enum import Enum
 
 from bmtk.builder.node_pool import NodePool
 from bmtk.builder.node_set import NodeSet
@@ -50,18 +49,14 @@ from .comm_interface import (
     CommInterface,
 )
 
+from .utils import MVParMethod, add_hdf5_attrs
+
 from .edge_props_table import MVEdgeTypesTable
 from .network import MVNetwork
 from .edge_collator import MVEdgesCollator
 
 
 logger = logging.getLogger(__name__)
-
-
-def add_hdf5_attrs(hdf5_handle: h5py.File):
-    # TODO: move this as a utility function
-    hdf5_handle['/'].attrs['magic'] = np.uint32(0x0A7A)
-    hdf5_handle['/'].attrs['version'] = [np.uint32(0), np.uint32(1)]
 
 
 @Timer(name="dm_network._sort_on_disk", logger=None) 
@@ -225,12 +220,6 @@ def _write_edges_h5(
             for group_id, prop_name, grp_idx_beg, grp_idx_end in merged_edges.get_group_data(chunk_id):
                 prop_array = merged_edges.get_group_property(prop_name, group_id, chunk_id)
                 pop_grp[str(group_id)][prop_name][grp_idx_beg:grp_idx_end] = prop_array # pyright: ignore[reportIndexIssue]
-
-class MVParMethod(str, Enum):
-    NONE = 'NONE'
-    ALL_GATHER = 'ALL_GATHER'
-    ALL_GATHER_BY_SND_RCV = 'ALL_GATHER_BY_SND_RCV'
-    DISTRIBUTED = 'DISTRIBUTED'
 
 @t.final
 class MVDenseNetwork(MVNetwork):

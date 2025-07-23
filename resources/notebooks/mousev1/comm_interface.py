@@ -17,26 +17,13 @@ from airavata_cerebrum.util.profile import (
     log_data_frame,
     log_with_timestamp
 )
+from .utils import block_low, block_high
 
 NPIntArray: t.TypeAlias = npt.NDArray[np.integer[t.Any]]
 
 LOGGER = logging.getLogger(__name__)
 MAX_XFER_LIMIT = (1024*1024*1024) + (512*1024*1024) # 1.5 GB for now
 MPI_fail_params_nonuniform = True  # raise exception if params across MPI procs are not same.
-
-
-def block_low(rank: int, nproc: int, n: int):
-    return (rank * n) // nproc
-
-def block_high(rank: int, nproc: int, n: int):
-    return (((rank + 1) * n) // nproc) - 1
-
-def block_size(rank: int, nproc: int, n: int):
-    return block_low(rank + 1, nproc, n) - block_low(rank, nproc, n)
-
-def block_owner(j: int, nproc: int, n: int):
-    return (((nproc) * ((j) + 1) - 1) // (n))
-
 
 class CommInterface:
     def __init__(self):
