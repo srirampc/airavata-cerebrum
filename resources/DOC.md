@@ -1,6 +1,6 @@
-# README
+# Airavata Cerebrum 
 
-## Cerebrum Tools
+## Introduction
 
 Airavata Cerebrum is a suite of tools designed to effectively build data-driven
 computational models. Key components of the software suite are as follows:
