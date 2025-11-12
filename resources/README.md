@@ -25,5 +25,5 @@ standalone batch scripts to build/simulate using cerbrum.
 | Model                              | Scripts                                    |
 | ---------------------------------- | ------------------------------------------ |
 | Build/Simulate Cerebrum V1 model   | [V1 script](notebooks/cerebrumv1.py)       |
-| Simulate Cerebrum V1 model w. BMTK | [V1 script](notebooks/v1_bmtk_simulate.py) |
-| Simulate Cerebrum V1 model w. NEST | [V1 script](notebooks/v1_nest_simulate.py) |
+| Simulate Cerebrum V1 model w. BMTK | [V1 BMTK script](notebooks/v1_bmtk_simulate.py) |
+| Simulate Cerebrum V1 model w. NEST | [V1 NEST script](notebooks/v1_nest_simulate.py) |
