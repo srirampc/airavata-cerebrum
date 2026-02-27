@@ -42,6 +42,7 @@ awitree = { git = "https://github.com/srirampc/awitree" }
 codetiming = { git = "https://github.com/srirampc/codetiming" }
 anywidget = "^0.9"
 allensdk = "^2.16"
+altair = "^6.0"
 anndata = "^0.10"
 airavata-python-sdk = "^1.1.6"
 bmtk = "^1.1"
