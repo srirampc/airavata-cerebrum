@@ -16,6 +16,7 @@ from jsonpath import JSONPointer
 from bmtk.builder import NetworkBuilder
 from bmtk.builder.node_pool import NodePool
 from airavata_cerebrum.operations import netops
+from airavata_cerebrum.model import structure
 from airavata_cerebrum.dataset import abc_mouse
 from .operations import (
     compute_pair_type_parameters,
@@ -31,7 +32,6 @@ from .operations import (
 from .dm_network import MVParMethod
 from .comm_interface import default_comm
 
-from airavata_cerebrum.model import structure
 from codetiming import Timer
 
 
@@ -170,13 +170,19 @@ class V1ConnectionMapper(structure.ConnectionMapper):
 structure.ConnectionMapper.register(V1ConnectionMapper)
 
 
-class ABCRegionMapper:
+class ABCRegionMapper(structure.RegionMapper):
+    @override
     def __init__(self, name: str, region_desc: dict[str, t.Any]):
         self.name : str = name
         self.region_desc : dict[str, t.Any] = region_desc
 
+    @override
+    def neuron_names(self) -> list[str]:
+        return []
+
+    @override
     def map(
-        self, neuron_struct: dict[str, structure.Neuron]
+        self, region_neurons: dict[str, structure.Neuron]
     ) -> structure.Region:
         return structure.Region(
             name=self.name,
@@ -184,16 +190,17 @@ class ABCRegionMapper:
             region_fraction=float(
                 self.region_desc[abc_mouse.FRACTION_WI_REGION_COLUMN]
             ),
-            neurons=neuron_struct,
+            neurons=region_neurons,
         )
 
 
-class ABCNeuronMapper:
+class ABCNeuronMapper(structure.NeuronMapper):
     def __init__(self, name: str, desc: dict[str, t.Any]):
         self.name : str = name
         self.desc : dict[str, t.Any] = desc
         self.ei_type : t.Literal['e', 'i'] = desc["ei"]
 
+    @override
     def map(self) -> structure.Neuron | None:
         frac_col = abc_mouse.FRACTION_COLUMN_FMT.format(self.name)
         return structure.Neuron(
@@ -202,7 +209,7 @@ class ABCNeuronMapper:
         )
 
 
-class V1BMTKNetworkBuilder:
+class V1BMTKNetworkBuilder(structure.ModelBuilder):
     def __init__(
         self,
         net_struct: structure.Network,
@@ -631,6 +638,7 @@ class V1BMTKNetworkBuilder:
                 self.add_connection_edges(connex_item, connex_md)
 
     @Timer(name="V1BMTKNetworkBuilder::build", logger=None)
+    @override
     def build(
         self,
     ) -> NetworkBuilder:
@@ -655,6 +663,7 @@ class V1BMTKNetworkBuilder:
         self.lgn_net.save(str(network_dir))
 
     @Timer(name="V1BMTKNetworkBuilder::save", logger=None)
+    @override
     def save(self, network_dir: str | Path):
         self.save_net(str(network_dir))
         self.save_lgn_net(str(network_dir))

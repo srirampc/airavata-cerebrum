@@ -2,16 +2,19 @@ import abc
 #
 from pathlib import Path
 from typing import Annotated, Any, Literal, TypeAlias
-from typing_extensions import Self, override
+
 from pydantic import Field
+from typing_extensions import Self, override
+
 #
 from ..base import BaseStruct
-from ..util import io as uio, merge_dict_inplace
+from ..util import io as uio
+from ..util import merge_dict_inplace
 
 
 class DataFile(BaseStruct):
     # path: pathlib.Path
-    path : Annotated[str, Field(title="File Path")]
+    path: Annotated[str, Field(title="File Path")]
 
     @override
     def exclude(self) -> set[str]:
@@ -59,7 +62,7 @@ class NeuronModel(BaseStruct):
     dynamics_params: Annotated[str, Field(title="Dynamics Parameters")] = ""
     morphology: Annotated[str, Field(title="Morphology")] = ""
     property_map: Annotated[dict[str, Any], Field(title="Property Map")] = {}
-    data_connect: Annotated[list[DataLink], Field(title="Data Connections")] = [] 
+    data_connect: Annotated[list[DataLink], Field(title="Data Connections")] = []
 
     @override
     def exclude(self) -> set[str]:
@@ -102,7 +105,7 @@ class Neuron(BaseStruct):
         if mod_struct.fraction > 0:
             self.fraction = mod_struct.fraction
         if mod_struct.N > 0:
-            self.N = mod_struct.N # pyright: ignore[reportConstantRedefinition]
+            self.N = mod_struct.N  # pyright: ignore[reportConstantRedefinition]
         # Neuron dimensions
         for dim_key, dim_value in mod_struct.dims.items():
             if dim_key not in self.dims:
@@ -123,7 +126,7 @@ class Region(BaseStruct):
     region_fraction: Annotated[float, Field(title="Region Fraction")] = 0.0
     ncells: Annotated[int, Field(title="No. Cells")] = 0
     inh_ncells: Annotated[int, Field(title="No. Inh. Cells")] = 0
-    exc_ncells: Annotated[int , Field(title="No. Ex. Cells")]= 0
+    exc_ncells: Annotated[int, Field(title="No. Ex. Cells")] = 0
     dims: Annotated[dict[str, Any], Field(title="Dimensions")] = {}
     neurons: Annotated[dict[str, Neuron], Field(title="Neurons")] = {}
 
@@ -259,27 +262,34 @@ class ExtNetwork(BaseStruct):
         return self
 
 
+class PriorNetwork(BaseStruct):
+    config_file: Annotated[Path, Field(title="Config")]
+    data_files: Annotated[dict[str, list[str]], Field(title="Data Files")]
+    data_type_files: Annotated[dict[str, list[str]], Field(title="Data Type Files")]
+
+    @override
+    def exclude(self) -> set[str]:
+        return set([])
+
+    @override
+    def apply_mod(self, mod_struct: Self) -> Self:
+        #TODO::
+        return self
+
+
 class Network(BaseStruct):
-    ncells: Annotated[int, Field(title = "No. Cells")] = 0
+    ncells: Annotated[int, Field(title="No. Cells")] = 0
     locations: Annotated[dict[str, Region], Field(title="Regions")] = {}
     connections: Annotated[dict[str, Connection], Field(title="Connections")] = {}
     dims: Annotated[dict[str, Any], Field(title="Dimensions")] = {}
-    ext_networks: Annotated[
-        dict[str, ExtNetwork], Field(title="Ext. Networks")
-    ] = {}
-    data_connect: Annotated[list[DataLink], Field(title="Data Connections")] = [] 
+    ext_networks: Annotated[dict[str, ExtNetwork], Field(title="Ext. Networks")] = {}
+    data_connect: Annotated[list[DataLink], Field(title="Data Connections")] = []
     data_files: Annotated[list[DataFile], Field(title="Data Files")] = []
 
     @override
     def exclude(self) -> set[str]:
         return set(
-            [
-                "locations",
-                "connections",
-                "ext_networks",
-                "data_connect",
-                "data_files"
-            ]
+            ["locations", "connections", "ext_networks", "data_connect", "data_files"]
         )
 
     @override
@@ -342,7 +352,7 @@ class Network(BaseStruct):
 
     @classmethod
     def from_file_list(cls, in_files: list[str | Path]) -> "Network":
-        cust_dict : dict[str, Any] = {}
+        cust_dict: dict[str, Any] = {}
         for ifile in in_files:
             f_dict = uio.load_json(ifile)
             if cust_dict and f_dict:
@@ -350,10 +360,13 @@ class Network(BaseStruct):
             else:
                 cust_dict = f_dict
         return cls.model_validate(cust_dict)
+
+
 #
 # Mapper Abstract Classes
 #
-MapperDesc : TypeAlias = dict[str, dict[str, Any]]
+MapperDesc: TypeAlias = dict[str, dict[str, Any]]
+
 
 class RegionMapper(abc.ABC):
     @abc.abstractmethod
@@ -420,8 +433,51 @@ class NoneConnectionMapper(ConnectionMapper):
         return None
 
 
+#
+# Builder Abstract Classes
+#
+class ModelBuilder(abc.ABC):
+    @abc.abstractmethod
+    def __init__(
+        self,
+        net_struct: Network,
+        **kwargs: Any,
+    ):
+        return None
+
+    @abc.abstractmethod
+    def build(self) -> Any:
+        return None
+
+    @abc.abstractmethod
+    def save(self, network_dir: str | Path):
+        return None
+
+
+#
+# Editor Abstract Classes
+#
+class ModelEditor(abc.ABC):
+    @abc.abstractmethod
+    def __init__(
+        self,
+        prior_net: PriorNetwork,
+        net_struct: Network,
+        **kwargs: Any,
+    ):
+        return None
+
+    @abc.abstractmethod
+    def edit(self) -> Any:
+        return None
+
+    @abc.abstractmethod
+    def save(self, network_dir: str | Path):
+        return None
+
+
 def dict2netstruct(
-    network_struct: dict[str, Any], # pyright: ignore[reportExplicitt.Any]
+    network_struct: dict[str, Any],  # pyright: ignore[reportExplicitt.Any]
 ) -> Network:
     return Network.model_validate(network_struct)
 
@@ -429,7 +485,7 @@ def dict2netstruct(
 #
 #
 def srcdata2network(
-    network_desc: dict[str, Any], # pyright: ignore[reportExplicitt.Any]
+    network_desc: dict[str, Any],  # pyright: ignore[reportExplicitt.Any]
     model_name: str,
     desc2region_mapper: type[RegionMapper],
     desc2neuron_mapper: type[NeuronMapper],
@@ -465,28 +521,28 @@ def subset_network(net_stats: Network, region_list: list[str]) -> Network:
 # TODO: Map Node Parameters
 # def map_node_paramas(model_struct, node_map):
 #     pass
-# 
-# 
+#
+#
 # TODO: Filter node Parameters
 # def filter_node_params(model_struct, filter_predicate):
 #     pass
-# 
-# 
+#
+#
 # TODO: Map Edge Parameters
 # def map_edge_paramas(model_struct, node_map):
 #     pass
-# 
-# 
+#
+#
 # TODO: Filter Edge Parameters
 # def filter_edge_params(model_struct, filter_predicate):
 #     pass
-# 
-# 
+#
+#
 # TODO: Union Parameters
 # def union_network(model_struct1, model_struct2):
 #     pass
-# 
-# 
+#
+#
 # TODO: Join Network
 # def join_network(model_struct1, model_struct2):
 #     pass

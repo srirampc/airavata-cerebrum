@@ -126,14 +126,12 @@ class RecipeSetup(pydantic.BaseModel):
         return self.recipe_templates
 
 
-
-
 class ModelRecipe(pydantic.BaseModel):
     recipe_setup: RecipeSetup
     region_mapper: type[structure.RegionMapper]
     neuron_mapper: type[structure.NeuronMapper]
     connection_mapper: type[structure.ConnectionMapper]
-    network_builder: type
+    network_builder: type[structure.ModelBuilder]
     mod_structure: structure.Network | None = None
     save_flag: bool = True
     write_duck: bool = True
@@ -271,6 +269,25 @@ class ModelRecipe(pydantic.BaseModel):
             net_builder.save(self.recipe_setup.network_dir)
         return net_builder
 
+
+class ModelUpdateRecipe(pydantic.BaseModel):
+    recipe_setup: RecipeSetup
+    prior_net: structure.PriorNetwork
+    connection_mapper: type[structure.ConnectionMapper]
+    network_updater: type[structure.ModelEditor]
+    mod_structure: structure.Network
+
+    def apply_mod(self, ncells: int=30000):
+        #TODO:: work in the future
+        return None
+
+    def update_network(self, save_flag: bool=True, **kwargs: t.Any):
+        #TODO::
+        updater = self.network_updater(self.prior_net, self.mod_structure) 
+        updater.edit()
+        if save_flag:
+            updater.save(self.recipe_setup.network_dir)
+        return updater
 
 def init_recipe_setup(
     name: str,
