@@ -3,7 +3,11 @@ from pathlib import Path
 
 import pydantic
 
-from airavata_cerebrum.recipe import RecipeSetup
+from airavata_cerebrum.model.structure import Network
+from airavata_cerebrum.recipe import ModelRecipe, RecipeSetup
+
+from .model import (V1BMTKNetworkBuilder, V1ConnectionMapper, V1NeuronMapper,
+                    V1RegionMapper)
 
 
 class RecipeParams(pydantic.BaseModel):
@@ -72,4 +76,17 @@ class RecipeParams(pydantic.BaseModel):
             recipe_dir=self.recipe_dir,
             recipe_output_dir=self.output_dir,
             create_model_dir=True,
+        )
+
+    def model_recipe(self) -> ModelRecipe:
+        md_recipe_setup = self.recipe_setup()
+        custom_mod_struct = Network.from_file_list(self.custom_mod)
+        return ModelRecipe(
+            recipe_setup=md_recipe_setup,
+            region_mapper=V1RegionMapper,
+            neuron_mapper=V1NeuronMapper,
+            connection_mapper=V1ConnectionMapper,
+            network_builder=V1BMTKNetworkBuilder,
+            mod_structure=custom_mod_struct,
+            save_flag=self.save_flag,
         )
