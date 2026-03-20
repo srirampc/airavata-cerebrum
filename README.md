@@ -35,11 +35,11 @@ standalone batch scripts to build/simulate using cerbrum.
 
 ## Command-line scripts
 
-| Model                              | Scripts                                              |
-| ---------------------------------- | ---------------------------------------------------- |
-| Build/Simulate Cerebrum V1 model   | [V1 script](resources/notebooks/cerebrumv1.py)       |
-| Simulate Cerebrum V1 model w. BMTK | [V1 script](resources/notebooks/v1_bmtk_simulate.py) |
-| Simulate Cerebrum V1 model w. NEST | [V1 script](resources/notebooks/v1_nest_simulate.py) |
+| Model                              | Scripts                                                           |
+| ---------------------------------- | ----------------------------------------------------------------- |
+| Build/Simulate Cerebrum V1 model   | [V1 script](resources/notebooks/mousev1/cli.py)                   |
+| Simulate Cerebrum V1 model w. BMTK | [V1 script](resources/notebooks/mousev1/simulate_cli.py)          |
+| Simulate Cerebrum V1 model w. NEST | [V1 script](resources/notebooks/mousev1/nest_simulate_cli.py)     |
 
 # Install Airavata Cerebrum
 
