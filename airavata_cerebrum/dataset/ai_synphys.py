@@ -1,21 +1,35 @@
-import collections
+import ast
+import itertools
 import logging
-import typing
-import traitlets
+import typing as t
+#
+import duckdb
+import polars as pl
 import aisynphys
 #
+from typing_extensions import override
+from pydantic import Field
 from aisynphys.database import SynphysDatabase
+from aisynphys.database.schema.experiment import PairBase
 from aisynphys.cell_class import CellClass, classify_cells, classify_pairs
 from aisynphys.connectivity import measure_connectivity
 #
-from .. import base
+from ..base import (
+    CerebrumBaseModel,
+    BaseParams, 
+    DbQuery,
+    QryDBWriter,
+    QryItr,
+)
 
 
-class CellClassSelection(
-    collections.namedtuple("CellClassSelection", ["layer", "neuron", "criteria"])
-):
+class CellClassSelection(t.NamedTuple):
+    layer: str
+    neuron: str
+    criteria: dict[str, str | tuple[str, str]]
+
     @property
-    def name(self):
+    def name(self) -> str:
         return self.layer + "-" + self.neuron
 
 
@@ -61,36 +75,12 @@ def _log():
     return logging.getLogger(__name__)
 
 
-class AISynPhysQuery(base.DbQuery):
-    class QryTraits(traitlets.HasTraits):
-        download_base = traitlets.Unicode()
-        layer = traitlets.List()
-
-    def __init__(self, **params):
-        """
-        Initialize AI SynphysDatabase
-        Parameters
-        ----------
-        download_base : str (Mandatory)
-           File location to store the database
-        projects : list[str] (optional)
-           Run the database
-
-        """
-        self.name = __name__ + ".ABCDbMERFISHQuery"
-        self.download_base = params["download_base"]
-        aisynphys.config.cache_path = self.download_base
-        self.sdb = SynphysDatabase.load_current("small")
-        self.projects = self.sdb.mouse_projects
-        if "projects" in params and params["projects"]:
-            self.projects = params["projects"]
-        self.qpairs = self.sdb.pair_query(project_name=self.projects).all()
-
+class AISynPhysHelper:
+    @staticmethod
     def select_cell_classes(
-        self,
-        layer_list: typing.List[str] | None,
-        neuron_list: typing.List[str] | None = None
-    ) -> typing.Dict[str, CellClass]:
+        layer_list: list[str] | None,
+        neuron_list: list[str] | None = None
+    ) -> dict[str, CellClass]:
         layer_set = CELL_LAYER_SET
         if layer_list:
             layer_set = set(layer_list)
@@ -102,12 +92,74 @@ class AISynPhysQuery(base.DbQuery):
             for cselect in CELL_CLASS_SELECT
             if (cselect.layer in layer_set) and (cselect.neuron in neuron_set)
         }
+    
+    @staticmethod
+    def get_connectivity(
+        layer_list: list[str] | None,
+        qpairs : list[PairBase]
+    ) -> tuple[dict[t.Any, t.Any], t.Literal[0, 1]]:
+        cell_classes = AISynPhysHelper.select_cell_classes(layer_list)
+        cell_groups = classify_cells(cell_classes.values(), pairs=qpairs)
+        pair_groups = classify_pairs(qpairs, cell_groups)
+        try:
+            return measure_connectivity(
+                pair_groups,
+                sigma=100e-6,
+                dist_measure="lateral_distance",
+            ), 0 
+        except RuntimeWarning as _rex:
+            return {}, 1
 
+
+class AISynInitParams(CerebrumBaseModel):
+    download_base : t.Annotated[str, Field(title="Download Base Dir.")]
+    projects : t.Annotated[list[str], Field(title="AI Syn. Projects")] = []
+    db_size  : t.Annotated[str, Field(title="DB Size")] = "small"
+
+class AISynExecParams(CerebrumBaseModel):
+    layer : t.Annotated[list[str], Field(title="Layers")]
+
+AISynBaseParams : t.TypeAlias = BaseParams[AISynInitParams, AISynExecParams]
+
+class AISynPhysQuery(DbQuery[AISynInitParams, AISynExecParams]):
+    class QryParams(AISynBaseParams):
+        init_params: t.Annotated[AISynInitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[AISynExecParams, Field(title='Exec Params')]
+
+    def __init__(self, init_params: AISynInitParams, **_params: t.Any):
+        """
+        Initialize AI SynphysDatabase
+        Parameters
+        ----------
+        download_base : str (Mandatory)
+           File location to store the database
+        projects : list[str] (optional)
+           Run the database
+
+        """
+        self.name : str = __name__ + ".AIProject"
+        self.download_base : str = init_params.download_base
+        aisynphys.config.cache_path = self.download_base
+        self.sdb : SynphysDatabase = SynphysDatabase.load_current(
+            init_params.db_size
+        )
+        self.projects : list[str] =  (
+            init_params.projects
+            if init_params.projects else self.sdb.mouse_projects
+        )
+        self.qpairs : list[PairBase] = self.sdb.pair_query(
+            project_name=self.projects
+        ).all()
+        self.nwarnings : int = 0
+
+    @override
     def run(
         self,
-        in_iter: typing.Iterable | None,
-        **params: typing.Any,
-    ) -> typing.Iterable | None:
+        exec_params: AISynExecParams,
+        first_iter: QryItr | None,
+        *rest_iter: QryItr | None,
+        **_params: t.Any,
+    ) -> QryItr | None:
         """
         Get the connectivity probabilities for given layter
 
@@ -124,23 +176,31 @@ class AISynPhysQuery(base.DbQuery):
         }
         """
         #
-        default_args = {}
-        rarg = {**default_args, **params} if params is not None else default_args
-        _log().info("AISynPhysQuery Args : %s", rarg)
-        layer_list = rarg["layer"]
-        cell_classes = self.select_cell_classes(layer_list)
-        cell_groups = classify_cells(cell_classes.values(), pairs=self.qpairs)
-        pair_groups = classify_pairs(self.qpairs, cell_groups)
-        nwarnings = 0
-        try:
-            results = measure_connectivity(
-                pair_groups, sigma=100e-6, dist_measure="lateral_distance"
-            ) 
-        except RuntimeWarning:
-            nwarnings += 1
-            results = {}
-            pass
-        _log().info("AISynPhysQuery Args : [%s] ; N warnings [%d]", rarg, nwarnings)
+        # default_args = {}
+        # rarg = {**default_args, **params} if params else default_args
+        _log().info("AISynPhysQuery Args : %s", str(exec_params))
+        results, rerror = AISynPhysHelper.get_connectivity(
+            exec_params.layer,
+            self.qpairs
+        )
+        # cell_classes = self.select_cell_classes(layer_list)
+        # cell_groups = classify_cells(cell_classes.values(), pairs=self.qpairs)
+        # pair_groups = classify_pairs(self.qpairs, cell_groups)
+        # nwarnings = 0
+        # try:
+        #     results = measure_connectivity(
+        #         pair_groups, sigma=100e-6, dist_measure="lateral_distance"
+        #     ) 
+        # except RuntimeWarning:
+        #     nwarnings += 1
+        #     results = {}
+        #     pass
+        self.nwarnings += rerror
+        _log().info(
+            "AISynPhysQuery Args : [%s] ; N warnings [%d]",
+            str(exec_params),
+            self.nwarnings
+        )
         #
         return [
             {
@@ -154,19 +214,65 @@ class AISynPhysQuery(base.DbQuery):
             }
         ]
 
+    @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.QryTraits
+    def params_type(cls) -> type[AISynBaseParams]:
+        return cls.QryParams
+
+    @override
+    @classmethod
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> AISynBaseParams:
+        return cls.QryParams.model_validate(param_dict)
 
 
-#
-# ------- Query and Xform Registers -----
-#
-def query_register() -> typing.List[type[base.DbQuery]]:
-    return [
-        AISynPhysQuery,
-    ]
+class DFBuilder:
+    @staticmethod
+    def syn_row(pair_literal: str, value: float) -> tuple[str, str, float]:
+        pairx = ast.literal_eval(pair_literal)
+        return (pairx[0], pairx[1], value)
+    
+    @staticmethod
+    def split_pairs(p_dict: dict[str, t.Any]):
+        return (
+            DFBuilder.syn_row(px, vx)
+            for px, vx in p_dict.items()
+        )
+ 
+    @staticmethod
+    def build(
+        in_iter: QryItr | None,
+        **_params: t.Any,
+    ) -> pl.DataFrame | None:
+        if in_iter is None:
+            return None
+        rschema=[
+            ("pre_synapse", pl.String),
+            ("post_synapse", pl.String),
+            ("connect_prob", pl.Float64)
+        ]
+        return pl.DataFrame(
+            (
+                itertools.chain.from_iterable(
+                    DFBuilder.split_pairs(x) for x in in_iter
+                )
+            ),
+            schema=rschema,
+            orient="row",
+        )
 
 
-def xform_register() -> typing.List[type[base.OpXFormer]]:
-    return []
+class AISynDuckDBWriter(QryDBWriter):
+    def __init__(self, db_conn: duckdb.DuckDBPyConnection):
+        self.conn : duckdb.DuckDBPyConnection = db_conn
+
+    @override
+    def write(
+        self,
+        in_iter: QryItr | None,
+        **_params: t.Any,
+    ) -> None:
+        result_df = DFBuilder.build(in_iter) # pyright: ignore[reportUnusedVariable]
+        self.conn.execute(
+            "CREATE OR REPLACE TABLE ai_synphys AS SELECT * FROM result_df"
+        )
+        self.conn.commit()

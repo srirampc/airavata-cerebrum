@@ -1,462 +1,700 @@
 import abc
 import itertools
 import logging
-import typing
-import types
+import typing as t
+#
+import awitree
 import ipywidgets as iwidgets
-import ipytree as itree
+from pydantic.fields import FieldInfo
 import traitlets
 
-from .. import base
-from ..register import find_type
-from ..util.desc_config import CfgKeys, ModelDescConfig, ModelDescConfigTemplate, ModelDescCfgTuple
+#
+from collections.abc import Iterable
+from typing_extensions import override
+
+from ..base import CerebrumBaseModel, BaseStruct, BaseParams
+from ..const import RecipeKeys
+from ..recipe import RecipeSetup
 from ..model import structure as structure
+from . import (
+    RcpTreeNames,
+    StructTreeNames,
+    workflow_params,
+    BaseTree,
+    CBTreeNode,
+    BasePanel
+)
+
+IPyPanelT : t.TypeAlias = BasePanel[iwidgets.CoreWidget, iwidgets.Box]
 
 def _log():
     return logging.getLogger(__name__)
 
 
-class CfgTreeNames:
-    SRC_DATA = "Source Data"
-    LOCATIONS = "Locations"
-    CONNECTIONS = "Connections"
+def scalar_widget(
+    widget_key: str,
+    value: t.Any,
+    options: list[str] | None = None,
+    allowed: list[str] | None = None,
+    **_kwargs: t.Any,
+) -> iwidgets.CoreWidget | None:
+    match widget_key:
+        case "int" | "int32" | "int64":
+            return iwidgets.IntText(value=value, disabled=False)
+        case "float" | "float32" | "float64":
+            return iwidgets.FloatText(value=value, disabled=False)
+        case "text":
+            return iwidgets.Text(value=value, disabled=False)
+        case "textarea" | "str":
+            return iwidgets.Textarea(value=value, disabled=False)
+        case "option":
+            return iwidgets.Dropdown(
+                disabled=False,
+                value=value,
+                options=options if options else [],
+            )
+        case "check" | "bool":
+            return iwidgets.Checkbox(
+                value=bool(value),
+                disabled=False,
+                indent=True,
+            )
+        case "tags":
+            return iwidgets.TagsInput(
+                value=value,
+                allowed_tags=allowed if allowed else None,
+                allowed_duplicates=False,
+            )
+        case "NoneType":
+            return iwidgets.Text(value="None", disabled=False)
+        case _:
+            return None
 
 
-#
-# Base class for tree node
-class CBTreeNode(itree.Node):
-    node_key = traitlets.Unicode()
+class PropertyListLayout(iwidgets.GridspecLayout):
+    value : traitlets.List[t.Any] = traitlets.List(
+        help="List values"
+    ).tag(sync=True)
+
+    def __init__(self, value: list[t.Any] | None, **kwargs: t.Any):
+        if value and len(value) > 0:
+            super().__init__(len(value), 2, value=value, **kwargs)
+            for kx, vx in enumerate(value):
+                wdx = scalar_widget(type(vx).__name__, vx)
+                wdx.add_traits(index=traitlets.Integer(kx))
+                wdx.observe(self.handle_change)
+                self[kx, 0] = iwidgets.Label(str(kx) + " :")
+                self[kx, 1] = wdx
+        else:
+            super().__init__(1, 1, value=[], **kwargs)
+            self[0, 0] = iwidgets.Label("[]")
+
+    def handle_change(self, change: dict[str, t.Any]):
+        # print("L:", change)
+        if change["name"] == "value" and change["old"] != change["new"]:
+            _log().info("List CTR Change Value : " + str(change))
+            entry_index = change["owner"].index
+            new_value = change["new"]
+            self.value[entry_index] = new_value
+
+
+class PropertyTupleLayout(iwidgets.GridspecLayout):
+    value : traitlets.Tuple = traitlets.Tuple(
+        help="Tuple values"
+    ).tag(sync=True)
+
+    def __init__(self, value: tuple[t.Any] | None, **kwargs: t.Any):
+        if value and len(value) > 0:
+            super().__init__(len(value), 2, value=value, **kwargs)
+            for kx, vx in enumerate(value):
+                wdx = scalar_widget(type(vx).__name__, vx)
+                wdx.add_traits(index=traitlets.Integer(kx))
+                wdx.observe(self.handle_change)
+                self[kx, 0] = iwidgets.Label(f"{str(kx)} :")
+                self[kx, 1] = wdx
+        else:
+            super().__init__(1, 1, value=(None), **kwargs)
+            self[0, 0] = iwidgets.Label("()")
+
+    def handle_change(self, change: dict[str, t.Any]):
+        # print("L:", change)
+        if change["name"] == "value" and change["old"] != change["new"]:
+            _log().info("List CTR Change Value : " + str(change))
+            entry_index = change["owner"].index
+            new_value = change["new"]
+            tlist = list(self.value)
+            tlist[entry_index] = new_value
+            self.value = tuple(tlist)
+
+
+class PropertyMapLayout(iwidgets.GridspecLayout):
+    value : traitlets.Dict = traitlets.Dict(
+        help="Dict values"
+    ).tag(sync=True)
+
+    def __init__(self, value: dict[str, t.Any], **kwargs: t.Any):
+        # print("Value: ", len(value))
+        if value and len(value) > 0:
+            super().__init__(len(value), 2, value=value, **kwargs)
+            for ix, (kx, vx) in enumerate(value.items()):
+                wdx = self.init_widget(vx)
+                wdx.add_traits(key=traitlets.Unicode(kx))  # type: ignore
+                wdx.observe(self.handle_change)  # type: ignore
+                self[ix, 0] = iwidgets.Label(f"{str(kx)} :")
+                self[ix, 1] = wdx 
+        else:
+            super().__init__(1, 1, value={}, **kwargs)
+            self[0, 0] = iwidgets.Label("{}")
+
+    def handle_change(self, change: dict[str, t.Any]):
+        # print("L:", change)
+        if change["name"] == "value" and change["old"] != change["new"]:
+            _log().info("List CTR Change Value : " + str(change))
+            entry_key = change["owner"].key
+            new_value = change["new"]
+            self.value[entry_key] = new_value
+ 
+    def init_widget(self, vx: t.Any) -> iwidgets.CoreWidget | None:
+        match type(vx).__name__:
+            case "NoneType":
+                return scalar_widget("str", "None")
+            case "list":
+                return PropertyListLayout(vx)
+            case "tuple":
+                return PropertyTupleLayout(vx)
+            case _:
+                return scalar_widget(type(vx).__name__, vx)
+
+
+def render_property(
+    w_key: str,
+    value: t.Any,
+    **kwargs: t.Any
+) -> iwidgets.CoreWidget | None:
+    match w_key:
+        case "dict":
+            return PropertyMapLayout(value, **kwargs)
+        case "list":
+            return PropertyListLayout(value, **kwargs)
+        case "tuple":
+            return PropertyTupleLayout(value, **kwargs)
+        case _:
+            return scalar_widget(w_key, value, **kwargs)
 
 
 # Base class for side panel
-class PanelBase:
-    def __init__(self, **kwargs):
-        self.layout = None
-        self.widget_map = {}
-        self.link_map = {}
-        self.links = []
-
-    def clear_links(self):
-        for lx in self.links:
-            lx.unlink()
-        self.links.clear()
-
-    def update(self, new_val):
-        self.clear_links()
-        if not new_val:
-            return
-        for slot, widx in self.link_map.items():
-            self.links.append(iwidgets.link((new_val, slot), (widx, "value")))
-
-    @staticmethod
-    def get_widget(widget_key, **kwargs):
-        match widget_key:
-            case "int":
-                return iwidgets.IntText(value=kwargs["default"], disabled=False)
-            case "float":
-                return iwidgets.FloatText(value=kwargs["default"], disabled=False)
-            case "text":
-                return iwidgets.Text(value=kwargs["default"], disabled=False)
-            case "textarea":
-                return iwidgets.Textarea(value=kwargs["default"], disabled=False)
-            case "option":
-                return iwidgets.Dropdown(
-                    options=kwargs["options"],
-                    disabled=False,
-                )
-            case "check":
-                return iwidgets.Checkbox(
-                    value=bool(kwargs["default"]),
-                    disabled=False,
-                    indent=True,
-                )
-            case "tags":
-                return iwidgets.TagsInput(
-                    value=kwargs["default"],
-                    allowed_tags=kwargs["allowed"],
-                    allowed_duplicates=False,
-                )
-
-
-class CfgSidePanel(PanelBase):
-    def __init__(self, template_map, **kwargs):
-        super().__init__(**kwargs)
-        for ekey, vmap in template_map["init_params"].items():
-            self.widget_map[ekey] = PanelBase.get_widget(vmap["type"], **vmap)
-        for ekey, vmap in template_map["exec_params"].items():
-            self.widget_map[ekey] = PanelBase.get_widget(vmap["type"], **vmap)
-
-        self.link_map = self.widget_map
-        # Set Widgets
-        init_widgets = [iwidgets.Label(" Init Arguments : ")]
-        if CfgKeys.INIT_PARAMS in template_map and template_map[CfgKeys.INIT_PARAMS]:
-            init_widgets += [
-                self.wrap(kx, wx)
-                for kx, wx in template_map[CfgKeys.INIT_PARAMS].items()
-            ]
-        else:
-            init_widgets[0].value += " N/A "
-        exec_widgets = [iwidgets.Label(" Exec Arguments : ")]
-        if CfgKeys.EXEC_PARAMS in template_map and template_map[CfgKeys.EXEC_PARAMS]:
-            exec_widgets += [
-                self.wrap(kx, wx)
-                for kx, wx in template_map[CfgKeys.EXEC_PARAMS].items()
-            ]
-        else:
-            exec_widgets[0].value += " N/A "
-        self.layout = iwidgets.VBox(init_widgets + exec_widgets)
-
-    def wrap(self, widget_key, twid_dict):
-        return iwidgets.HBox(
-            [
-                iwidgets.Label(twid_dict[CfgKeys.LABEL] + " :"),
-                self.widget_map[widget_key],
-            ]
-        )
-
-class StructSidePanel(PanelBase):
-    def __init__(self, struct_comp: structure.StructBase, **kwargs):
-        super().__init__(**kwargs)
-        for ekey, vmap in struct_comp.trait_ui().items():
-            self.widget_map[ekey] = PanelBase.get_widget(
-                vmap[CfgKeys.TYPE],
-                default=vmap["default"],
-            )
-
-        self.link_map = self.widget_map
-        # Set Widgets
-        struct_widgets = [iwidgets.Label(struct_comp.name)]
-        struct_widgets += [
-            self.wrap(kx, wx)
-            for kx, wx in struct_comp.trait_ui().items()
-        ]
-        self.layout = iwidgets.VBox(struct_widgets)
-
-    def wrap(self, widget_key, twid_dict):
-        return iwidgets.HBox(
-            [
-                iwidgets.Label(twid_dict[CfgKeys.LABEL] + " :"),
-                self.widget_map[widget_key],
-            ]
-        )
-
-
-class TreeBase(abc.ABC):
+class DBWorkflowSidePanel(IPyPanelT):
     def __init__(
         self,
-        left_width: str,
-        **kwargs,
+        mdr_setup: RecipeSetup,
+        workflow_desc: list[dict[str, t.Any]],
+        delay_build: bool = False,
+        **kwargs: t.Any,
     ):
-        self.tree: itree.Tree = itree.Tree()
-        self.layout: iwidgets.TwoByTwoLayout = iwidgets.TwoByTwoLayout()
-        self.panel_keys: typing.Set[str] = set([])
-        self.panel_dict: typing.Dict[str, PanelBase] = {}
-        self.left_width: str = left_width
+        super().__init__(**kwargs)
+        self.mdr_setup: RecipeSetup = mdr_setup
+        self.workflow_desc: list[dict[str, t.Any]] = workflow_desc
+        # Setup Widgets
+        if delay_build:
+            self.set_layout(None)
+        else:
+            self.set_layout(self.build_layout())
 
-    @abc.abstractmethod
-    def init_tree(self) -> itree.Tree:
-        return itree.Tree()
-    
-    @abc.abstractmethod
-    def build(self) -> "TreeBase":
-        return None
-
-    def tree_update(self, change):
-        new_val = change["new"]
-        if not len(new_val):
-            return
-        _log().warning("Key : " + new_val[0].node_key)
-        node_key = new_val[0].node_key
-        if node_key in self.panel_dict:
-            _log().warning("Key in Panel ")
-            side_panel = self.panel_dict[node_key]
-            side_panel.update(new_val[0])
-            self.layout.bottom_right = side_panel.layout
-
-    @staticmethod
-    def struct_tree_node(
-        struct_obj: structure.StructBase
-    ) -> CBTreeNode:
-        tnode_class = types.new_class(
-            struct_obj.__class__.__name__ + "Node",
-            bases=(CBTreeNode, struct_obj.trait_type()),
-        )
-        return tnode_class(
-            node_key=struct_obj.name,
-            **struct_obj.model_dump(exclude=struct_obj.exclude())
+    @override
+    def build_layout(self) -> iwidgets.Box | None:
+        return iwidgets.VBox(
+            [
+                iwidgets.VBox(
+                    [
+                        iwidgets.Label(
+                            f"Step {wf_idx + 1} : {wf_step[RecipeKeys.LABEL]} ::",
+                            style={"font_weight": "bold"},
+                        )
+                    ] +
+                    self.render_workflow_step(wf_step),
+                    layout=iwidgets.Layout(border="solid")
+                )
+                for wf_idx, wf_step in enumerate(self.workflow_desc)
+            ]
         )
 
-
-    @staticmethod
-    def type_trait_tree_node(
-        register_key: str, init_params: typing.Dict
-    ) -> CBTreeNode | None:
-        src_class: type[base.DbQuery] | type[base.OpXFormer] | None = find_type(
-            register_key
+    def render_workflow_step(
+        self, wf_step: dict[str, t.Any]
+    ) -> list[iwidgets.CoreWidget]:
+        step_key = wf_step[RecipeKeys.NAME]
+        # _log().warning("Initializing Panels for [%s]", step_key)
+        rcp_template = self.mdr_setup.get_template_for(step_key)
+        _, rcp_params = workflow_params(wf_step)
+        return self.workflow_ui(
+            rcp_template,
+            rcp_params,
         )
-        if src_class:
-            tnode_class = types.new_class(
-                src_class.__name__ + "Node",
-                bases=(CBTreeNode, src_class.trait_type()),
+
+    def workflow_ui(
+        self,
+        rcp_template: dict[str, t.Any],
+        wf_params: BaseParams[CerebrumBaseModel, CerebrumBaseModel]  | None = None,
+    ) -> list[iwidgets.CoreWidget]:
+        return [
+            self.workflow_params_widget(
+                rcp_template[RecipeKeys.INIT_PARAMS],
+                wf_params.init_params if wf_params else None,
+            ),
+            self.workflow_params_widget(
+                rcp_template[RecipeKeys.EXEC_PARAMS],
+                wf_params.exec_params if wf_params else None,
+            ),
+        ]
+
+    def render_widget(
+        self,
+        w_key: str,
+        value: t.Any,
+        prop_label: str,
+        **kwargs: t.Any
+    ):
+        return iwidgets.HBox(
+            [
+                iwidgets.Label(f"{prop_label} : "),
+                render_property(w_key, value, **kwargs,),
+            ]
+        )
+
+    def workflow_params_widget(
+        self,
+        wf_template: dict[str, t.Any] | None,
+        wf_params: CerebrumBaseModel | None ,
+    ) -> iwidgets.CoreWidget:
+        wd_itr: Iterable[iwidgets.CoreWidget | None] = ()
+        if wf_template and wf_params:
+            wd_itr = (
+                self.render_widget(
+                    tdesc[RecipeKeys.TYPE],
+                    wf_params.get(tkey, tdesc["default"]),
+                    tdesc[RecipeKeys.LABEL],
+                    **tdesc  
+                )
+                for tkey, tdesc in wf_template.items()
+                if tkey not in wf_params.exclude()
             )
-            return tnode_class(**init_params)
-        elif CfgKeys.NODE_KEY in init_params and CfgKeys.NAME in init_params:
-            return CBTreeNode(**init_params)
+        elif wf_template:
+            wd_itr = (
+                self.render_widget(
+                    tdesc[RecipeKeys.TYPE],
+                    tdesc["default"],
+                    tdesc[RecipeKeys.LABEL],
+                    **tdesc
+                )
+                for _tkey, tdesc in wf_template.items()
+            )
+        elif wf_params:
+            wd_itr = (
+                self.render_widget(
+                     tdesc.annotation.__name__,
+                     wf_params.get(tkey),
+                     str(tdesc.title),
+                     options = [wf_params.get(tkey)],
+                     allowed = [wf_params.get(tkey)]
+                )
+                for tkey, tdesc in wf_params.model_fields.items()
+                if tkey not in wf_params.exclude()
+            )
+
+        return iwidgets.VBox(list(wd_itr))
+
+
+
+class StructSidePanel(IPyPanelT):
+    def __init__(
+        self,
+        struct_comp: BaseStruct,
+        delay_build: bool = False,
+        **kwargs: t.Any,
+    ):
+        super().__init__(**kwargs)
+        self._struct: BaseStruct = struct_comp
+        if delay_build:
+            self.set_layout(None)
+        else:
+            self.set_layout(self.build_layout())
+
+    def wrap_hbox(
+            self,
+            field_info: FieldInfo,
+            rwidget: iwidgets.CoreWidget | None
+    ) -> iwidgets.HBox | None:
+        if rwidget is not None:
+            return iwidgets.HBox([
+                iwidgets.Label(str(field_info.title) + " :"),
+                rwidget
+            ])
         else:
             return None
 
-    @staticmethod
-    def wflow_step_tree_node(
-        wf_step: typing.Dict[str, typing.Any]
-    ) -> CBTreeNode | None:
-        step_key = wf_step[CfgKeys.NAME]
-        wf_dict = (
-            {
-                CfgKeys.NAME: wf_step[CfgKeys.LABEL],
-                CfgKeys.NODE_KEY: wf_step[CfgKeys.NAME],
-            }
-            | wf_step[CfgKeys.INIT_PARAMS]
-            | wf_step[CfgKeys.EXEC_PARAMS]
+    @override
+    def build_layout(self):
+        # Set Widgets
+        wd_itr: Iterable[iwidgets.HBox | None] = (
+            self.wrap_hbox(
+                field_info,
+                render_property(
+                    field_info.annotation.__name__,
+                    self._struct.get(fkey),
+                )
+            )
+            for fkey, field_info in self._struct.model_fields.items()
+            if fkey not in self._struct.exclude()
         )
-        return ConfigTreeBase.type_trait_tree_node(step_key, wf_dict)
+        ui_elements: list[iwidgets.CoreWidget] = [
+            wx for wx in wd_itr if wx is not None
+        ]
+        return iwidgets.VBox(
+            [iwidgets.Label(self._struct.name + " : ")] + ui_elements
+        )
 
 
-class ConfigTreeBase(TreeBase):
+class RecipeTreeBase(BaseTree[IPyPanelT], metaclass=abc.ABCMeta):
     def __init__(
         self,
-        md_cfg_tuple: ModelDescCfgTuple,
-        left_width: str,
-        **kwargs,
+        mdr_setup: RecipeSetup,
+        right_width: str,
+        **kwargs: t.Any,
     ):
-        super().__init__(left_width, **kwargs)
-        self.md_cfg: ModelDescConfig = md_cfg_tuple.config
-        self.md_cfg_template: ModelDescConfigTemplate = md_cfg_tuple.templates
+        super().__init__(**kwargs)
+        self.mdr_setup: RecipeSetup = mdr_setup
+        self.root_node: CBTreeNode | None = None
+        self.right_width : str = right_width
 
-    def init_db_node(
-        self, db_key: str, db_desc: typing.Dict[str, typing.Any]
-    ) -> CBTreeNode:
-        db_node = CBTreeNode(name=db_desc[CfgKeys.LABEL], node_key=db_key)
-        for wf_step in db_desc[CfgKeys.WORKFLOW]:
-            db_node.add_node(ConfigTreeBase.wflow_step_tree_node(wf_step))
-            self.panel_keys.add(wf_step[CfgKeys.NAME])
-        return db_node
-
-    def init_side_panels(self) -> typing.Dict[str, PanelBase]:
-        _log().info(
-            "Start Left-side panel construction for [%s]", str(self.panel_dict.keys())
+    def db_workflow_recipe_node(
+        self,
+        db_key: str,
+        db_desc: dict[str, t.Any],
+        delay_build: bool = False,
+    ) -> tuple[CBTreeNode, IPyPanelT]:
+        db_node = CBTreeNode.init(name=db_desc[RecipeKeys.LABEL], key=db_key)
+        _log().info("Start Left-side panel construction for [%s]", str(db_key))
+        db_panel = DBWorkflowSidePanel(
+            self.mdr_setup, db_desc[RecipeKeys.WORKFLOW], delay_build
         )
-        for pkey in self.panel_keys:
-            _log().debug("Initializing Panels for [%s]", pkey)
-            ptemplate = self.md_cfg_template.get_template_for(pkey)
-            self.panel_dict[pkey] = CfgSidePanel(ptemplate)
         _log().info("Completed Left-side panel construction")
-        return self.panel_dict
+        return db_node, db_panel
 
-    def build(self) -> TreeBase:
-        self.tree = self.init_tree()
-        self.panel_dict = self.init_side_panels()
+    @override
+    def build(self, root_pfx: str = "") -> BaseTree[IPyPanelT]:
+        self.tree: awitree.Tree | None = self.build_tree(root_pfx)
         self.tree.observe(self.tree_update, names="selected_nodes")
-        self.layout = iwidgets.TwoByTwoLayout(top_left=self.tree, bottom_right=None)
+        self.layout: iwidgets.TwoByTwoLayout = iwidgets.TwoByTwoLayout(
+            top_left=self.tree,
+            bottom_right=None
+        )
         return self
 
+    @override
+    def set_layout(self, selected_panel: IPyPanelT) -> None:
+          self.layout.bottom_right = selected_panel.layout
+
+    @override
     @abc.abstractmethod
-    def init_tree(self) -> itree.Tree:
-        return itree.Tree()
+    def build_tree(self, root_pfx: str = "") -> awitree.Tree:
+        pass
 
 
-class SourceDataTreeView(ConfigTreeBase):
+class DataSourceRecipeView(RecipeTreeBase):
     def __init__(
         self,
-        md_cfg_tuple: ModelDescCfgTuple,
-        left_width="40%",
-        **kwargs,
+        mdr_setup: RecipeSetup,
+        left_width: str="40%",
+        **kwargs: t.Any,
     ) -> None:
-        super().__init__(md_cfg_tuple, left_width, **kwargs)
-        self.src_data_desc = md_cfg_tuple.config.config[CfgKeys.SRC_DATA]
+        super().__init__(mdr_setup, left_width, **kwargs)
+        self.src_data_desc : dict[str, t.Any] = mdr_setup.recipe_sections[
+            RecipeKeys.SRC_DATA
+        ]
 
-    def init_tree(self) -> itree.Tree:
-        root_node = CBTreeNode(name=CfgTreeNames.SRC_DATA, node_key="root")
+    @override
+    def build_tree(self, root_pfx: str = "") -> awitree.Tree:
+        root_key = f"{root_pfx}-{RecipeKeys.SRC_DATA}"
+        self.root_node: CBTreeNode | None = CBTreeNode.init(
+            name=RcpTreeNames.SRC_DATA, key=root_key
+        )
         for db_key, db_desc in self.src_data_desc.items():
-            db_node = self.init_db_node(
-                db_key,
-                {
-                    CfgKeys.LABEL: db_desc[CfgKeys.LABEL],
-                    CfgKeys.WORKFLOW: itertools.chain(
-                        db_desc[CfgKeys.DB_CONNECT][CfgKeys.WORKFLOW],
-                        db_desc[CfgKeys.POST_OPS][CfgKeys.WORKFLOW],
-                    ),
-                },
+           src_db_key = f"{root_key}-{db_key}"
+           wf_iter = itertools.chain(
+                db_desc[RecipeKeys.DB_CONNECT][RecipeKeys.WORKFLOW],
+                db_desc[RecipeKeys.POST_OPS][RecipeKeys.WORKFLOW],
             )
-            root_node.add_node(db_node)
-        self.tree = itree.Tree(multiple_selection=False)
-        self.tree.add_node(root_node)
-        self.tree.layout.width = self.left_width
-        return self.tree
+           db_node, db_panel = self.db_workflow_recipe_node(
+                src_db_key,
+                {
+                    RecipeKeys.LABEL: db_desc[RecipeKeys.LABEL],
+                    RecipeKeys.WORKFLOW: wf_iter,
+                },
+           )
+           self.panel_dict[src_db_key] = db_panel
+           self.root_node.add_node(db_node)
+        tree_data = self.root_node.awi_dict()
+        tree_data["state"] = {"selected": True, "opened": True}
+        tree: awitree.Tree = awitree.Tree(data=tree_data)
+        #self.layout_.width = self.left_width
+        return tree
 
 
-class D2MLocationsTreeView(ConfigTreeBase):
+class Data2ModelRecipeView(RecipeTreeBase):
     def __init__(
         self,
-        md_cfg_tuple: ModelDescCfgTuple,
-        left_width="40%",
-        **kwargs,
+        mdr_setup: RecipeSetup,
+        right_width: str="60%",
+        **kwargs: t.Any,
     ) -> None:
-        super().__init__(md_cfg_tuple, left_width, **kwargs)
-        self.d2m_map_desc = md_cfg_tuple.config.config[CfgKeys.DB2MODEL_MAP]
+        super().__init__(mdr_setup, right_width, **kwargs)
+        self.d2m_map_desc: dict[str, t.Any] = mdr_setup.recipe_sections[
+            RecipeKeys.DB2MODEL_MAP
+        ]
 
-    def init_neuron_node(
-        self, neuron_name: str, neuron_desc: typing.Dict[str, typing.Any]
+    def neuron_node(
+        self,
+        neuron_name: str,
+        neuron_desc: dict[str, t.Any],
+        loc_node_pfx: str
     ) -> CBTreeNode:
-        neuron_node = CBTreeNode(name=neuron_name, node_key="d2m_map.neuron")
-        for db_key, db_desc in neuron_desc[CfgKeys.SRC_DATA].items():
-            neuron_node.add_node(self.init_db_node(db_key, db_desc))
+        neuron_pfx: str = f"{loc_node_pfx}-{neuron_name}"
+        neuron_node = CBTreeNode.init(
+            name=neuron_name,
+            key=f"{RcpTreeNames.D2M_NEURON}-{neuron_pfx}"
+        )
+        for db_key, db_desc in neuron_desc[RecipeKeys.SRC_DATA].items():
+            db_loc_key = f"{neuron_pfx}-{db_key}"
+            db_node, db_panel = self.db_workflow_recipe_node(
+                db_loc_key,
+                db_desc
+            )
+            self.panel_dict[db_loc_key] = db_panel
+            neuron_node.add_node(db_node)
         return neuron_node
 
-    def init_tree(self) -> itree.Tree:
-        root_node = CBTreeNode(name=CfgKeys.LOCATIONS, node_key="root")
-        for loc_name, loc_desc in self.d2m_map_desc[CfgKeys.LOCATIONS].items():
-            loc_node = CBTreeNode(name=loc_name, node_key="d2m_map.location")
-            for neuron_name, neuron_desc in loc_desc.items():
-                neuron_node = self.init_neuron_node(neuron_name, neuron_desc)
-                loc_node.add_node(neuron_node)
-            root_node.add_node(loc_node)
-        self.tree = itree.Tree(multiple_selection=False)
-        self.tree.add_node(root_node)
-        self.tree.layout.width = self.left_width
-        return self.tree
-
-
-class D2MConnectionsTreeView(ConfigTreeBase):
-    def __init__(
+    def conncection_node(
         self,
-        md_cfg_tuple: ModelDescCfgTuple,
-        left_width="40%",
-        **kwargs,
-    ) -> None:
-        super().__init__(md_cfg_tuple, left_width, **kwargs)
-        self.d2m_map_desc = md_cfg_tuple.config.config[CfgKeys.DB2MODEL_MAP]
-
-    def init_conncection_node(
-        self, connect_name: str, connect_desc: typing.Dict[str, typing.Any]
+        connect_name: str,
+        connect_desc: dict[str, t.Any],
+        conn_node_pfx: str
     ) -> CBTreeNode:
-        conn_node = CBTreeNode(name=connect_name, node_key="d2m_map.connection")
-        for db_key, db_desc in connect_desc[CfgKeys.SRC_DATA].items():
-            db_node = CBTreeNode(name=db_desc[CfgKeys.LABEL], node_key=db_key)
-            for wf_step in db_desc[CfgKeys.WORKFLOW]:
-                db_node.add_node(ConfigTreeBase.wflow_step_tree_node(wf_step))
-            self.panel_keys.union(
-                set(wf_step[CfgKeys.NAME] for wf_step in db_desc[CfgKeys.WORKFLOW])
+        conn_node_key = f"{conn_node_pfx}-{connect_name}"
+        conn_node = CBTreeNode.init(name=connect_name, key=conn_node_key)
+        for db_key, db_desc in connect_desc[RecipeKeys.SRC_DATA].items():
+            db_conn_key = f"{conn_node_key}-{db_key}"
+            db_node, db_panel = self.db_workflow_recipe_node(
+                db_conn_key,
+                db_desc
             )
-            conn_node.add_node(self.init_db_node(db_key, db_desc))
+            self.panel_dict[db_conn_key] = db_panel
+            conn_node.add_node(db_node)
         return conn_node
 
-    def init_tree(self) -> itree.Tree:
-        root_node = CBTreeNode(name=CfgTreeNames.CONNECTIONS, node_key="tree")
-        for conn_name, conn_desc in self.d2m_map_desc[CfgKeys.CONNECTIONS].items():
-            root_node.add_node(self.init_conncection_node(conn_name, conn_desc))
-        self.tree = itree.Tree(multiple_selection=False)
-        self.tree.add_node(root_node)
-        self.tree.layout.width = self.left_width
-        return self.tree
+    def connections(self, conn_pfx: str):
+        conn_key = f"{conn_pfx}-{RecipeKeys.CONNECTIONS}"
+        root_conn_node: CBTreeNode | None = CBTreeNode.init(
+            name=RcpTreeNames.CONNECTIONS, key=conn_key
+        )
+        for conn_name, conn_desc in self.d2m_map_desc[RecipeKeys.CONNECTIONS].items():
+            root_conn_node.add_node(
+                self.conncection_node(conn_name, conn_desc, conn_key)
+            )
+        return root_conn_node
 
-class NetworkTreeView(TreeBase):
+    def locations(self, loc_pfx: str = ""):
+        loc_key = f"{loc_pfx}-{RecipeKeys.LOCATIONS}"
+        loc_root_node: CBTreeNode | None = CBTreeNode.init(
+            name=RcpTreeNames.LOCATIONS, key=loc_key
+        )
+        for loc_name, loc_desc in self.d2m_map_desc[RecipeKeys.LOCATIONS].items():
+            loc_node_key = f"{loc_key}-{loc_name}"
+            loc_node = CBTreeNode.init(name=loc_name, key=loc_node_key)
+            for neuron_name, neuron_desc in loc_desc.items():
+                neuron_node = self.neuron_node(neuron_name, neuron_desc, loc_node_key)
+                loc_node.add_node(neuron_node)
+            loc_root_node.add_node(loc_node)
+        return loc_root_node
+
+    @override
+    def build_tree(self, root_pfx: str = "") -> awitree.Tree:
+        root_key = f"{root_pfx}-{RecipeKeys.DB2MODEL_MAP}"
+        # tree root node
+        self.root_node: CBTreeNode | None = CBTreeNode.init(
+            name=RcpTreeNames.D2M, key=root_key
+        )
+        self.root_node.add_node(self.locations(root_key))
+        self.root_node.add_node(self.connections(root_key))
+        # initialize tree
+        tree_data = self.root_node.awi_dict()
+        tree_data["state"] = {"selected": True, "opened": True}
+        tree: awitree.Tree = awitree.Tree(data=tree_data)
+        #self.layout_.width = self.left_width
+        return tree
+
+
+class NetworkStructureView(BaseTree[IPyPanelT]):
     def __init__(
         self,
         net_struct: structure.Network,
-        left_width="40%",
-        **kwargs,
+        left_width: str="40%",
+        **kwargs: t.Any,
     ) -> None:
-        super().__init__(left_width, **kwargs)
-        self.net_struct = net_struct
+        super().__init__(**kwargs)
+        self.net_struct : structure.Network = net_struct
+        self.left_width : str = left_width
 
-    def init_region_side_panels(self, net_region: structure.Region) -> None:
-        self.panel_dict[net_region.name] = StructSidePanel(net_region)
+    @override
+    def set_layout(self, selected_panel: IPyPanelT) -> None:
+          self.layout.bottom_right = selected_panel.layout
+
+    def region_node(
+        self, net_region: structure.Region, region_pfx: str = "r"
+    ) -> CBTreeNode:
+        region_key = f"{region_pfx}-{net_region.name}"
+        region_node = CBTreeNode.from_struct(net_region, region_key)
+        self.panel_dict[region_key] = StructSidePanel(net_region)
         for _, rx_neuron in net_region.neurons.items():
-            self.panel_dict[rx_neuron.name] = StructSidePanel(rx_neuron)
+            neuron_key = f"{region_key}-{rx_neuron.name}"
+            neuron_node = CBTreeNode.from_struct(rx_neuron, neuron_key)
+            self.panel_dict[neuron_key] = StructSidePanel(rx_neuron)
             for _, nx_model in rx_neuron.neuron_models.items():
-                self.panel_dict[nx_model.name] = StructSidePanel(nx_model)
-
-    def init_conn_side_panels(self, net_connect: structure.Connection) -> None:
-        self.panel_dict[net_connect.name] = StructSidePanel(net_connect)
-        for _, cx_model in net_connect.connect_models.items():
-            self.panel_dict[cx_model.name] = StructSidePanel(cx_model)
-
-    def init_ext_net_side_panels(self, ext_net: structure.ExtNetwork) -> None:
-        self.panel_dict[ext_net.name] = StructSidePanel(ext_net)
-        for _, net_region in ext_net.locations.items():
-            self.init_region_side_panels(net_region)
-        for _, net_connect in ext_net.connections.items():
-            self.init_conn_side_panels(net_connect)
-
-    def init_side_panels(self) -> typing.Dict[str, PanelBase]:
-        _log().info(
-            "Start Left-side panel construction for [%s]", str(self.net_struct.name)
-        )
-        self.panel_dict[self.net_struct.name] = StructSidePanel(self.net_struct)
-        #
-        for _, net_region in self.net_struct.locations.items():
-            self.init_region_side_panels(net_region)
-        #
-        for _, net_connect in self.net_struct.connections.items():
-            self.init_conn_side_panels(net_connect)
-        #
-        for _, ext_net in self.net_struct.ext_networks.items():
-            self.init_ext_net_side_panels(ext_net)
-        _log().info("Completed Left-side panel construction")
-        return self.panel_dict
-
-    def region_node(self, net_region: structure.Region) -> CBTreeNode:
-        region_node = TreeBase.struct_tree_node(net_region)
-        for _, rx_neuron in net_region.neurons.items():
-            neuron_node = TreeBase.struct_tree_node(rx_neuron)
-            for _, nx_model in rx_neuron.neuron_models.items():
-                neuron_node.add_node(TreeBase.struct_tree_node(nx_model))
+                model_key = f"{neuron_key}-{nx_model.name}"
+                neuron_node.add_node(CBTreeNode.from_struct(nx_model, model_key))
+                self.panel_dict[model_key] = StructSidePanel(nx_model, True)
             region_node.add_node(neuron_node)
         return region_node
 
-    def connection_node(self, net_connect: structure.Connection) -> CBTreeNode:
-        connect_node = TreeBase.struct_tree_node(net_connect)
+    def connection_node(
+        self, net_connect: structure.Connection, connect_pfx: str = "c"
+    ) -> CBTreeNode:
+        conn_key = f"{connect_pfx}-{net_connect.name}"
+        connect_node = CBTreeNode.from_struct(net_connect, conn_key)
+        self.panel_dict[conn_key] = StructSidePanel(net_connect)
         for _, cx_model in net_connect.connect_models.items():
-            connect_node.add_node(TreeBase.struct_tree_node(cx_model))
+            cx_key = f"{conn_key}-{cx_model.name}"
+            connect_node.add_node(CBTreeNode.from_struct(cx_model, cx_key))
+            self.panel_dict[cx_key] = StructSidePanel(cx_model, True)
         return connect_node
 
-    def ext_network_node(self, ext_net: structure.ExtNetwork) -> CBTreeNode:
-        ext_net_node = TreeBase.struct_tree_node(ext_net)
-        location_node = CBTreeNode(node_key=ext_net.name + ".locations", name="Regions")
+    def ext_network_node(
+        self, ext_net: structure.ExtNetwork, ext_prefix: str = ""
+    ) -> CBTreeNode:
+        ext_key = f"{ext_prefix}-{ext_net.name}"
+        ext_net_node = CBTreeNode.from_struct(ext_net, ext_key)
+        self.panel_dict[ext_key] = StructSidePanel(ext_net)
+        location_node = CBTreeNode.init(
+            StructTreeNames.REGIONS, ext_net.name + ".locations"
+        )
         for _, net_region in ext_net.locations.items():
-            location_node.add_node(self.region_node(net_region))
+            location_node.add_node(self.region_node(net_region, ext_key))
         ext_net_node.add_node(location_node)
-        connect_node = CBTreeNode(node_key=ext_net.name + ".connections", name="Connections")
+        connect_node = CBTreeNode.init(
+            StructTreeNames.CONNECTIONS,
+            ext_net.name + ".connections",
+        )
         for _, net_connect in ext_net.connections.items():
-            connect_node.add_node(self.connection_node(net_connect))
+            connect_node.add_node(self.connection_node(net_connect, ext_key))
         ext_net_node.add_node(connect_node)
         return ext_net_node
 
-    def init_tree(self) -> itree.Tree:
-        root_node = TreeBase.struct_tree_node(self.net_struct)
-        location_node = CBTreeNode(node_key="net.locations", name="Regions")
+    def data_link_node(
+        self, data_link: structure.DataLink, dl_prefix: str = ""
+    ) -> CBTreeNode | None:
+        if data_link.name and data_link.property_map:
+            dl_key = f"{dl_prefix}-{data_link.name}"
+            dl_node = CBTreeNode.from_struct(data_link, dl_key)
+            self.panel_dict[dl_key] = StructSidePanel(data_link)
+            return dl_node
+        return None
+
+    def data_file_node(
+        self, data_file: structure.DataFile, df_prefix: str = ""
+    ) -> CBTreeNode | None:
+        df_key = f"{df_prefix}-{data_file.name}"
+        df_node = CBTreeNode.from_struct(data_file, df_key)
+        self.panel_dict[df_key] = StructSidePanel(data_file)
+        return df_node
+
+    def locations(self, root_key: str):
+        #
+        loc_key = f"{root_key}-loc"
+        location_node = CBTreeNode.init(StructTreeNames.REGIONS, loc_key)
         #
         for _, net_region in self.net_struct.locations.items():
-            location_node.add_node(self.region_node(net_region))
-        root_node.add_node(location_node)
-        #
-        connect_node = CBTreeNode(node_key="net.connections", name="Connections")
-        for _, net_connect in self.net_struct.connections.items():
-            connect_node.add_node(self.connection_node(net_connect))
-        root_node.add_node(connect_node)
-        #
-        ext_net_node = CBTreeNode(node_key="net.ext_networks", name="External Networks")
-        for _, ext_net in self.net_struct.ext_networks.items():
-            ext_net_node.add_node(self.ext_network_node(ext_net))
-        root_node.add_node(ext_net_node)
-        self.tree = itree.Tree(multiple_selection=False)
-        self.tree.add_node(root_node)
-        self.tree.layout.width = self.left_width
-        return self.tree
+            location_node.add_node(self.region_node(net_region, loc_key))
+        return location_node
 
-    def build(self) -> TreeBase:
-        self.tree = self.init_tree()
-        self.panel_dict = self.init_side_panels()
-        self.tree.observe(self.tree_update, names="selected_nodes")
-        self.layout = iwidgets.TwoByTwoLayout(top_left=self.tree, bottom_right=None)
+    def connections(self, root_key: str):
+        #
+        conn_key = f"{root_key}-conn"
+        connect_node = CBTreeNode.init(StructTreeNames.CONNECTIONS, conn_key)
+        for _, net_connect in self.net_struct.connections.items():
+            connect_node.add_node(self.connection_node(net_connect, conn_key))
+        return connect_node
+
+    def ext_networks(self, root_key: str):
+        #
+        ext_key = f"{root_key}-extnet"
+        ext_net_node = CBTreeNode.init(StructTreeNames.EXTERNAL_NETWORKS, ext_key)
+        for _, ext_net in self.net_struct.ext_networks.items():
+            ext_net_node.add_node(self.ext_network_node(ext_net, ext_key))
+        return ext_net_node
+
+    def data_links(self, root_key: str):
+        #
+        data_link_key = f"{root_key}-dlinks"
+        data_link_node = CBTreeNode.init(
+            StructTreeNames.DATA_LINKS,
+            data_link_key,
+        )
+        for data_cx in self.net_struct.data_connect:
+            data_cx_node = self.data_link_node(data_cx, data_link_key)
+            if data_cx_node:
+                data_link_node.add_node(data_cx_node)
+        return data_link_node
+
+    def data_files(self, root_key: str):
+        #
+        data_file_key = f"{root_key}-dfiles"
+        data_file_node = CBTreeNode.init(
+            StructTreeNames.DATA_FILES,
+            data_file_key,
+        )
+        for data_fx in self.net_struct.data_files:
+            data_fx_node = self.data_file_node(data_fx, data_file_key)
+            if data_fx_node:
+                data_file_node.add_node(data_fx_node)
+        return data_file_node
+
+    def build_tree_nodes(self, root_pfx: str) -> CBTreeNode:
+        root_key = f"{root_pfx}-{self.net_struct.name}"
+        #
+        root_node = CBTreeNode.from_struct(self.net_struct, root_key)
+        root_node.add_node(self.locations(root_key))
+        root_node.add_node(self.connections(root_key))
+        root_node.add_node(self.ext_networks(root_key))
+        root_node.add_node(self.data_links(root_key))
+        root_node.add_node(self.data_files(root_key))
+        return root_node
+
+    def build_tree(self, root_pfx: str = "") -> awitree.Tree:
+        self.root_node: CBTreeNode | None = self.build_tree_nodes(root_pfx)
+        # initialize tree
+        tree_data = self.root_node.awi_dict()
+        tree_data["state"] = {"selected": True, "opened": True}
+        tree: awitree.Tree = awitree.Tree(data=tree_data)
+        # self.tree.layout.width = self.left_width  # type:ignore
+        return tree
+
+    @override
+    def build(self, root_pfx: str = "") -> BaseTree[IPyPanelT]:
+        self.tree: awitree.Tree | None = self.build_tree(root_pfx)
+        self.tree.observe(self.tree_update, names="selected_nodes")  # type:ignore
+        self.layout : iwidgets.TwoByTwoLayout = iwidgets.TwoByTwoLayout(
+            top_left=self.tree,
+            bottom_right=None,
+        )
         return self
+
+    def values_dict(self):
+        pass

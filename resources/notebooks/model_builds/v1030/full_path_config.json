@@ -1,0 +1,71 @@
+{
+  "manifest": {
+    "$BASE_DIR": "./model_builds/v1030/",
+    "$NETWORK_DIR": "./model_builds/v1030/v1/network",
+    "$COMPONENTS_DIR": "./model_components",
+    "$OUTPUT_DIR": "./model_builds/v1030/v1/output",
+    "$BKG_DIR": "./model_bkg",
+    "$LGN_DIR": "./model_lgn"
+  },
+  "run": {
+    "duration": 3000.0,
+    "dt": 0.25
+  },
+  "inputs": {
+    "LGN_spikes": {
+      "input_type": "spikes",
+      "module": "h5",
+      "input_file": "./model_lgn/full3_GScorrected_PScorrected_3.0sec_SF0.04_TF2.0_ori270.0_c100.0_gs0.5_spikes.trial_0.h5",
+      "node_set": "lgn"
+    },
+    "BKG_spikes": {
+      "input_type": "spikes",
+      "module": "h5",
+      "input_file": "./model_bkg/bkg_spikes_n1_fr1000_dt0.25_2.trial_0.h5",
+      "node_set": "bkg"
+    }
+  },
+  "output": {
+    "log_file": "./model_builds/v1030/v1/output/log.txt",
+    "spikes_file": "./model_builds/v1030/v1/output/spikes.h5",
+    "spikes_file_csv": "./model_builds/v1030/v1/output/spikes.csv",
+    "output_dir": "./model_builds/v1030/v1/output",
+    "overwrite_output_dir": true,
+    "quiet_simulator": true
+  },
+  "target_simulator": "NEST",
+  "components": {
+    "point_neuron_models_dir": "./model_components/cell_models",
+    "synaptic_models_dir": "./model_components/glif_psc_synapse_models"
+  },
+  "networks": {
+    "nodes": [
+      {
+        "nodes_file": "./model_builds/v1030/v1/network/v1_nodes.h5",
+        "node_types_file": "./model_builds/v1030/v1/network/v1_node_types.csv"
+      },
+      {
+        "nodes_file": "./model_builds/v1030/v1/network/lgn_nodes.h5",
+        "node_types_file": "./model_builds/v1030/v1/network/lgn_node_types.csv"
+      },
+      {
+        "nodes_file": "./model_builds/v1030/v1/network/bkg_nodes.h5",
+        "node_types_file": "./model_builds/v1030/v1/network/bkg_node_types.csv"
+      }
+    ],
+    "edges": [
+      {
+        "edges_file": "./model_builds/v1030/v1/network/v1_v1_edges.h5",
+        "edge_types_file": "./model_builds/v1030/v1/network/v1_v1_edge_types.csv"
+      },
+      {
+        "edges_file": "./model_builds/v1030/v1/network/lgn_v1_edges.h5",
+        "edge_types_file": "./model_builds/v1030/v1/network/lgn_v1_edge_types.csv"
+      },
+      {
+        "edges_file": "./model_builds/v1030/v1/network/bkg_v1_edges.h5",
+        "edge_types_file": "./model_builds/v1030/v1/network/bkg_v1_edge_types.csv"
+      }
+    ]
+  }
+}

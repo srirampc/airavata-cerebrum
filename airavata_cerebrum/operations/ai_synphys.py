@@ -1,42 +1,52 @@
-import typing
-import traitlets
+import typing as t
 #
-from .. import base
-from .json_filter import JPointerFilter
+from typing_extensions import override
+from pydantic import Field
+#
+from ..base import (CerebrumBaseModel, NoneParams, OpXFormer,
+                    BaseParams, XformItr)
+from .json_filter import JPFExecParams, JPointerFilter
 
 
-class AISynPhysPairFilter(base.OpXFormer):
-    class FilterTraits(traitlets.HasTraits):
-        pre = traitlets.Unicode()
-        post = traitlets.Unicode()
+class AISPPExecParams(CerebrumBaseModel):
+    pre  : t.Annotated[str, Field(title='Pre-synapse')]
+    post : t.Annotated[str, Field(title='Post-synapse')]
 
-    def __init__(self, **params):
-        self.jptr_filter = JPointerFilter(**params)
-        self.path_fmt = "/0/{}"
+AISPPBaseParams : t.TypeAlias = BaseParams[NoneParams, AISPPExecParams]
 
+class AISynPhysPairFilter(OpXFormer[NoneParams, AISPPExecParams]):
+    class FilterParams(AISPPBaseParams):
+        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
+        exec_params: t.Annotated[AISPPExecParams, Field(title='Exec Params')]
+
+    def __init__(self, init_params: NoneParams, **params: t.Any):
+        self.jptr_filter: JPointerFilter = JPointerFilter(
+            init_params, **params
+        )
+        self.path_fmt : str = "/0/{}"
+
+    @override
     def xform(
         self,
-        in_iter: typing.Iterable | None,
-        **params: typing.Any,
-    ) -> typing.Iterable | None:
-        npre = params["pre"] if "pre" in params else None
-        npost = params["post"] if "post" in params else None
+        exec_params: AISPPExecParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
+        **_params: t.Any,
+    ) -> XformItr | None:
+        npre = exec_params.pre
+        npost = exec_params.post
         rpath = self.path_fmt.format(repr((npre, npost)))
-        return self.jptr_filter.xform(in_iter, paths=[rpath], keys=["probability"])
+        return self.jptr_filter.xform(
+            JPFExecParams(paths=[rpath], keys=["probability"]),
+            first_iter,
+        )
 
+    @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[AISPPBaseParams]:
+        return cls.FilterParams
 
-
-#
-# ------- Query and Xform Registers -----
-#
-def query_register() -> typing.List[type[base.DbQuery]]:
-    return []
-
-
-def xform_register() -> typing.List[type[base.OpXFormer]]:
-    return [
-        AISynPhysPairFilter,
-    ]
+    @override
+    @classmethod
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> AISPPBaseParams:
+        return cls.FilterParams.model_validate(param_dict)

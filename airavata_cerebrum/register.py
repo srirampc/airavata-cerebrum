@@ -1,102 +1,160 @@
 import itertools
-import typing
-from . import base
-from .dataset import abc_mouse as abc_mouse_db
-from .dataset import abm_celltypes as abm_celltypes_db
-from .dataset import ai_synphys as ai_synphys_db
-from .operations import abc_mouse as abc_mouse_ops
-from .operations import abm_celltypes as abm_celltypes_ops
-from .operations import ai_synphys as ai_synphys_ops
-from .operations import json_filter
-from .operations import dict_filter
-from .operations import xform
+import typing as t
+from collections.abc import Iterable
+
+from .base import (
+    CerebrumBaseModel, 
+    OpXFormer, DbQuery, QryDBWriter,
+    BaseParamsCBT, DbQueryCBT, OpXFormerCBT
+)
+from .dataset import query_register as db_query_register
+from .dataset import xform_register as db_xform_register
+from .dataset import dbwriter_register
+from .operations import query_register as ops_query_register
+from .operations import xform_register as ops_xform_register
 from .util import class_qual_name
 
 
 #
 # -------- Register Query and Xform classes
 #
-RCType = typing.TypeVar("RCType")
+RCType = t.TypeVar("RCType")
 
 
-class TypeRegister(typing.Generic[RCType]):
-    register_map: typing.Dict[str, typing.Type[RCType]]
+class TypeRegister(t.Generic[RCType]):
+    register_map: dict[str, type[RCType]]
+    base_class: type[RCType]
 
     def __init__(
-        self, register_lst: typing.Iterable[type[RCType]], base_class: type[RCType]
+        self,
+        register_lst: Iterable[type[RCType]],
+        base_class: type[RCType],
+        key_source: t.Literal['class', 'module'] = 'class'
     ) -> None:
+        self.base_class = base_class
         self.register_map = {
-            class_qual_name(clsx): clsx
+            self.qual_name(clsx, key_source): clsx
             for clsx in register_lst
             if issubclass(clsx, base_class)
         }
+    
+    def qual_name(
+        self,
+        clsx: type,
+        key_source: t.Literal['class', 'module'],
+    ) -> str:
+        match key_source:
+            case 'class':
+                return class_qual_name(clsx)
+            case 'module':
+                return clsx.__module__
 
-    def get_object(
-        self, query_key: str, **init_params: typing.Any
-    ) -> RCType | None:
-        if query_key not in self.register_map:
-            return None
-        return self.register_map[query_key](**init_params)
+    def register(
+        self,
+        clsx : type[RCType],
+        key_source: t.Literal['class', 'module'] = 'class'
+    ) -> bool:
+        if issubclass(clsx, self.base_class):
+            self.register_map[self.qual_name(clsx, key_source)] = clsx
+            return True
+        return False
 
-    def get_type(self, query_key: str) -> typing.Type[RCType] | None:
+    def get_type(self, query_key: str) -> type[RCType] | None:
         if query_key not in self.register_map:
             return None
         return self.register_map[query_key]
 
 
-QUERY_REGISTER: TypeRegister[base.DbQuery] = TypeRegister(
+QUERY_REGISTER: TypeRegister[DbQueryCBT] = TypeRegister(
     itertools.chain(
-        abc_mouse_db.query_register(),
-        abm_celltypes_db.query_register(),
-        ai_synphys_db.query_register(),
-        xform.query_register(),
-        json_filter.query_register(),
-        dict_filter.query_register(),
-        abc_mouse_ops.query_register(),
-        abm_celltypes_ops.query_register(),
-        ai_synphys_ops.query_register(),
+        db_query_register(),
+        ops_query_register(),
     ),
-    base.DbQuery,
+    DbQuery,
 )
 
-XFORM_REGISTER: TypeRegister[base.OpXFormer] = TypeRegister(
+XFORM_REGISTER: TypeRegister[OpXFormerCBT] = TypeRegister(
     itertools.chain(
-        abc_mouse_db.xform_register(),
-        abm_celltypes_db.xform_register(),
-        ai_synphys_db.xform_register(),
-        xform.xform_register(),
-        json_filter.xform_register(),
-        dict_filter.xform_register(),
-        abc_mouse_ops.xform_register(),
-        abm_celltypes_ops.xform_register(),
-        ai_synphys_ops.xform_register(),
+        db_xform_register(),
+        ops_xform_register(),
     ),
-    base.OpXFormer,
+    OpXFormer,
 )
+
+QRY_DBWIRTER_REGISTER: TypeRegister[QryDBWriter] = TypeRegister(
+    dbwriter_register(),
+    QryDBWriter,
+    key_source='module'
+)
+
+
+def find_query_type(
+    register_key: str,
+):
+    return QUERY_REGISTER.get_type(register_key)
+
+
+def find_xformer_type(
+    register_key: str,
+):
+    return XFORM_REGISTER.get_type(register_key)
 
 
 def find_type(
     register_key: str,
-) -> type[base.OpXFormer] | type[base.DbQuery] | None:
-    reg_type = QUERY_REGISTER.get_type(register_key)
+) -> type[OpXFormerCBT] | type[DbQueryCBT] | None:
+    reg_type = find_query_type(register_key)
     if reg_type:
         return reg_type
-    return XFORM_REGISTER.get_type(register_key)
+    return find_xformer_type(register_key)
 
 
-def get_query_object(
+def get_query_params(
     register_key: str,
-    **params: typing.Any,
-) -> base.DbQuery | None:
-    return QUERY_REGISTER.get_object(
-        register_key, **params
+    params: dict[str, t.Any]
+) -> BaseParamsCBT | None:
+    reg_type = find_query_type(register_key)
+    if reg_type:
+        return reg_type.params_instance(params)
+    return None
+
+
+def get_xformer_params(
+    register_key: str,
+    params: dict[str, t.Any]
+) -> BaseParamsCBT | None:
+    reg_type = find_xformer_type(register_key)
+    if reg_type:
+        return reg_type.params_instance(params)
+    return None
+
+
+def get_query_instance(
+    register_key: str,
+    init_params: CerebrumBaseModel,
+    **params: t.Any,
+) -> DbQueryCBT | None:
+    qry_type : type[DbQueryCBT] | None = find_query_type(register_key)
+    return (
+        qry_type(init_params, **params)
+        if qry_type else None
     )
 
 
-def get_xform_op_object(
+def get_xformer_instance(
     register_key: str,
-    **params: typing.Any,
-) -> base.OpXFormer | None:
-    return XFORM_REGISTER.get_object(
-        register_key, **params
+    init_params: CerebrumBaseModel,
+    **params: t.Any,
+) -> OpXFormerCBT | None:
+    xformer_type : type[OpXFormerCBT] | None = find_xformer_type(register_key)
+    return (
+        xformer_type(init_params, **params)
+        if xformer_type else None
     )
+
+def get_db_writer_instance(
+    register_key: str,
+    **params: t.Any,
+) -> QryDBWriter | None:
+    qdb_writer = QRY_DBWIRTER_REGISTER.get_type(register_key)
+    return qdb_writer(**params) if qdb_writer else None

@@ -1,352 +1,196 @@
-import json
-import pydantic
-import traitlets
-import typing
 import abc
+#
+from pathlib import Path
+from typing import Annotated, Any, Literal, TypeAlias
+
+from pydantic import Field
+from typing_extensions import Self, override
+
+#
+from ..base import BaseStruct
+from ..util import io as uio
+from ..util import merge_dict_inplace
 
 
-class StructBase(pydantic.BaseModel, abc.ABC):
-    name: str = ""
+class DataFile(BaseStruct):
+    # path: pathlib.Path
+    path: Annotated[str, Field(title="File Path")]
 
-    class StructBaseTrait(traitlets.HasTraits):
-        name = traitlets.Unicode()
-
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.StructBaseTrait
-
-    @abc.abstractmethod
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set([])
 
-    @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {}
+    @override
+    def apply_mod(self, mod_struct: Self) -> Self:
+        self.path = mod_struct.path
+        return self
 
 
-class DataLink(StructBase):
-    property_map: typing.Dict = {}
+class DataLink(BaseStruct):
+    property_map: Annotated[dict[str, Any], Field(title="Property Map")] = {}
 
-    class DataTrait(StructBase.StructBaseTrait):
-        # property_map = traitlets.Dict()
-        property_map = traitlets.Unicode()
-
-
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set([])
 
-    @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "property_map": {"type": "textarea", "label": "Property Map", "default": "{}"},
-        }
-
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
+    @override
+    def apply_mod(self, mod_struct: Self) -> Self:
+        merge_dict_inplace(self.property_map, mod_struct.property_map)
+        return self
 
 
-class ComponentModel(StructBase):
-    property_map: typing.Dict = {}
+class ComponentModel(BaseStruct):
+    property_map: Annotated[dict[str, Any], Field(title="Property Map")] = {}
 
-    class DataTrait(StructBase.StructBaseTrait):
-        property_map = traitlets.Dict()
-
-        def __init__(self, property_map={}, **kwargs):
-            super().__init__(
-                property_map=json.dumps(property_map, indent=4),
-                **kwargs,
-            )
-
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set([])
 
-    @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "property_map": {
-                "type": "textarea",
-                "label": "Property Map",
-                "default": "{}",
-            },
-        }
-
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
+    @override
+    def apply_mod(self, mod_struct: Self) -> Self:
+        merge_dict_inplace(self.property_map, mod_struct.property_map)
+        return self
 
 
-class NeuronModel(StructBase):
-    N: int = 0
-    id: str = ""
-    proportion: float = 0.0
-    name: str = ""
-    m_type: str = ""
-    template: str = ""
-    dynamics_params: str = ""
-    property_map: typing.Dict = {}
-    data_connect: DataLink = DataLink()
+class NeuronModel(BaseStruct):
+    N: Annotated[int, Field(title="N")] = 0
+    id: Annotated[str, Field(title="ID")] = ""
+    proportion: Annotated[float, Field(title="Proportion")] = 0.0
+    name: Annotated[str, Field(title="Name")] = ""
+    m_type: Annotated[str, Field(title="Model Type")] = ""
+    template: Annotated[str, Field(title="Template")] = ""
+    dynamics_params: Annotated[str, Field(title="Dynamics Parameters")] = ""
+    morphology: Annotated[str, Field(title="Morphology")] = ""
+    property_map: Annotated[dict[str, Any], Field(title="Property Map")] = {}
+    data_connect: Annotated[list[DataLink], Field(title="Data Connections")] = []
 
-    class DataTrait(StructBase.StructBaseTrait):
-        N = traitlets.Int()
-        id = traitlets.Unicode()
-        proportion = traitlets.Float(0.0)
-        m_type = traitlets.Unicode()
-        template = traitlets.Unicode()
-        dynamics_params = traitlets.Unicode()
-        # property_map = traitlets.Dict()
-        property_map = traitlets.Unicode()
-
-        def __init__(self, property_map={}, **kwargs):
-            super().__init__(
-                property_map=json.dumps(property_map, indent=4),
-                **kwargs,
-            )
-
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set(["data_connect"])
 
-    @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "N": {"type": "int", "label": "N", "default": 0},
-            "id": {"type": "text", "label": "id", "default": ""},
-            "proportion": {"type": "float", "label": "Proportion", "default": 0.0},
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "m_type": {"type": "text", "label": "Model Type", "default": ""},
-            "template": {"type": "text", "label": "Template", "default": ""},
-            "dynamics_params": {
-                "type": "text",
-                "label": "Dynamis Parameters",
-                "default": "",
-            },
-            "property_map": {
-                "type": "textarea",
-                "label": "Property Map",
-                "default": "{\n}",
-            },
-        }
-
-    def apply_mod(self, mod_model: "NeuronModel") -> "NeuronModel":
-        if mod_model.name is not None:
-            self.name = mod_model.name
+    @override
+    def apply_mod(self, mod_struct: Self) -> Self:
+        if mod_struct.name:
+            self.name = mod_struct.name
         # Model Parameters
-        if mod_model.m_type is not None:
-            self.m_type = mod_model.m_type
-        if mod_model.template is not None:
-            self.template = mod_model.template
-        if mod_model.dynamics_params is not None:
-            self.dynamics_params = mod_model.dynamics_params
+        if mod_struct.m_type:
+            self.m_type = mod_struct.m_type
+        if mod_struct.template:
+            self.template = mod_struct.template
+        if mod_struct.dynamics_params:
+            self.dynamics_params = mod_struct.dynamics_params
         # Model Property Map
-        for pkey, pvalue in mod_model.property_map.items():
+        for pkey, pvalue in mod_struct.property_map.items():
             if pkey not in self.property_map:
                 self.property_map[pkey] = pvalue
             elif pvalue:
                 self.property_map[pkey] = pvalue
         return self
 
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
 
+class Neuron(BaseStruct):
+    ei: Annotated[Literal["e", "i"], Field("E/I")]  # Either e or i
+    N: Annotated[int, Field(title="N")] = 0
+    fraction: Annotated[float, Field(title="Proportion")] = 0.0
+    dims: Annotated[dict[str, Any], Field(title="Dimensions")] = {}
+    neuron_models: Annotated[dict[str, NeuronModel], Field(title="Neuron Models")] = {}
 
-class Neuron(StructBase):
-    N: int = 0
-    fraction: float = 0.0
-    ei: typing.Literal["e", "i"]  # Either e or i
-    dims: typing.Dict[str, typing.Any] = {}
-    neuron_models: typing.Dict[str, NeuronModel] = {}
-
-    class DataTrait(StructBase.StructBaseTrait):
-        N = traitlets.Int()
-        fraction = traitlets.Float(0.0)
-        ei = traitlets.Unicode()
-        # dims = traitlets.Dict(key_trait=traitlets.Unicode())
-        dims = traitlets.Unicode()
-
-        def __init__(self, dims={}, **kwargs):
-            super().__init__(
-                dims=json.dumps(dims, indent=4),
-                **kwargs,
-            )
-
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set(["neuron_models"])
 
-    @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "N": {"type": "int", "label": "N", "default": 0},
-            "fraction": {"type": "float", "label": "Proportion", "default": 0.0},
-            "ei": {"type": "text", "label": "E/I", "default": ""},
-            "dims": {"type": "textarea", "label": "Property Map", "default": "{\n}"},
-        }
-
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    def apply_mod(self, mod_neuron: "Neuron") -> "Neuron":
+    @override
+    def apply_mod(self, mod_struct: Self) -> Self:
         # Fraction and counts
-        if mod_neuron.fraction > 0:
-            self.fraction = mod_neuron.fraction
-        if mod_neuron.N > 0:
-            self.N = mod_neuron.N
+        if mod_struct.fraction > 0:
+            self.fraction = mod_struct.fraction
+        if mod_struct.N > 0:
+            self.N = mod_struct.N  # pyright: ignore[reportConstantRedefinition]
         # Neuron dimensions
-        for dim_key, dim_value in mod_neuron.dims.items():
+        for dim_key, dim_value in mod_struct.dims.items():
             if dim_key not in self.dims:
                 self.dims[dim_key] = dim_value
             elif dim_value:
                 self.dims[dim_key] = dim_value
         # Neuron models
-        for mx_name, neuron_mx in mod_neuron.neuron_models.items():
+        for mx_name, neuron_mx in mod_struct.neuron_models.items():
             if mx_name not in self.neuron_models:
                 self.neuron_models[mx_name] = neuron_mx
             else:
                 self.neuron_models[mx_name].apply_mod(neuron_mx)
         return self
 
-    def exclude_set(self) -> typing.Set[str]:
-        return set(["neuron_models"])
 
+class Region(BaseStruct):
+    inh_fraction: Annotated[float, Field(title="Inh Fraction")] = 0.0
+    region_fraction: Annotated[float, Field(title="Region Fraction")] = 0.0
+    ncells: Annotated[int, Field(title="No. Cells")] = 0
+    inh_ncells: Annotated[int, Field(title="No. Inh. Cells")] = 0
+    exc_ncells: Annotated[int, Field(title="No. Ex. Cells")] = 0
+    dims: Annotated[dict[str, Any], Field(title="Dimensions")] = {}
+    neurons: Annotated[dict[str, Neuron], Field(title="Neurons")] = {}
 
-class Region(StructBase):
-    inh_fraction: float = 0.0
-    region_fraction: float = 0.0
-    ncells: int = 0
-    inh_ncells: int = 0
-    exc_ncells: int = 0
-    dims: typing.Dict[str, typing.Any] = {}
-    neurons: typing.Dict[str, Neuron] = {}
-
-    class DataTrait(StructBase.StructBaseTrait):
-        inh_fraction = traitlets.Float(0.0)
-        region_fraction = traitlets.Float(0.0)
-        ncells = traitlets.Int()
-        inh_ncells = traitlets.Int()
-        exc_ncells = traitlets.Int()
-        # dims = traitlets.Dict(key_trait=traitlets.Unicode())
-        dims = traitlets.Unicode()
-
-        def __init__(self, dims={}, **kwargs):
-            super().__init__(
-                dims=json.dumps(dims, indent=4),
-                **kwargs,
-            )
-
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set(["neurons"])
 
-    @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "ncells": {"type": "int", "label": "No. Cells", "default": 0},
-            "inh_ncells": {"type": "int", "label": "No. Inh. Cells", "default": 0},
-            "exc_ncells": {"type": "int", "label": "No. Exc. Cells", "default": 0},
-            "inh_fraction": {"type": "float", "label": "Inh. Fraction", "default": 0.0},
-            "region_fraction": {
-                "type": "float",
-                "label": "Region Fraction",
-                "default": 0.0,
-            },
-            "dims": {"type": "textarea", "label": "Dimensions", "default": "{\n}"},
-        }
-
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    def apply_mod(self, mod_region: "Region") -> "Region":
+    @override
+    def apply_mod(self, mod_struct: Self) -> Self:
         # update fractions
-        if mod_region.inh_fraction > 0:
-            self.inh_fraction = mod_region.inh_fraction
-        if mod_region.region_fraction > 0:
-            self.region_fraction = mod_region.region_fraction
+        if mod_struct.inh_fraction > 0:
+            self.inh_fraction = mod_struct.inh_fraction
+        if mod_struct.region_fraction > 0:
+            self.region_fraction = mod_struct.region_fraction
         # update ncells
-        if mod_region.ncells > 0:
-            self.ncells = mod_region.ncells
-        if mod_region.inh_ncells > 0:
-            self.inh_ncells = mod_region.inh_ncells
-        if mod_region.exc_ncells > 0:
-            self.exc_ncells = mod_region.exc_ncells
+        if mod_struct.ncells > 0:
+            self.ncells = mod_struct.ncells
+        if mod_struct.inh_ncells > 0:
+            self.inh_ncells = mod_struct.inh_ncells
+        if mod_struct.exc_ncells > 0:
+            self.exc_ncells = mod_struct.exc_ncells
         # update dims
-        for dkey, dvalue in mod_region.dims.items():
+        for dkey, dvalue in mod_struct.dims.items():
             if dvalue:
                 self.dims[dkey] = dvalue
         # update neuron details
-        for nx_name, nx_obj in mod_region.neurons.items():
+        for nx_name, nx_obj in mod_struct.neurons.items():
             if nx_name not in self.neurons:
                 self.neurons[nx_name] = nx_obj
             else:
                 self.neurons[nx_name].apply_mod(nx_obj)
         return self
 
-    def find_neuron(self, neuron_name) -> Neuron | None:
+    def find_neuron(self, neuron_name: str) -> Neuron | None:
         if neuron_name in self.neurons:
             return self.neurons[neuron_name]
         return None
 
 
-class ConnectionModel(StructBase):
-    target_model_id: str = ""
-    source_model_id: str = ""
-    weight_max: float = 0.0
-    delay: float = 0.0
-    dynamics_params: str = ""
-    property_map: typing.Dict = {}
+class ConnectionModel(BaseStruct):
+    target_model_id: Annotated[str, Field(title="Target Id.")] = ""
+    source_model_id: Annotated[str, Field(title="Source Id.")] = ""
+    weight_max: Annotated[float, Field(title="Max. Weight")] = 0.0
+    delay: Annotated[float, Field(title="Delay")] = 0.0
+    dynamics_params: Annotated[str, Field(title="Dynamics Parameters")] = ""
+    property_map: Annotated[dict[str, Any], Field(title="Property Map")] = {}
 
-    class DataTrait(StructBase.StructBaseTrait):
-        target_model_id = traitlets.Unicode()
-        source_model_id = traitlets.Unicode()
-        weight_max = traitlets.Float(0.0)
-        delay = traitlets.Float(0.0)
-        # property_map = traitlets.Dict(key_trait=traitlets.Unicode())
-        property_map = traitlets.Unicode()
-
-        def __init__(self, property_map={}, **kwargs):
-            super().__init__(
-                dims=json.dumps(property_map, indent=4),
-                **kwargs,
-            )
-
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set([])
 
-    @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "source_model_id": {"type": "text", "label": "Source Id.", "default": ""},
-            "target_model_id": {"type": "text", "label": "Target Id.", "default": ""},
-            "weight_max": {"type": "float", "label": "Max. Weight", "default": 0.0},
-            "delay": {"type": "float", "label": "Delay", "default": 0.0},
-            "property_map": {
-                "type": "textarea",
-                "label": "Property Map",
-                "default": "{\n}",
-            },
-        }
-
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    def apply_mod(self, mod_cmd: "ConnectionModel") -> "ConnectionModel":
+    @override
+    def apply_mod(self, mod_struct: Self) -> Self:
         # Apply modification
-        if mod_cmd.target_model_id:
-            self.target_model_id = mod_cmd.target_model_id
-        if mod_cmd.source_model_id:
-            self.source_model_id = mod_cmd.source_model_id
-        if mod_cmd.delay > 0.0:
-            self.delay = mod_cmd.delay
-        if mod_cmd.weight_max > 0.0:
-            self.weight_max = mod_cmd.weight_max
+        if mod_struct.target_model_id:
+            self.target_model_id = mod_struct.target_model_id
+        if mod_struct.source_model_id:
+            self.source_model_id = mod_struct.source_model_id
+        if mod_struct.delay > 0.0:
+            self.delay = mod_struct.delay
+        if mod_struct.weight_max > 0.0:
+            self.weight_max = mod_struct.weight_max
         # Model Property Map
-        for pkey, pvalue in mod_cmd.property_map.items():
+        for pkey, pvalue in mod_struct.property_map.items():
             if pkey not in self.property_map:
                 self.property_map[pkey] = pvalue
             elif pvalue:
@@ -354,66 +198,35 @@ class ConnectionModel(StructBase):
         return self
 
 
-class Connection(StructBase):
-    pre: typing.Tuple[str, str]
-    post: typing.Tuple[str, str]
-    probability: float = 0.0
-    connect_models: typing.Dict[str, ConnectionModel] = {}
-    property_map: typing.Dict = {}
+class Connection(BaseStruct):
+    pre: Annotated[tuple[str, str], Field(title="Pre-Synapse")]
+    post: Annotated[tuple[str, str], Field(title="Post-Synapse")]
+    probability: Annotated[float, Field(title="Connection Probability")] = 0.0
+    connect_models: Annotated[
+        dict[str, ConnectionModel], Field(title="Connection Models")
+    ] = {}
+    property_map: Annotated[dict[str, Any], Field(title="Property Map")] = {}
 
-    class DataTrait(StructBase.StructBaseTrait):
-        # pre = traitlets.Tuple(traitlets.Unicode(), traitlets.Unicode())
-        # post = traitlets.Tuple(traitlets.Unicode(), traitlets.Unicode())
-        # property_map = traitlets.Dict(key_trait=traitlets.Unicode())
-        pre = traitlets.Unicode()
-        post = traitlets.Unicode()
-        probability = traitlets.Float(0.0)
-        property_map = traitlets.Unicode()
-
-        def __init__(self, pre=(), post=(), property_map={}, **kwargs):
-            super().__init__(
-                pre=repr(pre),
-                post=repr(post),
-                property_map=json.dumps(property_map, indent=4),
-                **kwargs,
-            )
-
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set(["connect_models"])
 
-    @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "pre": {"type": "textarea", "label": "Pre-Synapse", "default": "()"},
-            "post": {"type": "textarea", "label": "Post-Synapse", "default": "()"},
-            "probability": {"type": "float", "label": "Inh. Fraction", "default": 0.0},
-            "property_map": {
-                "type": "textarea",
-                "label": "Property Map",
-                "default": "{\n}",
-            },
-        }
-
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    def apply_mod(self, mod_con: "Connection") -> "Connection":
-        if mod_con.pre[0] and mod_con.pre[1]:
-            self.pre = mod_con.pre
-        if mod_con.post[0] and mod_con.post[1]:
-            self.post = mod_con.post
-        if mod_con.probability > 0.0:
-            self.probability = mod_con.probability
+    @override
+    def apply_mod(self, mod_struct: Self) -> Self:
+        if mod_struct.pre[0] and mod_struct.pre[1]:
+            self.pre = mod_struct.pre
+        if mod_struct.post[0] and mod_struct.post[1]:
+            self.post = mod_struct.post
+        if mod_struct.probability > 0.0:
+            self.probability = mod_struct.probability
         # Model Property Map
-        for pkey, pvalue in mod_con.property_map.items():
+        for pkey, pvalue in mod_struct.property_map.items():
             if pkey not in self.property_map:
                 self.property_map[pkey] = pvalue
             elif pvalue:
                 self.property_map[pkey] = pvalue
         # Models
-        for mx_name, mx_obj in mod_con.connect_models.items():
+        for mx_name, mx_obj in mod_struct.connect_models.items():
             if mx_name not in self.connect_models:
                 self.connect_models[mx_name] = mx_obj
             else:
@@ -421,39 +234,27 @@ class Connection(StructBase):
         return self
 
 
-class ExtNetwork(StructBase):
+class ExtNetwork(BaseStruct):
     ncells: int = 0
-    locations: typing.Dict[str, Region] = {}
-    connections: typing.Dict[str, Connection] = {}
+    locations: dict[str, Region] = {}
+    connections: dict[str, Connection] = {}
 
-    class DataTrait(StructBase.StructBaseTrait):
-        ncells = traitlets.Int(0)
-
-    def exclude(self) -> typing.Set[str]:
+    @override
+    def exclude(self) -> set[str]:
         return set(["locations", "connections"])
 
-    @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "ncells": {"type": "int", "label": "No. Cells", "default": 0},
-        }
-
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
-
-    def apply_mod(self, mod_net: "ExtNetwork") -> "ExtNetwork":
-        if mod_net.ncells > 0:
-            self.ncells = mod_net.ncells
+    @override
+    def apply_mod(self, mod_struct: Self) -> Self:
+        if mod_struct.ncells > 0:
+            self.ncells = mod_struct.ncells
         # Locations
-        for c_name, o_cnx in mod_net.locations.items():
+        for c_name, o_cnx in mod_struct.locations.items():
             if c_name not in self.locations:
                 self.locations[c_name] = o_cnx
                 continue
             self.locations[c_name].apply_mod(o_cnx)
         # Connections
-        for c_name, o_cnx in mod_net.connections.items():
+        for c_name, o_cnx in mod_struct.connections.items():
             if c_name not in self.connections:
                 self.connections[c_name] = o_cnx
                 continue
@@ -461,58 +262,56 @@ class ExtNetwork(StructBase):
         return self
 
 
-class Network(StructBase):
-    ncells: int = 0
-    locations: typing.Dict[str, Region] = {}
-    connections: typing.Dict[str, Connection] = {}
-    dims: typing.Dict[str, typing.Any] = {}
-    ext_networks: typing.Dict[str, ExtNetwork] = {}
+class PriorNetwork(BaseStruct):
+    config_file: Annotated[Path, Field(title="Config")]
+    data_files: Annotated[dict[str, list[str]], Field(title="Data Files")]
+    data_type_files: Annotated[dict[str, list[str]], Field(title="Data Type Files")]
 
-    class DataTrait(StructBase.StructBaseTrait):
-        ncells = traitlets.Int(0)
-        # dims = traitlets.Dict(key_trait=traitlets.Unicode())
-        dims = traitlets.Unicode()
+    @override
+    def exclude(self) -> set[str]:
+        return set([])
 
-        def __init__(self, dims={}, **kwargs):
-            super().__init__(
-                dims=json.dumps(dims, indent=4),
-                **kwargs,
-            )
+    @override
+    def apply_mod(self, mod_struct: Self) -> Self:
+        #TODO::
+        return self
 
-    def exclude(self) -> typing.Set[str]:
-        return set(["locations", "connections", "ext_networks"])
 
-    @classmethod
-    def trait_ui(cls) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
-        return {
-            "name": {"type": "text", "label": "Name", "default": ""},
-            "ncells": {"type": "int", "label": "No. Cells", "default": 0},
-            "dims": {"type": "textarea", "label": "Dimensions", "default": "{\n}"},
-        }
+class Network(BaseStruct):
+    ncells: Annotated[int, Field(title="No. Cells")] = 0
+    locations: Annotated[dict[str, Region], Field(title="Regions")] = {}
+    connections: Annotated[dict[str, Connection], Field(title="Connections")] = {}
+    dims: Annotated[dict[str, Any], Field(title="Dimensions")] = {}
+    ext_networks: Annotated[dict[str, ExtNetwork], Field(title="Ext. Networks")] = {}
+    data_connect: Annotated[list[DataLink], Field(title="Data Connections")] = []
+    data_files: Annotated[list[DataFile], Field(title="Data Files")] = []
 
-    @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.DataTrait
+    @override
+    def exclude(self) -> set[str]:
+        return set(
+            ["locations", "connections", "ext_networks", "data_connect", "data_files"]
+        )
 
-    def apply_mod(self, mod_net: "Network") -> "Network":
+    @override
+    def apply_mod(self, mod_struct: Self) -> Self:
         # Update dims
-        for dkey, dvalue in mod_net.dims.items():
+        for dkey, dvalue in mod_struct.dims.items():
             if dvalue:
                 self.dims[dkey] = dvalue
         # Locations
-        for c_name, o_cnx in mod_net.locations.items():
+        for c_name, o_cnx in mod_struct.locations.items():
             if c_name not in self.locations:
                 self.locations[c_name] = o_cnx
                 continue
             self.locations[c_name].apply_mod(o_cnx)
         # Connections
-        for c_name, o_cnx in mod_net.connections.items():
+        for c_name, o_cnx in mod_struct.connections.items():
             if c_name not in self.connections:
                 self.connections[c_name] = o_cnx
                 continue
             self.connections[c_name].apply_mod(o_cnx)
         # ExtNetwork
-        for e_name, e_net in mod_net.ext_networks.items():
+        for e_name, e_net in mod_struct.ext_networks.items():
             if e_name not in self.ext_networks:
                 self.ext_networks[e_name] = e_net
                 continue
@@ -540,34 +339,52 @@ class Network(StructBase):
                 self.locations[lx].neurons[nx].N = ncells
         return self
 
-    def find_neuron(self, neuron_name) -> Neuron | None:
-        for lx, lrx in self.locations.items():
+    def find_neuron(self, neuron_name: str) -> Neuron | None:
+        for _lx, lrx in self.locations.items():
             neuron_obj = lrx.find_neuron(neuron_name)
             if neuron_obj:
                 return neuron_obj
         return None
 
+    @classmethod
+    def from_file(cls, in_file: str | Path) -> "Network":
+        return cls.model_validate(uio.load(in_file))
+
+    @classmethod
+    def from_file_list(cls, in_files: list[str | Path]) -> "Network":
+        cust_dict: dict[str, Any] = {}
+        for ifile in in_files:
+            f_dict = uio.load_json(ifile)
+            if cust_dict and f_dict:
+                merge_dict_inplace(cust_dict, f_dict)
+            else:
+                cust_dict = f_dict
+        return cls.model_validate(cust_dict)
+
 
 #
 # Mapper Abstract Classes
 #
+MapperDesc: TypeAlias = dict[str, dict[str, Any]]
+
+
 class RegionMapper(abc.ABC):
     @abc.abstractmethod
-    def __init__(self, name: str, desc: typing.Dict[str, typing.Dict]):
+    def __init__(self, name: str, desc: MapperDesc):
         return None
 
     @abc.abstractmethod
-    def neuron_names(self) -> typing.List[str]:
+    def neuron_names(self) -> list[str]:
         return []
 
     @abc.abstractmethod
-    def map(self, region_neurons: typing.Dict[str, Neuron]) -> Region | None:
+    def map(self, region_neurons: dict[str, Neuron]) -> Region | None:
         return None
 
 
 class NeuronMapper(abc.ABC):
     @abc.abstractmethod
-    def __init__(self, name: str, desc: typing.Dict[str, typing.Dict]):
+    def __init__(self, name: str, desc: MapperDesc):
         return None
 
     @abc.abstractmethod
@@ -577,7 +394,7 @@ class NeuronMapper(abc.ABC):
 
 class ConnectionMapper(abc.ABC):
     @abc.abstractmethod
-    def __init__(self, name: str, desc: typing.Dict[str, typing.Dict]):
+    def __init__(self, name: str, desc: MapperDesc):
         return None
 
     @abc.abstractmethod
@@ -585,10 +402,90 @@ class ConnectionMapper(abc.ABC):
         return None
 
 
+class NoneRegionMapper(RegionMapper):
+    def __init__(self, name: str, desc: MapperDesc):
+        return None
+
+    @override
+    def neuron_names(self) -> list[str]:
+        return []
+
+    @override
+    def map(self, region_neurons: dict[str, Neuron]) -> Region | None:
+        return None
+
+
+class NoneNeuronMapper(NeuronMapper):
+    def __init__(self, name: str, desc: MapperDesc):
+        return None
+
+    @override
+    def map(self) -> Neuron | None:
+        return None
+
+
+class NoneConnectionMapper(ConnectionMapper):
+    def __init__(self, name: str, desc: MapperDesc):
+        return None
+
+    @override
+    def map(self) -> Connection | None:
+        return None
+
+
+#
+# Builder Abstract Classes
+#
+class ModelBuilder(abc.ABC):
+    @abc.abstractmethod
+    def __init__(
+        self,
+        net_struct: Network,
+        **kwargs: Any,
+    ):
+        return None
+
+    @abc.abstractmethod
+    def build(self) -> Any:
+        return None
+
+    @abc.abstractmethod
+    def save(self, network_dir: str | Path):
+        return None
+
+
+#
+# Editor Abstract Classes
+#
+class ModelEditor(abc.ABC):
+    @abc.abstractmethod
+    def __init__(
+        self,
+        prior_net: PriorNetwork,
+        net_struct: Network,
+        **kwargs: Any,
+    ):
+        return None
+
+    @abc.abstractmethod
+    def edit(self) -> Any:
+        return None
+
+    @abc.abstractmethod
+    def save(self, network_dir: str | Path):
+        return None
+
+
+def dict2netstruct(
+    network_struct: dict[str, Any],  # pyright: ignore[reportExplicitt.Any]
+) -> Network:
+    return Network.model_validate(network_struct)
+
+
 #
 #
 def srcdata2network(
-    network_desc: typing.Dict,
+    network_desc: dict[str, Any],  # pyright: ignore[reportExplicitt.Any]
     model_name: str,
     desc2region_mapper: type[RegionMapper],
     desc2neuron_mapper: type[NeuronMapper],
@@ -616,33 +513,39 @@ def srcdata2network(
     )
 
 
-def subset_network(net_stats: Network, region_list: typing.List[str]) -> Network:
+def subset_network(net_stats: Network, region_list: list[str]) -> Network:
     sub_locs = {k: v for k, v in net_stats.locations.items() if k in region_list}
     return Network(name=net_stats.name, dims=net_stats.dims, locations=sub_locs)
 
 
-def map_node_paramas(model_struct, node_map):
-    pass
-
-
-def filter_node_params(model_struct, filter_predicate):
-    pass
-
-
-def map_edge_paramas(model_struct, node_map):
-    pass
-
-
-def filter_edge_params(model_struct, filter_predicate):
-    pass
-
-
-def union_network(model_struct1, model_struct2):
-    pass
-
-
-def join_network(model_struct1, model_struct2):
-    pass
+# TODO: Map Node Parameters
+# def map_node_paramas(model_struct, node_map):
+#     pass
+#
+#
+# TODO: Filter node Parameters
+# def filter_node_params(model_struct, filter_predicate):
+#     pass
+#
+#
+# TODO: Map Edge Parameters
+# def map_edge_paramas(model_struct, node_map):
+#     pass
+#
+#
+# TODO: Filter Edge Parameters
+# def filter_edge_params(model_struct, filter_predicate):
+#     pass
+#
+#
+# TODO: Union Parameters
+# def union_network(model_struct1, model_struct2):
+#     pass
+#
+#
+# TODO: Join Network
+# def join_network(model_struct1, model_struct2):
+#     pass
 
 
 #

@@ -1,0 +1,4804 @@
+connections:
+  (('4', 'Pvalb'), ('4', 'Pvalb')):
+    connect_models:
+      (('4', 'Pvalb', ''), ('4', 'Pvalb', '478793814')):
+        delay: 1.01
+        name: (('4', 'Pvalb', ''), ('4', 'Pvalb', '478793814'))
+        property_map:
+          PSP_scale_factor: 0.037
+          lognorm_scale: 0.5199354476
+          lognorm_shape: 0.6828453321
+          params_file: pv_to_pv.json
+          synphys_mean: 0.6521111955
+        source_model_id: ''
+        target_model_id: '478793814'
+        weight_max: -6.3513513514
+      (('4', 'Pvalb', ''), ('4', 'Pvalb', '478958894')):
+        delay: 1.01
+        name: (('4', 'Pvalb', ''), ('4', 'Pvalb', '478958894'))
+        property_map:
+          PSP_scale_factor: 0.036
+          lognorm_scale: 0.5199354476
+          lognorm_shape: 0.6828453321
+          params_file: pv_to_pv.json
+          synphys_mean: 0.6521111955
+        source_model_id: ''
+        target_model_id: '478958894'
+        weight_max: -6.9117647059
+      (('4', 'Pvalb', ''), ('4', 'Pvalb', '481127173')):
+        delay: 1.01
+        name: (('4', 'Pvalb', ''), ('4', 'Pvalb', '481127173'))
+        property_map:
+          PSP_scale_factor: 0.043
+          lognorm_scale: 0.5199354476
+          lognorm_shape: 0.6828453321
+          params_file: pv_to_pv.json
+          synphys_mean: 0.6521111955
+        source_model_id: ''
+        target_model_id: '481127173'
+        weight_max: -5.9493670886
+      (('4', 'Pvalb', ''), ('4', 'Pvalb', '481127348')):
+        delay: 1.01
+        name: (('4', 'Pvalb', ''), ('4', 'Pvalb', '481127348'))
+        property_map:
+          PSP_scale_factor: 0.055
+          lognorm_scale: 0.5199354476
+          lognorm_shape: 0.6828453321
+          params_file: pv_to_pv.json
+          synphys_mean: 0.6521111955
+        source_model_id: ''
+        target_model_id: '481127348'
+        weight_max: -4.3518518519
+      (('4', 'Pvalb', ''), ('4', 'Pvalb', '487405644')):
+        delay: 1.01
+        name: (('4', 'Pvalb', ''), ('4', 'Pvalb', '487405644'))
+        property_map:
+          PSP_scale_factor: 0.065
+          lognorm_scale: 0.5199354476
+          lognorm_shape: 0.6828453321
+          params_file: pv_to_pv.json
+          synphys_mean: 0.6521111955
+        source_model_id: ''
+        target_model_id: '487405644'
+        weight_max: -3.9830508475
+      (('4', 'Pvalb', ''), ('4', 'Pvalb', '487667205')):
+        delay: 1.01
+        name: (('4', 'Pvalb', ''), ('4', 'Pvalb', '487667205'))
+        property_map:
+          PSP_scale_factor: 0.044
+          lognorm_scale: 0.5199354476
+          lognorm_shape: 0.6828453321
+          params_file: pv_to_pv.json
+          synphys_mean: 0.6521111955
+        source_model_id: ''
+        target_model_id: '487667205'
+        weight_max: -5.5952380952
+      (('4', 'Pvalb', ''), ('4', 'Pvalb', '491038812')):
+        delay: 1.01
+        name: (('4', 'Pvalb', ''), ('4', 'Pvalb', '491038812'))
+        property_map:
+          PSP_scale_factor: 0.034
+          lognorm_scale: 0.5199354476
+          lognorm_shape: 0.6828453321
+          params_file: pv_to_pv.json
+          synphys_mean: 0.6521111955
+        source_model_id: ''
+        target_model_id: '491038812'
+        weight_max: -7.8333333333
+      (('4', 'Pvalb', ''), ('4', 'Pvalb', '569997187')):
+        delay: 1.01
+        name: (('4', 'Pvalb', ''), ('4', 'Pvalb', '569997187'))
+        property_map:
+          PSP_scale_factor: 0.053
+          lognorm_scale: 0.5199354476
+          lognorm_shape: 0.6828453321
+          params_file: pv_to_pv.json
+          synphys_mean: 0.6521111955
+        source_model_id: ''
+        target_model_id: '569997187'
+        weight_max: -4.1228070175
+      (('4', 'Pvalb', ''), ('4', 'Pvalb', '571314481')):
+        delay: 1.01
+        name: (('4', 'Pvalb', ''), ('4', 'Pvalb', '571314481'))
+        property_map:
+          PSP_scale_factor: 0.055
+          lognorm_scale: 0.5199354476
+          lognorm_shape: 0.6828453321
+          params_file: pv_to_pv.json
+          synphys_mean: 0.6521111955
+        source_model_id: ''
+        target_model_id: '571314481'
+        weight_max: -4.4339622642
+      (('4', 'Pvalb', ''), ('4', 'Pvalb', '572375809')):
+        delay: 1.01
+        name: (('4', 'Pvalb', ''), ('4', 'Pvalb', '572375809'))
+        property_map:
+          PSP_scale_factor: 0.043
+          lognorm_scale: 0.5199354476
+          lognorm_shape: 0.6828453321
+          params_file: pv_to_pv.json
+          synphys_mean: 0.6521111955
+        source_model_id: ''
+        target_model_id: '572375809'
+        weight_max: -5.6626506024
+      (('4', 'Pvalb', ''), ('4', 'Pvalb', '579414994')):
+        delay: 1.01
+        name: (('4', 'Pvalb', ''), ('4', 'Pvalb', '579414994'))
+        property_map:
+          PSP_scale_factor: 0.035
+          lognorm_scale: 0.5199354476
+          lognorm_shape: 0.6828453321
+          params_file: pv_to_pv.json
+          synphys_mean: 0.6521111955
+        source_model_id: ''
+        target_model_id: '579414994'
+        weight_max: 0.0
+    name: (('4', 'Pvalb'), ('4', 'Pvalb'))
+    post:
+    - '4'
+    - Pvalb
+    pre:
+    - '4'
+    - Pvalb
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.633215339219893
+      A_literature_src:
+      - 0.633215339219893
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: i
+      sigma: 126.77
+  (('4', 'Pvalb'), ('4', 'Rorb')):
+    connect_models:
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '322723785')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '322723785'))
+        property_map:
+          PSP_scale_factor: 0.053
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '322723785'
+        weight_max: -5.1612903226
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '322761772')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '322761772'))
+        property_map:
+          PSP_scale_factor: 0.054
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '322761772'
+        weight_max: -4.5283018868
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '324065524')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '324065524'))
+        property_map:
+          PSP_scale_factor: 0.071
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '324065524'
+        weight_max: -3.8095238095
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '329550277')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '329550277'))
+        property_map:
+          PSP_scale_factor: 0.054
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '329550277'
+        weight_max: -5.1612903226
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '466378900')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '466378900'))
+        property_map:
+          PSP_scale_factor: 0.082
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '466378900'
+        weight_max: -3.2214765101
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '467003163')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '467003163'))
+        property_map:
+          PSP_scale_factor: 0.052
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '467003163'
+        weight_max: -6.0759493671
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '467357834')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '467357834'))
+        property_map:
+          PSP_scale_factor: 0.048
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '467357834'
+        weight_max: -5.5813953488
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '469763389')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '469763389'))
+        property_map:
+          PSP_scale_factor: 0.059
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '469763389'
+        weight_max: -4.5283018868
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '473020156')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '473020156'))
+        property_map:
+          PSP_scale_factor: 0.071
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '473020156'
+        weight_max: -3.5820895522
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '476562817')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '476562817'))
+        property_map:
+          PSP_scale_factor: 0.054
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '476562817'
+        weight_max: -5.1063829787
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '478586425')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '478586425'))
+        property_map:
+          PSP_scale_factor: 0.058
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '478586425'
+        weight_max: -4.8
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '479179020')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '479179020'))
+        property_map:
+          PSP_scale_factor: 0.051
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '479179020'
+        weight_max: -5.2173913043
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '484679812')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '484679812'))
+        property_map:
+          PSP_scale_factor: 0.069
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '484679812'
+        weight_max: -3.7209302326
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '484770879')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '484770879'))
+        property_map:
+          PSP_scale_factor: 0.051
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '484770879'
+        weight_max: -5.5172413793
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '485836906')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '485836906'))
+        property_map:
+          PSP_scale_factor: 0.043
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '485836906'
+        weight_max: -6.4
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '486472847')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '486472847'))
+        property_map:
+          PSP_scale_factor: 0.07
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '486472847'
+        weight_max: -3.8709677419
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '486500736')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '486500736'))
+        property_map:
+          PSP_scale_factor: 0.037
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '486500736'
+        weight_max: -7.2727272727
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '490626718')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '490626718'))
+        property_map:
+          PSP_scale_factor: 0.06
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '490626718'
+        weight_max: -5.5813953488
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '490626827')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '490626827'))
+        property_map:
+          PSP_scale_factor: 0.057
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '490626827'
+        weight_max: -5.393258427
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '500859045')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '500859045'))
+        property_map:
+          PSP_scale_factor: 0.054
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '500859045'
+        weight_max: -5.0526315789
+      (('4', 'Pvalb', ''), ('4', 'Rorb', '500894271')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Rorb', '500894271'))
+        property_map:
+          PSP_scale_factor: 0.055
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '500894271'
+        weight_max: 0.0
+    name: (('4', 'Pvalb'), ('4', 'Rorb'))
+    post:
+    - '4'
+    - Rorb
+    pre:
+    - '4'
+    - Pvalb
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.488046931160011
+      A_literature_src:
+      - 0.488046931160011
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: e
+      pre_ei: i
+      sigma: 96.6
+  (('4', 'Pvalb'), ('4', 'Scnn1a')):
+    connect_models:
+      (('4', 'Pvalb', ''), ('4', 'Scnn1a', '320207387')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Scnn1a', '320207387'))
+        property_map:
+          PSP_scale_factor: 0.046
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '320207387'
+        weight_max: -6.4864864865
+      (('4', 'Pvalb', ''), ('4', 'Scnn1a', '323838579')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Scnn1a', '323838579'))
+        property_map:
+          PSP_scale_factor: 0.053
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '323838579'
+        weight_max: -5.3333333333
+      (('4', 'Pvalb', ''), ('4', 'Scnn1a', '476266853')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Scnn1a', '476266853'))
+        property_map:
+          PSP_scale_factor: 0.052
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '476266853'
+        weight_max: -5.5813953488
+      (('4', 'Pvalb', ''), ('4', 'Scnn1a', '500964358')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Scnn1a', '500964358'))
+        property_map:
+          PSP_scale_factor: 0.05
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '500964358'
+        weight_max: -5.0
+      (('4', 'Pvalb', ''), ('4', 'Scnn1a', '517647182')):
+        delay: 0.96
+        name: (('4', 'Pvalb', ''), ('4', 'Scnn1a', '517647182'))
+        property_map:
+          PSP_scale_factor: 0.052
+          lognorm_scale: 0.5930918658
+          lognorm_shape: 0.6574717379
+          params_file: pv_to_e4.json
+          synphys_mean: 0.7292007006
+        source_model_id: ''
+        target_model_id: '517647182'
+        weight_max: 0.0
+    name: (('4', 'Pvalb'), ('4', 'Scnn1a'))
+    post:
+    - '4'
+    - Scnn1a
+    pre:
+    - '4'
+    - Pvalb
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.488046931160011
+      A_literature_src:
+      - 0.488046931160011
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: e
+      pre_ei: i
+      sigma: 96.6
+  (('4', 'Pvalb'), ('4', 'Sst')):
+    connect_models:
+      (('4', 'Pvalb', ''), ('4', 'Sst', '476099282')):
+        delay: 1.06
+        name: (('4', 'Pvalb', ''), ('4', 'Sst', '476099282'))
+        property_map:
+          PSP_scale_factor: 0.171
+          lognorm_scale: 0.5805745709
+          lognorm_shape: 0.5667170502
+          params_file: pv_to_sst.json
+          synphys_mean: 0.6758774351
+        source_model_id: ''
+        target_model_id: '476099282'
+        weight_max: -1.6447368421
+      (('4', 'Pvalb', ''), ('4', 'Sst', '476753465')):
+        delay: 1.06
+        name: (('4', 'Pvalb', ''), ('4', 'Sst', '476753465'))
+        property_map:
+          PSP_scale_factor: 0.16
+          lognorm_scale: 0.5805745709
+          lognorm_shape: 0.5667170502
+          params_file: pv_to_sst.json
+          synphys_mean: 0.6758774351
+        source_model_id: ''
+        target_model_id: '476753465'
+        weight_max: -1.5923566879
+      (('4', 'Pvalb', ''), ('4', 'Sst', '485061364')):
+        delay: 1.06
+        name: (('4', 'Pvalb', ''), ('4', 'Sst', '485061364'))
+        property_map:
+          PSP_scale_factor: 0.123
+          lognorm_scale: 0.5805745709
+          lognorm_shape: 0.5667170502
+          params_file: pv_to_sst.json
+          synphys_mean: 0.6758774351
+        source_model_id: ''
+        target_model_id: '485061364'
+        weight_max: -2.6595744681
+      (('4', 'Pvalb', ''), ('4', 'Sst', '501280518')):
+        delay: 1.06
+        name: (('4', 'Pvalb', ''), ('4', 'Sst', '501280518'))
+        property_map:
+          PSP_scale_factor: 0.123
+          lognorm_scale: 0.5805745709
+          lognorm_shape: 0.5667170502
+          params_file: pv_to_sst.json
+          synphys_mean: 0.6758774351
+        source_model_id: ''
+        target_model_id: '501280518'
+        weight_max: -2.380952381
+      (('4', 'Pvalb', ''), ('4', 'Sst', '501282204')):
+        delay: 1.06
+        name: (('4', 'Pvalb', ''), ('4', 'Sst', '501282204'))
+        property_map:
+          PSP_scale_factor: 0.063
+          lognorm_scale: 0.5805745709
+          lognorm_shape: 0.5667170502
+          params_file: pv_to_sst.json
+          synphys_mean: 0.6758774351
+        source_model_id: ''
+        target_model_id: '501282204'
+        weight_max: -4.3103448276
+      (('4', 'Pvalb', ''), ('4', 'Sst', '573622646')):
+        delay: 1.06
+        name: (('4', 'Pvalb', ''), ('4', 'Sst', '573622646'))
+        property_map:
+          PSP_scale_factor: 0.101
+          lognorm_scale: 0.5805745709
+          lognorm_shape: 0.5667170502
+          params_file: pv_to_sst.json
+          synphys_mean: 0.6758774351
+        source_model_id: ''
+        target_model_id: '573622646'
+        weight_max: 0.0
+    name: (('4', 'Pvalb'), ('4', 'Sst'))
+    post:
+    - '4'
+    - Sst
+    pre:
+    - '4'
+    - Pvalb
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.388413662252793
+      A_literature_src:
+      - 0.388413662252793
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: i
+      sigma: 126.77
+  (('4', 'Pvalb'), ('4', 'Vip')):
+    connect_models:
+      (('4', 'Pvalb', ''), ('4', 'Vip', '501570114')):
+        delay: 0.92
+        name: (('4', 'Pvalb', ''), ('4', 'Vip', '501570114'))
+        property_map:
+          PSP_scale_factor: 0.075
+          lognorm_scale: 0.4623438127
+          lognorm_shape: 0.4646536968
+          params_file: pv_to_vip.json
+          synphys_mean: 0.5119038678
+        source_model_id: ''
+        target_model_id: '501570114'
+        weight_max: -1.6363636364
+      (('4', 'Pvalb', ''), ('4', 'Vip', '531121585')):
+        delay: 0.92
+        name: (('4', 'Pvalb', ''), ('4', 'Vip', '531121585'))
+        property_map:
+          PSP_scale_factor: 0.062
+          lognorm_scale: 0.4623438127
+          lognorm_shape: 0.4646536968
+          params_file: pv_to_vip.json
+          synphys_mean: 0.5119038678
+        source_model_id: ''
+        target_model_id: '531121585'
+        weight_max: -1.9708029197
+      (('4', 'Pvalb', ''), ('4', 'Vip', '535728342')):
+        delay: 0.92
+        name: (('4', 'Pvalb', ''), ('4', 'Vip', '535728342'))
+        property_map:
+          PSP_scale_factor: 0.091
+          lognorm_scale: 0.4623438127
+          lognorm_shape: 0.4646536968
+          params_file: pv_to_vip.json
+          synphys_mean: 0.5119038678
+        source_model_id: ''
+        target_model_id: '535728342'
+        weight_max: -1.2980769231
+      (('4', 'Pvalb', ''), ('4', 'Vip', '560690291')):
+        delay: 0.92
+        name: (('4', 'Pvalb', ''), ('4', 'Vip', '560690291'))
+        property_map:
+          PSP_scale_factor: 0.058
+          lognorm_scale: 0.4623438127
+          lognorm_shape: 0.4646536968
+          params_file: pv_to_vip.json
+          synphys_mean: 0.5119038678
+        source_model_id: ''
+        target_model_id: '560690291'
+        weight_max: -2.3275862069
+      (('4', 'Pvalb', ''), ('4', 'Vip', '561934585')):
+        delay: 0.92
+        name: (('4', 'Pvalb', ''), ('4', 'Vip', '561934585'))
+        property_map:
+          PSP_scale_factor: 0.037
+          lognorm_scale: 0.4623438127
+          lognorm_shape: 0.4646536968
+          params_file: pv_to_vip.json
+          synphys_mean: 0.5119038678
+        source_model_id: ''
+        target_model_id: '561934585'
+        weight_max: -3.3333333333
+      (('4', 'Pvalb', ''), ('4', 'Vip', '562540395')):
+        delay: 0.92
+        name: (('4', 'Pvalb', ''), ('4', 'Vip', '562540395'))
+        property_map:
+          PSP_scale_factor: 0.057
+          lognorm_scale: 0.4623438127
+          lognorm_shape: 0.4646536968
+          params_file: pv_to_vip.json
+          synphys_mean: 0.5119038678
+        source_model_id: ''
+        target_model_id: '562540395'
+        weight_max: 0.0
+    name: (('4', 'Pvalb'), ('4', 'Vip'))
+    post:
+    - '4'
+    - Vip
+    pre:
+    - '4'
+    - Pvalb
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.194864242166707
+      A_literature_src:
+      - 0.194864242166707
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: i
+      sigma: 126.77
+  (('4', 'Rorb'), ('4', 'Pvalb')):
+    connect_models:
+      (('4', 'Rorb', ''), ('4', 'Pvalb', '478793814')):
+        delay: 1.13
+        name: (('4', 'Rorb', ''), ('4', 'Pvalb', '478793814'))
+        property_map:
+          PSP_scale_factor: 0.031
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '478793814'
+        weight_max: 9.0
+      (('4', 'Rorb', ''), ('4', 'Pvalb', '478958894')):
+        delay: 1.13
+        name: (('4', 'Rorb', ''), ('4', 'Pvalb', '478958894'))
+        property_map:
+          PSP_scale_factor: 0.03
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '478958894'
+        weight_max: 9.375
+      (('4', 'Rorb', ''), ('4', 'Pvalb', '481127173')):
+        delay: 1.13
+        name: (('4', 'Rorb', ''), ('4', 'Pvalb', '481127173'))
+        property_map:
+          PSP_scale_factor: 0.036
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '481127173'
+        weight_max: 8.0357142857
+      (('4', 'Rorb', ''), ('4', 'Pvalb', '481127348')):
+        delay: 1.13
+        name: (('4', 'Rorb', ''), ('4', 'Pvalb', '481127348'))
+        property_map:
+          PSP_scale_factor: 0.046
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '481127348'
+        weight_max: 6.0810810811
+      (('4', 'Rorb', ''), ('4', 'Pvalb', '487405644')):
+        delay: 1.13
+        name: (('4', 'Rorb', ''), ('4', 'Pvalb', '487405644'))
+        property_map:
+          PSP_scale_factor: 0.055
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '487405644'
+        weight_max: 5.2325581395
+      (('4', 'Rorb', ''), ('4', 'Pvalb', '487667205')):
+        delay: 1.13
+        name: (('4', 'Rorb', ''), ('4', 'Pvalb', '487667205'))
+        property_map:
+          PSP_scale_factor: 0.037
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '487667205'
+        weight_max: 7.6271186441
+      (('4', 'Rorb', ''), ('4', 'Pvalb', '491038812')):
+        delay: 1.13
+        name: (('4', 'Rorb', ''), ('4', 'Pvalb', '491038812'))
+        property_map:
+          PSP_scale_factor: 0.029
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '491038812'
+        weight_max: 10.2272727273
+      (('4', 'Rorb', ''), ('4', 'Pvalb', '569997187')):
+        delay: 1.13
+        name: (('4', 'Rorb', ''), ('4', 'Pvalb', '569997187'))
+        property_map:
+          PSP_scale_factor: 0.043
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '569997187'
+        weight_max: 6.1643835616
+      (('4', 'Rorb', ''), ('4', 'Pvalb', '571314481')):
+        delay: 1.13
+        name: (('4', 'Rorb', ''), ('4', 'Pvalb', '571314481'))
+        property_map:
+          PSP_scale_factor: 0.046
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '571314481'
+        weight_max: 6.0810810811
+      (('4', 'Rorb', ''), ('4', 'Pvalb', '572375809')):
+        delay: 1.13
+        name: (('4', 'Rorb', ''), ('4', 'Pvalb', '572375809'))
+        property_map:
+          PSP_scale_factor: 0.035
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '572375809'
+        weight_max: 7.8947368421
+      (('4', 'Rorb', ''), ('4', 'Pvalb', '579414994')):
+        delay: 1.13
+        name: (('4', 'Rorb', ''), ('4', 'Pvalb', '579414994'))
+        property_map:
+          PSP_scale_factor: 0.029
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '579414994'
+        weight_max: 0.0
+    name: (('4', 'Rorb'), ('4', 'Pvalb'))
+    post:
+    - '4'
+    - Pvalb
+    pre:
+    - '4'
+    - Rorb
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.315678465282962
+      A_literature_src:
+      - 0.315678465282962
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: e
+      sigma: 99.84
+  (('4', 'Rorb'), ('4', 'Rorb')):
+    connect_models:
+      (('4', 'Rorb', ''), ('4', 'Rorb', '322723785')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '322723785'))
+        property_map:
+          PSP_scale_factor: 0.063
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '322723785'
+        weight_max: 2.4
+      (('4', 'Rorb', ''), ('4', 'Rorb', '322761772')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '322761772'))
+        property_map:
+          PSP_scale_factor: 0.06
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '322761772'
+        weight_max: 2.25
+      (('4', 'Rorb', ''), ('4', 'Rorb', '324065524')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '324065524'))
+        property_map:
+          PSP_scale_factor: 0.084
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '324065524'
+        weight_max: 1.7821782178
+      (('4', 'Rorb', ''), ('4', 'Rorb', '329550277')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '329550277'))
+        property_map:
+          PSP_scale_factor: 0.064
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '329550277'
+        weight_max: 2.3684210526
+      (('4', 'Rorb', ''), ('4', 'Rorb', '466378900')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '466378900'))
+        property_map:
+          PSP_scale_factor: 0.096
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '466378900'
+        weight_max: 1.5254237288
+      (('4', 'Rorb', ''), ('4', 'Rorb', '467003163')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '467003163'))
+        property_map:
+          PSP_scale_factor: 0.063
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '467003163'
+        weight_max: 2.6865671642
+      (('4', 'Rorb', ''), ('4', 'Rorb', '467357834')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '467357834'))
+        property_map:
+          PSP_scale_factor: 0.056
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '467357834'
+        weight_max: 2.6470588235
+      (('4', 'Rorb', ''), ('4', 'Rorb', '469763389')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '469763389'))
+        property_map:
+          PSP_scale_factor: 0.069
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '469763389'
+        weight_max: 2.1428571429
+      (('4', 'Rorb', ''), ('4', 'Rorb', '473020156')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '473020156'))
+        property_map:
+          PSP_scale_factor: 0.08
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '473020156'
+        weight_max: 1.7307692308
+      (('4', 'Rorb', ''), ('4', 'Rorb', '476562817')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '476562817'))
+        property_map:
+          PSP_scale_factor: 0.064
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '476562817'
+        weight_max: 2.3684210526
+      (('4', 'Rorb', ''), ('4', 'Rorb', '478586425')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '478586425'))
+        property_map:
+          PSP_scale_factor: 0.069
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '478586425'
+        weight_max: 2.2222222222
+      (('4', 'Rorb', ''), ('4', 'Rorb', '479179020')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '479179020'))
+        property_map:
+          PSP_scale_factor: 0.059
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '479179020'
+        weight_max: 2.4657534247
+      (('4', 'Rorb', ''), ('4', 'Rorb', '484679812')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '484679812'))
+        property_map:
+          PSP_scale_factor: 0.08
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '484679812'
+        weight_max: 1.7821782178
+      (('4', 'Rorb', ''), ('4', 'Rorb', '484770879')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '484770879'))
+        property_map:
+          PSP_scale_factor: 0.061
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '484770879'
+        weight_max: 2.5352112676
+      (('4', 'Rorb', ''), ('4', 'Rorb', '485836906')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '485836906'))
+        property_map:
+          PSP_scale_factor: 0.051
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '485836906'
+        weight_max: 3.0
+      (('4', 'Rorb', ''), ('4', 'Rorb', '486472847')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '486472847'))
+        property_map:
+          PSP_scale_factor: 0.082
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '486472847'
+        weight_max: 1.8181818182
+      (('4', 'Rorb', ''), ('4', 'Rorb', '486500736')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '486500736'))
+        property_map:
+          PSP_scale_factor: 0.043
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '486500736'
+        weight_max: 3.4615384615
+      (('4', 'Rorb', ''), ('4', 'Rorb', '490626718')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '490626718'))
+        property_map:
+          PSP_scale_factor: 0.074
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '490626718'
+        weight_max: 2.4
+      (('4', 'Rorb', ''), ('4', 'Rorb', '490626827')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '490626827'))
+        property_map:
+          PSP_scale_factor: 0.07
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '490626827'
+        weight_max: 2.4
+      (('4', 'Rorb', ''), ('4', 'Rorb', '500859045')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '500859045'))
+        property_map:
+          PSP_scale_factor: 0.063
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '500859045'
+        weight_max: 2.3684210526
+      (('4', 'Rorb', ''), ('4', 'Rorb', '500894271')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Rorb', '500894271'))
+        property_map:
+          PSP_scale_factor: 0.063
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '500894271'
+        weight_max: 0.0
+    name: (('4', 'Rorb'), ('4', 'Rorb'))
+    post:
+    - '4'
+    - Rorb
+    pre:
+    - '4'
+    - Rorb
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.0305413259819695
+      A_literature_src:
+      - 0.0305413259819695
+      B_ratio: 0.5
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: e
+      pre_ei: e
+      sigma: 127.0
+  (('4', 'Rorb'), ('4', 'Scnn1a')):
+    connect_models:
+      (('4', 'Rorb', ''), ('4', 'Scnn1a', '320207387')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Scnn1a', '320207387'))
+        property_map:
+          PSP_scale_factor: 0.056
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '320207387'
+        weight_max: 2.9032258065
+      (('4', 'Rorb', ''), ('4', 'Scnn1a', '323838579')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Scnn1a', '323838579'))
+        property_map:
+          PSP_scale_factor: 0.063
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '323838579'
+        weight_max: 2.4657534247
+      (('4', 'Rorb', ''), ('4', 'Scnn1a', '476266853')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Scnn1a', '476266853'))
+        property_map:
+          PSP_scale_factor: 0.062
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '476266853'
+        weight_max: 2.5352112676
+      (('4', 'Rorb', ''), ('4', 'Scnn1a', '500964358')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Scnn1a', '500964358'))
+        property_map:
+          PSP_scale_factor: 0.057
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '500964358'
+        weight_max: 2.4324324324
+      (('4', 'Rorb', ''), ('4', 'Scnn1a', '517647182')):
+        delay: 1.48
+        name: (('4', 'Rorb', ''), ('4', 'Scnn1a', '517647182'))
+        property_map:
+          PSP_scale_factor: 0.059
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '517647182'
+        weight_max: 0.0
+    name: (('4', 'Rorb'), ('4', 'Scnn1a'))
+    post:
+    - '4'
+    - Scnn1a
+    pre:
+    - '4'
+    - Rorb
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.0305413259819695
+      A_literature_src:
+      - 0.0305413259819695
+      B_ratio: 0.5
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: e
+      pre_ei: e
+      sigma: 127.0
+  (('4', 'Rorb'), ('4', 'Sst')):
+    connect_models:
+      (('4', 'Rorb', ''), ('4', 'Sst', '476099282')):
+        delay: 1.1
+        name: (('4', 'Rorb', ''), ('4', 'Sst', '476099282'))
+        property_map:
+          PSP_scale_factor: 0.083
+          lognorm_scale: 0.3577175718
+          lognorm_shape: 0.7822724783
+          params_file: e4_to_sst.json
+          synphys_mean: 0.4618269056
+        source_model_id: ''
+        target_model_id: '476099282'
+        weight_max: 0.5154639175
+      (('4', 'Rorb', ''), ('4', 'Sst', '476753465')):
+        delay: 1.1
+        name: (('4', 'Rorb', ''), ('4', 'Sst', '476753465'))
+        property_map:
+          PSP_scale_factor: 0.077
+          lognorm_scale: 0.3577175718
+          lognorm_shape: 0.7822724783
+          params_file: e4_to_sst.json
+          synphys_mean: 0.4618269056
+        source_model_id: ''
+        target_model_id: '476753465'
+        weight_max: 0.5376344086
+      (('4', 'Rorb', ''), ('4', 'Sst', '485061364')):
+        delay: 1.1
+        name: (('4', 'Rorb', ''), ('4', 'Sst', '485061364'))
+        property_map:
+          PSP_scale_factor: 0.061
+          lognorm_scale: 0.3577175718
+          lognorm_shape: 0.7822724783
+          params_file: e4_to_sst.json
+          synphys_mean: 0.4618269056
+        source_model_id: ''
+        target_model_id: '485061364'
+        weight_max: 0.7462686567
+      (('4', 'Rorb', ''), ('4', 'Sst', '501280518')):
+        delay: 1.1
+        name: (('4', 'Rorb', ''), ('4', 'Sst', '501280518'))
+        property_map:
+          PSP_scale_factor: 0.06
+          lognorm_scale: 0.3577175718
+          lognorm_shape: 0.7822724783
+          params_file: e4_to_sst.json
+          synphys_mean: 0.4618269056
+        source_model_id: ''
+        target_model_id: '501280518'
+        weight_max: 0.7246376812
+      (('4', 'Rorb', ''), ('4', 'Sst', '501282204')):
+        delay: 1.1
+        name: (('4', 'Rorb', ''), ('4', 'Sst', '501282204'))
+        property_map:
+          PSP_scale_factor: 0.031
+          lognorm_scale: 0.3577175718
+          lognorm_shape: 0.7822724783
+          params_file: e4_to_sst.json
+          synphys_mean: 0.4618269056
+        source_model_id: ''
+        target_model_id: '501282204'
+        weight_max: 1.3888888889
+      (('4', 'Rorb', ''), ('4', 'Sst', '573622646')):
+        delay: 1.1
+        name: (('4', 'Rorb', ''), ('4', 'Sst', '573622646'))
+        property_map:
+          PSP_scale_factor: 0.049
+          lognorm_scale: 0.3577175718
+          lognorm_shape: 0.7822724783
+          params_file: e4_to_sst.json
+          synphys_mean: 0.4618269056
+        source_model_id: ''
+        target_model_id: '573622646'
+        weight_max: 0.0
+    name: (('4', 'Rorb'), ('4', 'Sst'))
+    post:
+    - '4'
+    - Sst
+    pre:
+    - '4'
+    - Rorb
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.324284555241534
+      A_literature_src:
+      - 0.324284555241534
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: e
+      sigma: 99.84
+  (('4', 'Rorb'), ('4', 'Vip')):
+    connect_models:
+      (('4', 'Rorb', ''), ('4', 'Vip', '501570114')):
+        delay: 1.46
+        name: (('4', 'Rorb', ''), ('4', 'Vip', '501570114'))
+        property_map:
+          PSP_scale_factor: 0.089
+          lognorm_scale: 1.3675847718
+          lognorm_shape: 0.6435686435
+          params_file: e4_to_vip.json
+          synphys_mean: 1.6206456373
+        source_model_id: ''
+        target_model_id: '501570114'
+        weight_max: 6.6666666667
+      (('4', 'Rorb', ''), ('4', 'Vip', '531121585')):
+        delay: 1.46
+        name: (('4', 'Rorb', ''), ('4', 'Vip', '531121585'))
+        property_map:
+          PSP_scale_factor: 0.073
+          lognorm_scale: 1.3675847718
+          lognorm_shape: 0.6435686435
+          params_file: e4_to_vip.json
+          synphys_mean: 1.6206456373
+        source_model_id: ''
+        target_model_id: '531121585'
+        weight_max: 8.1481481481
+      (('4', 'Rorb', ''), ('4', 'Vip', '535728342')):
+        delay: 1.46
+        name: (('4', 'Rorb', ''), ('4', 'Vip', '535728342'))
+        property_map:
+          PSP_scale_factor: 0.106
+          lognorm_scale: 1.3675847718
+          lognorm_shape: 0.6435686435
+          params_file: e4_to_vip.json
+          synphys_mean: 1.6206456373
+        source_model_id: ''
+        target_model_id: '535728342'
+        weight_max: 5.5462184874
+      (('4', 'Rorb', ''), ('4', 'Vip', '560690291')):
+        delay: 1.46
+        name: (('4', 'Rorb', ''), ('4', 'Vip', '560690291'))
+        property_map:
+          PSP_scale_factor: 0.071
+          lognorm_scale: 1.3675847718
+          lognorm_shape: 0.6435686435
+          params_file: e4_to_vip.json
+          synphys_mean: 1.6206456373
+        source_model_id: ''
+        target_model_id: '560690291'
+        weight_max: 8.6842105263
+      (('4', 'Rorb', ''), ('4', 'Vip', '561934585')):
+        delay: 1.46
+        name: (('4', 'Rorb', ''), ('4', 'Vip', '561934585'))
+        property_map:
+          PSP_scale_factor: 0.045
+          lognorm_scale: 1.3675847718
+          lognorm_shape: 0.6435686435
+          params_file: e4_to_vip.json
+          synphys_mean: 1.6206456373
+        source_model_id: ''
+        target_model_id: '561934585'
+        weight_max: 13.4693877551
+      (('4', 'Rorb', ''), ('4', 'Vip', '562540395')):
+        delay: 1.46
+        name: (('4', 'Rorb', ''), ('4', 'Vip', '562540395'))
+        property_map:
+          PSP_scale_factor: 0.069
+          lognorm_scale: 1.3675847718
+          lognorm_shape: 0.6435686435
+          params_file: e4_to_vip.json
+          synphys_mean: 1.6206456373
+        source_model_id: ''
+        target_model_id: '562540395'
+        weight_max: 0.0
+    name: (('4', 'Rorb'), ('4', 'Vip'))
+    post:
+    - '4'
+    - Vip
+    pre:
+    - '4'
+    - Rorb
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.0845196761302092
+      A_literature_src:
+      - 0.0845196761302092
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: e
+      sigma: 99.84
+  (('4', 'Scnn1a'), ('4', 'Pvalb')):
+    connect_models:
+      (('4', 'Scnn1a', ''), ('4', 'Pvalb', '478793814')):
+        delay: 1.13
+        name: (('4', 'Scnn1a', ''), ('4', 'Pvalb', '478793814'))
+        property_map:
+          PSP_scale_factor: 0.031
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '478793814'
+        weight_max: 9.0
+      (('4', 'Scnn1a', ''), ('4', 'Pvalb', '478958894')):
+        delay: 1.13
+        name: (('4', 'Scnn1a', ''), ('4', 'Pvalb', '478958894'))
+        property_map:
+          PSP_scale_factor: 0.03
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '478958894'
+        weight_max: 9.375
+      (('4', 'Scnn1a', ''), ('4', 'Pvalb', '481127173')):
+        delay: 1.13
+        name: (('4', 'Scnn1a', ''), ('4', 'Pvalb', '481127173'))
+        property_map:
+          PSP_scale_factor: 0.036
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '481127173'
+        weight_max: 8.0357142857
+      (('4', 'Scnn1a', ''), ('4', 'Pvalb', '481127348')):
+        delay: 1.13
+        name: (('4', 'Scnn1a', ''), ('4', 'Pvalb', '481127348'))
+        property_map:
+          PSP_scale_factor: 0.046
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '481127348'
+        weight_max: 6.0810810811
+      (('4', 'Scnn1a', ''), ('4', 'Pvalb', '487405644')):
+        delay: 1.13
+        name: (('4', 'Scnn1a', ''), ('4', 'Pvalb', '487405644'))
+        property_map:
+          PSP_scale_factor: 0.055
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '487405644'
+        weight_max: 5.2325581395
+      (('4', 'Scnn1a', ''), ('4', 'Pvalb', '487667205')):
+        delay: 1.13
+        name: (('4', 'Scnn1a', ''), ('4', 'Pvalb', '487667205'))
+        property_map:
+          PSP_scale_factor: 0.037
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '487667205'
+        weight_max: 7.6271186441
+      (('4', 'Scnn1a', ''), ('4', 'Pvalb', '491038812')):
+        delay: 1.13
+        name: (('4', 'Scnn1a', ''), ('4', 'Pvalb', '491038812'))
+        property_map:
+          PSP_scale_factor: 0.029
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '491038812'
+        weight_max: 10.2272727273
+      (('4', 'Scnn1a', ''), ('4', 'Pvalb', '569997187')):
+        delay: 1.13
+        name: (('4', 'Scnn1a', ''), ('4', 'Pvalb', '569997187'))
+        property_map:
+          PSP_scale_factor: 0.043
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '569997187'
+        weight_max: 6.1643835616
+      (('4', 'Scnn1a', ''), ('4', 'Pvalb', '571314481')):
+        delay: 1.13
+        name: (('4', 'Scnn1a', ''), ('4', 'Pvalb', '571314481'))
+        property_map:
+          PSP_scale_factor: 0.046
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '571314481'
+        weight_max: 6.0810810811
+      (('4', 'Scnn1a', ''), ('4', 'Pvalb', '572375809')):
+        delay: 1.13
+        name: (('4', 'Scnn1a', ''), ('4', 'Pvalb', '572375809'))
+        property_map:
+          PSP_scale_factor: 0.035
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '572375809'
+        weight_max: 7.8947368421
+      (('4', 'Scnn1a', ''), ('4', 'Pvalb', '579414994')):
+        delay: 1.13
+        name: (('4', 'Scnn1a', ''), ('4', 'Pvalb', '579414994'))
+        property_map:
+          PSP_scale_factor: 0.029
+          lognorm_scale: 0.6799802917
+          lognorm_shape: 0.5876306305
+          params_file: e4_to_pv.json
+          synphys_mean: 0.7958240058
+        source_model_id: ''
+        target_model_id: '579414994'
+        weight_max: 0.0
+    name: (('4', 'Scnn1a'), ('4', 'Pvalb'))
+    post:
+    - '4'
+    - Pvalb
+    pre:
+    - '4'
+    - Scnn1a
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.315678465282962
+      A_literature_src:
+      - 0.315678465282962
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: e
+      sigma: 99.84
+  (('4', 'Scnn1a'), ('4', 'Rorb')):
+    connect_models:
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '322723785')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '322723785'))
+        property_map:
+          PSP_scale_factor: 0.063
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '322723785'
+        weight_max: 2.4
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '322761772')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '322761772'))
+        property_map:
+          PSP_scale_factor: 0.06
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '322761772'
+        weight_max: 2.25
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '324065524')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '324065524'))
+        property_map:
+          PSP_scale_factor: 0.084
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '324065524'
+        weight_max: 1.7821782178
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '329550277')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '329550277'))
+        property_map:
+          PSP_scale_factor: 0.064
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '329550277'
+        weight_max: 2.3684210526
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '466378900')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '466378900'))
+        property_map:
+          PSP_scale_factor: 0.096
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '466378900'
+        weight_max: 1.5254237288
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '467003163')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '467003163'))
+        property_map:
+          PSP_scale_factor: 0.063
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '467003163'
+        weight_max: 2.6865671642
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '467357834')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '467357834'))
+        property_map:
+          PSP_scale_factor: 0.056
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '467357834'
+        weight_max: 2.6470588235
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '469763389')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '469763389'))
+        property_map:
+          PSP_scale_factor: 0.069
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '469763389'
+        weight_max: 2.1428571429
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '473020156')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '473020156'))
+        property_map:
+          PSP_scale_factor: 0.08
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '473020156'
+        weight_max: 1.7307692308
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '476562817')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '476562817'))
+        property_map:
+          PSP_scale_factor: 0.064
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '476562817'
+        weight_max: 2.3684210526
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '478586425')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '478586425'))
+        property_map:
+          PSP_scale_factor: 0.069
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '478586425'
+        weight_max: 2.2222222222
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '479179020')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '479179020'))
+        property_map:
+          PSP_scale_factor: 0.059
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '479179020'
+        weight_max: 2.4657534247
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '484679812')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '484679812'))
+        property_map:
+          PSP_scale_factor: 0.08
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '484679812'
+        weight_max: 1.7821782178
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '484770879')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '484770879'))
+        property_map:
+          PSP_scale_factor: 0.061
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '484770879'
+        weight_max: 2.5352112676
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '485836906')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '485836906'))
+        property_map:
+          PSP_scale_factor: 0.051
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '485836906'
+        weight_max: 3.0
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '486472847')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '486472847'))
+        property_map:
+          PSP_scale_factor: 0.082
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '486472847'
+        weight_max: 1.8181818182
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '486500736')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '486500736'))
+        property_map:
+          PSP_scale_factor: 0.043
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '486500736'
+        weight_max: 3.4615384615
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '490626718')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '490626718'))
+        property_map:
+          PSP_scale_factor: 0.074
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '490626718'
+        weight_max: 2.4
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '490626827')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '490626827'))
+        property_map:
+          PSP_scale_factor: 0.07
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '490626827'
+        weight_max: 2.4
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '500859045')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '500859045'))
+        property_map:
+          PSP_scale_factor: 0.063
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '500859045'
+        weight_max: 2.3684210526
+      (('4', 'Scnn1a', ''), ('4', 'Rorb', '500894271')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Rorb', '500894271'))
+        property_map:
+          PSP_scale_factor: 0.063
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '500894271'
+        weight_max: 0.0
+    name: (('4', 'Scnn1a'), ('4', 'Rorb'))
+    post:
+    - '4'
+    - Rorb
+    pre:
+    - '4'
+    - Scnn1a
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.0305413259819695
+      A_literature_src:
+      - 0.0305413259819695
+      B_ratio: 0.5
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: e
+      pre_ei: e
+      sigma: 127.0
+  (('4', 'Scnn1a'), ('4', 'Scnn1a')):
+    connect_models:
+      (('4', 'Scnn1a', ''), ('4', 'Scnn1a', '320207387')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Scnn1a', '320207387'))
+        property_map:
+          PSP_scale_factor: 0.056
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '320207387'
+        weight_max: 2.9032258065
+      (('4', 'Scnn1a', ''), ('4', 'Scnn1a', '323838579')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Scnn1a', '323838579'))
+        property_map:
+          PSP_scale_factor: 0.063
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '323838579'
+        weight_max: 2.4657534247
+      (('4', 'Scnn1a', ''), ('4', 'Scnn1a', '476266853')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Scnn1a', '476266853'))
+        property_map:
+          PSP_scale_factor: 0.062
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '476266853'
+        weight_max: 2.5352112676
+      (('4', 'Scnn1a', ''), ('4', 'Scnn1a', '500964358')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Scnn1a', '500964358'))
+        property_map:
+          PSP_scale_factor: 0.057
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '500964358'
+        weight_max: 2.4324324324
+      (('4', 'Scnn1a', ''), ('4', 'Scnn1a', '517647182')):
+        delay: 1.48
+        name: (('4', 'Scnn1a', ''), ('4', 'Scnn1a', '517647182'))
+        property_map:
+          PSP_scale_factor: 0.059
+          lognorm_scale: 0.3730737936
+          lognorm_shape: 0.6032438129
+          params_file: e4_to_e4.json
+          synphys_mean: 0.4558436608
+        source_model_id: ''
+        target_model_id: '517647182'
+        weight_max: 0.0
+    name: (('4', 'Scnn1a'), ('4', 'Scnn1a'))
+    post:
+    - '4'
+    - Scnn1a
+    pre:
+    - '4'
+    - Scnn1a
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.0305413259819695
+      A_literature_src:
+      - 0.0305413259819695
+      B_ratio: 0.5
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: e
+      pre_ei: e
+      sigma: 127.0
+  (('4', 'Scnn1a'), ('4', 'Sst')):
+    connect_models:
+      (('4', 'Scnn1a', ''), ('4', 'Sst', '476099282')):
+        delay: 1.1
+        name: (('4', 'Scnn1a', ''), ('4', 'Sst', '476099282'))
+        property_map:
+          PSP_scale_factor: 0.083
+          lognorm_scale: 0.3577175718
+          lognorm_shape: 0.7822724783
+          params_file: e4_to_sst.json
+          synphys_mean: 0.4618269056
+        source_model_id: ''
+        target_model_id: '476099282'
+        weight_max: 0.5154639175
+      (('4', 'Scnn1a', ''), ('4', 'Sst', '476753465')):
+        delay: 1.1
+        name: (('4', 'Scnn1a', ''), ('4', 'Sst', '476753465'))
+        property_map:
+          PSP_scale_factor: 0.077
+          lognorm_scale: 0.3577175718
+          lognorm_shape: 0.7822724783
+          params_file: e4_to_sst.json
+          synphys_mean: 0.4618269056
+        source_model_id: ''
+        target_model_id: '476753465'
+        weight_max: 0.5376344086
+      (('4', 'Scnn1a', ''), ('4', 'Sst', '485061364')):
+        delay: 1.1
+        name: (('4', 'Scnn1a', ''), ('4', 'Sst', '485061364'))
+        property_map:
+          PSP_scale_factor: 0.061
+          lognorm_scale: 0.3577175718
+          lognorm_shape: 0.7822724783
+          params_file: e4_to_sst.json
+          synphys_mean: 0.4618269056
+        source_model_id: ''
+        target_model_id: '485061364'
+        weight_max: 0.7462686567
+      (('4', 'Scnn1a', ''), ('4', 'Sst', '501280518')):
+        delay: 1.1
+        name: (('4', 'Scnn1a', ''), ('4', 'Sst', '501280518'))
+        property_map:
+          PSP_scale_factor: 0.06
+          lognorm_scale: 0.3577175718
+          lognorm_shape: 0.7822724783
+          params_file: e4_to_sst.json
+          synphys_mean: 0.4618269056
+        source_model_id: ''
+        target_model_id: '501280518'
+        weight_max: 0.7246376812
+      (('4', 'Scnn1a', ''), ('4', 'Sst', '501282204')):
+        delay: 1.1
+        name: (('4', 'Scnn1a', ''), ('4', 'Sst', '501282204'))
+        property_map:
+          PSP_scale_factor: 0.031
+          lognorm_scale: 0.3577175718
+          lognorm_shape: 0.7822724783
+          params_file: e4_to_sst.json
+          synphys_mean: 0.4618269056
+        source_model_id: ''
+        target_model_id: '501282204'
+        weight_max: 1.3888888889
+      (('4', 'Scnn1a', ''), ('4', 'Sst', '573622646')):
+        delay: 1.1
+        name: (('4', 'Scnn1a', ''), ('4', 'Sst', '573622646'))
+        property_map:
+          PSP_scale_factor: 0.049
+          lognorm_scale: 0.3577175718
+          lognorm_shape: 0.7822724783
+          params_file: e4_to_sst.json
+          synphys_mean: 0.4618269056
+        source_model_id: ''
+        target_model_id: '573622646'
+        weight_max: 0.0
+    name: (('4', 'Scnn1a'), ('4', 'Sst'))
+    post:
+    - '4'
+    - Sst
+    pre:
+    - '4'
+    - Scnn1a
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.324284555241534
+      A_literature_src:
+      - 0.324284555241534
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: e
+      sigma: 99.84
+  (('4', 'Scnn1a'), ('4', 'Vip')):
+    connect_models:
+      (('4', 'Scnn1a', ''), ('4', 'Vip', '501570114')):
+        delay: 1.46
+        name: (('4', 'Scnn1a', ''), ('4', 'Vip', '501570114'))
+        property_map:
+          PSP_scale_factor: 0.089
+          lognorm_scale: 1.3675847718
+          lognorm_shape: 0.6435686435
+          params_file: e4_to_vip.json
+          synphys_mean: 1.6206456373
+        source_model_id: ''
+        target_model_id: '501570114'
+        weight_max: 6.6666666667
+      (('4', 'Scnn1a', ''), ('4', 'Vip', '531121585')):
+        delay: 1.46
+        name: (('4', 'Scnn1a', ''), ('4', 'Vip', '531121585'))
+        property_map:
+          PSP_scale_factor: 0.073
+          lognorm_scale: 1.3675847718
+          lognorm_shape: 0.6435686435
+          params_file: e4_to_vip.json
+          synphys_mean: 1.6206456373
+        source_model_id: ''
+        target_model_id: '531121585'
+        weight_max: 8.1481481481
+      (('4', 'Scnn1a', ''), ('4', 'Vip', '535728342')):
+        delay: 1.46
+        name: (('4', 'Scnn1a', ''), ('4', 'Vip', '535728342'))
+        property_map:
+          PSP_scale_factor: 0.106
+          lognorm_scale: 1.3675847718
+          lognorm_shape: 0.6435686435
+          params_file: e4_to_vip.json
+          synphys_mean: 1.6206456373
+        source_model_id: ''
+        target_model_id: '535728342'
+        weight_max: 5.5462184874
+      (('4', 'Scnn1a', ''), ('4', 'Vip', '560690291')):
+        delay: 1.46
+        name: (('4', 'Scnn1a', ''), ('4', 'Vip', '560690291'))
+        property_map:
+          PSP_scale_factor: 0.071
+          lognorm_scale: 1.3675847718
+          lognorm_shape: 0.6435686435
+          params_file: e4_to_vip.json
+          synphys_mean: 1.6206456373
+        source_model_id: ''
+        target_model_id: '560690291'
+        weight_max: 8.6842105263
+      (('4', 'Scnn1a', ''), ('4', 'Vip', '561934585')):
+        delay: 1.46
+        name: (('4', 'Scnn1a', ''), ('4', 'Vip', '561934585'))
+        property_map:
+          PSP_scale_factor: 0.045
+          lognorm_scale: 1.3675847718
+          lognorm_shape: 0.6435686435
+          params_file: e4_to_vip.json
+          synphys_mean: 1.6206456373
+        source_model_id: ''
+        target_model_id: '561934585'
+        weight_max: 13.4693877551
+      (('4', 'Scnn1a', ''), ('4', 'Vip', '562540395')):
+        delay: 1.46
+        name: (('4', 'Scnn1a', ''), ('4', 'Vip', '562540395'))
+        property_map:
+          PSP_scale_factor: 0.069
+          lognorm_scale: 1.3675847718
+          lognorm_shape: 0.6435686435
+          params_file: e4_to_vip.json
+          synphys_mean: 1.6206456373
+        source_model_id: ''
+        target_model_id: '562540395'
+        weight_max: 0.0
+    name: (('4', 'Scnn1a'), ('4', 'Vip'))
+    post:
+    - '4'
+    - Vip
+    pre:
+    - '4'
+    - Scnn1a
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.0845196761302092
+      A_literature_src:
+      - 0.0845196761302092
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: e
+      sigma: 99.84
+  (('4', 'Sst'), ('4', 'Pvalb')):
+    connect_models:
+      (('4', 'Sst', ''), ('4', 'Pvalb', '478793814')):
+        delay: 1.2
+        name: (('4', 'Sst', ''), ('4', 'Pvalb', '478793814'))
+        property_map:
+          PSP_scale_factor: 0.068
+          lognorm_scale: 0.4028248323
+          lognorm_shape: 0.6280035736
+          params_file: sst_to_pv.json
+          synphys_mean: 0.4879019506
+        source_model_id: ''
+        target_model_id: '478793814'
+        weight_max: -2.4324324324
+      (('4', 'Sst', ''), ('4', 'Pvalb', '478958894')):
+        delay: 1.2
+        name: (('4', 'Sst', ''), ('4', 'Pvalb', '478958894'))
+        property_map:
+          PSP_scale_factor: 0.064
+          lognorm_scale: 0.4028248323
+          lognorm_shape: 0.6280035736
+          params_file: sst_to_pv.json
+          synphys_mean: 0.4879019506
+        source_model_id: ''
+        target_model_id: '478958894'
+        weight_max: -2.6470588235
+      (('4', 'Sst', ''), ('4', 'Pvalb', '481127173')):
+        delay: 1.2
+        name: (('4', 'Sst', ''), ('4', 'Pvalb', '481127173'))
+        property_map:
+          PSP_scale_factor: 0.076
+          lognorm_scale: 0.4028248323
+          lognorm_shape: 0.6280035736
+          params_file: sst_to_pv.json
+          synphys_mean: 0.4879019506
+        source_model_id: ''
+        target_model_id: '481127173'
+        weight_max: -2.2784810127
+      (('4', 'Sst', ''), ('4', 'Pvalb', '481127348')):
+        delay: 1.2
+        name: (('4', 'Sst', ''), ('4', 'Pvalb', '481127348'))
+        property_map:
+          PSP_scale_factor: 0.1
+          lognorm_scale: 0.4028248323
+          lognorm_shape: 0.6280035736
+          params_file: sst_to_pv.json
+          synphys_mean: 0.4879019506
+        source_model_id: ''
+        target_model_id: '481127348'
+        weight_max: -1.6666666667
+      (('4', 'Sst', ''), ('4', 'Pvalb', '487405644')):
+        delay: 1.2
+        name: (('4', 'Sst', ''), ('4', 'Pvalb', '487405644'))
+        property_map:
+          PSP_scale_factor: 0.116
+          lognorm_scale: 0.4028248323
+          lognorm_shape: 0.6280035736
+          params_file: sst_to_pv.json
+          synphys_mean: 0.4879019506
+        source_model_id: ''
+        target_model_id: '487405644'
+        weight_max: -1.5254237288
+      (('4', 'Sst', ''), ('4', 'Pvalb', '487667205')):
+        delay: 1.2
+        name: (('4', 'Sst', ''), ('4', 'Pvalb', '487667205'))
+        property_map:
+          PSP_scale_factor: 0.08
+          lognorm_scale: 0.4028248323
+          lognorm_shape: 0.6280035736
+          params_file: sst_to_pv.json
+          synphys_mean: 0.4879019506
+        source_model_id: ''
+        target_model_id: '487667205'
+        weight_max: -2.1428571429
+      (('4', 'Sst', ''), ('4', 'Pvalb', '491038812')):
+        delay: 1.2
+        name: (('4', 'Sst', ''), ('4', 'Pvalb', '491038812'))
+        property_map:
+          PSP_scale_factor: 0.06
+          lognorm_scale: 0.4028248323
+          lognorm_shape: 0.6280035736
+          params_file: sst_to_pv.json
+          synphys_mean: 0.4879019506
+        source_model_id: ''
+        target_model_id: '491038812'
+        weight_max: -3.0
+      (('4', 'Sst', ''), ('4', 'Pvalb', '569997187')):
+        delay: 1.2
+        name: (('4', 'Sst', ''), ('4', 'Pvalb', '569997187'))
+        property_map:
+          PSP_scale_factor: 0.098
+          lognorm_scale: 0.4028248323
+          lognorm_shape: 0.6280035736
+          params_file: sst_to_pv.json
+          synphys_mean: 0.4879019506
+        source_model_id: ''
+        target_model_id: '569997187'
+        weight_max: -1.5789473684
+      (('4', 'Sst', ''), ('4', 'Pvalb', '571314481')):
+        delay: 1.2
+        name: (('4', 'Sst', ''), ('4', 'Pvalb', '571314481'))
+        property_map:
+          PSP_scale_factor: 0.099
+          lognorm_scale: 0.4028248323
+          lognorm_shape: 0.6280035736
+          params_file: sst_to_pv.json
+          synphys_mean: 0.4879019506
+        source_model_id: ''
+        target_model_id: '571314481'
+        weight_max: -1.6981132075
+      (('4', 'Sst', ''), ('4', 'Pvalb', '572375809')):
+        delay: 1.2
+        name: (('4', 'Sst', ''), ('4', 'Pvalb', '572375809'))
+        property_map:
+          PSP_scale_factor: 0.077
+          lognorm_scale: 0.4028248323
+          lognorm_shape: 0.6280035736
+          params_file: sst_to_pv.json
+          synphys_mean: 0.4879019506
+        source_model_id: ''
+        target_model_id: '572375809'
+        weight_max: -2.1686746988
+      (('4', 'Sst', ''), ('4', 'Pvalb', '579414994')):
+        delay: 1.2
+        name: (('4', 'Sst', ''), ('4', 'Pvalb', '579414994'))
+        property_map:
+          PSP_scale_factor: 0.064
+          lognorm_scale: 0.4028248323
+          lognorm_shape: 0.6280035736
+          params_file: sst_to_pv.json
+          synphys_mean: 0.4879019506
+        source_model_id: ''
+        target_model_id: '579414994'
+        weight_max: 0.0
+    name: (('4', 'Sst'), ('4', 'Pvalb'))
+    post:
+    - '4'
+    - Pvalb
+    pre:
+    - '4'
+    - Sst
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.642166594694609
+      A_literature_src:
+      - 0.642166594694609
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: i
+      sigma: 126.77
+  (('4', 'Sst'), ('4', 'Rorb')):
+    connect_models:
+      (('4', 'Sst', ''), ('4', 'Rorb', '322723785')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '322723785'))
+        property_map:
+          PSP_scale_factor: 0.098
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '322723785'
+        weight_max: -1.935483871
+      (('4', 'Sst', ''), ('4', 'Rorb', '322761772')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '322761772'))
+        property_map:
+          PSP_scale_factor: 0.1
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '322761772'
+        weight_max: -1.6981132075
+      (('4', 'Sst', ''), ('4', 'Rorb', '324065524')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '324065524'))
+        property_map:
+          PSP_scale_factor: 0.132
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '324065524'
+        weight_max: -1.4285714286
+      (('4', 'Sst', ''), ('4', 'Rorb', '329550277')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '329550277'))
+        property_map:
+          PSP_scale_factor: 0.1
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '329550277'
+        weight_max: -1.935483871
+      (('4', 'Sst', ''), ('4', 'Rorb', '466378900')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '466378900'))
+        property_map:
+          PSP_scale_factor: 0.153
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '466378900'
+        weight_max: -1.2080536913
+      (('4', 'Sst', ''), ('4', 'Rorb', '467003163')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '467003163'))
+        property_map:
+          PSP_scale_factor: 0.093
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '467003163'
+        weight_max: -2.2784810127
+      (('4', 'Sst', ''), ('4', 'Rorb', '467357834')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '467357834'))
+        property_map:
+          PSP_scale_factor: 0.088
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '467357834'
+        weight_max: -2.0930232558
+      (('4', 'Sst', ''), ('4', 'Rorb', '469763389')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '469763389'))
+        property_map:
+          PSP_scale_factor: 0.109
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '469763389'
+        weight_max: -1.6981132075
+      (('4', 'Sst', ''), ('4', 'Rorb', '473020156')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '473020156'))
+        property_map:
+          PSP_scale_factor: 0.131
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '473020156'
+        weight_max: -1.3432835821
+      (('4', 'Sst', ''), ('4', 'Rorb', '476562817')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '476562817'))
+        property_map:
+          PSP_scale_factor: 0.1
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '476562817'
+        weight_max: -1.914893617
+      (('4', 'Sst', ''), ('4', 'Rorb', '478586425')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '478586425'))
+        property_map:
+          PSP_scale_factor: 0.107
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '478586425'
+        weight_max: -1.8
+      (('4', 'Sst', ''), ('4', 'Rorb', '479179020')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '479179020'))
+        property_map:
+          PSP_scale_factor: 0.094
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '479179020'
+        weight_max: -1.9565217391
+      (('4', 'Sst', ''), ('4', 'Rorb', '484679812')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '484679812'))
+        property_map:
+          PSP_scale_factor: 0.129
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '484679812'
+        weight_max: -1.3953488372
+      (('4', 'Sst', ''), ('4', 'Rorb', '484770879')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '484770879'))
+        property_map:
+          PSP_scale_factor: 0.095
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '484770879'
+        weight_max: -2.0689655172
+      (('4', 'Sst', ''), ('4', 'Rorb', '485836906')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '485836906'))
+        property_map:
+          PSP_scale_factor: 0.08
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '485836906'
+        weight_max: -2.4
+      (('4', 'Sst', ''), ('4', 'Rorb', '486472847')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '486472847'))
+        property_map:
+          PSP_scale_factor: 0.13
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '486472847'
+        weight_max: -1.4516129032
+      (('4', 'Sst', ''), ('4', 'Rorb', '486500736')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '486500736'))
+        property_map:
+          PSP_scale_factor: 0.068
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '486500736'
+        weight_max: -2.7272727273
+      (('4', 'Sst', ''), ('4', 'Rorb', '490626718')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '490626718'))
+        property_map:
+          PSP_scale_factor: 0.107
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '490626718'
+        weight_max: -2.0930232558
+      (('4', 'Sst', ''), ('4', 'Rorb', '490626827')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '490626827'))
+        property_map:
+          PSP_scale_factor: 0.104
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '490626827'
+        weight_max: -2.0224719101
+      (('4', 'Sst', ''), ('4', 'Rorb', '500859045')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '500859045'))
+        property_map:
+          PSP_scale_factor: 0.1
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '500859045'
+        weight_max: -1.8947368421
+      (('4', 'Sst', ''), ('4', 'Rorb', '500894271')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Rorb', '500894271'))
+        property_map:
+          PSP_scale_factor: 0.102
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '500894271'
+        weight_max: 0.0
+    name: (('4', 'Sst'), ('4', 'Rorb'))
+    post:
+    - '4'
+    - Rorb
+    pre:
+    - '4'
+    - Sst
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.476772423992245
+      A_literature_src:
+      - 0.476772423992245
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: e
+      pre_ei: i
+      sigma: 96.6
+  (('4', 'Sst'), ('4', 'Scnn1a')):
+    connect_models:
+      (('4', 'Sst', ''), ('4', 'Scnn1a', '320207387')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Scnn1a', '320207387'))
+        property_map:
+          PSP_scale_factor: 0.085
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '320207387'
+        weight_max: -2.4324324324
+      (('4', 'Sst', ''), ('4', 'Scnn1a', '323838579')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Scnn1a', '323838579'))
+        property_map:
+          PSP_scale_factor: 0.098
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '323838579'
+        weight_max: -2.0
+      (('4', 'Sst', ''), ('4', 'Scnn1a', '476266853')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Scnn1a', '476266853'))
+        property_map:
+          PSP_scale_factor: 0.095
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '476266853'
+        weight_max: -2.0930232558
+      (('4', 'Sst', ''), ('4', 'Scnn1a', '500964358')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Scnn1a', '500964358'))
+        property_map:
+          PSP_scale_factor: 0.094
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '500964358'
+        weight_max: -1.875
+      (('4', 'Sst', ''), ('4', 'Scnn1a', '517647182')):
+        delay: 1.03
+        name: (('4', 'Sst', ''), ('4', 'Scnn1a', '517647182'))
+        property_map:
+          PSP_scale_factor: 0.096
+          lognorm_scale: 0.3941148624
+          lognorm_shape: 0.4453260389
+          params_file: sst_to_e4.json
+          synphys_mean: 0.4509966417
+        source_model_id: ''
+        target_model_id: '517647182'
+        weight_max: 0.0
+    name: (('4', 'Sst'), ('4', 'Scnn1a'))
+    post:
+    - '4'
+    - Scnn1a
+    pre:
+    - '4'
+    - Sst
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.476772423992245
+      A_literature_src:
+      - 0.476772423992245
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: e
+      pre_ei: i
+      sigma: 96.6
+  (('4', 'Sst'), ('4', 'Sst')):
+    connect_models:
+      (('4', 'Sst', ''), ('4', 'Sst', '476099282')):
+        delay: 1.41
+        name: (('4', 'Sst', ''), ('4', 'Sst', '476099282'))
+        property_map:
+          PSP_scale_factor: 0.093
+          lognorm_scale: 0.4420259472
+          lognorm_shape: 0.4889524934
+          params_file: sst_to_sst.json
+          synphys_mean: 0.5053890797
+        source_model_id: ''
+        target_model_id: '476099282'
+        weight_max: -1.1184210526
+      (('4', 'Sst', ''), ('4', 'Sst', '476753465')):
+        delay: 1.41
+        name: (('4', 'Sst', ''), ('4', 'Sst', '476753465'))
+        property_map:
+          PSP_scale_factor: 0.088
+          lognorm_scale: 0.4420259472
+          lognorm_shape: 0.4889524934
+          params_file: sst_to_sst.json
+          synphys_mean: 0.5053890797
+        source_model_id: ''
+        target_model_id: '476753465'
+        weight_max: -1.0828025478
+      (('4', 'Sst', ''), ('4', 'Sst', '485061364')):
+        delay: 1.41
+        name: (('4', 'Sst', ''), ('4', 'Sst', '485061364'))
+        property_map:
+          PSP_scale_factor: 0.067
+          lognorm_scale: 0.4420259472
+          lognorm_shape: 0.4889524934
+          params_file: sst_to_sst.json
+          synphys_mean: 0.5053890797
+        source_model_id: ''
+        target_model_id: '485061364'
+        weight_max: -1.8085106383
+      (('4', 'Sst', ''), ('4', 'Sst', '501280518')):
+        delay: 1.41
+        name: (('4', 'Sst', ''), ('4', 'Sst', '501280518'))
+        property_map:
+          PSP_scale_factor: 0.067
+          lognorm_scale: 0.4420259472
+          lognorm_shape: 0.4889524934
+          params_file: sst_to_sst.json
+          synphys_mean: 0.5053890797
+        source_model_id: ''
+        target_model_id: '501280518'
+        weight_max: -1.619047619
+      (('4', 'Sst', ''), ('4', 'Sst', '501282204')):
+        delay: 1.41
+        name: (('4', 'Sst', ''), ('4', 'Sst', '501282204'))
+        property_map:
+          PSP_scale_factor: 0.034
+          lognorm_scale: 0.4420259472
+          lognorm_shape: 0.4889524934
+          params_file: sst_to_sst.json
+          synphys_mean: 0.5053890797
+        source_model_id: ''
+        target_model_id: '501282204'
+        weight_max: -2.9310344828
+      (('4', 'Sst', ''), ('4', 'Sst', '573622646')):
+        delay: 1.41
+        name: (('4', 'Sst', ''), ('4', 'Sst', '573622646'))
+        property_map:
+          PSP_scale_factor: 0.055
+          lognorm_scale: 0.4420259472
+          lognorm_shape: 0.4889524934
+          params_file: sst_to_sst.json
+          synphys_mean: 0.5053890797
+        source_model_id: ''
+        target_model_id: '573622646'
+        weight_max: 0.0
+    name: (('4', 'Sst'), ('4', 'Sst'))
+    post:
+    - '4'
+    - Sst
+    pre:
+    - '4'
+    - Sst
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.389532543636401
+      A_literature_src:
+      - 0.389532543636401
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: i
+      sigma: 126.77
+  (('4', 'Sst'), ('4', 'Vip')):
+    connect_models:
+      (('4', 'Sst', ''), ('4', 'Vip', '501570114')):
+        delay: 1.29
+        name: (('4', 'Sst', ''), ('4', 'Vip', '501570114'))
+        property_map:
+          PSP_scale_factor: 0.113
+          lognorm_scale: 0.7338465413
+          lognorm_shape: 0.6515086867
+          params_file: sst_to_vip.json
+          synphys_mean: 0.9061640212
+        source_model_id: ''
+        target_model_id: '501570114'
+        weight_max: -1.0303030303
+      (('4', 'Sst', ''), ('4', 'Vip', '531121585')):
+        delay: 1.29
+        name: (('4', 'Sst', ''), ('4', 'Vip', '531121585'))
+        property_map:
+          PSP_scale_factor: 0.093
+          lognorm_scale: 0.7338465413
+          lognorm_shape: 0.6515086867
+          params_file: sst_to_vip.json
+          synphys_mean: 0.9061640212
+        source_model_id: ''
+        target_model_id: '531121585'
+        weight_max: -1.2408759124
+      (('4', 'Sst', ''), ('4', 'Vip', '535728342')):
+        delay: 1.29
+        name: (('4', 'Sst', ''), ('4', 'Vip', '535728342'))
+        property_map:
+          PSP_scale_factor: 0.138
+          lognorm_scale: 0.7338465413
+          lognorm_shape: 0.6515086867
+          params_file: sst_to_vip.json
+          synphys_mean: 0.9061640212
+        source_model_id: ''
+        target_model_id: '535728342'
+        weight_max: -0.8173076923
+      (('4', 'Sst', ''), ('4', 'Vip', '560690291')):
+        delay: 1.29
+        name: (('4', 'Sst', ''), ('4', 'Vip', '560690291'))
+        property_map:
+          PSP_scale_factor: 0.087
+          lognorm_scale: 0.7338465413
+          lognorm_shape: 0.6515086867
+          params_file: sst_to_vip.json
+          synphys_mean: 0.9061640212
+        source_model_id: ''
+        target_model_id: '560690291'
+        weight_max: -1.4655172414
+      (('4', 'Sst', ''), ('4', 'Vip', '561934585')):
+        delay: 1.29
+        name: (('4', 'Sst', ''), ('4', 'Vip', '561934585'))
+        property_map:
+          PSP_scale_factor: 0.056
+          lognorm_scale: 0.7338465413
+          lognorm_shape: 0.6515086867
+          params_file: sst_to_vip.json
+          synphys_mean: 0.9061640212
+        source_model_id: ''
+        target_model_id: '561934585'
+        weight_max: -2.0987654321
+      (('4', 'Sst', ''), ('4', 'Vip', '562540395')):
+        delay: 1.29
+        name: (('4', 'Sst', ''), ('4', 'Vip', '562540395'))
+        property_map:
+          PSP_scale_factor: 0.086
+          lognorm_scale: 0.7338465413
+          lognorm_shape: 0.6515086867
+          params_file: sst_to_vip.json
+          synphys_mean: 0.9061640212
+        source_model_id: ''
+        target_model_id: '562540395'
+        weight_max: 0.0
+    name: (('4', 'Sst'), ('4', 'Vip'))
+    post:
+    - '4'
+    - Vip
+    pre:
+    - '4'
+    - Sst
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.283881768687639
+      A_literature_src:
+      - 0.283881768687639
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: i
+      sigma: 126.77
+  (('4', 'Vip'), ('4', 'Pvalb')):
+    connect_models:
+      (('4', 'Vip', ''), ('4', 'Pvalb', '478793814')):
+        delay: 1.44
+        name: (('4', 'Vip', ''), ('4', 'Pvalb', '478793814'))
+        property_map:
+          PSP_scale_factor: 0.082
+          lognorm_scale: 0.3213333255
+          lognorm_shape: 0.4906300038
+          params_file: vip_to_pv.json
+          synphys_mean: 0.3672708228
+        source_model_id: ''
+        target_model_id: '478793814'
+        weight_max: -1.7567567568
+      (('4', 'Vip', ''), ('4', 'Pvalb', '478958894')):
+        delay: 1.44
+        name: (('4', 'Vip', ''), ('4', 'Pvalb', '478958894'))
+        property_map:
+          PSP_scale_factor: 0.077
+          lognorm_scale: 0.3213333255
+          lognorm_shape: 0.4906300038
+          params_file: vip_to_pv.json
+          synphys_mean: 0.3672708228
+        source_model_id: ''
+        target_model_id: '478958894'
+        weight_max: -1.9117647059
+      (('4', 'Vip', ''), ('4', 'Pvalb', '481127173')):
+        delay: 1.44
+        name: (('4', 'Vip', ''), ('4', 'Pvalb', '481127173'))
+        property_map:
+          PSP_scale_factor: 0.091
+          lognorm_scale: 0.3213333255
+          lognorm_shape: 0.4906300038
+          params_file: vip_to_pv.json
+          synphys_mean: 0.3672708228
+        source_model_id: ''
+        target_model_id: '481127173'
+        weight_max: -1.6455696203
+      (('4', 'Vip', ''), ('4', 'Pvalb', '481127348')):
+        delay: 1.44
+        name: (('4', 'Vip', ''), ('4', 'Pvalb', '481127348'))
+        property_map:
+          PSP_scale_factor: 0.121
+          lognorm_scale: 0.3213333255
+          lognorm_shape: 0.4906300038
+          params_file: vip_to_pv.json
+          synphys_mean: 0.3672708228
+        source_model_id: ''
+        target_model_id: '481127348'
+        weight_max: -1.2037037037
+      (('4', 'Vip', ''), ('4', 'Pvalb', '487405644')):
+        delay: 1.44
+        name: (('4', 'Vip', ''), ('4', 'Pvalb', '487405644'))
+        property_map:
+          PSP_scale_factor: 0.139
+          lognorm_scale: 0.3213333255
+          lognorm_shape: 0.4906300038
+          params_file: vip_to_pv.json
+          synphys_mean: 0.3672708228
+        source_model_id: ''
+        target_model_id: '487405644'
+        weight_max: -1.1016949153
+      (('4', 'Vip', ''), ('4', 'Pvalb', '487667205')):
+        delay: 1.44
+        name: (('4', 'Vip', ''), ('4', 'Pvalb', '487667205'))
+        property_map:
+          PSP_scale_factor: 0.096
+          lognorm_scale: 0.3213333255
+          lognorm_shape: 0.4906300038
+          params_file: vip_to_pv.json
+          synphys_mean: 0.3672708228
+        source_model_id: ''
+        target_model_id: '487667205'
+        weight_max: -1.5476190476
+      (('4', 'Vip', ''), ('4', 'Pvalb', '491038812')):
+        delay: 1.44
+        name: (('4', 'Vip', ''), ('4', 'Pvalb', '491038812'))
+        property_map:
+          PSP_scale_factor: 0.071
+          lognorm_scale: 0.3213333255
+          lognorm_shape: 0.4906300038
+          params_file: vip_to_pv.json
+          synphys_mean: 0.3672708228
+        source_model_id: ''
+        target_model_id: '491038812'
+        weight_max: -2.1666666667
+      (('4', 'Vip', ''), ('4', 'Pvalb', '569997187')):
+        delay: 1.44
+        name: (('4', 'Vip', ''), ('4', 'Pvalb', '569997187'))
+        property_map:
+          PSP_scale_factor: 0.119
+          lognorm_scale: 0.3213333255
+          lognorm_shape: 0.4906300038
+          params_file: vip_to_pv.json
+          synphys_mean: 0.3672708228
+        source_model_id: ''
+        target_model_id: '569997187'
+        weight_max: -1.1403508772
+      (('4', 'Vip', ''), ('4', 'Pvalb', '571314481')):
+        delay: 1.44
+        name: (('4', 'Vip', ''), ('4', 'Pvalb', '571314481'))
+        property_map:
+          PSP_scale_factor: 0.119
+          lognorm_scale: 0.3213333255
+          lognorm_shape: 0.4906300038
+          params_file: vip_to_pv.json
+          synphys_mean: 0.3672708228
+        source_model_id: ''
+        target_model_id: '571314481'
+        weight_max: -1.2264150943
+      (('4', 'Vip', ''), ('4', 'Pvalb', '572375809')):
+        delay: 1.44
+        name: (('4', 'Vip', ''), ('4', 'Pvalb', '572375809'))
+        property_map:
+          PSP_scale_factor: 0.093
+          lognorm_scale: 0.3213333255
+          lognorm_shape: 0.4906300038
+          params_file: vip_to_pv.json
+          synphys_mean: 0.3672708228
+        source_model_id: ''
+        target_model_id: '572375809'
+        weight_max: -1.5662650602
+      (('4', 'Vip', ''), ('4', 'Pvalb', '579414994')):
+        delay: 1.44
+        name: (('4', 'Vip', ''), ('4', 'Pvalb', '579414994'))
+        property_map:
+          PSP_scale_factor: 0.077
+          lognorm_scale: 0.3213333255
+          lognorm_shape: 0.4906300038
+          params_file: vip_to_pv.json
+          synphys_mean: 0.3672708228
+        source_model_id: ''
+        target_model_id: '579414994'
+        weight_max: 0.0
+    name: (('4', 'Vip'), ('4', 'Pvalb'))
+    post:
+    - '4'
+    - Pvalb
+    pre:
+    - '4'
+    - Vip
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.160877014664453
+      A_literature_src:
+      - 0.160877014664453
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: i
+      sigma: 126.77
+  (('4', 'Vip'), ('4', 'Rorb')):
+    connect_models:
+      (('4', 'Vip', ''), ('4', 'Rorb', '322723785')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '322723785'))
+        property_map:
+          PSP_scale_factor: 0.055
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '322723785'
+        weight_max: -3.1182795699
+      (('4', 'Vip', ''), ('4', 'Rorb', '322761772')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '322761772'))
+        property_map:
+          PSP_scale_factor: 0.057
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '322761772'
+        weight_max: -2.7358490566
+      (('4', 'Vip', ''), ('4', 'Rorb', '324065524')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '324065524'))
+        property_map:
+          PSP_scale_factor: 0.074
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '324065524'
+        weight_max: -2.3015873016
+      (('4', 'Vip', ''), ('4', 'Rorb', '329550277')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '329550277'))
+        property_map:
+          PSP_scale_factor: 0.056
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '329550277'
+        weight_max: -3.1182795699
+      (('4', 'Vip', ''), ('4', 'Rorb', '466378900')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '466378900'))
+        property_map:
+          PSP_scale_factor: 0.085
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '466378900'
+        weight_max: -1.9463087248
+      (('4', 'Vip', ''), ('4', 'Rorb', '467003163')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '467003163'))
+        property_map:
+          PSP_scale_factor: 0.052
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '467003163'
+        weight_max: -3.6708860759
+      (('4', 'Vip', ''), ('4', 'Rorb', '467357834')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '467357834'))
+        property_map:
+          PSP_scale_factor: 0.049
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '467357834'
+        weight_max: -3.3720930233
+      (('4', 'Vip', ''), ('4', 'Rorb', '469763389')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '469763389'))
+        property_map:
+          PSP_scale_factor: 0.061
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '469763389'
+        weight_max: -2.7358490566
+      (('4', 'Vip', ''), ('4', 'Rorb', '473020156')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '473020156'))
+        property_map:
+          PSP_scale_factor: 0.074
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '473020156'
+        weight_max: -2.1641791045
+      (('4', 'Vip', ''), ('4', 'Rorb', '476562817')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '476562817'))
+        property_map:
+          PSP_scale_factor: 0.055
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '476562817'
+        weight_max: -3.085106383
+      (('4', 'Vip', ''), ('4', 'Rorb', '478586425')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '478586425'))
+        property_map:
+          PSP_scale_factor: 0.059
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '478586425'
+        weight_max: -2.9
+      (('4', 'Vip', ''), ('4', 'Rorb', '479179020')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '479179020'))
+        property_map:
+          PSP_scale_factor: 0.052
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '479179020'
+        weight_max: -3.152173913
+      (('4', 'Vip', ''), ('4', 'Rorb', '484679812')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '484679812'))
+        property_map:
+          PSP_scale_factor: 0.072
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '484679812'
+        weight_max: -2.2480620155
+      (('4', 'Vip', ''), ('4', 'Rorb', '484770879')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '484770879'))
+        property_map:
+          PSP_scale_factor: 0.053
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '484770879'
+        weight_max: -3.3333333333
+      (('4', 'Vip', ''), ('4', 'Rorb', '485836906')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '485836906'))
+        property_map:
+          PSP_scale_factor: 0.044
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '485836906'
+        weight_max: -3.8666666667
+      (('4', 'Vip', ''), ('4', 'Rorb', '486472847')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '486472847'))
+        property_map:
+          PSP_scale_factor: 0.072
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '486472847'
+        weight_max: -2.3387096774
+      (('4', 'Vip', ''), ('4', 'Rorb', '486500736')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '486500736'))
+        property_map:
+          PSP_scale_factor: 0.038
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '486500736'
+        weight_max: -4.3939393939
+      (('4', 'Vip', ''), ('4', 'Rorb', '490626718')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '490626718'))
+        property_map:
+          PSP_scale_factor: 0.06
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '490626718'
+        weight_max: -3.3720930233
+      (('4', 'Vip', ''), ('4', 'Rorb', '490626827')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '490626827'))
+        property_map:
+          PSP_scale_factor: 0.058
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '490626827'
+        weight_max: -3.2584269663
+      (('4', 'Vip', ''), ('4', 'Rorb', '500859045')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '500859045'))
+        property_map:
+          PSP_scale_factor: 0.055
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '500859045'
+        weight_max: -3.0526315789
+      (('4', 'Vip', ''), ('4', 'Rorb', '500894271')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Rorb', '500894271'))
+        property_map:
+          PSP_scale_factor: 0.057
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '500894271'
+        weight_max: 0.0
+    name: (('4', 'Vip'), ('4', 'Rorb'))
+    post:
+    - '4'
+    - Rorb
+    pre:
+    - '4'
+    - Vip
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.0090387251730265
+      A_literature_src:
+      - 0.0090387251730265
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: e
+      pre_ei: i
+      sigma: 96.6
+  (('4', 'Vip'), ('4', 'Scnn1a')):
+    connect_models:
+      (('4', 'Vip', ''), ('4', 'Scnn1a', '320207387')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Scnn1a', '320207387'))
+        property_map:
+          PSP_scale_factor: 0.047
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '320207387'
+        weight_max: -3.9189189189
+      (('4', 'Vip', ''), ('4', 'Scnn1a', '323838579')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Scnn1a', '323838579'))
+        property_map:
+          PSP_scale_factor: 0.054
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '323838579'
+        weight_max: -3.2222222222
+      (('4', 'Vip', ''), ('4', 'Scnn1a', '476266853')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Scnn1a', '476266853'))
+        property_map:
+          PSP_scale_factor: 0.053
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '476266853'
+        weight_max: -3.3720930233
+      (('4', 'Vip', ''), ('4', 'Scnn1a', '500964358')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Scnn1a', '500964358'))
+        property_map:
+          PSP_scale_factor: 0.053
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '500964358'
+        weight_max: -3.0208333333
+      (('4', 'Vip', ''), ('4', 'Scnn1a', '517647182')):
+        delay: 1.85
+        name: (('4', 'Vip', ''), ('4', 'Scnn1a', '517647182'))
+        property_map:
+          PSP_scale_factor: 0.054
+          lognorm_scale: 0.4898623104
+          lognorm_shape: 0.6116363402
+          params_file: vip_to_e4.json
+          synphys_mean: 0.5970172787
+        source_model_id: ''
+        target_model_id: '517647182'
+        weight_max: 0.0
+    name: (('4', 'Vip'), ('4', 'Scnn1a'))
+    post:
+    - '4'
+    - Scnn1a
+    pre:
+    - '4'
+    - Vip
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.0090387251730265
+      A_literature_src:
+      - 0.0090387251730265
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: e
+      pre_ei: i
+      sigma: 96.6
+  (('4', 'Vip'), ('4', 'Sst')):
+    connect_models:
+      (('4', 'Vip', ''), ('4', 'Sst', '476099282')):
+        delay: 1.43
+        name: (('4', 'Vip', ''), ('4', 'Sst', '476099282'))
+        property_map:
+          PSP_scale_factor: 0.141
+          lognorm_scale: 0.4947485729
+          lognorm_shape: 0.5104236043
+          params_file: vip_to_sst.json
+          synphys_mean: 0.5748321044
+        source_model_id: ''
+        target_model_id: '476099282'
+        weight_max: -0.9868421053
+      (('4', 'Vip', ''), ('4', 'Sst', '476753465')):
+        delay: 1.43
+        name: (('4', 'Vip', ''), ('4', 'Sst', '476753465'))
+        property_map:
+          PSP_scale_factor: 0.134
+          lognorm_scale: 0.4947485729
+          lognorm_shape: 0.5104236043
+          params_file: vip_to_sst.json
+          synphys_mean: 0.5748321044
+        source_model_id: ''
+        target_model_id: '476753465'
+        weight_max: -0.9554140127
+      (('4', 'Vip', ''), ('4', 'Sst', '485061364')):
+        delay: 1.43
+        name: (('4', 'Vip', ''), ('4', 'Sst', '485061364'))
+        property_map:
+          PSP_scale_factor: 0.098
+          lognorm_scale: 0.4947485729
+          lognorm_shape: 0.5104236043
+          params_file: vip_to_sst.json
+          synphys_mean: 0.5748321044
+        source_model_id: ''
+        target_model_id: '485061364'
+        weight_max: -1.5957446809
+      (('4', 'Vip', ''), ('4', 'Sst', '501280518')):
+        delay: 1.43
+        name: (('4', 'Vip', ''), ('4', 'Sst', '501280518'))
+        property_map:
+          PSP_scale_factor: 0.101
+          lognorm_scale: 0.4947485729
+          lognorm_shape: 0.5104236043
+          params_file: vip_to_sst.json
+          synphys_mean: 0.5748321044
+        source_model_id: ''
+        target_model_id: '501280518'
+        weight_max: -1.4285714286
+      (('4', 'Vip', ''), ('4', 'Sst', '501282204')):
+        delay: 1.43
+        name: (('4', 'Vip', ''), ('4', 'Sst', '501282204'))
+        property_map:
+          PSP_scale_factor: 0.052
+          lognorm_scale: 0.4947485729
+          lognorm_shape: 0.5104236043
+          params_file: vip_to_sst.json
+          synphys_mean: 0.5748321044
+        source_model_id: ''
+        target_model_id: '501282204'
+        weight_max: -2.5862068966
+      (('4', 'Vip', ''), ('4', 'Sst', '573622646')):
+        delay: 1.43
+        name: (('4', 'Vip', ''), ('4', 'Sst', '573622646'))
+        property_map:
+          PSP_scale_factor: 0.082
+          lognorm_scale: 0.4947485729
+          lognorm_shape: 0.5104236043
+          params_file: vip_to_sst.json
+          synphys_mean: 0.5748321044
+        source_model_id: ''
+        target_model_id: '573622646'
+        weight_max: 0.0
+    name: (('4', 'Vip'), ('4', 'Sst'))
+    post:
+    - '4'
+    - Sst
+    pre:
+    - '4'
+    - Vip
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.401398109859421
+      A_literature_src:
+      - 0.401398109859421
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: i
+      sigma: 126.77
+  (('4', 'Vip'), ('4', 'Vip')):
+    connect_models:
+      (('4', 'Vip', ''), ('4', 'Vip', '501570114')):
+        delay: 1.37
+        name: (('4', 'Vip', ''), ('4', 'Vip', '501570114'))
+        property_map:
+          PSP_scale_factor: 0.16
+          lognorm_scale: 0.3903439951
+          lognorm_shape: 0.6783943635
+          params_file: vip_to_vip.json
+          synphys_mean: 0.4996826466
+        source_model_id: ''
+        target_model_id: '501570114'
+        weight_max: -0.8484848485
+      (('4', 'Vip', ''), ('4', 'Vip', '531121585')):
+        delay: 1.37
+        name: (('4', 'Vip', ''), ('4', 'Vip', '531121585'))
+        property_map:
+          PSP_scale_factor: 0.132
+          lognorm_scale: 0.3903439951
+          lognorm_shape: 0.6783943635
+          params_file: vip_to_vip.json
+          synphys_mean: 0.4996826466
+        source_model_id: ''
+        target_model_id: '531121585'
+        weight_max: -1.0218978102
+      (('4', 'Vip', ''), ('4', 'Vip', '535728342')):
+        delay: 1.37
+        name: (('4', 'Vip', ''), ('4', 'Vip', '535728342'))
+        property_map:
+          PSP_scale_factor: 0.193
+          lognorm_scale: 0.3903439951
+          lognorm_shape: 0.6783943635
+          params_file: vip_to_vip.json
+          synphys_mean: 0.4996826466
+        source_model_id: ''
+        target_model_id: '535728342'
+        weight_max: -0.6730769231
+      (('4', 'Vip', ''), ('4', 'Vip', '560690291')):
+        delay: 1.37
+        name: (('4', 'Vip', ''), ('4', 'Vip', '560690291'))
+        property_map:
+          PSP_scale_factor: 0.123
+          lognorm_scale: 0.3903439951
+          lognorm_shape: 0.6783943635
+          params_file: vip_to_vip.json
+          synphys_mean: 0.4996826466
+        source_model_id: ''
+        target_model_id: '560690291'
+        weight_max: -1.2068965517
+      (('4', 'Vip', ''), ('4', 'Vip', '561934585')):
+        delay: 1.37
+        name: (('4', 'Vip', ''), ('4', 'Vip', '561934585'))
+        property_map:
+          PSP_scale_factor: 0.08
+          lognorm_scale: 0.3903439951
+          lognorm_shape: 0.6783943635
+          params_file: vip_to_vip.json
+          synphys_mean: 0.4996826466
+        source_model_id: ''
+        target_model_id: '561934585'
+        weight_max: -1.7283950617
+      (('4', 'Vip', ''), ('4', 'Vip', '562540395')):
+        delay: 1.37
+        name: (('4', 'Vip', ''), ('4', 'Vip', '562540395'))
+        property_map:
+          PSP_scale_factor: 0.122
+          lognorm_scale: 0.3903439951
+          lognorm_shape: 0.6783943635
+          params_file: vip_to_vip.json
+          synphys_mean: 0.4996826466
+        source_model_id: ''
+        target_model_id: '562540395'
+        weight_max: 0.0
+    name: (('4', 'Vip'), ('4', 'Vip'))
+    post:
+    - '4'
+    - Vip
+    pre:
+    - '4'
+    - Vip
+    probability: 0.0
+    property_map:
+      A_literature:
+      - 0.262676504817764
+      A_literature_src:
+      - 0.262676504817764
+      B_ratio: null
+      R0: 75.0
+      is_pmax: 1.0
+      nsyn_range:
+      - 3
+      - 8
+      post_ei: i
+      pre_ei: i
+      sigma: 126.77
+dims:
+  core_radius: 400.0
+  radius: 845.0
+ext_networks:
+  bkg:
+    connections:
+      (('bkg', ''), ('4', 'Pvalb')):
+        connect_models:
+          (('bkg', ''), ('4', 'Pvalb'), '478793814'):
+            dynamics_params: exc_to_pv.json
+            name: (('bkg', ''), ('4', 'Pvalb'), '478793814')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.481130099256e-26
+              syn_weight_psp: 2.4132677739541942e-24
+              target_median_fr: 8.86
+              unitary_PSP: 0.0309999999999917
+            target_model_id: '478793814'
+          (('bkg', ''), ('4', 'Pvalb'), '478958894'):
+            dynamics_params: exc_to_pv.json
+            name: (('bkg', ''), ('4', 'Pvalb'), '478958894')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.481130099256e-26
+              syn_weight_psp: 2.4937100330864203e-24
+              target_median_fr: 8.86
+              unitary_PSP: 0.0299999999999869
+            target_model_id: '478958894'
+          (('bkg', ''), ('4', 'Pvalb'), '481127173'):
+            dynamics_params: exc_to_pv.json
+            name: (('bkg', ''), ('4', 'Pvalb'), '481127173')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.481130099256e-26
+              syn_weight_psp: 2.078091694237699e-24
+              target_median_fr: 8.86
+              unitary_PSP: 0.0360000000000013
+            target_model_id: '481127173'
+          (('bkg', ''), ('4', 'Pvalb'), '481127348'):
+            dynamics_params: exc_to_pv.json
+            name: (('bkg', ''), ('4', 'Pvalb'), '481127348')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.481130099256e-26
+              syn_weight_psp: 1.6263326302728143e-24
+              target_median_fr: 8.86
+              unitary_PSP: 0.0460000000000064
+            target_model_id: '481127348'
+          (('bkg', ''), ('4', 'Pvalb'), '487405644'):
+            dynamics_params: exc_to_pv.json
+            name: (('bkg', ''), ('4', 'Pvalb'), '487405644')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.481130099256e-26
+              syn_weight_psp: 1.3602054725918314e-24
+              target_median_fr: 8.86
+              unitary_PSP: 0.0550000000000068
+            target_model_id: '487405644'
+          (('bkg', ''), ('4', 'Pvalb'), '487667205'):
+            dynamics_params: exc_to_pv.json
+            name: (('bkg', ''), ('4', 'Pvalb'), '487667205')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.481130099256e-26
+              syn_weight_psp: 2.021927053852637e-24
+              target_median_fr: 8.86
+              unitary_PSP: 0.0370000000000061
+            target_model_id: '487667205'
+          (('bkg', ''), ('4', 'Pvalb'), '491038812'):
+            dynamics_params: exc_to_pv.json
+            name: (('bkg', ''), ('4', 'Pvalb'), '491038812')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.481130099256e-26
+              syn_weight_psp: 2.5797000342265305e-24
+              target_median_fr: 8.86
+              unitary_PSP: 0.0289999999999963
+            target_model_id: '491038812'
+          (('bkg', ''), ('4', 'Pvalb'), '569997187'):
+            dynamics_params: exc_to_pv.json
+            name: (('bkg', ''), ('4', 'Pvalb'), '569997187')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.481130099256e-26
+              syn_weight_psp: 1.739797697501138e-24
+              target_median_fr: 8.86
+              unitary_PSP: 0.0430000000000063
+            target_model_id: '569997187'
+          (('bkg', ''), ('4', 'Pvalb'), '571314481'):
+            dynamics_params: exc_to_pv.json
+            name: (('bkg', ''), ('4', 'Pvalb'), '571314481')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.481130099256e-26
+              syn_weight_psp: 1.6263326302733168e-24
+              target_median_fr: 8.86
+              unitary_PSP: 0.0459999999999922
+            target_model_id: '571314481'
+          (('bkg', ''), ('4', 'Pvalb'), '572375809'):
+            dynamics_params: exc_to_pv.json
+            name: (('bkg', ''), ('4', 'Pvalb'), '572375809')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.481130099256e-26
+              syn_weight_psp: 2.13746574264478e-24
+              target_median_fr: 8.86
+              unitary_PSP: 0.0349999999999965
+            target_model_id: '572375809'
+          (('bkg', ''), ('4', 'Pvalb'), '579414994'):
+            dynamics_params: exc_to_pv.json
+            name: (('bkg', ''), ('4', 'Pvalb'), '579414994')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.481130099256e-26
+              syn_weight_psp: 2.5797000342258983e-24
+              target_median_fr: 8.86
+              unitary_PSP: 0.0290000000000034
+            target_model_id: '579414994'
+        name: (('bkg', ''), ('4', 'Pvalb'))
+        post:
+        - '4'
+        - Pvalb
+        pre:
+        - bkg
+        - ''
+        property_map:
+          n_conn: 4
+      (('bkg', ''), ('4', 'Rorb')):
+        connect_models:
+          (('bkg', ''), ('4', 'Rorb'), '322723785'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '322723785')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.1817540683714552e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.0600000000000022
+            target_model_id: '322723785'
+          (('bkg', ''), ('4', 'Rorb'), '322761772'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '322761772')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.2225042086600262e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.0580000000000069
+            target_model_id: '322761772'
+          (('bkg', ''), ('4', 'Rorb'), '324065524'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '324065524')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 8.753733839790093e-07
+              target_median_fr: 2.12
+              unitary_PSP: 0.0809999999999888
+            target_model_id: '324065524'
+          (('bkg', ''), ('4', 'Rorb'), '329550277'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '329550277')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.1436329693918182e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.0619999999999976
+            target_model_id: '329550277'
+          (('bkg', ''), ('4', 'Rorb'), '466378900'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '466378900')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 7.624219795944872e-07
+              target_median_fr: 2.12
+              unitary_PSP: 0.0930000000000035
+            target_model_id: '466378900'
+          (('bkg', ''), ('4', 'Rorb'), '467003163'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '467003163')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.1623810508573496e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.0609999999999928
+            target_model_id: '467003163'
+          (('bkg', ''), ('4', 'Rorb'), '467357834'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '467357834')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.3130600759682837e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.054000000000002
+            target_model_id: '467357834'
+          (('bkg', ''), ('4', 'Rorb'), '469763389'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '469763389')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.074321880337918e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.0659999999999882
+            target_model_id: '469763389'
+          (('bkg', ''), ('4', 'Rorb'), '473020156'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '473020156')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 9.20847326003788e-07
+              target_median_fr: 2.12
+              unitary_PSP: 0.0769999999999981
+            target_model_id: '473020156'
+          (('bkg', ''), ('4', 'Rorb'), '476562817'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '476562817')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.1623810508573496e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.0609999999999928
+            target_model_id: '476562817'
+          (('bkg', ''), ('4', 'Rorb'), '478586425'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '478586425')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.0582872254071984e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.0670000000000072
+            target_model_id: '478586425'
+          (('bkg', ''), ('4', 'Rorb'), '479179020'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '479179020')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.2439516509173212e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.0570000000000021
+            target_model_id: '479179020'
+          (('bkg', ''), ('4', 'Rorb'), '484679812'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '484679812')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 9.20847326003788e-07
+              target_median_fr: 2.12
+              unitary_PSP: 0.0769999999999981
+            target_model_id: '484679812'
+          (('bkg', ''), ('4', 'Rorb'), '484770879'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '484770879')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.2017837983439491e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.0589999999999975
+            target_model_id: '484770879'
+          (('bkg', ''), ('4', 'Rorb'), '485836906'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '485836906')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.4470457980061433e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.0489999999999923
+            target_model_id: '485836906'
+          (('bkg', ''), ('4', 'Rorb'), '486472847'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '486472847')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 8.863155512786438e-07
+              target_median_fr: 2.12
+              unitary_PSP: 0.0799999999999983
+            target_model_id: '486472847'
+          (('bkg', ''), ('4', 'Rorb'), '486500736'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '486500736')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.7293961976169635e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.0409999999999968
+            target_model_id: '486500736'
+          (('bkg', ''), ('4', 'Rorb'), '490626718'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '490626718')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 9.986654098914372e-07
+              target_median_fr: 2.12
+              unitary_PSP: 0.0709999999999979
+            target_model_id: '490626718'
+          (('bkg', ''), ('4', 'Rorb'), '490626827'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '490626827')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.0582872254071984e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.0670000000000072
+            target_model_id: '490626827'
+          (('bkg', ''), ('4', 'Rorb'), '500859045'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '500859045')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.1623810508570787e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.061000000000007
+            target_model_id: '500859045'
+          (('bkg', ''), ('4', 'Rorb'), '500894271'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Rorb'), '500894271')
+            property_map:
+              nsyns: 1
+              syn_weight: 7.090524410229e-08
+              syn_weight_psp: 1.1623810508570787e-06
+              target_median_fr: 2.12
+              unitary_PSP: 0.061000000000007
+            target_model_id: '500894271'
+        name: (('bkg', ''), ('4', 'Rorb'))
+        post:
+        - '4'
+        - Rorb
+        pre:
+        - bkg
+        - ''
+        property_map:
+          n_conn: 4
+      (('bkg', ''), ('4', 'Scnn1a')):
+        connect_models:
+          (('bkg', ''), ('4', 'Scnn1a'), '320207387'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Scnn1a'), '320207387')
+            property_map:
+              nsyns: 1
+              syn_weight: 8.59391427069e-11
+              syn_weight_psp: 1.5914656056836915e-09
+              target_median_fr: 2.12
+              unitary_PSP: 0.0539999999999878
+            target_model_id: '320207387'
+          (('bkg', ''), ('4', 'Scnn1a'), '323838579'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Scnn1a'), '323838579')
+            property_map:
+              nsyns: 1
+              syn_weight: 8.59391427069e-11
+              syn_weight_psp: 1.4088384050313126e-09
+              target_median_fr: 2.12
+              unitary_PSP: 0.0609999999999928
+            target_model_id: '323838579'
+          (('bkg', ''), ('4', 'Scnn1a'), '476266853'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Scnn1a'), '476266853')
+            property_map:
+              nsyns: 1
+              syn_weight: 8.59391427069e-11
+              syn_weight_psp: 1.4323190451149455e-09
+              target_median_fr: 2.12
+              unitary_PSP: 0.0600000000000022
+            target_model_id: '476266853'
+          (('bkg', ''), ('4', 'Scnn1a'), '500964358'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Scnn1a'), '500964358')
+            property_map:
+              nsyns: 1
+              syn_weight: 8.59391427069e-11
+              syn_weight_psp: 1.562529867397988e-09
+              target_median_fr: 2.12
+              unitary_PSP: 0.0550000000000068
+            target_model_id: '500964358'
+          (('bkg', ''), ('4', 'Scnn1a'), '517647182'):
+            dynamics_params: exc_to_e4.json
+            name: (('bkg', ''), ('4', 'Scnn1a'), '517647182')
+            property_map:
+              nsyns: 1
+              syn_weight: 8.59391427069e-11
+              syn_weight_psp: 1.5346275483375714e-09
+              target_median_fr: 2.12
+              unitary_PSP: 0.0559999999999973
+            target_model_id: '517647182'
+        name: (('bkg', ''), ('4', 'Scnn1a'))
+        post:
+        - '4'
+        - Scnn1a
+        pre:
+        - bkg
+        - ''
+        property_map:
+          n_conn: 4
+      (('bkg', ''), ('4', 'Sst')):
+        connect_models:
+          (('4', 'Sst'), '485061364'):
+            dynamics_params: exc_to_sst.json
+            name: (('bkg', ''), ('4', 'Sst'), '485061364')
+            property_map:
+              nsyns: 1
+              syn_weight: 3.657252909984
+              syn_weight_psp: 59.95496573744966
+              target_median_fr: 3.82
+              unitary_PSP: 0.0609999999999928
+            target_model_id: '485061364'
+          (('bkg', ''), ('4', 'Sst'), '476099282'):
+            dynamics_params: exc_to_sst.json
+            name: (('bkg', ''), ('4', 'Sst'), '476099282')
+            property_map:
+              nsyns: 1
+              syn_weight: 3.657252909984
+              syn_weight_psp: 44.06328807208968
+              target_median_fr: 3.82
+              unitary_PSP: 0.0830000000000126
+            target_model_id: '476099282'
+          (('bkg', ''), ('4', 'Sst'), '476753465'):
+            dynamics_params: exc_to_sst.json
+            name: (('bkg', ''), ('4', 'Sst'), '476753465')
+            property_map:
+              nsyns: 1
+              syn_weight: 3.657252909984
+              syn_weight_psp: 47.49679103875437
+              target_median_fr: 3.82
+              unitary_PSP: 0.0769999999999981
+            target_model_id: '476753465'
+          (('bkg', ''), ('4', 'Sst'), '501280518'):
+            dynamics_params: exc_to_sst.json
+            name: (('bkg', ''), ('4', 'Sst'), '501280518')
+            property_map:
+              nsyns: 1
+              syn_weight: 3.657252909984
+              syn_weight_psp: 60.95421516639769
+              target_median_fr: 3.82
+              unitary_PSP: 0.0600000000000022
+            target_model_id: '501280518'
+          (('bkg', ''), ('4', 'Sst'), '501282204'):
+            dynamics_params: exc_to_sst.json
+            name: (('bkg', ''), ('4', 'Sst'), '501282204')
+            property_map:
+              nsyns: 1
+              syn_weight: 3.657252909984
+              syn_weight_psp: 117.975900322042
+              target_median_fr: 3.82
+              unitary_PSP: 0.0310000000000059
+            target_model_id: '501282204'
+          (('bkg', ''), ('4', 'Sst'), '573622646'):
+            dynamics_params: exc_to_sst.json
+            name: (('bkg', ''), ('4', 'Sst'), '573622646')
+            property_map:
+              nsyns: 1
+              syn_weight: 3.657252909984
+              syn_weight_psp: 74.63781448945934
+              target_median_fr: 3.82
+              unitary_PSP: 0.0490000000000065
+            target_model_id: '573622646'
+        name: (('bkg', ''), ('4', 'Sst'))
+        post:
+        - '4'
+        - Sst
+        pre:
+        - bkg
+        - ''
+        property_map:
+          n_conn: 4
+      (('bkg', ''), ('4', 'Vip')):
+        connect_models:
+          (('bkg', ''), ('4', 'Vip'), '501570114'):
+            dynamics_params: exc_to_vip.json
+            name: (('bkg', ''), ('4', 'Vip'), '501570114')
+            property_map:
+              nsyns: 1
+              syn_weight: 0.793264203462
+              syn_weight_psp: 8.913080937775417
+              target_median_fr: 3.13
+              unitary_PSP: 0.0889999999999986
+            target_model_id: '501570114'
+          (('bkg', ''), ('4', 'Vip'), '531121585'):
+            dynamics_params: exc_to_vip.json
+            name: (('bkg', ''), ('4', 'Vip'), '531121585')
+            property_map:
+              nsyns: 1
+              syn_weight: 0.793264203462
+              syn_weight_psp: 10.86663292413587
+              target_median_fr: 3.13
+              unitary_PSP: 0.0730000000000075
+            target_model_id: '531121585'
+          (('bkg', ''), ('4', 'Vip'), '535728342'):
+            dynamics_params: exc_to_vip.json
+            name: (('bkg', ''), ('4', 'Vip'), '535728342')
+            property_map:
+              nsyns: 1
+              syn_weight: 0.793264203462
+              syn_weight_psp: 7.4836245609626495
+              target_median_fr: 3.13
+              unitary_PSP: 0.1059999999999945
+            target_model_id: '535728342'
+          (('bkg', ''), ('4', 'Vip'), '560690291'):
+            dynamics_params: exc_to_vip.json
+            name: (('bkg', ''), ('4', 'Vip'), '560690291')
+            property_map:
+              nsyns: 1
+              syn_weight: 0.793264203462
+              syn_weight_psp: 11.17273526002849
+              target_median_fr: 3.13
+              unitary_PSP: 0.0709999999999979
+            target_model_id: '560690291'
+          (('bkg', ''), ('4', 'Vip'), '561934585'):
+            dynamics_params: exc_to_vip.json
+            name: (('bkg', ''), ('4', 'Vip'), '561934585')
+            property_map:
+              nsyns: 1
+              syn_weight: 0.793264203462
+              syn_weight_psp: 17.628093410265997
+              target_median_fr: 3.13
+              unitary_PSP: 0.0450000000000017
+            target_model_id: '561934585'
+          (('bkg', ''), ('4', 'Vip'), '562540395'):
+            dynamics_params: exc_to_vip.json
+            name: (('bkg', ''), ('4', 'Vip'), '562540395')
+            property_map:
+              nsyns: 1
+              syn_weight: 0.793264203462
+              syn_weight_psp: 11.49658265886913
+              target_median_fr: 3.13
+              unitary_PSP: 0.0690000000000026
+            target_model_id: '562540395'
+        name: (('bkg', ''), ('4', 'Vip'))
+        post:
+        - '4'
+        - Vip
+        pre:
+        - bkg
+        - ''
+        property_map:
+          n_conn: 4
+    locations:
+      bkg:
+        inh_fraction: 0.0
+        name: SG_001
+        ncells: 100
+        neurons:
+          bkg:
+            ei: e
+            name: bkg
+            neuron_models:
+              bkg:
+                m_type: virtual
+                property_map: {}
+                proportion: 1.0
+        region_fraction: 1.0
+    name: bkg
+    ncells: 100
+  lgn:
+    connections:
+      (('lgn', ''), ('4', 'Pvalb')):
+        connect_models:
+          (('lgn', ''), ('4', 'Pvalb'), '478793814'):
+            dynamics_params: exc_to_pv.json
+            name: (('lgn', ''), ('4', 'Pvalb'), '478793814')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 7.790322580647246
+              unitary_PSP: 0.0309999999999917
+            target_model_id: '478793814'
+          (('lgn', ''), ('4', 'Pvalb'), '478958894'):
+            dynamics_params: exc_to_pv.json
+            name: (('lgn', ''), ('4', 'Pvalb'), '478958894')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 10.35000000000451
+              unitary_PSP: 0.0299999999999869
+            target_model_id: '478958894'
+          (('lgn', ''), ('4', 'Pvalb'), '481127173'):
+            dynamics_params: exc_to_pv.json
+            name: (('lgn', ''), ('4', 'Pvalb'), '481127173')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 9.58333333333297
+              unitary_PSP: 0.0360000000000013
+            target_model_id: '481127173'
+          (('lgn', ''), ('4', 'Pvalb'), '481127348'):
+            dynamics_params: exc_to_pv.json
+            name: (('lgn', ''), ('4', 'Pvalb'), '481127348')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 7.499999999998943
+              unitary_PSP: 0.0460000000000064
+            target_model_id: '481127348'
+          (('lgn', ''), ('4', 'Pvalb'), '487405644'):
+            dynamics_params: exc_to_pv.json
+            name: (('lgn', ''), ('4', 'Pvalb'), '487405644')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 6.272727272726494
+              unitary_PSP: 0.0550000000000068
+            target_model_id: '487405644'
+          (('lgn', ''), ('4', 'Pvalb'), '487667205'):
+            dynamics_params: exc_to_pv.json
+            name: (('lgn', ''), ('4', 'Pvalb'), '487667205')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 9.324324324322776
+              unitary_PSP: 0.0370000000000061
+            target_model_id: '487667205'
+          (('lgn', ''), ('4', 'Pvalb'), '491038812'):
+            dynamics_params: exc_to_pv.json
+            name: (('lgn', ''), ('4', 'Pvalb'), '491038812')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 11.896551724139425
+              unitary_PSP: 0.0289999999999963
+            target_model_id: '491038812'
+          (('lgn', ''), ('4', 'Pvalb'), '569997187'):
+            dynamics_params: exc_to_pv.json
+            name: (('lgn', ''), ('4', 'Pvalb'), '569997187')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.61627906976661
+              unitary_PSP: 0.0430000000000063
+            target_model_id: '569997187'
+          (('lgn', ''), ('4', 'Pvalb'), '571314481'):
+            dynamics_params: exc_to_pv.json
+            name: (('lgn', ''), ('4', 'Pvalb'), '571314481')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 7.500000000001259
+              unitary_PSP: 0.0459999999999922
+            target_model_id: '571314481'
+          (('lgn', ''), ('4', 'Pvalb'), '572375809'):
+            dynamics_params: exc_to_pv.json
+            name: (('lgn', ''), ('4', 'Pvalb'), '572375809')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 7.885714285715053
+              unitary_PSP: 0.0349999999999965
+            target_model_id: '572375809'
+          (('lgn', ''), ('4', 'Pvalb'), '579414994'):
+            dynamics_params: exc_to_pv.json
+            name: (('lgn', ''), ('4', 'Pvalb'), '579414994')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 7.1379310344819045
+              unitary_PSP: 0.0290000000000034
+            target_model_id: '579414994'
+        name: (('lgn', ''), ('4', 'Pvalb'))
+        post:
+        - '4'
+        - Pvalb
+        pre:
+        - lgn
+        - ''
+        property_map:
+          n_conn: 4
+      (('lgn', ''), ('4', 'Rorb')):
+        connect_models:
+          (('lgn', ''), ('4', 'Rorb'), '322723785'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '322723785')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.7499999999997815
+              unitary_PSP: 0.0600000000000022
+            target_model_id: '322723785'
+          (('lgn', ''), ('4', 'Rorb'), '322761772'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '322761772')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.948275862068254
+              unitary_PSP: 0.0580000000000069
+            target_model_id: '322761772'
+          (('lgn', ''), ('4', 'Rorb'), '324065524'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '324065524')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 4.259259259259845
+              unitary_PSP: 0.0809999999999888
+            target_model_id: '324065524'
+          (('lgn', ''), ('4', 'Rorb'), '329550277'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '329550277')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.564516129032472
+              unitary_PSP: 0.0619999999999976
+            target_model_id: '329550277'
+          (('lgn', ''), ('4', 'Rorb'), '466378900'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '466378900')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 3.7096774193546977
+              unitary_PSP: 0.0930000000000035
+            target_model_id: '466378900'
+          (('lgn', ''), ('4', 'Rorb'), '467003163'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '467003163')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.655737704918696
+              unitary_PSP: 0.0609999999999928
+            target_model_id: '467003163'
+          (('lgn', ''), ('4', 'Rorb'), '467357834'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '467357834')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 6.388888888888646
+              unitary_PSP: 0.054000000000002
+            target_model_id: '467357834'
+          (('lgn', ''), ('4', 'Rorb'), '469763389'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '469763389')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.227272727273654
+              unitary_PSP: 0.0659999999999882
+            target_model_id: '469763389'
+          (('lgn', ''), ('4', 'Rorb'), '473020156'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '473020156')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 4.480519480519586
+              unitary_PSP: 0.0769999999999981
+            target_model_id: '473020156'
+          (('lgn', ''), ('4', 'Rorb'), '476562817'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '476562817')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.655737704918696
+              unitary_PSP: 0.0609999999999928
+            target_model_id: '476562817'
+          (('lgn', ''), ('4', 'Rorb'), '478586425'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '478586425')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.149253731342724
+              unitary_PSP: 0.0670000000000072
+            target_model_id: '478586425'
+          (('lgn', ''), ('4', 'Rorb'), '479179020'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '479179020')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.447368421052425
+              unitary_PSP: 0.0570000000000021
+            target_model_id: '479179020'
+          (('lgn', ''), ('4', 'Rorb'), '484679812'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '484679812')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 4.032467532467628
+              unitary_PSP: 0.0769999999999981
+            target_model_id: '484679812'
+          (('lgn', ''), ('4', 'Rorb'), '484770879'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '484770879')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.847457627118891
+              unitary_PSP: 0.0589999999999975
+            target_model_id: '484770879'
+          (('lgn', ''), ('4', 'Rorb'), '485836906'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '485836906')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 7.040816326531706
+              unitary_PSP: 0.0489999999999923
+            target_model_id: '485836906'
+          (('lgn', ''), ('4', 'Rorb'), '486472847'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '486472847')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 4.312500000000092
+              unitary_PSP: 0.0799999999999983
+            target_model_id: '486472847'
+          (('lgn', ''), ('4', 'Rorb'), '486500736'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '486500736')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 8.414634146342117
+              unitary_PSP: 0.0409999999999968
+            target_model_id: '486500736'
+          (('lgn', ''), ('4', 'Rorb'), '490626718'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '490626718')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 4.859154929577604
+              unitary_PSP: 0.0709999999999979
+            target_model_id: '490626718'
+          (('lgn', ''), ('4', 'Rorb'), '490626827'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '490626827')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.149253731342724
+              unitary_PSP: 0.0670000000000072
+            target_model_id: '490626827'
+          (('lgn', ''), ('4', 'Rorb'), '500859045'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '500859045')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.655737704917379
+              unitary_PSP: 0.061000000000007
+            target_model_id: '500859045'
+          (('lgn', ''), ('4', 'Rorb'), '500894271'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Rorb'), '500894271')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.655737704917379
+              unitary_PSP: 0.061000000000007
+            target_model_id: '500894271'
+        name: (('lgn', ''), ('4', 'Rorb'))
+        post:
+        - '4'
+        - Rorb
+        pre:
+        - lgn
+        - ''
+        property_map:
+          n_conn: 4
+      (('lgn', ''), ('4', 'Scnn1a')):
+        connect_models:
+          (('lgn', ''), ('4', 'Scnn1a'), '320207387'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Scnn1a'), '320207387')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 6.388888888890327
+              unitary_PSP: 0.0539999999999878
+            target_model_id: '320207387'
+          (('lgn', ''), ('4', 'Scnn1a'), '323838579'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Scnn1a'), '323838579')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.655737704918696
+              unitary_PSP: 0.0609999999999928
+            target_model_id: '323838579'
+          (('lgn', ''), ('4', 'Scnn1a'), '476266853'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Scnn1a'), '476266853')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.7499999999997815
+              unitary_PSP: 0.0600000000000022
+            target_model_id: '476266853'
+          (('lgn', ''), ('4', 'Scnn1a'), '500964358'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Scnn1a'), '500964358')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 6.272727272726494
+              unitary_PSP: 0.0550000000000068
+            target_model_id: '500964358'
+          (('lgn', ''), ('4', 'Scnn1a'), '517647182'):
+            dynamics_params: exc_to_e4.json
+            name: (('lgn', ''), ('4', 'Scnn1a'), '517647182')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.544642857143115
+              unitary_PSP: 0.0559999999999973
+            target_model_id: '517647182'
+        name: (('lgn', ''), ('4', 'Scnn1a'))
+        post:
+        - '4'
+        - Scnn1a
+        pre:
+        - lgn
+        - ''
+        property_map:
+          n_conn: 4
+      (('lgn', ''), ('4', 'Sst')):
+        connect_models:
+          (('lgn', ''), ('4', 'Sst'), '476099282'):
+            dynamics_params: exc_to_sst.json
+            name: (('lgn', ''), ('4', 'Sst'), '476099282')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 4.156626506023464
+              unitary_PSP: 0.0830000000000126
+            target_model_id: '476099282'
+          (('lgn', ''), ('4', 'Sst'), '476753465'):
+            dynamics_params: exc_to_sst.json
+            name: (('lgn', ''), ('4', 'Sst'), '476753465')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 4.480519480519586
+              unitary_PSP: 0.0769999999999981
+            target_model_id: '476753465'
+          (('lgn', ''), ('4', 'Sst'), '485061364'):
+            dynamics_params: exc_to_sst.json
+            name: (('lgn', ''), ('4', 'Sst'), '485061364')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.655737704918696
+              unitary_PSP: 0.0609999999999928
+            target_model_id: '485061364'
+          (('lgn', ''), ('4', 'Sst'), '501280518'):
+            dynamics_params: exc_to_sst.json
+            name: (('lgn', ''), ('4', 'Sst'), '501280518')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 5.7499999999997815
+              unitary_PSP: 0.0600000000000022
+            target_model_id: '501280518'
+          (('lgn', ''), ('4', 'Sst'), '501282204'):
+            dynamics_params: exc_to_sst.json
+            name: (('lgn', ''), ('4', 'Sst'), '501282204')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 11.129032258062391
+              unitary_PSP: 0.0310000000000059
+            target_model_id: '501282204'
+          (('lgn', ''), ('4', 'Sst'), '573622646'):
+            dynamics_params: exc_to_sst.json
+            name: (('lgn', ''), ('4', 'Sst'), '573622646')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 7.040816326529664
+              unitary_PSP: 0.0490000000000065
+            target_model_id: '573622646'
+        name: (('lgn', ''), ('4', 'Sst'))
+        post:
+        - '4'
+        - Sst
+        pre:
+        - lgn
+        - ''
+        property_map:
+          n_conn: 4
+      (('lgn', ''), ('4', 'Vip')):
+        connect_models:
+          (('lgn', ''), ('4', 'Vip'), '501570114'):
+            dynamics_params: exc_to_vip.json
+            name: (('lgn', ''), ('4', 'Vip'), '501570114')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 3.8764044943820815
+              unitary_PSP: 0.0889999999999986
+            target_model_id: '501570114'
+          (('lgn', ''), ('4', 'Vip'), '531121585'):
+            dynamics_params: exc_to_vip.json
+            name: (('lgn', ''), ('4', 'Vip'), '531121585')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 4.726027397259788
+              unitary_PSP: 0.0730000000000075
+            target_model_id: '531121585'
+          (('lgn', ''), ('4', 'Vip'), '535728342'):
+            dynamics_params: exc_to_vip.json
+            name: (('lgn', ''), ('4', 'Vip'), '535728342')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 1.6273584905661214
+              unitary_PSP: 0.1059999999999945
+            target_model_id: '535728342'
+          (('lgn', ''), ('4', 'Vip'), '560690291'):
+            dynamics_params: exc_to_vip.json
+            name: (('lgn', ''), ('4', 'Vip'), '560690291')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 4.859154929577604
+              unitary_PSP: 0.0709999999999979
+            target_model_id: '560690291'
+          (('lgn', ''), ('4', 'Vip'), '561934585'):
+            dynamics_params: exc_to_vip.json
+            name: (('lgn', ''), ('4', 'Vip'), '561934585')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 7.666666666666376
+              unitary_PSP: 0.0450000000000017
+            target_model_id: '561934585'
+          (('lgn', ''), ('4', 'Vip'), '562540395'):
+            dynamics_params: exc_to_vip.json
+            name: (('lgn', ''), ('4', 'Vip'), '562540395')
+            property_map:
+              syn_weight: 0.345
+              syn_weight_psp: 4.99999999999981
+              unitary_PSP: 0.0690000000000026
+            target_model_id: '562540395'
+        name: (('lgn', ''), ('4', 'Vip'))
+        post:
+        - '4'
+        - Vip
+        pre:
+        - lgn
+        - ''
+        property_map:
+          n_conn: 4
+    locations:
+      lgn:
+        inh_fraction: 0.0
+        name: lgn
+        neurons:
+          sOFF_TF1:
+            N: 8
+            dims:
+              size_range:
+              - 2
+              - 10
+            ei: e
+            name: sOFF_TF1
+            neuron_models:
+              sOFF_TF1:
+                name: sOFF_TF1
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+          sOFF_TF15:
+            N: 7
+            dims:
+              size_range:
+              - 2
+              - 10
+            ei: e
+            name: sOFF_TF15
+            neuron_models:
+              sOFF_TF15:
+                name: sOFF_TF15
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+          sOFF_TF2:
+            N: 8
+            dims:
+              size_range:
+              - 2
+              - 10
+            ei: e
+            name: sOFF_TF2
+            neuron_models:
+              sOFF_TF2:
+                name: sOFF_TF2
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+          sOFF_TF4:
+            N: 15
+            dims:
+              size_range:
+              - 2
+              - 10
+            ei: e
+            name: sOFF_TF4
+            neuron_models:
+              sOFF_TF4:
+                name: sOFF_TF4
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+          sOFF_TF8:
+            N: 8
+            dims:
+              size_range:
+              - 2
+              - 10
+            ei: e
+            name: sOFF_TF8
+            neuron_models:
+              sOFF_TF8:
+                name: sOFF_TF8
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+          sON_TF1:
+            N: 7
+            dims:
+              size_range:
+              - 2
+              - 10
+            ei: e
+            name: sON_TF1
+            neuron_models:
+              sON_TF1:
+                name: sON_TF1
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+          sON_TF2:
+            N: 5
+            dims:
+              size_range:
+              - 2
+              - 10
+            ei: e
+            name: sON_TF2
+            neuron_models:
+              sON_TF2:
+                name: sON_TF2
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+          sON_TF4:
+            N: 7
+            dims:
+              size_range:
+              - 2
+              - 10
+            ei: e
+            name: sON_TF4
+            neuron_models:
+              sON_TF4:
+                name: sON_TF4
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+          sON_TF8:
+            N: 15
+            dims:
+              size_range:
+              - 2
+              - 10
+            ei: e
+            name: sON_TF8
+            neuron_models:
+              sON_TF8:
+                name: sON_TF8
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+          sONsOFF_001:
+            N: 8
+            dims:
+              size_range:
+              - 6
+            ei: e
+            name: sONsOFF_001
+            neuron_models:
+              sONsOFF_001:
+                name: sONsOFF_001
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+          sONtOFF_001:
+            N: 5
+            dims:
+              size_range:
+              - 9
+            ei: e
+            name: sONtOFF_001
+            neuron_models:
+              sONtOFF_001:
+                name: sONtOFF_001
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+          tOFF_TF15:
+            N: 8
+            dims:
+              size_range:
+              - 2
+              - 10
+            ei: e
+            name: tOFF_TF15
+            neuron_models:
+              tOFF_TF15:
+                name: tOFF_TF15
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+          tOFF_TF4:
+            N: 10
+            dims:
+              size_range:
+              - 2
+              - 10
+            ei: e
+            level_of_detail: filter
+            name: tOFF_TF4
+            neuron_models:
+              tOFF_TF4:
+                name: tOFF_TF4
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+          tOFF_TF8:
+            N: 5
+            dims:
+              size_range:
+              - 2
+              - 10
+            ei: e
+            name: tOFF_TF8
+            neuron_models:
+              tOFF_TF8:
+                name: tOFF_TF8
+                proportion: 1.0
+            property_map:
+              level_of_detail: filter
+        region_fraction: 1.0
+    name: LGN
+locations:
+  VISp4:
+    name: VISp4
+    dims:
+      depth_range:
+      - 357
+      - 505
+    neurons:
+      ('4', 'Pvalb'):
+        dims:
+          nsyn_lognorm_scale: 7432.587
+          nsyn_lognorm_shape: 0.433
+        ei: i
+        fraction: 0.0
+        name: ('4', 'Pvalb')
+      ('4', 'Rorb'):
+        dims:
+          nsyn_lognorm_scale: 2188.765
+          nsyn_lognorm_shape: 0.345
+        ei: e
+        fraction: 0.5
+        name: ('4', 'Rorb')
+      ('4', 'Scnn1a'):
+        dims:
+          nsyn_lognorm_scale: 2188.765
+          nsyn_lognorm_shape: 0.345
+        ei: e
+        fraction: 0.5
+        name: ('4', 'Scnn1a')
+      ('4', 'Sst'):
+        dims:
+          nsyn_lognorm_scale: 5305.151
+          nsyn_lognorm_shape: 0.55
+        ei: i
+        fraction: 0.0
+        name: ('4', 'Sst')
+      ('4', 'Vip'):
+        dims:
+          nsyn_lognorm_scale: 2355.279
+          nsyn_lognorm_shape: 0.537
+        ei: i
+        fraction: 0.0
+        name: ('4', 'Vip')
+name: User-Mod-V1L4

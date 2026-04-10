@@ -1,0 +1,11 @@
+{
+    "left_subnet": "./wbn_sleep/data/Map_642_To_10242_30-Aug-2017_LH.txt",
+    "right_subnet": "./wbn_sleep/data/Map_642_To_10242_30-Aug-2017_RH.txt",
+    "left_right_map": "./wbn_sleep/data/Map_LH_RH_10242_30-Aug-2017.txt",
+    "left_right_map_small": "./wbn_sleep/data/Map_LH_RH_642_30-Aug-2017.txt",
+    "dist3d_probability": "./wbn_sleep/data/dist_inMeters_prob_LH_onesOnDiag.txt",
+    "weight_factor": "./wbn_sleep/data/weights_LH.txt",
+    "weight_factor_inpy": "./wbn_sleep/data/weights_INPY_both_hemi.txt",
+    "thalamus_cortex_distance": "./wbn_sleep/data/thalCort_dist_inMeters_LH.txt",
+    "intra_thalamus_distance": "./wbn_sleep/data/dist_TC_LH_zeroDiag.txt"
+}

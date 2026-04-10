@@ -1,36 +1,51 @@
 import logging
-import typing
+import typing as t
+from pydantic import Field
+from typing_extensions import override
 import jsonpath
-import traitlets
 #
-from .. import base
+from ..base import (
+    CerebrumBaseModel,
+    NoneParams, BaseParams,
+    OpXFormer, XformItr,
+    XformElt, XformSeq
+)
 
 
 def _log():
     return logging.getLogger(__name__)
 
 
-class JPointerFilter(base.OpXFormer):
-    class FilterTraits(traitlets.HasTraits):
-        paths = traitlets.List()
-        keys = traitlets.List()
+class JPFExecParams(CerebrumBaseModel):
+    paths : t.Annotated[list[str], Field(title="JSON Pointer Paths")]
+    keys  : t.Annotated[list[str], Field(title="Keys")]
 
-    def __init__(self, **params):
-        self.name = __name__ + ".JPointerFilter"
-        self.patch_out = None
+JPFBaseParams    : t.TypeAlias = BaseParams[NoneParams, JPFExecParams]
 
-    def resolve(self, fpath, dctx):
+class JPointerFilter(OpXFormer[NoneParams, JPFExecParams]):
+    class FilterParams(JPFBaseParams):
+        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
+        exec_params: t.Annotated[JPFExecParams, Field(title='Exec Params')]
+
+    def __init__(self, init_params: NoneParams, **params: t.Any):
+        self.name : str = __name__ + ".JPointerFilter"
+        self.patch_out : str | None = None
+
+    def resolve(self, fpath: str, dctx: XformSeq | None):
         jptr = jsonpath.JSONPointer(fpath)
-        if jptr.exists(dctx):
+        if dctx and jptr.exists(dctx):
             return jptr.resolve(dctx)
         else:
             return None
 
+    @override
     def xform(
         self,
-        in_iter: typing.Iterable | None,
-        **params: typing.Any,
-    ) -> typing.Iterable | None:
+        exec_params: JPFExecParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
+        **_params: t.Any,
+    ) -> XformItr | None:
         """
         Filter the output only if the destination path is present in dctx.
 
@@ -49,35 +64,52 @@ class JPointerFilter(base.OpXFormer):
         dctx: dict | None
            dict or None
         """
-        fp_lst = params["paths"]
-        key_lst = params["keys"]
+        fp_lst = exec_params.paths
+        key_lst = exec_params.keys
         return [
-            {key: self.resolve(fpath, in_iter) for fpath, key in zip(fp_lst, key_lst)}
+            {key: self.resolve(
+                fpath,
+                first_iter  # pyright: ignore[reportArgumentType]
+            ) for fpath, key in zip(fp_lst, key_lst)}
         ]
 
+    @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[JPFBaseParams]:
+        return cls.FilterParams
+
+    @override
+    @classmethod
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> JPFBaseParams:
+        return cls.FilterParams.model_validate(param_dict)
 
 
-class IterJPatchFilter(base.OpXFormer):
-    class FilterTraits(traitlets.HasTraits):
-        filter_exp = traitlets.Bytes()
-        dest_path = traitlets.Bytes()
 
-    def __init__(self, **init_params):
-        self.name = __name__ + ".IterJPatchFilter"
-        self.patch_out = None
+class IJPExecParams(CerebrumBaseModel):
+    filter_exp : t.Annotated[str, Field(title="Filter Expression")] # = traitlets.Bytes()
+    dest_path  : t.Annotated[str, Field(title="Dest. Path")] # = traitlets.Bytes()
 
-    def patch(self, ctx, filter_exp, dest_path):
+IJPBaseParams : t.TypeAlias = BaseParams[NoneParams, IJPExecParams]
+
+class IterJPatchFilter(OpXFormer[NoneParams, IJPExecParams]):
+    class FilterParams(IJPBaseParams):
+        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
+        exec_params: t.Annotated[IJPExecParams, Field(title='Exec Params')]
+
+    def __init__(self, init_params: NoneParams, **_params: t.Any):
+        self.name : str = __name__ + ".IterJPatchFilter"
+        self.patch_out : str | None = None
+
+    def patch(self, ctx: XformElt, filter_exp: str, dest_path: str) -> XformElt:
         fx = jsonpath.findall(filter_exp, ctx)
         try:
             if jsonpath.JSONPointer(dest_path).exists(ctx):
                 return jsonpath.patch.apply(
-                    [{"op": "replace", "path": dest_path, "value": fx}], ctx
-                )
+                    [{"op": "replace", "path": dest_path, "value": fx}],
+                    ctx
+                ) # pyright: ignore[reportReturnType] TODO::Type match
             else:
-                return None
+                return {}
         except jsonpath.JSONPatchError as jpex:
             _log().error("Jpatch error : ", jpex)
             _log().debug(
@@ -86,13 +118,16 @@ class IterJPatchFilter(base.OpXFormer):
                 dest_path,
                 str(ctx),
             )
-            return None
+            return {}
 
+    @override
     def xform(
         self,
-        in_iter: typing.Iterable | None,
-        **params: typing.Any,
-    ) -> typing.Iterable | None:
+        exec_params: IJPExecParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
+        **_params: t.Any,
+    ) -> XformItr | None:
         """
         Select the output matching the filter expression and place in
         the destination.
@@ -112,35 +147,50 @@ class IterJPatchFilter(base.OpXFormer):
         ct_iter: iterator
            iterator of cell type descriptions
         """
-        filter_exp = params["filter_exp"]
-        dest_path = params["dest_path"]
         return (
-            iter(self.patch(x, filter_exp, dest_path) for x in in_iter if x)
-            if in_iter
-            else None
+            iter(
+                self.patch(x, exec_params.filter_exp, exec_params.dest_path)
+                for x in first_iter if x
+            )
+            if first_iter else {}
         )
 
+    @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[IJPBaseParams]:
+        return cls.FilterParams
+
+    @override
+    @classmethod
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> IJPBaseParams:
+        return cls.FilterParams.model_validate(param_dict)
 
 
-class IterJPointerFilter(base.OpXFormer):
-    class FilterTraits(traitlets.HasTraits):
-        path = traitlets.Unicode()
+class IJPtrExecParams(CerebrumBaseModel):
+    path : t.Annotated[str, Field(title="JSON Path")]
 
-    def __init__(self, **params):
-        self.name = __name__ + ".IterJPointerFilter"
-        self.patch_out = None
+IJPtrBaseParams : t.TypeAlias = BaseParams[NoneParams, IJPtrExecParams]
 
-    def exists(self, ctx, fpath):
+class IterJPointerFilter(OpXFormer[NoneParams, IJPtrExecParams]):
+    class FilterParams(IJPtrBaseParams):
+        init_params: t.Annotated[NoneParams, Field(title='Init Params')]
+        exec_params: t.Annotated[IJPtrExecParams, Field(title='Exec Params')]
+
+    def __init__(self, init_params: NoneParams, **_params: t.Any):
+        self.name : str = __name__ + ".IterJPointerFilter"
+        self.patch_out : str | None = None
+
+    def exists(self, ctx: XformElt, fpath: str):
         return jsonpath.JSONPointer(fpath).exists(ctx)
 
+    @override
     def xform(
         self,
-        in_iter: typing.Iterable | None,
-        **params: typing.Any,
-    ) -> typing.Iterable | None:
+        exec_params: IJPtrExecParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
+        **_params: t.Any,
+    ) -> XformItr | None:
         """
         Filter the output only if the destination path is present.
 
@@ -158,25 +208,17 @@ class IterJPointerFilter(base.OpXFormer):
         ct_iter: iterator
            iterator of cell type descriptions
         """
-        fpath = params["path"]
         return (
-            iter(x for x in in_iter if x and self.exists(x, fpath)) if in_iter else None
+            iter(x for x in first_iter if x and self.exists(x, exec_params.path))
+            if first_iter else None
         )
 
+    @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[IJPtrBaseParams]:
+        return cls.FilterParams
 
-#
-# ----- Mapper, Filter and Query Registers ------
-#
-def query_register():
-    return []
-
-
-def xform_register():
-    return [
-        IterJPointerFilter,
-        IterJPatchFilter,
-        JPointerFilter,
-    ]
+    @override
+    @classmethod
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> IJPtrBaseParams:
+        return cls.FilterParams.model_validate(param_dict)

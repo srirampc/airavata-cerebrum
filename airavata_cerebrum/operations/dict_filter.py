@@ -1,19 +1,32 @@
 import logging
-import typing
-import traitlets
+import typing as t
+from pydantic import Field
+from typing_extensions import override
 #
-from .. import base
+from ..base import (
+    CerebrumBaseModel, 
+    XformItr,
+    OpXFormer,
+    NoneParams, 
+    BaseParams,
+)
 
 
 def _log():
     return logging.getLogger(__name__)
 
 
-class IterAttrMapper(base.OpXFormer):
-    class MapperTraits(traitlets.HasTraits):
-        attribute = traitlets.Unicode()
+class IAMInitParams(CerebrumBaseModel):
+    attribute : t.Annotated[str, Field(title='Attribute Selected to Map')]
 
-    def __init__(self, **params):
+IAMBaseParams : t.TypeAlias = BaseParams[IAMInitParams, NoneParams]
+
+class IterAttrMapper(OpXFormer[IAMInitParams, NoneParams]):
+    class MapperParams(IAMBaseParams):
+        init_params: t.Annotated[IAMInitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[NoneParams, Field(title='Exec Params')]
+
+    def __init__(self, init_params: IAMInitParams, **params: t.Any):
         """
         Attribute value mapper
 
@@ -22,14 +35,17 @@ class IterAttrMapper(base.OpXFormer):
         attribute : str
            Attribute of the cell type; key of the cell type descr. dict
         """
-        self.name = __name__ + ".IterAttrMapper"
-        self.attr = params["attribute"]
+        self.name : str = __name__ + ".IterAttrMapper"
+        self.attr: str = init_params.attribute
 
+    @override
     def xform(
         self,
-        in_iter: typing.Iterable | None,
-        **params
-    ) -> typing.Iterable | None:
+        exec_params: NoneParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
+        **_params: t.Any
+    ) -> XformItr | None:
         """
         Get values from cell type descriptions
 
@@ -45,29 +61,80 @@ class IterAttrMapper(base.OpXFormer):
         value_iter: iterator
            iterator of values from cell type descriptions for given attribute
         """
-        if not in_iter:
+        if not first_iter:
             return None
-        return iter(x[self.attr] for x in in_iter)
+        return iter(x[self.attr] for x in first_iter)
 
+    @override
     @classmethod
-    def trait_type(cls):
-        return cls.MapperTraits
+    def params_type(cls) -> type[IAMBaseParams]:
+        return cls.MapperParams
+
+    @override
+    @classmethod
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> IAMBaseParams:
+        return cls.MapperParams.model_validate(param_dict)
 
 
-class IterAttrFilter(base.OpXFormer):
-    class FilterTraits(traitlets.HasTraits):
-        key = traitlets.Unicode()
-        filters = traitlets.List()
+FilterPredicateT : t.TypeAlias = t.Callable[[t.Any, t.Any], bool]
 
-    def __init__(self, **params):
-        self.name = __name__ + ".IterAttrFilter"
-        self.key_fn = lambda x: x
+class IAFInitParams(CerebrumBaseModel):
+    combine : t.Literal['any', 'all'] = 'all'
 
+class IAFExecParams(CerebrumBaseModel):
+    key     : t.Annotated[str | None, Field(title='Key')] = None
+    filters : t.Annotated[
+        list[tuple[str, FilterPredicateT, t.Any]],
+        Field(title='Filters')
+    ] = []
+
+IAFBaseParams : t.TypeAlias = BaseParams[IAFInitParams, IAFExecParams]
+
+class IterAttrFilter(OpXFormer[IAFInitParams, IAFExecParams]):
+    class FilterParams(IAFBaseParams):
+        init_params: t.Annotated[IAFInitParams, Field(title='Init Params')]
+        exec_params: t.Annotated[IAFExecParams, Field(title='Exec Params')]
+
+    PREDICATE_COMBINE : dict[
+        t.Literal['any', 'all'], t.Callable[[t.Any], bool]
+    ] = {
+        'any' : any,
+        'all' : all
+    }
+
+    def __init__(
+        self,
+        init_params: IAFInitParams,
+        **params: t.Any
+    ):
+        self.name : str = __name__ + ".IterAttrFilter"
+        self.combine_fn : t.Callable[[t.Any], bool] = (
+            IterAttrFilter.PREDICATE_COMBINE[init_params.combine]
+        )
+
+    def apply_filter(
+        self,
+        rcdx: dict[str, t.Any],
+        key: str | None,
+        tfilter: tuple[str, FilterPredicateT, t.Any]
+    ) -> bool:
+        if key and key not in rcdx:
+            return False
+        rcdx = rcdx[key] if key else rcdx
+        attr, bin_predicate, val = tfilter
+        return (attr in rcdx) and (
+            bin_predicate(rcdx[attr], val)
+            if key else bin_predicate(rcdx[attr], val)
+        )
+
+    @override
     def xform(
         self,
-        in_iter: typing.Iterable | None,
-        **params: typing.Any,
-    ) -> typing.Iterable | None:
+        exec_params: IAFExecParams,
+        first_iter: XformItr | None,
+        *rest_iter: XformItr | None,
+        **_params: t.Any,
+    ) -> XformItr | None:
         """
         Filter cell type descriptions matching all the values for the given attrs.
 
@@ -90,33 +157,26 @@ class IterAttrFilter(base.OpXFormer):
         ct_iter: iterator
            iterator of cell type descriptions
         """
-        _log().info("CTDbCellAttrFilter Args : %s", params)
-        filters_itr = params["filters"]
-        if params and "key" in params and params["key"]:
-            self.key_fn = lambda x: x[params["key"]]
+        _log().info(
+            "IterAttrFilter Args : (key:%s, filters:%s)",
+            str(exec_params.key),
+            str(exec_params.filters)
+        )
         return iter(
-            x
-            for x in in_iter
-            if x and all(
-                getattr(self.key_fn(x)[attr], bin_op)(val)
-                for attr, bin_op, val in filters_itr
+            rcdx
+            for rcdx in first_iter
+            if rcdx and self.combine_fn(
+                self.apply_filter(rcdx, exec_params.key, tfilter)
+                for tfilter in exec_params.filters
             )
-        ) if in_iter else None
+        ) if first_iter else None
 
+    @override
     @classmethod
-    def trait_type(cls) -> type[traitlets.HasTraits]:
-        return cls.FilterTraits
+    def params_type(cls) -> type[IAFBaseParams]:
+        return cls.FilterParams
 
-
-#
-# ------- Query and Xform Registers -----
-#
-def query_register() -> typing.List[type[base.DbQuery]]:
-    return []
-
-
-def xform_register() -> typing.List[type[base.OpXFormer]]:
-    return [
-        IterAttrMapper,
-        IterAttrFilter,
-    ]
+    @override
+    @classmethod
+    def params_instance(cls, param_dict: dict[str, t.Any]) -> IAFBaseParams:
+        return cls.FilterParams.model_validate(param_dict)
