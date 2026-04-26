@@ -19,10 +19,30 @@ straight-forward to reproduce.
 - **Streamlined Environment**: Ensuring a lightweight, efficient framework for
   both beginners and advanced users alike.
 
+# Install Airavata Cerebrum
+
+Airavata Cerebrum requires python3.10+ environment.
+It is currently tested only in Linux operating system.
+To install from the source, we recommend creating a `conda` environment using
+[miniforge](https://github.com/conda-forge/miniforge) as below:
+
+```
+conda config --add channels conda-forge
+conda create -n cerebrum python=3.10 nodejs
+conda activate cerebrum
+```
+
+To install Airavata Cerebrum from source into the environment created above,
+pip can be used with the git option as follows.
+
+```
+pip install git+https://github.com/apache/airavata-cerebrum.git
+```
+
 # Model Notebooks and Scripts
 
-The resources directory contains the list of notebooks to demonstrate Cerebrum, and
-standalone batch scripts to build/simulate using cerbrum.
+The `resources` directory contains a set of notebooks to demonstrate Cerebrum, and
+also standalone batch scripts that build/simulate models using cerbrum.
 
 ## IPython Notebooks
 
@@ -41,42 +61,34 @@ standalone batch scripts to build/simulate using cerbrum.
 | Simulate Cerebrum V1 model w. BMTK | [V1 script](resources/notebooks/mousev1/simulate_cli.py)          |
 | Simulate Cerebrum V1 model w. NEST | [V1 script](resources/notebooks/mousev1/nest_simulate_cli.py)     |
 
-# Install Airavata Cerebrum
 
-Airavata Cerebrum requires python3.10+ environment.
-It is currently tested only in Linux operating system.
+Please refer to [resources/README.md](resources/notebooks/README.md) for additional 
+installation requirements to run the notebooks. 
 
-To install locally, we recommend to create a virtual environment using
-conda ([miniforge](https://github.com/conda-forge/miniforge) for a faster
-installation) as below:
 
+# Development 
+
+## Installing Environment For Development
+
+Development environment for Airavata Cerebrum can be created as a python3.10+ 
+virtual environment in conda using the `environment.yml` file.
 ```
-conda config --add channels conda-forge
-conda create -n cerebrum python=3.10 nest-simulator mpi4py nodejs
+conda create env -n cerebrum -f environment.yml
 conda activate cerebrum
 ```
 
-nest-simulator should be installed when creating the conda environment
-since there is no PyPI package available for NEST.
+`environment.yml` includes the version of each of the package to make conda's 
+dependency resolution algorithm to run faster. 
 
-Cerebrum depends upon NEST and BMTK, both of which depend upon mpi4py, the python
-interface to MPI. In the above commands, we attempt to install via conda.
-However, in some cases where conda's MPI causes some errors, we recommend
-that MPI is installed from the OS.
-In case of Ubuntu, this can be accomplished by
+## Potential Environment Issues
 
-```
-sudo apt install openmpi-bin  libopenmpi-dev
-```
+### Miniforge `conda` Issue when installed with `spack`
 
-After installing MPI libraries, mpi4py can be installed via pip manually.
+If installing conda with miniforge, in some cases the following error appears:
+`ModuleNotFoundError: No module named 'conda'`
 
-To install Airavata Cerebrum into the environment created above,
-pip can be used with the git option as follows.
-
-```
-pip install git+https://github.com/apache/airavata-cerebrum.git
-```
-
-See [INSTALL.md](INSTALL.md) for details about how to install for a
-development environment and other issues.
+This happens when the conda script (`$CONDA_EXE`)  has in its first line 
+`#!/usr/bin/env python`, which picks up the python from the `cerebrum` environment
+which is currently being installed instead of the base environment. To fix this,
+replace the `/usr/bin/env python` with the python installed in the base 
+environment (generally corresponds of the environment variable `$CONDA_PYTHON_EXE`).
