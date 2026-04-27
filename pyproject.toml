@@ -21,7 +21,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "airavata-cerebrum"
-version = "0.1.2"
+version = "0.1.0"
 description = "Apache Airavata Cerebrum : Integrated Data-driver Modeling for Computational Neuroscience"
 authors = ["Sriram P Chockalingam <srirampc@gatech.edu>"]
 maintainers = ["Apache Airavata Developers <dev@apache.airavata.org>"]
