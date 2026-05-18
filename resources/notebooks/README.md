@@ -34,7 +34,7 @@ sudo apt install openmpi-bin  libopenmpi-dev
 ```
 
 After installing MPI libraries, all the additional dependcies can be
-installed form `environment.yml` as follows:
+installed form `environment.yml` (in this directory) as follows:
 
 ```
 conda env update -n cerebrum --file environment.yml

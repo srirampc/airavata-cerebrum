@@ -30,6 +30,7 @@ maintainers = [
 readme = "README.md"
 homepage = "https://github.com/apache/airavata-cerebrum"
 license = "Apache-2.0"
+license-files = ["LICENSE"]
 keywords = [
     "Data-driven",
     "Computational Neuroscience",

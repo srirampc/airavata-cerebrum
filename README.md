@@ -36,7 +36,7 @@ To install Airavata Cerebrum from source into the environment created above,
 pip can be used with the git option as follows.
 
 ```
-pip install git+https://github.com/apache/airavata-cerebrum.git
+pip install -i https://test.pypi.org/simple/ airavata-cerebrum==0.1.0
 ```
 
 # Model Notebooks and Scripts
