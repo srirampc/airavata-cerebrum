@@ -9,29 +9,43 @@ dependencies:
   # Requirements for airavata cerebrum
   - anndata
   - anywidget
+  - boto3
   - duckdb
   - fastexcel
   - h5py
   - ipywidgets
+  - jupyter
+  - lmfit
   - marimo
   - matplotlib
   - nodejs
+  - numba
   - numpy
   - pandas
+  - pillow
   - polars
   - psutil
   - pydantic
+  - pyqt
   - python-jsonpath
   - pyyaml
+  - seaborn
+  - scikit-image
+  - scikit-learn
   - scipy
+  - sqlalchemy
+  - statsmodels
   - tqdm
   - traitlets
-
   # PIP dependencies
   - pip:
       - allensdk
+      - awitree
+      - neuroanalysis
+      - psycopg2
+      - pyqtgraph
       - typing-extensions
-      - git+https://github.com/alleninstitute/abc_atlas_access
-      - git+https://github.com/alleninstitute/aisynphys
-      - git+https://github.com/srirampc/awitree
-      - git+https://github.com/srirampc/codetiming
+      #- git+https://github.com/alleninstitute/abc_atlas_access
+      #- git+https://github.com/alleninstitute/aisynphys
+      #- git+https://github.com/srirampc/awitree
+      #- git+https://github.com/srirampc/codetiming

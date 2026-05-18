@@ -19,12 +19,14 @@ from pathlib import Path
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from pydantic import Field
-from abc_atlas_access.abc_atlas_cache.abc_project_cache import AbcProjectCache
+from ..ext.abc_atlas_access.abc_atlas_cache.abc_project_cache import (
+    AbcProjectCache
+)
 #
 from ..base import CerebrumBaseModel, DbQuery, BaseParams, QryDBWriter, QryItr
 
-ProcessResult : t.TypeAlias = subprocess.CompletedProcess[bytes]
-NDFloatArray : t.TypeAlias = npt.NDArray[np.floating[t.Any]]
+ProcessResult: t.TypeAlias = subprocess.CompletedProcess[bytes]
+NDFloatArray: t.TypeAlias = npt.NDArray[np.floating[t.Any]]
 DictDataFrame: t.TypeAlias = dict[str, pd.DataFrame]
 
 PARCEL_META_DATA_KEY = "cell_metadata_with_parcellation_annotation"
@@ -325,7 +327,8 @@ def aws_download_file(
     {
      'version': '20230630',
      'relative_path': 'expression_matrices/WMB-10Xv3/20230630',
-     'url': 'https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/expression_matrices/WMB-10Xv3/20230630/',
+     'url':
+     'https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/expression_matrices/WMB-10Xv3/20230630/',
      'view_link':
      'https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/index.html#expression_matrices/WMB-10Xv3/20230630/',
      'total_size': 189424020276
@@ -340,7 +343,8 @@ def aws_download_file(
         {
          'version': '20230630',
          'relative_path': 'expression_matrices/WMB-10Xv3/20230630',
-         'url': 'https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/expression_matrices/WMB-10Xv3/20230630/',
+         'url':
+         'https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/expression_matrices/WMB-10Xv3/20230630/',
          'view_link':
          'https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com/index.html#expression_matrices/WMB-10Xv3/20230630/',
          'total_size': 189424020276
@@ -379,7 +383,7 @@ def download_size(
     dict
         A dictionary containing the file sizes in GB of each of the files.
     """
-    to_gb = float(float(1024) ** 3)
+    to_gb = float(1024 ** 3)
     #
     file_size_dict = {}
     for r in manifest["directory_listing"]:
@@ -395,7 +399,7 @@ def download_size(
 def aws_download_meta_data(
     manifest: dict[str, t.Any],
     download_base: str | Path
-)-> list[ProcessResult]:
+) -> list[ProcessResult]:
     """
     Download all the metadata files using AWS CLI listed in the manifest to
     download_base.
@@ -719,15 +723,16 @@ def gene_expression_matrix(
     adata = anndata.read_h5ad(data_file, backed="r")
     return adata
 
+
 def plot_section(
     xx: NDFloatArray,
     yy: NDFloatArray,
-    cc: str | None =None,
+    cc: str | None=None,
     val: str | None=None,
     fig_width: int=8,
     fig_height: int=8,
     cmap: str | None =None
-)  -> tuple[Figure, Axes]:
+) -> tuple[Figure, Axes]:
     """
     Plot a Section of the MERFISH co-ordinates
     """
@@ -766,14 +771,14 @@ def aggregate_by_metadata(
     gnames: list[str],
     group_value: str,
     sort: bool=False
-)-> pd.DataFrame:
+) -> pd.DataFrame:
     """
     Aggregate gene expression by 'group_value' and report the average gene
     expression values of the list of genes given by 'gnames'
     """
     grouped : pd.DataFrame = df.groupby(
         group_value
-    )[gnames].mean() # pyright: ignore[reportAssignmentType]
+    )[gnames].mean()  # pyright: ignore[reportAssignmentType]
     if sort:
         grouped = grouped.sort_values(by=gnames[0], ascending=False)
     return grouped
@@ -801,7 +806,7 @@ def plot_heatmap(
     im = ax.imshow(
         arr,
         cmap=cmap,
-        aspect="auto", 
+        aspect="auto",
         vmin=lmin,
         vmax=lmax)
     xlabs = df.columns.values
@@ -828,12 +833,17 @@ def valid_genes_symbols(gene_meta: pd.DataFrame) -> list[str]:
     """
     Genes that doesn't contain 'Blank'
     """
-    return gene_meta[~gene_meta.gene_symbol.str.contains("Blank")].gene_symbol.values
+    return (
+        gene_meta[(  # pyrefly: ignore[bad-return]
+            ~gene_meta.gene_symbol.str.contains("Blank")
+        )].gene_symbol.values
+    )
 
 
-def filter_invalid_genes(
+def filter_invalid_genes(  # pyright: ignore[reportUnknownParameterType]
     gene_meta: pd.DataFrame,
-    valid_genes: list[str] | set[str]):
+    valid_genes: list[str] | set[str]
+):
     """
     Select the valid genes
     """
@@ -856,7 +866,7 @@ def predicate_flags_df(area_cell_df: pd.DataFrame,
     """
     pred_dct = {
         flag_column : pred_fn(
-            area_cell_df[select_col], # pyright: ignore[reportArgumentType]
+            area_cell_df[select_col],  # pyright: ignore[reportArgumentType]
             flag_key
         )
         for flag_column, flag_key in flag_key_map.items()
@@ -900,7 +910,7 @@ def cell_meta_subclass_flags(
     pred_subclass = {}
     for kx, subx in subclass_mapset.items():
         pred_subclass[kx] = (
-            area_cell_df["subclass"].isin(subx) # pyright: ignore[reportArgumentType]
+            area_cell_df["subclass"].isin(subx)  # pyright: ignore[reportArgumentType]
         )
     return pred_subclass
 
@@ -975,6 +985,7 @@ def cell_meta_type_ratios(
         ratio_df[fraction_col] = area_sumdf[colx] / area_sumdf[GLUT]
     return ratio_df
 
+
 def region_ccf_cell_types(
     cell_ccf: pd.DataFrame,
     region_list: list[str]
@@ -1001,8 +1012,8 @@ def region_ccf_cell_types(
         region_ei_ctx = region_ei_df.groupby(PARCELLATION_SUBSTRUCTURE).sum()
         region_ei_ctx["T"] = (
             region_ei_ctx["E"] + region_ei_ctx["I"] + region_ei_ctx["O"]
-        )  # type:ignore
-        region_ei_ctx["EI"] = region_ei_ctx["E"] + region_ei_ctx["I"]  # type: ignore
+        )
+        region_ei_ctx["EI"] = region_ei_ctx["E"] + region_ei_ctx["I"]
         n_region_layers = len(region_df)
         region_name = region
         # 3. Compute the ratios
@@ -1021,8 +1032,8 @@ def region_ccf_cell_types(
 def region_cell_type_ratios(
     region_name: str,
     download_base: str,
-    merfish_ccf_data_key: str=MERFISH_CCF_DATASET_KEY,
-    parcel_meta_data_key: str=PARCEL_META_DATA_KEY
+    merfish_ccf_data_key: str = MERFISH_CCF_DATASET_KEY,
+    parcel_meta_data_key: str = PARCEL_META_DATA_KEY
 ):
     # Cell Meta and CCF Meta data
     ccf_meta_file = abc_cache_download_meta(download_base, merfish_ccf_data_key,
@@ -1036,10 +1047,13 @@ def region_cell_type_ratios(
 class InitParams(CerebrumBaseModel):
     download_base : t.Annotated[str, Field(title="Download Base")]
 
+
 class ExecParams(CerebrumBaseModel):
     region  : t.Annotated[list[str] , Field(title="List of Regions")]
 
-CCFParamsBase : t.TypeAlias = BaseParams[InitParams,  ExecParams] 
+
+CCFParamsBase : t.TypeAlias = BaseParams[InitParams, ExecParams]
+
 
 class ABCDbMERFISH_CCFQuery(DbQuery[InitParams, ExecParams]):
     class QryParams(CCFParamsBase):
@@ -1055,15 +1069,18 @@ class ABCDbMERFISH_CCFQuery(DbQuery[InitParams, ExecParams]):
            File location to store the manifest and the cells.json files
 
         """
-        self.name : str = __name__ + ".ABCDbMERFISHQuery"
-        self.download_base : str = init_params.download_base # params["download_base"]
-        self.pcache : AbcProjectCache = AbcProjectCache.from_s3_cache(
+        self.name: str = __name__ + ".ABCDbMERFISHQuery"
+        # params["download_base"]
+        self.download_base: str = init_params.download_base
+        self.pcache: AbcProjectCache = AbcProjectCache.from_s3_cache(
             self.download_base
         )
         self.pcache.load_latest_manifest()
         self.pcache.get_directory_metadata(MERFISH_CCF_DATASET_KEY)
-        self.ccf_meta_file : Path = self.pcache.get_metadata_path(
-            MERFISH_CCF_DATASET_KEY, PARCEL_META_DATA_KEY
+        self.ccf_meta_file: Path = (
+            self.pcache.get_metadata_path(  # pyright: ignore[reportAttributeAccessIssue]
+                MERFISH_CCF_DATASET_KEY, PARCEL_META_DATA_KEY
+            )
         )
 
     @override
@@ -1093,7 +1110,7 @@ class ABCDbMERFISH_CCFQuery(DbQuery[InitParams, ExecParams]):
         # default_args = {}
         # rarg = {**default_args, **params} if params else default_args
         _log().info("ABCDbMERFISH_CCFQuery Args : %s", str(exec_params))
-        region_list =  exec_params.region # rarg["region"]
+        region_list = exec_params.region  # rarg["region"]
         #
         mfish_ccf_df = pd.read_csv(self.ccf_meta_file)
         _, _, region_frac_map = region_ccf_cell_types(mfish_ccf_df, region_list)
@@ -1146,7 +1163,7 @@ class DFBuilder:
 
 class ABCDuckDBWriter(QryDBWriter):
     def __init__(self, db_conn: duckdb.DuckDBPyConnection):
-        self.conn : duckdb.DuckDBPyConnection = db_conn
+        self.conn: duckdb.DuckDBPyConnection = db_conn
 
     @override
     def write(
@@ -1154,7 +1171,7 @@ class ABCDuckDBWriter(QryDBWriter):
         in_iter: QryItr | None,
         **_params: t.Any,
     ) -> None:
-        result_df = DFBuilder.build(in_iter) # pyright: ignore[reportUnusedVariable]
+        result_df = DFBuilder.build(in_iter)  # pyright: ignore[reportUnusedVariable]
         self.conn.execute(
             "CREATE OR REPLACE TABLE abm_mouse AS SELECT * FROM result_df"
         )

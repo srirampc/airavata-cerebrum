@@ -42,7 +42,7 @@ from bmtk.builder.index_builders import create_index_in_memory
 from bmtk.builder.edges_sorter import sort_edges
 from bmtk.builder.connection_map import ConnectionMap
 
-from codetiming import Timer
+from airavata_cerebrum.ext.codetiming import Timer
 
 from .comm_interface import (
     default_comm,

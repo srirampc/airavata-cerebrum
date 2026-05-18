@@ -8,7 +8,7 @@ from typing import NamedTuple
 from bmtk.builder.connection_map import ConnectionMap
 from bmtk.builder.node import Node
 
-from codetiming import Timer
+from airavata_cerebrum.ext.codetiming import Timer
 
 NPIntArray = npt.NDArray[np.integer[t.Any]]
 

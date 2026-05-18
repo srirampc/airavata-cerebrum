@@ -8,7 +8,7 @@ import typing as t
 from collections.abc import Iterable
 from abc import abstractmethod, ABCMeta
 
-from codetiming import Timer
+from airavata_cerebrum.ext.codetiming import Timer
 
 from bmtk.builder.node_pool import NodePool
 from bmtk.builder.connection_map import ConnectionMap

@@ -18,12 +18,13 @@ from scipy.stats import yulesimon, multivariate_normal
 from scipy.special import erfinv
 # from numba import njit, jit
 #
-from codetiming import Timer
+from airavata_cerebrum.ext.codetiming import Timer
 
 from airavata_cerebrum.util.profile import log_with_timestamp
 
 NPIntArray: t.TypeAlias = npt.NDArray[np.integer[t.Any]]
 NPFloatArray: t.TypeAlias = npt.NDArray[np.floating[t.Any]]
+
 
 def _log():
     return logging.getLogger(__name__)

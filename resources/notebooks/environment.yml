@@ -7,49 +7,19 @@ dependencies:
   - pip
 
   # Requirements for airavata cerebrum
-  - altair
-  - anndata
-  - anywidget
-  - duckdb
-  - fastexcel
-  - ipywidgets
-  - ipytree
   - jupyter
   - leidenalg
   - nest-simulator
-  - nodejs
-  - numba
-  - numpy
   - marimo
-  - matplotlib
   - mpi4py
   - openmpi-mpicc
-  - openpyxl
-  - pandas
-  - polars
   - pyarrow
-  - pydantic
-  - pyqtgraph
   - python-dateutil
   - python-igraph
-  - python-jsonpath
-  - pyyaml
-  - requests
-  - scanpy
-  - scikit-learn
-  - scipy
-  - traitlets
-  - tqdm
 
   # PIP dependencies
   - pip:
-      - allensdk
       - bmtk
-      - neuroanalysis
       - parse
       - psutil
-      - git+https://github.com/alleninstitute/abc_atlas_access
-      - git+https://github.com/alleninstitute/aisynphys
-      - git+https://github.com/srirampc/awitree
-      - git+https://github.com/srirampc/codetiming
       - git+https://github.com/srirampc/airavata-cerebrum

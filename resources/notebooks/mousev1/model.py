@@ -32,7 +32,7 @@ from .operations import (
 from .dm_network import MVParMethod
 from .comm_interface import default_comm
 
-from codetiming import Timer
+from airavata_cerebrum.ext.codetiming import Timer
 
 
 def _log():

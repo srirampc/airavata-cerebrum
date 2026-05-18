@@ -32,12 +32,15 @@ def _log():
 class CCacheInitParams(CerebrumBaseModel):
     download_base : t.Annotated[str, Field(title="Download Base Dir.")]
 
+
 class CCacheExecParams(CerebrumBaseModel):
     species  : t.Annotated[str | None, Field(title="Species")] = None
     manifest : t.Annotated[str, Field(title="Manifest File")] = "manifest.json"
-    cells    : t.Annotated[str, Field(title="Cells json File")]  = "cells.json"
+    cells    : t.Annotated[str, Field(title="Cells json File")] = "cells.json"
 
-CCacheBaseParams : t.TypeAlias = BaseParams[CCacheInitParams, CCacheExecParams] 
+
+CCacheBaseParams : t.TypeAlias = BaseParams[CCacheInitParams, CCacheExecParams]
+
 
 class CTDbCellCacheQuery(DbQuery[CCacheInitParams, CCacheExecParams]):
     class QryParams(CCacheBaseParams):
@@ -127,7 +130,9 @@ class CTDbCellCacheQuery(DbQuery[CCacheInitParams, CCacheExecParams]):
 class CellAPIExecParams(CerebrumBaseModel):
     species   : t.Annotated[str | None, Field(title="Species")] = None
 
-CAPIBaseParams : t.TypeAlias = BaseParams[NoneParams, CellAPIExecParams] 
+
+CAPIBaseParams : t.TypeAlias = BaseParams[NoneParams, CellAPIExecParams]
+
 
 class CTDbCellApiQuery(DbQuery[NoneParams, CellAPIExecParams]):
     class QryParams(CAPIBaseParams):
@@ -184,12 +189,13 @@ class CTDbCellApiQuery(DbQuery[NoneParams, CellAPIExecParams]):
         return cls.QryParams.model_validate(param_dict)
 
 
-
 class GlifApiExecParams(CerebrumBaseModel):
     key   : t.Annotated[str, Field(title="Query Key")]
     first : t.Annotated[bool, Field(title="Select Only First")]
 
-GlifApiBaseParams : t.TypeAlias = BaseParams[NoneParams, GlifApiExecParams] 
+
+GlifApiBaseParams : t.TypeAlias = BaseParams[NoneParams, GlifApiExecParams]
+
 
 class CTDbGlifApiQuery(DbQuery[NoneParams, GlifApiExecParams]):
     class QryParams(GlifApiBaseParams):
@@ -270,7 +276,9 @@ class GAMCExecParams(CerebrumBaseModel):
     suffix    : t.Annotated[str, Field(title="Output Suffix")]
     output_dir: t.Annotated[str, Field(title="Output Dir.")]
 
-GAMCBaseParams : t.TypeAlias = BaseParams[NoneParams, GAMCExecParams] 
+
+GAMCBaseParams : t.TypeAlias = BaseParams[NoneParams, GAMCExecParams]
+
 
 class CTDbGlifApiModelConfigQry(DbQuery[NoneParams, GAMCExecParams]):
     class QryParams(GAMCBaseParams):
@@ -303,7 +311,7 @@ class CTDbGlifApiModelConfigQry(DbQuery[NoneParams, GAMCExecParams]):
     ) -> QryItr | None:
         if not first_iter:
             return None
-        self.suffix : str= exec_params.suffix
+        self.suffix : str = exec_params.suffix
         self.output_dir : str = exec_params.output_dir
         _log().debug("CTDbGlifApiQuery Args : %s", str(exec_params))
         # Create Config
@@ -324,11 +332,12 @@ class CTDbGlifApiModelConfigQry(DbQuery[NoneParams, GAMCExecParams]):
 
 class DFBuilder:
     TableTypes: t.TypeAlias = t.Literal["ct", "glif", "nm", "nmr"]
+
     @staticmethod
     def clean_nrn_models(nrn_dct: dict[str, t.Any]):
         return exclude_keys(
             (
-                nrn_dct | 
+                nrn_dct |
                 prefix_keys(
                     nrn_dct['neuronal_model_template'],
                     'template'
@@ -340,7 +349,7 @@ class DFBuilder:
                 'well_known_files'
             ])
         )
-    
+
     @staticmethod
     def clean_nrn_model_runs(nrn_dict: dict[str, t.Any]):
         return (
@@ -350,8 +359,7 @@ class DFBuilder:
             )
             for nrx in nrn_dict["neuronal_model_runs"]
         )
-     
-    
+
     @staticmethod
     def nm_row(glf_dct: dict[str, t.Any] | None):
         if glf_dct is None:
@@ -360,23 +368,23 @@ class DFBuilder:
             DFBuilder.clean_nrn_models(nmx)
             for nmx in glf_dct['neuronal_models']
         )
-    
+
     @staticmethod
     def nmruns_row(glf_dct: dict[str, t.Any] | None):
         if glf_dct is None:
             return iter([])
         return itertools.chain.from_iterable(
-            DFBuilder.clean_nrn_model_runs(nmx)    
+            DFBuilder.clean_nrn_model_runs(nmx)
             for nmx in glf_dct['neuronal_models']
         )
-        
+
     @staticmethod
-    def glif_row(glf_dct: dict[str,t.Any]):
+    def glif_row(glf_dct: dict[str, t.Any]):
         return exclude_keys(
             glf_dct,
             set(["neuronal_models"])
         )
-    
+
     @staticmethod
     def build(
         in_iter: QryItr | None,
@@ -406,7 +414,7 @@ class DFBuilder:
                 return pl.DataFrame(
                     itertools.chain.from_iterable(
                         DFBuilder.nmruns_row(tgx['glif'])
-                        for tgx in in_iter 
+                        for tgx in in_iter
                     )
                 )
 

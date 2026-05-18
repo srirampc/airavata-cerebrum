@@ -4,7 +4,7 @@ import typing as t
 import pydantic
 #
 from pathlib import Path
-from codetiming import Timer, TimerConfig
+from airavata_cerebrum.ext.codetiming import Timer, TimerConfig
 #
 from airavata_cerebrum.recipe import ModelRecipe, RecipeSetup
 from airavata_cerebrum.model.structure import Network
@@ -23,7 +23,9 @@ from .utils import MVParMethod
 def _log():
     return logging.getLogger(__name__)
 
-NetworkConstructor: t.TypeAlias = t.Literal['DenseNetwork', 'MVDenseNetwork'] 
+
+NetworkConstructor: t.TypeAlias = t.Literal['DenseNetwork', 'MVDenseNetwork']
+
 
 def get_build_adaptor(nc: NetworkConstructor):
     from bmtk.builder.network_adaptors.dm_network import DenseNetwork
@@ -46,7 +48,7 @@ class CerebrumRecipeRunner(pydantic.BaseModel):
     base_dir: Path = Path("./")
     recipe_dir: Path = Path("./model_recipes/v1")
     recipe_output_dir: Path | None = Path("./model_data/v1")
-    levels: list[str] = ["L1",  "L23", "L4", "L5", "L6"]
+    levels: list[str] = ["L1", "L23", "L4", "L5", "L6"]
     recipe_levels: dict[str, str | Path] = {
         "L1"  : "recipe_dm_l1.json",
         "L23" : "recipe_dm_l23.json",
@@ -85,7 +87,7 @@ class CerebrumRecipeRunner(pydantic.BaseModel):
         ]
         return {
             "recipe": full_recipe,
-            "templates": [ "recipe_template.json" ]
+            "templates": ["recipe_template.json"]
         }
 
     @property
@@ -108,7 +110,7 @@ class CerebrumRecipeRunner(pydantic.BaseModel):
 
     def model_recipe(self) -> ModelRecipe:
         md_recipe_setup = self.recipe_setup()
-        custom_mod_struct = Network.from_file_list(self.custom_mod) 
+        custom_mod_struct = Network.from_file_list(self.custom_mod)
         return ModelRecipe(
             recipe_setup=md_recipe_setup,
             region_mapper=V1RegionMapper,
@@ -147,7 +149,7 @@ class CerebrumRecipeRunner(pydantic.BaseModel):
 
 @Timer(name="v1_build.mdr_build", logger=None)
 def mdr_build(
-    mdr:ModelRecipe,
+    mdr: ModelRecipe,
     build_adaptor_class: NetworkConstructor,
     parallel_method: MVParMethod,
 ):
@@ -155,6 +157,7 @@ def mdr_build(
         adaptor_cls=get_build_adaptor(build_adaptor_class),
         parallel_method=parallel_method,
     )
+
 
 def recipe_bmtk(
     mdrcp: ModelRecipe,
@@ -167,7 +170,7 @@ def recipe_bmtk(
     mdr_build(mdrcp, build_adaptor_class, parallel_method)
     comm.log_profile_summary(
         _log(),
-        logging.DEBUG, 
+        logging.DEBUG,
         f"{mdrcp.recipe_setup.base_dir}/runtimes_{comm.size}.csv",
         f"{mdrcp.recipe_setup.base_dir}/mem_used_{comm.size}.csv",
     )
@@ -183,13 +186,13 @@ def struct_bmtk(rcp_set: CerebrumRecipeRunner):
     mdr_build(mdrcp, rcp_set.build_adaptor_class, rcp_set.build_parallel_method)
     comm.log_profile_summary(
         _log(),
-        logging.DEBUG, 
+        logging.DEBUG,
         f"{mdrcp.recipe_setup.base_dir}/runtimes_{comm.size}.csv",
         f"{mdrcp.recipe_setup.base_dir}/mem_used_{comm.size}.csv",
     )
 
 
-def data_mapped_model(levels: tuple[str,...]=("L1", "L23", "L4")):
+def data_mapped_model(levels: tuple[str, ...]=("L1", "L23", "L4")):
     rcp_set = CerebrumRecipeRunner(levels=list(levels))
     mdrcp = rcp_set.model_recipe()
     mdrcp.map_source_data()
@@ -197,15 +200,16 @@ def data_mapped_model(levels: tuple[str,...]=("L1", "L23", "L4")):
     mdrcp.apply_mod(rcp_set.ncells)
     mdrcp.build_network()
 
+
 def load_recipe_runner(input_config_file: str):
     return CerebrumRecipeRunner.model_validate(
         loadio(input_config_file)
     )
 
 
-#def run_sonata():
-#    from .v1_nest_simulate import load_nest_sonata
-#    return load_nest_sonata()
+# def run_sonata():
+#     from .v1_nest_simulate import load_nest_sonata
+#     return load_nest_sonata()
 
 def main(input_config_file: str):
     rcp_runner = load_recipe_runner(input_config_file)

@@ -1,0 +1,9 @@
+[submodule "ext/abc_atlas_access"]
+	path = ext/abc_atlas_access
+	url = https://github.com/srirampc/abc_atlas_access.git
+[submodule "ext/aisynphys"]
+	path = ext/aisynphys
+	url = https://github.com/srirampc/aisynphys.git
+[submodule "ext/codetiming"]
+	path = ext/codetiming
+	url = https://github.com/srirampc/codetiming/
