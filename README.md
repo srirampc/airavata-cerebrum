@@ -22,7 +22,7 @@ straight-forward to reproduce.
 # Install Airavata Cerebrum
 
 Airavata Cerebrum requires python3.10+ environment.
-It is currently tested only in Linux operating system.
+It is currently tested only in the Linux operating system.
 To install from the source, we recommend creating a `conda` environment using
 [miniforge](https://github.com/conda-forge/miniforge) as below:
 
@@ -33,37 +33,21 @@ conda activate cerebrum
 ```
 
 To install Airavata Cerebrum from source into the environment created above,
-pip can be used with the git option as follows.
+install from pypi using pip.
 
 ```
-pip install -i https://test.pypi.org/simple/ airavata-cerebrum==0.1.0
+pip install -i https://test.pypi.org/simple/ airavata-cerebrum
 ```
 
 # Model Notebooks and Scripts
 
-The `resources` directory contains a set of notebooks to demonstrate Cerebrum, and
+The `resources` directory in our 
+[github repo](https://github.com/apache/airavata-cerebrum/tree/main/resources) 
+contains a set of notebooks to demonstrate Cerebrum, and
 also standalone batch scripts that build/simulate models using cerbrum.
-
-## IPython Notebooks
-
-| Model                                     | Notebook                                                          |
-| ----------------------------------------- | ----------------------------------------------------------------- |
-| Demo of Cerebrum V1L4 model               | [V1 L4 IPython Notebook](resources/notebooks/V1L4-Notebook.ipynb) |
-| Demo of Cerebrum V1 model                 | [V1 IPython Notebook](resources/notebooks/V1-Notebook.ipynb)      |
-| Demo of Cerebrum V1 model on Cybershuttle | [V1 IPython Notebook](resources/notebooks/V1-CS-Notebook.ipynb)   |
-| Demo of WGN Sleep model                   | [WGN Sleep IPython Notebook](resources/notebooks/WGN-Sleep.ipynb) |
-
-## Command-line scripts
-
-| Model                              | Scripts                                                           |
-| ---------------------------------- | ----------------------------------------------------------------- |
-| Build/Simulate Cerebrum V1 model   | [V1 script](resources/notebooks/mousev1/cli.py)                   |
-| Simulate Cerebrum V1 model w. BMTK | [V1 script](resources/notebooks/mousev1/simulate_cli.py)          |
-| Simulate Cerebrum V1 model w. NEST | [V1 script](resources/notebooks/mousev1/nest_simulate_cli.py)     |
-
-
-Please refer to [resources/README.md](resources/notebooks/README.md) for additional 
-installation requirements to run the notebooks. 
+Please refer to 
+[resources/README.md](https://github.com/apache/airavata-cerebrum/tree/main/notebooks/README.md)
+for additional installation requirements to run the notebooks. 
 
 
 # Development 
