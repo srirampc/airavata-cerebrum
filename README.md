@@ -46,7 +46,7 @@ The `resources` directory in our
 contains a set of notebooks to demonstrate Cerebrum, and
 also standalone batch scripts that build/simulate models using cerbrum.
 Please refer to 
-[resources/README.md](https://github.com/apache/airavata-cerebrum/tree/main/notebooks/README.md)
+[resources/README.md](https://github.com/apache/airavata-cerebrum/tree/main/resources/notebooks/README.md)
 for additional installation requirements to run the notebooks. 
 
 
