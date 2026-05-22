@@ -6,4 +6,4 @@
 	url = https://github.com/srirampc/aisynphys.git
 [submodule "ext/codetiming"]
 	path = ext/codetiming
-	url = https://github.com/srirampc/codetiming/
+	url = https://github.com/srirampc/codetiming.git

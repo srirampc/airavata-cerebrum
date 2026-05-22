@@ -21,12 +21,12 @@ straight-forward to reproduce.
 
 # Install Airavata Cerebrum
 
-Airavata Cerebrum requires python3.10+ environment.
+Airavata Cerebrum requires python v3.10 environment.
 It is currently tested only in the Linux operating system.
 To install from the source, we recommend creating a `conda` environment using
 [miniforge](https://github.com/conda-forge/miniforge) as below:
 
-```
+```sh
 conda config --add channels conda-forge
 conda create -n cerebrum python=3.10 nodejs
 conda activate cerebrum
@@ -35,8 +35,8 @@ conda activate cerebrum
 To install Airavata Cerebrum from source into the environment created above,
 install from pypi using pip.
 
-```
-pip install -i https://test.pypi.org/simple/ airavata-cerebrum
+```sh
+pip install airavata-cerebrum
 ```
 
 # Model Notebooks and Scripts
@@ -52,17 +52,56 @@ for additional installation requirements to run the notebooks.
 
 # Development 
 
+## Clone the source github repo
+`airavata-cerebrum` includes three submodules:
+[abc_atlas_access](https://github.com/srirampc/abc_atlas_access),
+[aisynphys](https://github.com/srirampc/aisynphys) and
+[codetiming](https://github.com/srirampc/codetiming).
+Clone the repo with all submodules  as below.
+```sh
+git clone --recurse-submodules https://github.com/apache/airavata-cerebrum.git
+```
+
+All the dependencies are included with in the `airavata_cerebrum/ext` namespace.
+To get these python module to work in developement environment, create the following
+links:
+```sh
+cd airavata-cerebrum/airavata_cerebrum
+ln -s ../../ext/codetiming/codetiming/
+ln -s ../../ext/abc_atlas_access/src/abc_atlas_access/
+ln -s ../../ext/aisynphys/aisynphys/
+ln -s ../../ext/abc_atlas_access/src/manifest_builder/
+```
+
 ## Installing Environment For Development
 
-Development environment for Airavata Cerebrum can be created as a python3.10+ 
-virtual environment in conda using the `environment.yml` file.
-```
-conda create env -n cerebrum -f environment.yml
-conda activate cerebrum
+Development environment for Airavata Cerebrum is created as a python3.10+ 
+virtual environment in `conda` using the `environment.yml` file.
+```sh
+conda config --add channels conda-forge
+conda env create -n cbmdev -f environment.yml
+conda activate cbmdev
 ```
 
 `environment.yml` includes the version of each of the package to make conda's 
 dependency resolution algorithm to run faster. 
+
+## Buliding dist/wheels
+
+We use [poetry](https://python-poetry.org/) a build tool which can be buit 
+as follows.
+Intall the follwing dependencies for building the dist/wheels:
+```sh
+pip install build
+pip install twine==6.0.1
+```
+
+Build and upload to pypi:
+```sh
+rm -rf dist; python3 -m build
+python3 -m twine upload --repository pypi dist/* --verbose
+```
+
 
 ## Potential Environment Issues
 
