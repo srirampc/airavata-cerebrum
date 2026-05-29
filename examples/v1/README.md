@@ -2,14 +2,15 @@
 
 ## Contents
 
-0. [Installation](#installation)
-1. [Introduction to Airavata Cerebrum](#airavata-cerebrum-introduction)
-2. [Recipes and Builder Classess](#cerebrum-recipe-and-model-builders)
+1. [Installation](#installation)
+2. [Introduction to Airavata Cerebrum](#introduction-to-airavata-cerebrum)
+3. [Recipes and Builder Classess](#cerebrum-recipe-and-model-builders)
    - [Recipe Description](#recipe-description)
      - [Recipe Data Sources](#recipe-data-sources)
      - [Recipe Data2Model map](#recipe-data2model-maps)
      - [Recipe Custom Modifications](#recipe-custom-modifications)
    - [Model Builders](#model-builders-description)
+4. [Notebooks and Scripts](#notebooks-and-scripts)
 
 ## Installation
 
@@ -30,7 +31,7 @@ conda activate arvcbm
 ```
 
 
-## Airavata Cerebrum Introduction
+## Introduction to Airavata Cerebrum
 
 Airavata Cerebrum is a suite of tools designed to effectively build data-driven
 computational models. Key components of the software suite are as follows:
@@ -104,7 +105,7 @@ model.
 
 Data source section of the recipe
 The following snippet shows a top-level view of the data sources section for
-Allen Institute V1 L4 model.
+Allen Institute V1 model.
 
 ```YAML
 source_data:
@@ -388,3 +389,39 @@ For building the final skeletion, requires three class
 For the final step, a builder method that accepts the final model and generates
 all location of the all the neurons, synapses between the neurons and saves them
 in the SONATA format.
+
+
+## Notebooks and Scripts
+
+The notebooks demonstrate the use of airavata-cerebrum to gather 
+data from Brain Atlases and other databases,  build the model and 
+simulate using NEST simulator.
+
+### IPython Notebooks
+
+| Model                             | Notebook                                      |
+| --------------------------------- | --------------------------------------------- |
+| Complete V1 model                 | [V1 IPython Notebook](V1-Notebook.ipynb)      |
+| Complete V1 model w. Cybershuttle | [V1 IPython Notebook](V1-CS-Notebook.ipynb)   |
+| V1 model restricted to L4         | [V1 L4 IPython Notebook](V1L4-Notebook.ipynb) |
+
+### marimo Notebooks
+
+| Model                      | Notebook                                  |
+| -------------------------- | ----------------------------------------- |
+| Complete V1 model          | [V1 marimo Notebook](marimo_v1.py)        |
+| Data views w.r.t V1        | [V1 db marimo Notebook](marimo_v1l4db.py) |
+| V1 model  resricted to L4  | [V1 L4 marimo Notebook](marimo_v1l4.py)   |
+
+### Command-line scripts
+
+The following standalone scripts can be used to build/simulate V1 models 
+via command line or as a batch run.
+
+| Model                              | Scripts                                    |
+| ---------------------------------- | ------------------------------------------ |
+| Build/Simulate Cerebrum V1 model   | [V1 script](src/cli.py)                    |
+| Simulate Cerebrum V1 model w. BMTK | [V1 BMTK script](src/simulate_cli.py)      |
+| Simulate Cerebrum V1 model w. NEST | [V1 NEST script](src/nest_simulate_cli.py) |
+
+

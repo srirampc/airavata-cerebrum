@@ -1,9 +1,9 @@
 {
   "manifest": {
     "$BASE_DIR": "./builds/v1030/",
-    "$NETWORK_DIR": "./builds/v1030/v1/network",
+    "$NETWORK_DIR": "./builds/v1030/network",
     "$COMPONENTS_DIR": "./components",
-    "$OUTPUT_DIR": "./builds/v1030/v1/output",
+    "$OUTPUT_DIR": "./builds/v1030/output",
     "$BKG_DIR": "./bkg",
     "$LGN_DIR": "./lgn"
   },
@@ -26,10 +26,10 @@
     }
   },
   "output": {
-    "log_file": "./builds/v1030/v1/output/log.txt",
-    "spikes_file": "./builds/v1030/v1/output/spikes.h5",
-    "spikes_file_csv": "./builds/v1030/v1/output/spikes.csv",
-    "output_dir": "./builds/v1030/v1/output",
+    "log_file": "./builds/v1030/output/log.txt",
+    "spikes_file": "./builds/v1030/output/spikes.h5",
+    "spikes_file_csv": "./builds/v1030/output/spikes.csv",
+    "output_dir": "./builds/v1030/output",
     "overwrite_output_dir": true,
     "quiet_simulator": true
   },
@@ -41,30 +41,30 @@
   "networks": {
     "nodes": [
       {
-        "nodes_file": "./builds/v1030/v1/network/v1_nodes.h5",
-        "node_types_file": "./builds/v1030/v1/network/v1_node_types.csv"
+        "nodes_file": "./builds/v1030/network/v1_nodes.h5",
+        "node_types_file": "./builds/v1030/network/v1_node_types.csv"
       },
       {
-        "nodes_file": "./builds/v1030/v1/network/lgn_nodes.h5",
-        "node_types_file": "./builds/v1030/v1/network/lgn_node_types.csv"
+        "nodes_file": "./builds/v1030/network/lgn_nodes.h5",
+        "node_types_file": "./builds/v1030/network/lgn_node_types.csv"
       },
       {
-        "nodes_file": "./builds/v1030/v1/network/bkg_nodes.h5",
-        "node_types_file": "./builds/v1030/v1/network/bkg_node_types.csv"
+        "nodes_file": "./builds/v1030/network/bkg_nodes.h5",
+        "node_types_file": "./builds/v1030/network/bkg_node_types.csv"
       }
     ],
     "edges": [
       {
-        "edges_file": "./builds/v1030/v1/network/v1_v1_edges.h5",
-        "edge_types_file": "./builds/v1030/v1/network/v1_v1_edge_types.csv"
+        "edges_file": "./builds/v1030/network/v1_v1_edges.h5",
+        "edge_types_file": "./builds/v1030/network/v1_v1_edge_types.csv"
       },
       {
-        "edges_file": "./builds/v1030/v1/network/lgn_v1_edges.h5",
-        "edge_types_file": "./builds/v1030/v1/network/lgn_v1_edge_types.csv"
+        "edges_file": "./builds/v1030/network/lgn_v1_edges.h5",
+        "edge_types_file": "./builds/v1030/network/lgn_v1_edge_types.csv"
       },
       {
-        "edges_file": "./builds/v1030/v1/network/bkg_v1_edges.h5",
-        "edge_types_file": "./builds/v1030/v1/network/bkg_v1_edge_types.csv"
+        "edges_file": "./builds/v1030/network/bkg_v1_edges.h5",
+        "edge_types_file": "./builds/v1030/network/bkg_v1_edge_types.csv"
       }
     ]
   }
