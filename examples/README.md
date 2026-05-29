@@ -1,11 +1,11 @@
 # Examples of `airavata-cerebrum` applications
 
-This repository contains jupyter notebooks, marimo notebooks and 
+This folder contains jupyter notebooks, marimo notebooks and 
 other standalone scripts demonstating the use of
 [airavata-cerebrum](https://github.com/apache/airavata-cerebrum) 
 software in building the neuroscience models. 
 
-## Table of Contents
+## Contents
 
 1. [Installation](#install-airavata-cerebrum-and-dependencies)
 2. [V1 Model](#v1-model)
@@ -24,8 +24,8 @@ All these dependencies can be installed via conda using the given
 `environment.yml` (in this directory) as follows:
 
 ```sh
-conda env create -n arvcbm -f environment.yml
-conda activate arvcbm
+conda env create -n arv_cbm -f environment.yml
+conda activate arv_cbm
 ```
 
 See [below](#installation-issues) for common installation issues.
@@ -42,28 +42,31 @@ for a detail discussion on each phase of model construction.
 
 | Model                             | Notebook                                         |
 | --------------------------------- | ------------------------------------------------ |
-| Cerebrum V1 model                 | [V1 IPython Notebook](v1/V1-Notebook.ipynb)      |
-| Cerebrum V1 model w. Cybershuttle | [V1 IPython Notebook](v1/V1-CS-Notebook.ipynb)   |
-| Cerebrum V1L4 model               | [V1 L4 IPython Notebook](v1/V1L4-Notebook.ipynb) |
+| Complete V1 model                 | [V1 IPython Notebook](v1/V1-Notebook.ipynb)      |
+| Complete V1 model w. Cybershuttle | [V1 IPython Notebook](v1/V1-CS-Notebook.ipynb)   |
+| V1 model restricted to L4         | [V1 L4 IPython Notebook](v1/V1L4-Notebook.ipynb) |
 
 ### marimo Notebooks
 
-| Model                   | Notebook                                     |
-| ----------------------- | -------------------------------------------- |
-| Cerebrum V1 model       | [V1 marimo Notebook](v1/marimo_v1.py)        |
-| Cerebrum db view for V1 | [V1 db marimo Notebook](v1/marimo_v1l4db.py) |
-| Cerebrum V1L4 model     | [V1 L4 marimo Notebook](v1/marimo_v1l4.py)   |
+| Model                      | Notebook                                     |
+| -------------------------- | -------------------------------------------- |
+| Complete V1 model          | [V1 marimo Notebook](v1/marimo_v1.py)        |
+| Data views w.r.t V1        | [V1 db marimo Notebook](v1/marimo_v1l4db.py) |
+| V1 model  resricted to L4  | [V1 L4 marimo Notebook](v1/marimo_v1l4.py)   |
+
+
 
 ### Command-line scripts
 
 The following standalone scripts can be used to build/simulate V1 models 
 via command line or as a batch run.
 
-| Model                              | Scripts                                  |
-| ---------------------------------- | ---------------------------------------- |
-| Build/Simulate Cerebrum V1 model   | [V1 script](v1/cerebrumv1.py)            |
-| Simulate Cerebrum V1 model w. BMTK | [V1 BMTK script](v1/v1_bmtk_simulate.py) |
-| Simulate Cerebrum V1 model w. NEST | [V1 NEST script](v1/v1_nest_simulate.py) |
+
+| Model                              | Scripts                                       |
+| ---------------------------------- | --------------------------------------------- |
+| Build/Simulate Cerebrum V1 model   | [V1 script](v1/src/cli.py)                    |
+| Simulate Cerebrum V1 model w. BMTK | [V1 BMTK script](v1/src/simulate_cli.py)      |
+| Simulate Cerebrum V1 model w. NEST | [V1 NEST script](v1/src/nest_simulate_cli.py) |
 
 ## SONATA Edge Editor
 
