@@ -1,4 +1,4 @@
-# Resources to use airavata-cerebrum package
+# Examples of `airavata-cerebrum` applications
 
 This repository contains jupyter notebooks, marimo notebooks and 
 other standalone scripts demonstating the use of
@@ -35,7 +35,7 @@ See [below](#installation-issues) for common installation issues.
 
 The following notebooks demonstrate the use of airavata-cerebrum to gather 
 data from Brain Atlases and other databases,  build the model and 
-simulate using NEST simulator. See the [v1/README.md](/v1/README.md) 
+simulate using NEST simulator. See the [v1/README.md](v1/README.md) 
 for a detail discussion on each phase of model construction.
 
 ### IPython Notebooks
@@ -71,7 +71,7 @@ via command line or as a batch run.
 These notebooks show a demo of edititng edges in a SONATA file: A specific 
 case of selecting all the edges of a given edge type id and
 replacing it with a random subset of edges. 
-See [editor/README.md](/editor/README.md) for a description of this 
+See [editor/README.md](editor/README.md) for a description of this 
 functionality.
 
 | Model               | Notebook                                          |
