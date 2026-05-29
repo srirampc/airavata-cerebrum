@@ -2,10 +2,10 @@
   "manifest": {
     "$BASE_DIR": "${configdir}/",
     "$NETWORK_DIR": "$BASE_DIR/v1/network",
-    "$COMPONENTS_DIR": "$BASE_DIR/../../model_components",
+    "$COMPONENTS_DIR": "$BASE_DIR/../../components",
     "$OUTPUT_DIR": "$BASE_DIR/output",
-    "$BKG_DIR": "$BASE_DIR/../../model_bkg",
-    "$LGN_DIR": "$BASE_DIR/../../model_lgn"
+    "$BKG_DIR": "$BASE_DIR/../../bkg",
+    "$LGN_DIR": "$BASE_DIR/../../lgn"
   },
   "run": {
     "duration": 3000.0,

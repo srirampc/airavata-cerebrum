@@ -217,7 +217,7 @@
         "type": "text",
         "label": "Output Directory",
         "doct": "Output Directory",
-        "default": "v1l4/components/point_neuron_models/"
+        "default": "components/point_neuron_models/"
       }
     }
   },

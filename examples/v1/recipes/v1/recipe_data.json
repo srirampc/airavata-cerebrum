@@ -72,7 +72,7 @@
             "init_params": {},
             "exec_params": {
               "suffix": "_glif_lif_asc_config.json",
-              "output_dir": "v1/components/point_neuron_models/"
+              "output_dir": "components/point_neuron_models/"
             }
           },
           {
