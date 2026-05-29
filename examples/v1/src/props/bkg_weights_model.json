@@ -1,0 +1,2766 @@
+{
+    "(('bkg', ''), ('1', 'Htr3a'))": {
+        "name": "(('bkg', ''), ('1', 'Htr3a'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "1",
+            "Htr3a"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('1', 'Htr3a'), '475585413')": {
+                "name": "(('bkg', ''), ('1', 'Htr3a'), '475585413')",
+                "target_model_id": "475585413",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0999999999999943,
+                    "syn_weight": 4.678465901004,
+                    "target_median_fr": 2.21,
+                    "syn_weight_psp": 46.78465901004267
+                }
+            },
+            "(('bkg', ''), ('1', 'Htr3a'), '482649712')": {
+                "name": "(('bkg', ''), ('1', 'Htr3a'), '482649712')",
+                "target_model_id": "482649712",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0909999999999939,
+                    "syn_weight": 4.678465901004,
+                    "target_median_fr": 2.21,
+                    "syn_weight_psp": 51.411713197849565
+                }
+            },
+            "(('bkg', ''), ('1', 'Htr3a'), '482654108')": {
+                "name": "(('bkg', ''), ('1', 'Htr3a'), '482654108')",
+                "target_model_id": "482654108",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0579999999999927,
+                    "syn_weight": 4.678465901004,
+                    "target_median_fr": 2.21,
+                    "syn_weight_psp": 80.66320518973427
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('23', 'Cux2'))": {
+        "name": "(('bkg', ''), ('23', 'Cux2'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "23",
+            "Cux2"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('23', 'Cux2'), '484509440')": {
+                "name": "(('bkg', ''), ('23', 'Cux2'), '484509440')",
+                "target_model_id": "484509440",
+                "dynamics_params": "exc_to_e23.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.073999999999998,
+                    "syn_weight": 3.976659363085,
+                    "target_median_fr": 0.63,
+                    "syn_weight_psp": 53.738640041690594
+                }
+            },
+            "(('bkg', ''), ('23', 'Cux2'), '486262299')": {
+                "name": "(('bkg', ''), ('23', 'Cux2'), '486262299')",
+                "target_model_id": "486262299",
+                "dynamics_params": "exc_to_e23.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0309999999999917,
+                    "syn_weight": 3.976659363085,
+                    "target_median_fr": 0.63,
+                    "syn_weight_psp": 128.27933429309886
+                }
+            },
+            "(('bkg', ''), ('23', 'Cux2'), '486753754')": {
+                "name": "(('bkg', ''), ('23', 'Cux2'), '486753754')",
+                "target_model_id": "486753754",
+                "dynamics_params": "exc_to_e23.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0910000000000081,
+                    "syn_weight": 3.976659363085,
+                    "target_median_fr": 0.63,
+                    "syn_weight_psp": 43.699553440490575
+                }
+            },
+            "(('bkg', ''), ('23', 'Cux2'), '489751692')": {
+                "name": "(('bkg', ''), ('23', 'Cux2'), '489751692')",
+                "target_model_id": "489751692",
+                "dynamics_params": "exc_to_e23.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.1050000000000039,
+                    "syn_weight": 3.976659363085,
+                    "target_median_fr": 0.63,
+                    "syn_weight_psp": 37.872946315093806
+                }
+            },
+            "(('bkg', ''), ('23', 'Cux2'), '490376252')": {
+                "name": "(('bkg', ''), ('23', 'Cux2'), '490376252')",
+                "target_model_id": "490376252",
+                "dynamics_params": "exc_to_e23.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0780000000000029,
+                    "syn_weight": 3.976659363085,
+                    "target_median_fr": 0.63,
+                    "syn_weight_psp": 50.982812347241655
+                }
+            },
+            "(('bkg', ''), ('23', 'Cux2'), '505512874')": {
+                "name": "(('bkg', ''), ('23', 'Cux2'), '505512874')",
+                "target_model_id": "505512874",
+                "dynamics_params": "exc_to_e23.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0620000000000118,
+                    "syn_weight": 3.976659363085,
+                    "target_median_fr": 0.63,
+                    "syn_weight_psp": 64.13966714652003
+                }
+            },
+            "(('bkg', ''), ('23', 'Cux2'), '513510227')": {
+                "name": "(('bkg', ''), ('23', 'Cux2'), '513510227')",
+                "target_model_id": "513510227",
+                "dynamics_params": "exc_to_e23.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0310000000000059,
+                    "syn_weight": 3.976659363085,
+                    "target_median_fr": 0.63,
+                    "syn_weight_psp": 128.27933429304005
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('23', 'Vip'))": {
+        "name": "(('bkg', ''), ('23', 'Vip'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "23",
+            "Vip"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('23', 'Vip'), '501736631')": {
+                "name": "(('bkg', ''), ('23', 'Vip'), '501736631')",
+                "target_model_id": "501736631",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.039999999999992,
+                    "syn_weight": 2.469383327728,
+                    "target_median_fr": 14.73,
+                    "syn_weight_psp": 61.73458319321228
+                }
+            },
+            "(('bkg', ''), ('23', 'Vip'), '514767977')": {
+                "name": "(('bkg', ''), ('23', 'Vip'), '514767977')",
+                "target_model_id": "514767977",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0919999999999987,
+                    "syn_weight": 2.469383327728,
+                    "target_median_fr": 14.73,
+                    "syn_weight_psp": 26.841123127478625
+                }
+            },
+            "(('bkg', ''), ('23', 'Vip'), '522418855')": {
+                "name": "(('bkg', ''), ('23', 'Vip'), '522418855')",
+                "target_model_id": "522418855",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0930000000000035,
+                    "syn_weight": 2.469383327728,
+                    "target_median_fr": 14.73,
+                    "syn_weight_psp": 26.55250890030007
+                }
+            },
+            "(('bkg', ''), ('23', 'Vip'), '523478869')": {
+                "name": "(('bkg', ''), ('23', 'Vip'), '523478869')",
+                "target_model_id": "523478869",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0450000000000017,
+                    "syn_weight": 2.469383327728,
+                    "target_median_fr": 14.73,
+                    "syn_weight_psp": 54.87518506062014
+                }
+            },
+            "(('bkg', ''), ('23', 'Vip'), '524689239')": {
+                "name": "(('bkg', ''), ('23', 'Vip'), '524689239')",
+                "target_model_id": "524689239",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0699999999999931,
+                    "syn_weight": 2.469383327728,
+                    "target_median_fr": 14.73,
+                    "syn_weight_psp": 35.27690468183201
+                }
+            },
+            "(('bkg', ''), ('23', 'Vip'), '524693113')": {
+                "name": "(('bkg', ''), ('23', 'Vip'), '524693113')",
+                "target_model_id": "524693113",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.1039999999999992,
+                    "syn_weight": 2.469383327728,
+                    "target_median_fr": 14.73,
+                    "syn_weight_psp": 23.744070458923257
+                }
+            },
+            "(('bkg', ''), ('23', 'Vip'), '524876305')": {
+                "name": "(('bkg', ''), ('23', 'Vip'), '524876305')",
+                "target_model_id": "524876305",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0760000000000076,
+                    "syn_weight": 2.469383327728,
+                    "target_median_fr": 14.73,
+                    "syn_weight_psp": 32.49188589115464
+                }
+            },
+            "(('bkg', ''), ('23', 'Vip'), '560814288')": {
+                "name": "(('bkg', ''), ('23', 'Vip'), '560814288')",
+                "target_model_id": "560814288",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.1110000000000042,
+                    "syn_weight": 2.469383327728,
+                    "target_median_fr": 14.73,
+                    "syn_weight_psp": 22.246696646197357
+                }
+            },
+            "(('bkg', ''), ('23', 'Vip'), '562539062')": {
+                "name": "(('bkg', ''), ('23', 'Vip'), '562539062')",
+                "target_model_id": "562539062",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0990000000000037,
+                    "syn_weight": 2.469383327728,
+                    "target_median_fr": 14.73,
+                    "syn_weight_psp": 24.94326593664552
+                }
+            },
+            "(('bkg', ''), ('23', 'Vip'), '575920560')": {
+                "name": "(('bkg', ''), ('23', 'Vip'), '575920560')",
+                "target_model_id": "575920560",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0630000000000023,
+                    "syn_weight": 2.469383327728,
+                    "target_median_fr": 14.73,
+                    "syn_weight_psp": 39.19656075758581
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('23', 'Pvalb'))": {
+        "name": "(('bkg', ''), ('23', 'Pvalb'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "23",
+            "Pvalb"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('23', 'Pvalb'), '341016267')": {
+                "name": "(('bkg', ''), ('23', 'Pvalb'), '341016267')",
+                "target_model_id": "341016267",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0369999999999919,
+                    "syn_weight": 2.06360632416,
+                    "target_median_fr": 7.35,
+                    "syn_weight_psp": 55.773143896228376
+                }
+            },
+            "(('bkg', ''), ('23', 'Pvalb'), '341442651')": {
+                "name": "(('bkg', ''), ('23', 'Pvalb'), '341442651')",
+                "target_model_id": "341442651",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0319999999999964,
+                    "syn_weight": 2.06360632416,
+                    "target_median_fr": 7.35,
+                    "syn_weight_psp": 64.48769763000709
+                }
+            },
+            "(('bkg', ''), ('23', 'Pvalb'), '469614747')": {
+                "name": "(('bkg', ''), ('23', 'Pvalb'), '469614747')",
+                "target_model_id": "469614747",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0420000000000015,
+                    "syn_weight": 2.06360632416,
+                    "target_median_fr": 7.35,
+                    "syn_weight_psp": 49.13348390856956
+                }
+            },
+            "(('bkg', ''), ('23', 'Pvalb'), '477490421')": {
+                "name": "(('bkg', ''), ('23', 'Pvalb'), '477490421')",
+                "target_model_id": "477490421",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0319999999999964,
+                    "syn_weight": 2.06360632416,
+                    "target_median_fr": 7.35,
+                    "syn_weight_psp": 64.48769763000709
+                }
+            },
+            "(('bkg', ''), ('23', 'Pvalb'), '479298854')": {
+                "name": "(('bkg', ''), ('23', 'Pvalb'), '479298854')",
+                "target_model_id": "479298854",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.027000000000001,
+                    "syn_weight": 2.06360632416,
+                    "target_median_fr": 7.35,
+                    "syn_weight_psp": 76.42986385777488
+                }
+            },
+            "(('bkg', ''), ('23', 'Pvalb'), '481018305')": {
+                "name": "(('bkg', ''), ('23', 'Pvalb'), '481018305')",
+                "target_model_id": "481018305",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0379999999999967,
+                    "syn_weight": 2.06360632416,
+                    "target_median_fr": 7.35,
+                    "syn_weight_psp": 54.3054295831626
+                }
+            },
+            "(('bkg', ''), ('23', 'Pvalb'), '482444444')": {
+                "name": "(('bkg', ''), ('23', 'Pvalb'), '482444444')",
+                "target_model_id": "482444444",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0319999999999964,
+                    "syn_weight": 2.06360632416,
+                    "target_median_fr": 7.35,
+                    "syn_weight_psp": 64.48769763000709
+                }
+            },
+            "(('bkg', ''), ('23', 'Pvalb'), '484635029')": {
+                "name": "(('bkg', ''), ('23', 'Pvalb'), '484635029')",
+                "target_model_id": "484635029",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0339999999999918,
+                    "syn_weight": 2.06360632416,
+                    "target_median_fr": 7.35,
+                    "syn_weight_psp": 60.69430365177932
+                }
+            },
+            "(('bkg', ''), ('23', 'Pvalb'), '485184849')": {
+                "name": "(('bkg', ''), ('23', 'Pvalb'), '485184849')",
+                "target_model_id": "485184849",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0310000000000059,
+                    "syn_weight": 2.06360632416,
+                    "target_median_fr": 7.35,
+                    "syn_weight_psp": 66.56794594063246
+                }
+            },
+            "(('bkg', ''), ('23', 'Pvalb'), '485245025')": {
+                "name": "(('bkg', ''), ('23', 'Pvalb'), '485245025')",
+                "target_model_id": "485245025",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0380000000000109,
+                    "syn_weight": 2.06360632416,
+                    "target_median_fr": 7.35,
+                    "syn_weight_psp": 54.30542958314229
+                }
+            },
+            "(('bkg', ''), ('23', 'Pvalb'), '488501071')": {
+                "name": "(('bkg', ''), ('23', 'Pvalb'), '488501071')",
+                "target_model_id": "488501071",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0299999999999869,
+                    "syn_weight": 2.06360632416,
+                    "target_median_fr": 7.35,
+                    "syn_weight_psp": 68.78687747202997
+                }
+            },
+            "(('bkg', ''), ('23', 'Pvalb'), '574992320')": {
+                "name": "(('bkg', ''), ('23', 'Pvalb'), '574992320')",
+                "target_model_id": "574992320",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0289999999999963,
+                    "syn_weight": 2.06360632416,
+                    "target_median_fr": 7.35,
+                    "syn_weight_psp": 71.15883876414685
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('23', 'Sst'))": {
+        "name": "(('bkg', ''), ('23', 'Sst'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "23",
+            "Sst"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('23', 'Sst'), '313862274')": {
+                "name": "(('bkg', ''), ('23', 'Sst'), '313862274')",
+                "target_model_id": "313862274",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0480000000000018,
+                    "syn_weight": 4.83280828545,
+                    "target_median_fr": 3.82,
+                    "syn_weight_psp": 100.68350594687118
+                }
+            },
+            "(('bkg', ''), ('23', 'Sst'), '324493977')": {
+                "name": "(('bkg', ''), ('23', 'Sst'), '324493977')",
+                "target_model_id": "324493977",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0510000000000019,
+                    "syn_weight": 4.83280828545,
+                    "target_median_fr": 3.82,
+                    "syn_weight_psp": 94.76094677352582
+                }
+            },
+            "(('bkg', ''), ('23', 'Sst'), '476686112')": {
+                "name": "(('bkg', ''), ('23', 'Sst'), '476686112')",
+                "target_model_id": "476686112",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0549999999999926,
+                    "syn_weight": 4.83280828545,
+                    "target_median_fr": 3.82,
+                    "syn_weight_psp": 87.86924155364817
+                }
+            },
+            "(('bkg', ''), ('23', 'Sst'), '485466109')": {
+                "name": "(('bkg', ''), ('23', 'Sst'), '485466109')",
+                "target_model_id": "485466109",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0560000000000115,
+                    "syn_weight": 4.83280828545,
+                    "target_median_fr": 3.82,
+                    "syn_weight_psp": 86.3001479544464
+                }
+            },
+            "(('bkg', ''), ('23', 'Sst'), '488677994')": {
+                "name": "(('bkg', ''), ('23', 'Sst'), '488677994')",
+                "target_model_id": "488677994",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0559999999999973,
+                    "syn_weight": 4.83280828545,
+                    "target_median_fr": 3.82,
+                    "syn_weight_psp": 86.30014795446831
+                }
+            },
+            "(('bkg', ''), ('23', 'Sst'), '491026389')": {
+                "name": "(('bkg', ''), ('23', 'Sst'), '491026389')",
+                "target_model_id": "491026389",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0460000000000064,
+                    "syn_weight": 4.83280828545,
+                    "target_median_fr": 3.82,
+                    "syn_weight_psp": 105.06104968368084
+                }
+            },
+            "(('bkg', ''), ('23', 'Sst'), '623960880')": {
+                "name": "(('bkg', ''), ('23', 'Sst'), '623960880')",
+                "target_model_id": "623960880",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.046999999999997,
+                    "syn_weight": 4.83280828545,
+                    "target_median_fr": 3.82,
+                    "syn_weight_psp": 102.82570820107028
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('4', 'Nr5a1'))": {
+        "name": "(('bkg', ''), ('4', 'Nr5a1'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "4",
+            "Nr5a1"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('4', 'Nr5a1'), '354833767')": {
+                "name": "(('bkg', ''), ('4', 'Nr5a1'), '354833767')",
+                "target_model_id": "354833767",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0559999999999973,
+                    "syn_weight": 3.334693673586e-14,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 5.954810131403849e-13
+                }
+            },
+            "(('bkg', ''), ('4', 'Nr5a1'), '369697038')": {
+                "name": "(('bkg', ''), ('4', 'Nr5a1'), '369697038')",
+                "target_model_id": "369697038",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.066999999999993,
+                    "syn_weight": 3.334693673586e-14,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 4.977154736696037e-13
+                }
+            },
+            "(('bkg', ''), ('4', 'Nr5a1'), '386049446')": {
+                "name": "(('bkg', ''), ('4', 'Nr5a1'), '386049446')",
+                "target_model_id": "386049446",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0689999999999884,
+                    "syn_weight": 3.334693673586e-14,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 4.832889382009508e-13
+                }
+            },
+            "(('bkg', ''), ('4', 'Nr5a1'), '397354239')": {
+                "name": "(('bkg', ''), ('4', 'Nr5a1'), '397354239')",
+                "target_model_id": "397354239",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0550000000000068,
+                    "syn_weight": 3.334693673586e-14,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 6.063079406519249e-13
+                }
+            },
+            "(('bkg', ''), ('4', 'Nr5a1'), '465924786')": {
+                "name": "(('bkg', ''), ('4', 'Nr5a1'), '465924786')",
+                "target_model_id": "465924786",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0609999999999928,
+                    "syn_weight": 3.334693673586e-14,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 5.46671094030556e-13
+                }
+            },
+            "(('bkg', ''), ('4', 'Nr5a1'), '469704261')": {
+                "name": "(('bkg', ''), ('4', 'Nr5a1'), '469704261')",
+                "target_model_id": "469704261",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0499999999999971,
+                    "syn_weight": 3.334693673586e-14,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 6.66938734717238e-13
+                }
+            },
+            "(('bkg', ''), ('4', 'Nr5a1'), '469734859')": {
+                "name": "(('bkg', ''), ('4', 'Nr5a1'), '469734859')",
+                "target_model_id": "469734859",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0649999999999977,
+                    "syn_weight": 3.334693673586e-14,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 5.130297959363257e-13
+                }
+            },
+            "(('bkg', ''), ('4', 'Nr5a1'), '475838754')": {
+                "name": "(('bkg', ''), ('4', 'Nr5a1'), '475838754')",
+                "target_model_id": "475838754",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.046999999999997,
+                    "syn_weight": 3.334693673586e-14,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 7.09509292252385e-13
+                }
+            },
+            "(('bkg', ''), ('4', 'Nr5a1'), '478439166')": {
+                "name": "(('bkg', ''), ('4', 'Nr5a1'), '478439166')",
+                "target_model_id": "478439166",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0899999999999892,
+                    "syn_weight": 3.334693673586e-14,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 3.705215192873778e-13
+                }
+            },
+            "(('bkg', ''), ('4', 'Nr5a1'), '489754156')": {
+                "name": "(('bkg', ''), ('4', 'Nr5a1'), '489754156')",
+                "target_model_id": "489754156",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0780000000000029,
+                    "syn_weight": 3.334693673586e-14,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 4.2752482994690694e-13
+                }
+            },
+            "(('bkg', ''), ('4', 'Nr5a1'), '502260112')": {
+                "name": "(('bkg', ''), ('4', 'Nr5a1'), '502260112')",
+                "target_model_id": "502260112",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0510000000000019,
+                    "syn_weight": 3.334693673586e-14,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 6.53861504624681e-13
+                }
+            },
+            "(('bkg', ''), ('4', 'Nr5a1'), '505808144')": {
+                "name": "(('bkg', ''), ('4', 'Nr5a1'), '505808144')",
+                "target_model_id": "505808144",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0609999999999928,
+                    "syn_weight": 3.334693673586e-14,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 5.46671094030556e-13
+                }
+            },
+            "(('bkg', ''), ('4', 'Nr5a1'), '517977609')": {
+                "name": "(('bkg', ''), ('4', 'Nr5a1'), '517977609')",
+                "target_model_id": "517977609",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0579999999999927,
+                    "syn_weight": 3.334693673586e-14,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 5.749471851011065e-13
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('4', 'Rorb'))": {
+        "name": "(('bkg', ''), ('4', 'Rorb'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "4",
+            "Rorb"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('4', 'Rorb'), '322723785')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '322723785')",
+                "target_model_id": "322723785",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0600000000000022,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.1817540683714552e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '322761772')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '322761772')",
+                "target_model_id": "322761772",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0580000000000069,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.2225042086600262e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '324065524')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '324065524')",
+                "target_model_id": "324065524",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0809999999999888,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 8.753733839790093e-07
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '329550277')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '329550277')",
+                "target_model_id": "329550277",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0619999999999976,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.1436329693918182e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '466378900')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '466378900')",
+                "target_model_id": "466378900",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0930000000000035,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 7.624219795944872e-07
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '467003163')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '467003163')",
+                "target_model_id": "467003163",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0609999999999928,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.1623810508573496e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '467357834')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '467357834')",
+                "target_model_id": "467357834",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.054000000000002,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.3130600759682837e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '469763389')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '469763389')",
+                "target_model_id": "469763389",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0659999999999882,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.074321880337918e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '473020156')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '473020156')",
+                "target_model_id": "473020156",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0769999999999981,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 9.20847326003788e-07
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '476562817')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '476562817')",
+                "target_model_id": "476562817",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0609999999999928,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.1623810508573496e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '478586425')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '478586425')",
+                "target_model_id": "478586425",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0670000000000072,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.0582872254071984e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '479179020')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '479179020')",
+                "target_model_id": "479179020",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0570000000000021,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.2439516509173212e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '484679812')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '484679812')",
+                "target_model_id": "484679812",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0769999999999981,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 9.20847326003788e-07
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '484770879')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '484770879')",
+                "target_model_id": "484770879",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0589999999999975,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.2017837983439491e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '485836906')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '485836906')",
+                "target_model_id": "485836906",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0489999999999923,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.4470457980061433e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '486472847')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '486472847')",
+                "target_model_id": "486472847",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0799999999999983,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 8.863155512786438e-07
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '486500736')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '486500736')",
+                "target_model_id": "486500736",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0409999999999968,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.7293961976169635e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '490626718')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '490626718')",
+                "target_model_id": "490626718",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0709999999999979,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 9.986654098914372e-07
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '490626827')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '490626827')",
+                "target_model_id": "490626827",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0670000000000072,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.0582872254071984e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '500859045')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '500859045')",
+                "target_model_id": "500859045",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.061000000000007,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.1623810508570787e-06
+                }
+            },
+            "(('bkg', ''), ('4', 'Rorb'), '500894271')": {
+                "name": "(('bkg', ''), ('4', 'Rorb'), '500894271')",
+                "target_model_id": "500894271",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.061000000000007,
+                    "syn_weight": 7.090524410229e-08,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.1623810508570787e-06
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('4', 'Scnn1a'))": {
+        "name": "(('bkg', ''), ('4', 'Scnn1a'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "4",
+            "Scnn1a"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('4', 'Scnn1a'), '320207387')": {
+                "name": "(('bkg', ''), ('4', 'Scnn1a'), '320207387')",
+                "target_model_id": "320207387",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0539999999999878,
+                    "syn_weight": 8.59391427069e-11,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.5914656056836915e-09
+                }
+            },
+            "(('bkg', ''), ('4', 'Scnn1a'), '323838579')": {
+                "name": "(('bkg', ''), ('4', 'Scnn1a'), '323838579')",
+                "target_model_id": "323838579",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0609999999999928,
+                    "syn_weight": 8.59391427069e-11,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.4088384050313126e-09
+                }
+            },
+            "(('bkg', ''), ('4', 'Scnn1a'), '476266853')": {
+                "name": "(('bkg', ''), ('4', 'Scnn1a'), '476266853')",
+                "target_model_id": "476266853",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0600000000000022,
+                    "syn_weight": 8.59391427069e-11,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.4323190451149455e-09
+                }
+            },
+            "(('bkg', ''), ('4', 'Scnn1a'), '500964358')": {
+                "name": "(('bkg', ''), ('4', 'Scnn1a'), '500964358')",
+                "target_model_id": "500964358",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0550000000000068,
+                    "syn_weight": 8.59391427069e-11,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.562529867397988e-09
+                }
+            },
+            "(('bkg', ''), ('4', 'Scnn1a'), '517647182')": {
+                "name": "(('bkg', ''), ('4', 'Scnn1a'), '517647182')",
+                "target_model_id": "517647182",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0559999999999973,
+                    "syn_weight": 8.59391427069e-11,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.5346275483375714e-09
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('4', 'other'))": {
+        "name": "(('bkg', ''), ('4', 'other'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "4",
+            "other"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('4', 'other'), '479993900')": {
+                "name": "(('bkg', ''), ('4', 'other'), '479993900')",
+                "target_model_id": "479993900",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0550000000000068,
+                    "syn_weight": 1.165568732787e-17,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 2.119215877794283e-16
+                }
+            },
+            "(('bkg', ''), ('4', 'other'), '480169202')": {
+                "name": "(('bkg', ''), ('4', 'other'), '480169202')",
+                "target_model_id": "480169202",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0300000000000011,
+                    "syn_weight": 1.165568732787e-17,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 3.8852291092898535e-16
+                }
+            },
+            "(('bkg', ''), ('4', 'other'), '483020137')": {
+                "name": "(('bkg', ''), ('4', 'other'), '483020137')",
+                "target_model_id": "483020137",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0890000000000128,
+                    "syn_weight": 1.165568732787e-17,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 1.3096277896481255e-16
+                }
+            },
+            "(('bkg', ''), ('4', 'other'), '488689403')": {
+                "name": "(('bkg', ''), ('4', 'other'), '488689403')",
+                "target_model_id": "488689403",
+                "dynamics_params": "exc_to_e4.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0390000000000014,
+                    "syn_weight": 1.165568732787e-17,
+                    "target_median_fr": 2.12,
+                    "syn_weight_psp": 2.9886377763768103e-16
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('4', 'Vip'))": {
+        "name": "(('bkg', ''), ('4', 'Vip'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "4",
+            "Vip"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('4', 'Vip'), '501570114')": {
+                "name": "(('bkg', ''), ('4', 'Vip'), '501570114')",
+                "target_model_id": "501570114",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0889999999999986,
+                    "syn_weight": 0.793264203462,
+                    "target_median_fr": 3.13,
+                    "syn_weight_psp": 8.913080937775417
+                }
+            },
+            "(('bkg', ''), ('4', 'Vip'), '531121585')": {
+                "name": "(('bkg', ''), ('4', 'Vip'), '531121585')",
+                "target_model_id": "531121585",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0730000000000075,
+                    "syn_weight": 0.793264203462,
+                    "target_median_fr": 3.13,
+                    "syn_weight_psp": 10.86663292413587
+                }
+            },
+            "(('bkg', ''), ('4', 'Vip'), '535728342')": {
+                "name": "(('bkg', ''), ('4', 'Vip'), '535728342')",
+                "target_model_id": "535728342",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.1059999999999945,
+                    "syn_weight": 0.793264203462,
+                    "target_median_fr": 3.13,
+                    "syn_weight_psp": 7.4836245609626495
+                }
+            },
+            "(('bkg', ''), ('4', 'Vip'), '560690291')": {
+                "name": "(('bkg', ''), ('4', 'Vip'), '560690291')",
+                "target_model_id": "560690291",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0709999999999979,
+                    "syn_weight": 0.793264203462,
+                    "target_median_fr": 3.13,
+                    "syn_weight_psp": 11.17273526002849
+                }
+            },
+            "(('bkg', ''), ('4', 'Vip'), '561934585')": {
+                "name": "(('bkg', ''), ('4', 'Vip'), '561934585')",
+                "target_model_id": "561934585",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0450000000000017,
+                    "syn_weight": 0.793264203462,
+                    "target_median_fr": 3.13,
+                    "syn_weight_psp": 17.628093410265997
+                }
+            },
+            "(('bkg', ''), ('4', 'Vip'), '562540395')": {
+                "name": "(('bkg', ''), ('4', 'Vip'), '562540395')",
+                "target_model_id": "562540395",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0690000000000026,
+                    "syn_weight": 0.793264203462,
+                    "target_median_fr": 3.13,
+                    "syn_weight_psp": 11.49658265886913
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('4', 'Pvalb'))": {
+        "name": "(('bkg', ''), ('4', 'Pvalb'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "4",
+            "Pvalb"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('4', 'Pvalb'), '478793814')": {
+                "name": "(('bkg', ''), ('4', 'Pvalb'), '478793814')",
+                "target_model_id": "478793814",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0309999999999917,
+                    "syn_weight": 7.481130099256e-26,
+                    "target_median_fr": 8.86,
+                    "syn_weight_psp": 2.4132677739541942e-24
+                }
+            },
+            "(('bkg', ''), ('4', 'Pvalb'), '478958894')": {
+                "name": "(('bkg', ''), ('4', 'Pvalb'), '478958894')",
+                "target_model_id": "478958894",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0299999999999869,
+                    "syn_weight": 7.481130099256e-26,
+                    "target_median_fr": 8.86,
+                    "syn_weight_psp": 2.4937100330864203e-24
+                }
+            },
+            "(('bkg', ''), ('4', 'Pvalb'), '481127173')": {
+                "name": "(('bkg', ''), ('4', 'Pvalb'), '481127173')",
+                "target_model_id": "481127173",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0360000000000013,
+                    "syn_weight": 7.481130099256e-26,
+                    "target_median_fr": 8.86,
+                    "syn_weight_psp": 2.078091694237699e-24
+                }
+            },
+            "(('bkg', ''), ('4', 'Pvalb'), '481127348')": {
+                "name": "(('bkg', ''), ('4', 'Pvalb'), '481127348')",
+                "target_model_id": "481127348",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0460000000000064,
+                    "syn_weight": 7.481130099256e-26,
+                    "target_median_fr": 8.86,
+                    "syn_weight_psp": 1.6263326302728143e-24
+                }
+            },
+            "(('bkg', ''), ('4', 'Pvalb'), '487405644')": {
+                "name": "(('bkg', ''), ('4', 'Pvalb'), '487405644')",
+                "target_model_id": "487405644",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0550000000000068,
+                    "syn_weight": 7.481130099256e-26,
+                    "target_median_fr": 8.86,
+                    "syn_weight_psp": 1.3602054725918314e-24
+                }
+            },
+            "(('bkg', ''), ('4', 'Pvalb'), '487667205')": {
+                "name": "(('bkg', ''), ('4', 'Pvalb'), '487667205')",
+                "target_model_id": "487667205",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0370000000000061,
+                    "syn_weight": 7.481130099256e-26,
+                    "target_median_fr": 8.86,
+                    "syn_weight_psp": 2.021927053852637e-24
+                }
+            },
+            "(('bkg', ''), ('4', 'Pvalb'), '491038812')": {
+                "name": "(('bkg', ''), ('4', 'Pvalb'), '491038812')",
+                "target_model_id": "491038812",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0289999999999963,
+                    "syn_weight": 7.481130099256e-26,
+                    "target_median_fr": 8.86,
+                    "syn_weight_psp": 2.5797000342265305e-24
+                }
+            },
+            "(('bkg', ''), ('4', 'Pvalb'), '569997187')": {
+                "name": "(('bkg', ''), ('4', 'Pvalb'), '569997187')",
+                "target_model_id": "569997187",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0430000000000063,
+                    "syn_weight": 7.481130099256e-26,
+                    "target_median_fr": 8.86,
+                    "syn_weight_psp": 1.739797697501138e-24
+                }
+            },
+            "(('bkg', ''), ('4', 'Pvalb'), '571314481')": {
+                "name": "(('bkg', ''), ('4', 'Pvalb'), '571314481')",
+                "target_model_id": "571314481",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0459999999999922,
+                    "syn_weight": 7.481130099256e-26,
+                    "target_median_fr": 8.86,
+                    "syn_weight_psp": 1.6263326302733168e-24
+                }
+            },
+            "(('bkg', ''), ('4', 'Pvalb'), '572375809')": {
+                "name": "(('bkg', ''), ('4', 'Pvalb'), '572375809')",
+                "target_model_id": "572375809",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0349999999999965,
+                    "syn_weight": 7.481130099256e-26,
+                    "target_median_fr": 8.86,
+                    "syn_weight_psp": 2.13746574264478e-24
+                }
+            },
+            "(('bkg', ''), ('4', 'Pvalb'), '579414994')": {
+                "name": "(('bkg', ''), ('4', 'Pvalb'), '579414994')",
+                "target_model_id": "579414994",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0290000000000034,
+                    "syn_weight": 7.481130099256e-26,
+                    "target_median_fr": 8.86,
+                    "syn_weight_psp": 2.5797000342258983e-24
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('4', 'Sst'))": {
+        "name": "(('bkg', ''), ('4', 'Sst'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "4",
+            "Sst"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('4', 'Sst'), '476099282')": {
+                "name": "(('bkg', ''), ('4', 'Sst'), '476099282')",
+                "target_model_id": "476099282",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0830000000000126,
+                    "syn_weight": 3.657252909984,
+                    "target_median_fr": 3.82,
+                    "syn_weight_psp": 44.06328807208968
+                }
+            },
+            "(('bkg', ''), ('4', 'Sst'), '476753465')": {
+                "name": "(('bkg', ''), ('4', 'Sst'), '476753465')",
+                "target_model_id": "476753465",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0769999999999981,
+                    "syn_weight": 3.657252909984,
+                    "target_median_fr": 3.82,
+                    "syn_weight_psp": 47.49679103875437
+                }
+            },
+            "(('bkg', ''), ('4', 'Sst'), '485061364')": {
+                "name": "(('bkg', ''), ('4', 'Sst'), '485061364')",
+                "target_model_id": "485061364",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0609999999999928,
+                    "syn_weight": 3.657252909984,
+                    "target_median_fr": 3.82,
+                    "syn_weight_psp": 59.95496573744966
+                }
+            },
+            "(('bkg', ''), ('4', 'Sst'), '501280518')": {
+                "name": "(('bkg', ''), ('4', 'Sst'), '501280518')",
+                "target_model_id": "501280518",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0600000000000022,
+                    "syn_weight": 3.657252909984,
+                    "target_median_fr": 3.82,
+                    "syn_weight_psp": 60.95421516639769
+                }
+            },
+            "(('bkg', ''), ('4', 'Sst'), '501282204')": {
+                "name": "(('bkg', ''), ('4', 'Sst'), '501282204')",
+                "target_model_id": "501282204",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0310000000000059,
+                    "syn_weight": 3.657252909984,
+                    "target_median_fr": 3.82,
+                    "syn_weight_psp": 117.975900322042
+                }
+            },
+            "(('bkg', ''), ('4', 'Sst'), '573622646')": {
+                "name": "(('bkg', ''), ('4', 'Sst'), '573622646')",
+                "target_model_id": "573622646",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0490000000000065,
+                    "syn_weight": 3.657252909984,
+                    "target_median_fr": 3.82,
+                    "syn_weight_psp": 74.63781448945934
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('5', 'IT'))": {
+        "name": "(('bkg', ''), ('5', 'IT'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "5",
+            "IT"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('5', 'IT'), '314822529')": {
+                "name": "(('bkg', ''), ('5', 'IT'), '314822529')",
+                "target_model_id": "314822529",
+                "dynamics_params": "exc_to_e5it.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.061000000000007,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 54.28705248507569
+                }
+            },
+            "(('bkg', ''), ('5', 'IT'), '468120757')": {
+                "name": "(('bkg', ''), ('5', 'IT'), '468120757')",
+                "target_model_id": "468120757",
+                "dynamics_params": "exc_to_e5it.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0510000000000019,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 64.93157258019362
+                }
+            },
+            "(('bkg', ''), ('5', 'IT'), '480169178')": {
+                "name": "(('bkg', ''), ('5', 'IT'), '480169178')",
+                "target_model_id": "480169178",
+                "dynamics_params": "exc_to_e5it.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0609999999999928,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 54.28705248508834
+                }
+            },
+            "(('bkg', ''), ('5', 'IT'), '486110216')": {
+                "name": "(('bkg', ''), ('5', 'IT'), '486110216')",
+                "target_model_id": "486110216",
+                "dynamics_params": "exc_to_e5it.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0660000000000025,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 50.174396993785976
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('5', 'ET'))": {
+        "name": "(('bkg', ''), ('5', 'ET'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "5",
+            "ET"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('5', 'ET'), '485574832')": {
+                "name": "(('bkg', ''), ('5', 'ET'), '485574832')",
+                "target_model_id": "485574832",
+                "dynamics_params": "exc_to_e5et.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0509999999999877,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 64.93157258021171
+                }
+            },
+            "(('bkg', ''), ('5', 'ET'), '485838981')": {
+                "name": "(('bkg', ''), ('5', 'ET'), '485838981')",
+                "target_model_id": "485838981",
+                "dynamics_params": "exc_to_e5et.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0619999999999976,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 53.4114548643569
+                }
+            },
+            "(('bkg', ''), ('5', 'ET'), '486111903')": {
+                "name": "(('bkg', ''), ('5', 'ET'), '486111903')",
+                "target_model_id": "486111903",
+                "dynamics_params": "exc_to_e5et.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0619999999999976,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 53.4114548643569
+                }
+            },
+            "(('bkg', ''), ('5', 'ET'), '488679042')": {
+                "name": "(('bkg', ''), ('5', 'ET'), '488679042')",
+                "target_model_id": "488679042",
+                "dynamics_params": "exc_to_e5et.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0509999999999877,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 64.93157258021171
+                }
+            },
+            "(('bkg', ''), ('5', 'ET'), '488680917')": {
+                "name": "(('bkg', ''), ('5', 'ET'), '488680917')",
+                "target_model_id": "488680917",
+                "dynamics_params": "exc_to_e5et.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0600000000000022,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 55.191836693164575
+                }
+            },
+            "(('bkg', ''), ('5', 'ET'), '488683425')": {
+                "name": "(('bkg', ''), ('5', 'ET'), '488683425')",
+                "target_model_id": "488683425",
+                "dynamics_params": "exc_to_e5et.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0499999999999971,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 66.23020403180377
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('5', 'NP'))": {
+        "name": "(('bkg', ''), ('5', 'NP'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "5",
+            "NP"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('5', 'NP'), '322762730')": {
+                "name": "(('bkg', ''), ('5', 'NP'), '322762730')",
+                "target_model_id": "322762730",
+                "dynamics_params": "exc_to_e5np.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0590000000000117,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 56.12729155236174
+                }
+            },
+            "(('bkg', ''), ('5', 'NP'), '487445455')": {
+                "name": "(('bkg', ''), ('5', 'NP'), '487445455')",
+                "target_model_id": "487445455",
+                "dynamics_params": "exc_to_e5np.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0550000000000068,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 60.20927639253799
+                }
+            },
+            "(('bkg', ''), ('5', 'NP'), '487664070')": {
+                "name": "(('bkg', ''), ('5', 'NP'), '487664070')",
+                "target_model_id": "487664070",
+                "dynamics_params": "exc_to_e5np.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0690000000000026,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 47.99290147231702
+                }
+            },
+            "(('bkg', ''), ('5', 'NP'), '488419491')": {
+                "name": "(('bkg', ''), ('5', 'NP'), '488419491')",
+                "target_model_id": "488419491",
+                "dynamics_params": "exc_to_e5np.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.046999999999997,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 70.45766386362145
+                }
+            },
+            "(('bkg', ''), ('5', 'NP'), '488467273')": {
+                "name": "(('bkg', ''), ('5', 'NP'), '488467273')",
+                "target_model_id": "488467273",
+                "dynamics_params": "exc_to_e5np.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0690000000000026,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 47.99290147231702
+                }
+            },
+            "(('bkg', ''), ('5', 'NP'), '490263438')": {
+                "name": "(('bkg', ''), ('5', 'NP'), '490263438')",
+                "target_model_id": "490263438",
+                "dynamics_params": "exc_to_e5np.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0510000000000019,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 64.93157258019362
+                }
+            },
+            "(('bkg', ''), ('5', 'NP'), '505202906')": {
+                "name": "(('bkg', ''), ('5', 'NP'), '505202906')",
+                "target_model_id": "505202906",
+                "dynamics_params": "exc_to_e5np.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0460000000000064,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 71.98935220846812
+                }
+            },
+            "(('bkg', ''), ('5', 'NP'), '558675748')": {
+                "name": "(('bkg', ''), ('5', 'NP'), '558675748')",
+                "target_model_id": "558675748",
+                "dynamics_params": "exc_to_e5np.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.054000000000002,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 61.32426299240508
+                }
+            },
+            "(('bkg', ''), ('5', 'NP'), '562999984')": {
+                "name": "(('bkg', ''), ('5', 'NP'), '562999984')",
+                "target_model_id": "562999984",
+                "dynamics_params": "exc_to_e5np.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0300000000000011,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 110.38367338632916
+                }
+            },
+            "(('bkg', ''), ('5', 'NP'), '569469018')": {
+                "name": "(('bkg', ''), ('5', 'NP'), '569469018')",
+                "target_model_id": "569469018",
+                "dynamics_params": "exc_to_e5np.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0649999999999977,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 50.94631079369409
+                }
+            },
+            "(('bkg', ''), ('5', 'NP'), '569477234')": {
+                "name": "(('bkg', ''), ('5', 'NP'), '569477234')",
+                "target_model_id": "569477234",
+                "dynamics_params": "exc_to_e5np.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.046999999999997,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 70.45766386362145
+                }
+            },
+            "(('bkg', ''), ('5', 'NP'), '605141937')": {
+                "name": "(('bkg', ''), ('5', 'NP'), '605141937')",
+                "target_model_id": "605141937",
+                "dynamics_params": "exc_to_e5np.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.054000000000002,
+                    "syn_weight": 3.31151020159,
+                    "target_median_fr": 4.05,
+                    "syn_weight_psp": 61.32426299240508
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('5', 'Vip'))": {
+        "name": "(('bkg', ''), ('5', 'Vip'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "5",
+            "Vip"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('5', 'Vip'), '568767467')": {
+                "name": "(('bkg', ''), ('5', 'Vip'), '568767467')",
+                "target_model_id": "568767467",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.108000000000004,
+                    "syn_weight": 0.01970275024068,
+                    "target_median_fr": 11.57,
+                    "syn_weight_psp": 0.1824328725988819
+                }
+            },
+            "(('bkg', ''), ('5', 'Vip'), '591627904')": {
+                "name": "(('bkg', ''), ('5', 'Vip'), '591627904')",
+                "target_model_id": "591627904",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0719999999999885,
+                    "syn_weight": 0.01970275024068,
+                    "target_median_fr": 11.57,
+                    "syn_weight_psp": 0.2736493088983769
+                }
+            },
+            "(('bkg', ''), ('5', 'Vip'), '592819166')": {
+                "name": "(('bkg', ''), ('5', 'Vip'), '592819166')",
+                "target_model_id": "592819166",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0979999999999989,
+                    "syn_weight": 0.01970275024068,
+                    "target_median_fr": 11.57,
+                    "syn_weight_psp": 0.2010484718436755
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('5', 'Pvalb'))": {
+        "name": "(('bkg', ''), ('5', 'Pvalb'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "5",
+            "Pvalb"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('5', 'Pvalb'), '313861608')": {
+                "name": "(('bkg', ''), ('5', 'Pvalb'), '313861608')",
+                "target_model_id": "313861608",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0409999999999968,
+                    "syn_weight": 3.2695254225500004e-18,
+                    "target_median_fr": 8.94,
+                    "syn_weight_psp": 7.974452250122572e-17
+                }
+            },
+            "(('bkg', ''), ('5', 'Pvalb'), '318556138')": {
+                "name": "(('bkg', ''), ('5', 'Pvalb'), '318556138')",
+                "target_model_id": "318556138",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0520000000000067,
+                    "syn_weight": 3.2695254225500004e-18,
+                    "target_median_fr": 8.94,
+                    "syn_weight_psp": 6.28754888951842e-17
+                }
+            },
+            "(('bkg', ''), ('5', 'Pvalb'), '320455763')": {
+                "name": "(('bkg', ''), ('5', 'Pvalb'), '320455763')",
+                "target_model_id": "320455763",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0429999999999921,
+                    "syn_weight": 3.2695254225500004e-18,
+                    "target_median_fr": 8.94,
+                    "syn_weight_psp": 7.603547494303713e-17
+                }
+            },
+            "(('bkg', ''), ('5', 'Pvalb'), '469801569')": {
+                "name": "(('bkg', ''), ('5', 'Pvalb'), '469801569')",
+                "target_model_id": "469801569",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0379999999999967,
+                    "syn_weight": 3.2695254225500004e-18,
+                    "target_median_fr": 8.94,
+                    "syn_weight_psp": 8.604014269869169e-17
+                }
+            },
+            "(('bkg', ''), ('5', 'Pvalb'), '478949560')": {
+                "name": "(('bkg', ''), ('5', 'Pvalb'), '478949560')",
+                "target_model_id": "478949560",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0499999999999971,
+                    "syn_weight": 3.2695254225500004e-18,
+                    "target_median_fr": 8.94,
+                    "syn_weight_psp": 6.539050845100373e-17
+                }
+            },
+            "(('bkg', ''), ('5', 'Pvalb'), '480952106')": {
+                "name": "(('bkg', ''), ('5', 'Pvalb'), '480952106')",
+                "target_model_id": "480952106",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0499999999999971,
+                    "syn_weight": 3.2695254225500004e-18,
+                    "target_median_fr": 8.94,
+                    "syn_weight_psp": 6.539050845100373e-17
+                }
+            },
+            "(('bkg', ''), ('5', 'Pvalb'), '481093525')": {
+                "name": "(('bkg', ''), ('5', 'Pvalb'), '481093525')",
+                "target_model_id": "481093525",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.041000000000011,
+                    "syn_weight": 3.2695254225500004e-18,
+                    "target_median_fr": 8.94,
+                    "syn_weight_psp": 7.974452250119806e-17
+                }
+            },
+            "(('bkg', ''), ('5', 'Pvalb'), '484742372')": {
+                "name": "(('bkg', ''), ('5', 'Pvalb'), '484742372')",
+                "target_model_id": "484742372",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0519999999999925,
+                    "syn_weight": 3.2695254225500004e-18,
+                    "target_median_fr": 8.94,
+                    "syn_weight_psp": 6.287548889520137e-17
+                }
+            },
+            "(('bkg', ''), ('5', 'Pvalb'), '487400838')": {
+                "name": "(('bkg', ''), ('5', 'Pvalb'), '487400838')",
+                "target_model_id": "487400838",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0500000000000113,
+                    "syn_weight": 3.2695254225500004e-18,
+                    "target_median_fr": 8.94,
+                    "syn_weight_psp": 6.539050845098514e-17
+                }
+            },
+            "(('bkg', ''), ('5', 'Pvalb'), '487594856')": {
+                "name": "(('bkg', ''), ('5', 'Pvalb'), '487594856')",
+                "target_model_id": "487594856",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0529999999999972,
+                    "syn_weight": 3.2695254225500004e-18,
+                    "target_median_fr": 8.94,
+                    "syn_weight_psp": 6.168915891604091e-17
+                }
+            },
+            "(('bkg', ''), ('5', 'Pvalb'), '488440436')": {
+                "name": "(('bkg', ''), ('5', 'Pvalb'), '488440436')",
+                "target_model_id": "488440436",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0499999999999971,
+                    "syn_weight": 3.2695254225500004e-18,
+                    "target_median_fr": 8.94,
+                    "syn_weight_psp": 6.539050845100373e-17
+                }
+            },
+            "(('bkg', ''), ('5', 'Pvalb'), '515305346')": {
+                "name": "(('bkg', ''), ('5', 'Pvalb'), '515305346')",
+                "target_model_id": "515305346",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0370000000000061,
+                    "syn_weight": 3.2695254225500004e-18,
+                    "target_median_fr": 8.94,
+                    "syn_weight_psp": 8.836555196079616e-17
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('5', 'Sst'))": {
+        "name": "(('bkg', ''), ('5', 'Sst'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "5",
+            "Sst"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('5', 'Sst'), '313862134')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '313862134')",
+                "target_model_id": "313862134",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0979999999999989,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 17.930796776816514
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '328015342')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '328015342')",
+                "target_model_id": "328015342",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0429999999999921,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 40.86553684019351
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '328031983')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '328031983')",
+                "target_model_id": "328031983",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0560000000000115,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 31.378894359422077
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '329224678')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '329224678')",
+                "target_model_id": "329224678",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0549999999999926,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 31.949419711422475
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '329254830')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '329254830')",
+                "target_model_id": "329254830",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0559999999999973,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 31.37889435943004
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '464212183')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '464212183')",
+                "target_model_id": "464212183",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0709999999999979,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 24.74955048067677
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '473011949')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '473011949')",
+                "target_model_id": "473011949",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0369999999999919,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 47.49238065211847
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '473593847')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '473593847')",
+                "target_model_id": "473593847",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0559999999999973,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 31.37889435943004
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '475057898')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '475057898')",
+                "target_model_id": "475057898",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0450000000000017,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 39.04929075839852
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '475542907')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '475542907')",
+                "target_model_id": "475542907",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0499999999999971,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 35.144361682562
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '475580568')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '475580568')",
+                "target_model_id": "475580568",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.066999999999993,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 26.22713558400272
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '482690728')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '482690728')",
+                "target_model_id": "482690728",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0760000000000076,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 23.121290580629264
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '485058595')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '485058595')",
+                "target_model_id": "485058595",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0709999999999979,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 24.74955048067677
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '485455285')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '485455285')",
+                "target_model_id": "485455285",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0489999999999923,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 35.86159355363823
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '486352114')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '486352114')",
+                "target_model_id": "486352114",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0849999999999937,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 20.67315393091917
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '490173806')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '490173806')",
+                "target_model_id": "490173806",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0729999999999932,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 24.071480604495363
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '491029832')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '491029832')",
+                "target_model_id": "491029832",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0750000000000028,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 23.429574455039116
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '491030723')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '491030723')",
+                "target_model_id": "491030723",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0499999999999971,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 35.144361682562
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '497560724')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '497560724')",
+                "target_model_id": "497560724",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0390000000000014,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 45.05687395199829
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '501730497')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '501730497')",
+                "target_model_id": "501730497",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0520000000000067,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 33.792655463995644
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '526785742')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '526785742')",
+                "target_model_id": "526785742",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0489999999999923,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 35.86159355363823
+                }
+            },
+            "(('bkg', ''), ('5', 'Sst'), '575637715')": {
+                "name": "(('bkg', ''), ('5', 'Sst'), '575637715')",
+                "target_model_id": "575637715",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0459999999999922,
+                    "syn_weight": 1.757218084128,
+                    "target_median_fr": 3.92,
+                    "syn_weight_psp": 38.20039313322381
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('6', 'Ntsr1'))": {
+        "name": "(('bkg', ''), ('6', 'Ntsr1'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "6",
+            "Ntsr1"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('6', 'Ntsr1'), '466632464')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '466632464')",
+                "target_model_id": "466632464",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0590000000000117,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 111.05175817904576
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '471789504')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '471789504')",
+                "target_model_id": "471789504",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0789999999999935,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 82.93738901981692
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '471800189')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '471800189')",
+                "target_model_id": "471800189",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0489999999999923,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 133.71538229726568
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '471819401')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '471819401')",
+                "target_model_id": "471819401",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0510000000000019,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 128.47164181499514
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '485287944')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '485287944')",
+                "target_model_id": "485287944",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0529999999999972,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 123.62365533142145
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '485905411')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '485905411')",
+                "target_model_id": "485905411",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0510000000000019,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 128.47164181499514
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '485938494')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '485938494')",
+                "target_model_id": "485938494",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0520000000000067,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 126.00103331854145
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '488426904')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '488426904')",
+                "target_model_id": "488426904",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0499999999999971,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 131.04107465130744
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '488430487')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '488430487')",
+                "target_model_id": "488430487",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0400000000000062,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 163.8013433140994
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '488432250')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '488432250')",
+                "target_model_id": "488432250",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0690000000000026,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 94.95730047195292
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '488448839')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '488448839')",
+                "target_model_id": "488448839",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0570000000000021,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 114.9483110976272
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '488676149')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '488676149')",
+                "target_model_id": "488676149",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0719999999999885,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 91.00074628563952
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '490259231')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '490259231')",
+                "target_model_id": "490259231",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0489999999999923,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 133.71538229726568
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '490264167')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '490264167')",
+                "target_model_id": "490264167",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0510000000000019,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 128.47164181499514
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '490485142')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '490485142')",
+                "target_model_id": "490485142",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.054000000000002,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 121.33432838082872
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '490718897')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '490718897')",
+                "target_model_id": "490718897",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0409999999999968,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 159.80618859915873
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '501562903')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '501562903')",
+                "target_model_id": "501562903",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0589999999999975,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 111.0517581790725
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '501566512')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '501566512')",
+                "target_model_id": "501566512",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.046999999999997,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 139.40539856522153
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '503286448')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '503286448')",
+                "target_model_id": "503286448",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0379999999999967,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 172.4224666464623
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '503814817')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '503814817')",
+                "target_model_id": "503814817",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0439999999999969,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 148.9103121037604
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '507914933')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '507914933')",
+                "target_model_id": "507914933",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0920000000000129,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 71.21797535395736
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '508980706')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '508980706')",
+                "target_model_id": "508980706",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0409999999999968,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 159.80618859915873
+                }
+            },
+            "(('bkg', ''), ('6', 'Ntsr1'), '539742766')": {
+                "name": "(('bkg', ''), ('6', 'Ntsr1'), '539742766')",
+                "target_model_id": "539742766",
+                "dynamics_params": "exc_to_e6.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0570000000000021,
+                    "syn_weight": 6.552053732565,
+                    "target_median_fr": 1.86,
+                    "syn_weight_psp": 114.9483110976272
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('6', 'Vip'))": {
+        "name": "(('bkg', ''), ('6', 'Vip'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "6",
+            "Vip"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('6', 'Vip'), '565880475')": {
+                "name": "(('bkg', ''), ('6', 'Vip'), '565880475')",
+                "target_model_id": "565880475",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.093999999999994,
+                    "syn_weight": 2.632469083272,
+                    "target_median_fr": 6.73,
+                    "syn_weight_psp": 28.004990247576227
+                }
+            },
+            "(('bkg', ''), ('6', 'Vip'), '582917630')": {
+                "name": "(('bkg', ''), ('6', 'Vip'), '582917630')",
+                "target_model_id": "582917630",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0590000000000117,
+                    "syn_weight": 2.632469083272,
+                    "target_median_fr": 6.73,
+                    "syn_weight_psp": 44.61812005544877
+                }
+            },
+            "(('bkg', ''), ('6', 'Vip'), '585080288')": {
+                "name": "(('bkg', ''), ('6', 'Vip'), '585080288')",
+                "target_model_id": "585080288",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.081000000000003,
+                    "syn_weight": 2.632469083272,
+                    "target_median_fr": 6.73,
+                    "syn_weight_psp": 32.499618311998766
+                }
+            },
+            "(('bkg', ''), ('6', 'Vip'), '592816620')": {
+                "name": "(('bkg', ''), ('6', 'Vip'), '592816620')",
+                "target_model_id": "592816620",
+                "dynamics_params": "exc_to_vip.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0799999999999983,
+                    "syn_weight": 2.632469083272,
+                    "target_median_fr": 6.73,
+                    "syn_weight_psp": 32.9058635409007
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('6', 'Pvalb'))": {
+        "name": "(('bkg', ''), ('6', 'Pvalb'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "6",
+            "Pvalb"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('6', 'Pvalb'), '471087830')": {
+                "name": "(('bkg', ''), ('6', 'Pvalb'), '471087830')",
+                "target_model_id": "471087830",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0450000000000017,
+                    "syn_weight": 1.91467447012e-20,
+                    "target_median_fr": 9.76,
+                    "syn_weight_psp": 4.254832155822061e-19
+                }
+            },
+            "(('bkg', ''), ('6', 'Pvalb'), '478058328')": {
+                "name": "(('bkg', ''), ('6', 'Pvalb'), '478058328')",
+                "target_model_id": "478058328",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0480000000000018,
+                    "syn_weight": 1.91467447012e-20,
+                    "target_median_fr": 9.76,
+                    "syn_weight_psp": 3.9889051460831828e-19
+                }
+            },
+            "(('bkg', ''), ('6', 'Pvalb'), '571396942')": {
+                "name": "(('bkg', ''), ('6', 'Pvalb'), '571396942')",
+                "target_model_id": "571396942",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.041000000000011,
+                    "syn_weight": 1.91467447012e-20,
+                    "target_median_fr": 9.76,
+                    "syn_weight_psp": 4.669937731998746e-19
+                }
+            },
+            "(('bkg', ''), ('6', 'Pvalb'), '581404810')": {
+                "name": "(('bkg', ''), ('6', 'Pvalb'), '581404810')",
+                "target_model_id": "581404810",
+                "dynamics_params": "exc_to_pv.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.059999999999988,
+                    "syn_weight": 1.91467447012e-20,
+                    "target_median_fr": 9.76,
+                    "syn_weight_psp": 3.1911241168673023e-19
+                }
+            }
+        }
+    },
+    "(('bkg', ''), ('6', 'Sst'))": {
+        "name": "(('bkg', ''), ('6', 'Sst'))",
+        "pre": [
+            "bkg",
+            ""
+        ],
+        "post": [
+            "6",
+            "Sst"
+        ],
+        "property_map": {
+            "n_conn": 4
+        },
+        "connect_models": {
+            "(('bkg', ''), ('6', 'Sst'), '473564515')": {
+                "name": "(('bkg', ''), ('6', 'Sst'), '473564515')",
+                "target_model_id": "473564515",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0579999999999927,
+                    "syn_weight": 3.15562589751,
+                    "target_median_fr": 10.28,
+                    "syn_weight_psp": 54.40734306052407
+                }
+            },
+            "(('bkg', ''), ('6', 'Sst'), '475512108')": {
+                "name": "(('bkg', ''), ('6', 'Sst'), '475512108')",
+                "target_model_id": "475512108",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0490000000000065,
+                    "syn_weight": 3.15562589751,
+                    "target_median_fr": 10.28,
+                    "syn_weight_psp": 64.40052852060359
+                }
+            },
+            "(('bkg', ''), ('6', 'Sst'), '476104386')": {
+                "name": "(('bkg', ''), ('6', 'Sst'), '476104386')",
+                "target_model_id": "476104386",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0499999999999971,
+                    "syn_weight": 3.15562589751,
+                    "target_median_fr": 10.28,
+                    "syn_weight_psp": 63.11251795020359
+                }
+            },
+            "(('bkg', ''), ('6', 'Sst'), '502382506')": {
+                "name": "(('bkg', ''), ('6', 'Sst'), '502382506')",
+                "target_model_id": "502382506",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0549999999999926,
+                    "syn_weight": 3.15562589751,
+                    "target_median_fr": 10.28,
+                    "syn_weight_psp": 57.37501631837135
+                }
+            },
+            "(('bkg', ''), ('6', 'Sst'), '534141324')": {
+                "name": "(('bkg', ''), ('6', 'Sst'), '534141324')",
+                "target_model_id": "534141324",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0319999999999964,
+                    "syn_weight": 3.15562589751,
+                    "target_median_fr": 10.28,
+                    "syn_weight_psp": 98.61330929719836
+                }
+            },
+            "(('bkg', ''), ('6', 'Sst'), '547325858')": {
+                "name": "(('bkg', ''), ('6', 'Sst'), '547325858')",
+                "target_model_id": "547325858",
+                "dynamics_params": "exc_to_sst.json",
+                "property_map": {
+                    "nsyns": 1,
+                    "unitary_PSP": 0.0380000000000109,
+                    "syn_weight": 3.15562589751,
+                    "target_median_fr": 10.28,
+                    "syn_weight_psp": 83.0427867765551
+                }
+            }
+        }
+    }
+}
