@@ -39,14 +39,14 @@ install from pypi using pip.
 pip install airavata-cerebrum
 ```
 
-# Model Notebooks and Scripts
+# Example Usage
 
-The `resources` directory in our 
-[github repo](https://github.com/apache/airavata-cerebrum/tree/main/resources) 
+The `examples` directory in our 
+[github repo](https://github.com/apache/airavata-cerebrum/tree/main/examples) 
 contains a set of notebooks to demonstrate Cerebrum, and
 also standalone batch scripts that build/simulate models using cerbrum.
 Please refer to 
-[resources/README.md](https://github.com/apache/airavata-cerebrum/tree/main/resources/notebooks/README.md)
+[examples/README.md](https://github.com/apache/airavata-cerebrum/tree/main/examples/README.md)
 for additional installation requirements to run the notebooks. 
 
 
