@@ -6,7 +6,7 @@ from ..base import DbQueryCBT, OpXFormerCBT, QryDBWriter
 
 from .abc_mouse import (
     ABCDbMERFISH_CCFQuery,
-    ABCDuckDBWriter 
+    ABCDuckDBWriter
 )
 from .abm_celltypes import (
     CTDbCellCacheQuery,
@@ -23,6 +23,7 @@ from .me_features import (
     MEFDataQuery,
     MEFDuckDBWriter,
 )
+
 
 #
 # ------- Query and Xform Registers -----

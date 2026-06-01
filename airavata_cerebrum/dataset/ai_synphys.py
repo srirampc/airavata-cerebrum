@@ -5,18 +5,21 @@ import typing as t
 #
 import duckdb
 import polars as pl
-import aisynphys
+# import aisynphys
 #
 from typing_extensions import override
 from pydantic import Field
-from aisynphys.database import SynphysDatabase
-from aisynphys.database.schema.experiment import PairBase
-from aisynphys.cell_class import CellClass, classify_cells, classify_pairs
-from aisynphys.connectivity import measure_connectivity
+from ..ext.aisynphys import config as aisynphys_config
+from ..ext.aisynphys.database.synphys_database import SynphysDatabase
+from ..ext.aisynphys.database.schema.experiment import PairBase
+from ..ext.aisynphys.cell_class import (
+    CellClass, classify_cells, classify_pairs
+)
+from ..ext.aisynphys.connectivity import measure_connectivity
 #
 from ..base import (
     CerebrumBaseModel,
-    BaseParams, 
+    BaseParams,
     DbQuery,
     QryDBWriter,
     QryItr,
@@ -92,7 +95,7 @@ class AISynPhysHelper:
             for cselect in CELL_CLASS_SELECT
             if (cselect.layer in layer_set) and (cselect.neuron in neuron_set)
         }
-    
+
     @staticmethod
     def get_connectivity(
         layer_list: list[str] | None,
@@ -106,7 +109,7 @@ class AISynPhysHelper:
                 pair_groups,
                 sigma=100e-6,
                 dist_measure="lateral_distance",
-            ), 0 
+            ), 0
         except RuntimeWarning as _rex:
             return {}, 1
 
@@ -116,10 +119,13 @@ class AISynInitParams(CerebrumBaseModel):
     projects : t.Annotated[list[str], Field(title="AI Syn. Projects")] = []
     db_size  : t.Annotated[str, Field(title="DB Size")] = "small"
 
+
 class AISynExecParams(CerebrumBaseModel):
     layer : t.Annotated[list[str], Field(title="Layers")]
 
+
 AISynBaseParams : t.TypeAlias = BaseParams[AISynInitParams, AISynExecParams]
+
 
 class AISynPhysQuery(DbQuery[AISynInitParams, AISynExecParams]):
     class QryParams(AISynBaseParams):
@@ -139,11 +145,11 @@ class AISynPhysQuery(DbQuery[AISynInitParams, AISynExecParams]):
         """
         self.name : str = __name__ + ".AIProject"
         self.download_base : str = init_params.download_base
-        aisynphys.config.cache_path = self.download_base
+        aisynphys_config.cache_path = self.download_base
         self.sdb : SynphysDatabase = SynphysDatabase.load_current(
             init_params.db_size
         )
-        self.projects : list[str] =  (
+        self.projects : list[str] = (
             init_params.projects
             if init_params.projects else self.sdb.mouse_projects
         )
@@ -190,7 +196,7 @@ class AISynPhysQuery(DbQuery[AISynInitParams, AISynExecParams]):
         # try:
         #     results = measure_connectivity(
         #         pair_groups, sigma=100e-6, dist_measure="lateral_distance"
-        #     ) 
+        #     )
         # except RuntimeWarning:
         #     nwarnings += 1
         #     results = {}
@@ -230,14 +236,14 @@ class DFBuilder:
     def syn_row(pair_literal: str, value: float) -> tuple[str, str, float]:
         pairx = ast.literal_eval(pair_literal)
         return (pairx[0], pairx[1], value)
-    
+
     @staticmethod
     def split_pairs(p_dict: dict[str, t.Any]):
         return (
             DFBuilder.syn_row(px, vx)
             for px, vx in p_dict.items()
         )
- 
+
     @staticmethod
     def build(
         in_iter: QryItr | None,
@@ -245,7 +251,7 @@ class DFBuilder:
     ) -> pl.DataFrame | None:
         if in_iter is None:
             return None
-        rschema=[
+        rschema = [
             ("pre_synapse", pl.String),
             ("post_synapse", pl.String),
             ("connect_prob", pl.Float64)
@@ -271,7 +277,7 @@ class AISynDuckDBWriter(QryDBWriter):
         in_iter: QryItr | None,
         **_params: t.Any,
     ) -> None:
-        result_df = DFBuilder.build(in_iter) # pyright: ignore[reportUnusedVariable]
+        result_df = DFBuilder.build(in_iter)  # pyright: ignore[reportUnusedVariable]
         self.conn.execute(
             "CREATE OR REPLACE TABLE ai_synphys AS SELECT * FROM result_df"
         )

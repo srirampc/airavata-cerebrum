@@ -19,64 +19,99 @@ straight-forward to reproduce.
 - **Streamlined Environment**: Ensuring a lightweight, efficient framework for
   both beginners and advanced users alike.
 
-# Model Notebooks and Scripts
-
-The resources directory contains the list of notebooks to demonstrate Cerebrum, and
-standalone batch scripts to build/simulate using cerbrum.
-
-## IPython Notebooks
-
-| Model                                     | Notebook                                                          |
-| ----------------------------------------- | ----------------------------------------------------------------- |
-| Demo of Cerebrum V1L4 model               | [V1 L4 IPython Notebook](resources/notebooks/V1L4-Notebook.ipynb) |
-| Demo of Cerebrum V1 model                 | [V1 IPython Notebook](resources/notebooks/V1-Notebook.ipynb)      |
-| Demo of Cerebrum V1 model on Cybershuttle | [V1 IPython Notebook](resources/notebooks/V1-CS-Notebook.ipynb)   |
-| Demo of WGN Sleep model                   | [WGN Sleep IPython Notebook](resources/notebooks/WGN-Sleep.ipynb) |
-
-## Command-line scripts
-
-| Model                              | Scripts                                                           |
-| ---------------------------------- | ----------------------------------------------------------------- |
-| Build/Simulate Cerebrum V1 model   | [V1 script](resources/notebooks/mousev1/cli.py)                   |
-| Simulate Cerebrum V1 model w. BMTK | [V1 script](resources/notebooks/mousev1/simulate_cli.py)          |
-| Simulate Cerebrum V1 model w. NEST | [V1 script](resources/notebooks/mousev1/nest_simulate_cli.py)     |
-
 # Install Airavata Cerebrum
 
-Airavata Cerebrum requires python3.10+ environment.
-It is currently tested only in Linux operating system.
+Airavata Cerebrum requires python v3.10 environment.
+It is currently tested only in the Linux operating system.
+To install from the source, we recommend creating a `conda` environment using
+[miniforge](https://github.com/conda-forge/miniforge) as below:
 
-To install locally, we recommend to create a virtual environment using
-conda ([miniforge](https://github.com/conda-forge/miniforge) for a faster
-installation) as below:
-
-```
+```sh
 conda config --add channels conda-forge
-conda create -n cerebrum python=3.10 nest-simulator mpi4py nodejs
+conda create -n cerebrum python=3.10 nodejs
 conda activate cerebrum
 ```
 
-nest-simulator should be installed when creating the conda environment
-since there is no PyPI package available for NEST.
+To install Airavata Cerebrum from source into the environment created above,
+install from pypi using pip.
 
-Cerebrum depends upon NEST and BMTK, both of which depend upon mpi4py, the python
-interface to MPI. In the above commands, we attempt to install via conda.
-However, in some cases where conda's MPI causes some errors, we recommend
-that MPI is installed from the OS.
-In case of Ubuntu, this can be accomplished by
-
-```
-sudo apt install openmpi-bin  libopenmpi-dev
+```sh
+pip install airavata-cerebrum
 ```
 
-After installing MPI libraries, mpi4py can be installed via pip manually.
+# Example Usage
 
-To install Airavata Cerebrum into the environment created above,
-pip can be used with the git option as follows.
+The `examples` directory in our 
+[github repo](https://github.com/apache/airavata-cerebrum/tree/main/examples) 
+contains a set of notebooks to demonstrate Cerebrum, and
+also standalone batch scripts that build/simulate models using cerbrum.
+Please refer to 
+[examples/README.md](https://github.com/apache/airavata-cerebrum/tree/main/examples/README.md)
+for additional installation requirements to run the notebooks. 
 
+
+# Development 
+
+## Clone the source github repo
+`airavata-cerebrum` includes three submodules:
+[abc_atlas_access](https://github.com/srirampc/abc_atlas_access),
+[aisynphys](https://github.com/srirampc/aisynphys) and
+[codetiming](https://github.com/srirampc/codetiming).
+Clone the repo with all submodules  as below.
+```sh
+git clone --recurse-submodules https://github.com/apache/airavata-cerebrum.git
 ```
-pip install git+https://github.com/apache/airavata-cerebrum.git
+
+All the dependencies are included with in the `airavata_cerebrum/ext` namespace.
+To get these python module to work in developement environment, create the following
+links:
+```sh
+cd airavata-cerebrum/airavata_cerebrum
+ln -s ../../ext/codetiming/codetiming/
+ln -s ../../ext/abc_atlas_access/src/abc_atlas_access/
+ln -s ../../ext/aisynphys/aisynphys/
+ln -s ../../ext/abc_atlas_access/src/manifest_builder/
 ```
 
-See [INSTALL.md](INSTALL.md) for details about how to install for a
-development environment and other issues.
+## Installing Environment For Development
+
+Development environment for Airavata Cerebrum is created as a python3.10+ 
+virtual environment in `conda` using the `environment.yml` file.
+```sh
+conda config --add channels conda-forge
+conda env create -n cbmdev -f environment.yml
+conda activate cbmdev
+```
+
+`environment.yml` includes the version of each of the package to make conda's 
+dependency resolution algorithm to run faster. 
+
+## Buliding dist/wheels
+
+We use [poetry](https://python-poetry.org/) a build tool which can be buit 
+as follows.
+Intall the follwing dependencies for building the dist/wheels:
+```sh
+pip install build
+pip install twine==6.0.1
+```
+
+Build and upload to pypi:
+```sh
+rm -rf dist; python3 -m build
+python3 -m twine upload --repository pypi dist/* --verbose
+```
+
+
+## Potential Environment Issues
+
+### Miniforge `conda` Issue when installed with `spack`
+
+If installing conda with miniforge, in some cases the following error appears:
+`ModuleNotFoundError: No module named 'conda'`
+
+This happens when the conda script (`$CONDA_EXE`)  has in its first line 
+`#!/usr/bin/env python`, which picks up the python from the `cerebrum` environment
+which is currently being installed instead of the base environment. To fix this,
+replace the `/usr/bin/env python` with the python installed in the base 
+environment (generally corresponds of the environment variable `$CONDA_PYTHON_EXE`).

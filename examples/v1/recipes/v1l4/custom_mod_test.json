@@ -1,0 +1,60 @@
+{
+    "name": "v1l4",
+    "dims": {
+        "core_radius": 400.0,
+        "radius": 845.0
+    },
+    "locations": {
+        "VISp4": {
+            "name": "VISp4",
+            "dims": {
+                "depth_range": [
+                    357,
+                    505
+                ]
+            },
+            "neurons": {
+                "('4', 'Sst')": {
+                    "name": "('4', 'Sst')",
+                    "ei": "i",
+                    "fraction": 0.0,
+                    "dims": {
+                        "nsyn_lognorm_shape": 0.55,
+                        "nsyn_lognorm_scale": 5305.151
+                    }
+                }
+            }
+        }
+    },
+    "connections": {
+        "(('4', 'Rorb'), ('4', 'Rorb'))": {
+            "name": "(('4', 'Rorb'), ('4', 'Rorb'))",
+            "pre": [
+                "4",
+                "Rorb"
+            ],
+            "post": [
+                "4",
+                "Rorb"
+            ],
+            "probability": 0.0,
+            "connect_models": {
+                "(('4', 'Rorb', ''), ('4', 'Rorb', '322723785'))": {
+                    "name": "(('4', 'Rorb', ''), ('4', 'Rorb', '322723785'))",
+                    "target_model_id": "322723785",
+                    "source_model_id": "",
+                    "weight_max": 2.4,
+                    "delay": 1.48,
+                    "property_map": {
+                        "params_file": "e4_to_e4.json",
+                        "PSP_scale_factor": 0.063,
+                        "lognorm_shape": 0.6032438129,
+                        "lognorm_scale": 0.3730737936,
+                        "synphys_mean": 0.4558436608
+                    }
+                }
+            }
+        }
+    },
+    "ext_networks": {}
+}

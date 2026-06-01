@@ -164,9 +164,12 @@ cython_debug/
 #.idea/
 
 # Data directories
+airavata_cerebrum/ext
 brain_atlases/
-V1/
-/data/
 cache/
-/resources/notebooks/airavata_cerebrum
+/data/
+/examples/v1/airavata_cerebrum
+/examples/sleep/wbn_sleep/data
+/scripts/output/
 /tests/airavata_cerebrum
+V1/

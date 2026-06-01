@@ -10,8 +10,10 @@ from ..base import (
     DbQuery, QryDBWriter, QryItr
 )
 
+
 class InitParams(CerebrumBaseModel):
     file_url : t.Annotated[str, Field(title="Download Base")]
+
 
 class ExecParams(CerebrumBaseModel):
     key           : t.Annotated[str , Field(title="Input Key")] = ""
@@ -19,13 +21,14 @@ class ExecParams(CerebrumBaseModel):
     mef_attribute  : t.Annotated[str | None , Field(title="MEF Property")] = None
 
 
-MEFParamsBase : t.TypeAlias = BaseParams[InitParams,  ExecParams] 
+MEFParamsBase : t.TypeAlias = BaseParams[InitParams, ExecParams]
+
 
 class MEFDataQuery(DbQuery[InitParams, ExecParams]):
     class QryParams(MEFParamsBase):
         init_params: t.Annotated[InitParams, Field(title='Init Params')]
         exec_params: t.Annotated[ExecParams, Field(title='Exec Params')]
-    
+
     def __init__(self, init_params: InitParams, **params: t.Any):
         self.file_url : str = init_params.file_url
 
@@ -52,8 +55,8 @@ class MEFDataQuery(DbQuery[InitParams, ExecParams]):
     ) -> QryItr | None:
         edf = pl.read_excel(self.file_url)
         if first_iter is None:
-            return ( {"mef": rcdx} for rcdx in edf.to_dicts() )
-        #
+            return ({"mef": rcdx} for rcdx in edf.to_dicts())
+
         def select_fn(initx: t.Any):
             return (
                 initx[exec_params.key][exec_params.attribute]
@@ -70,7 +73,6 @@ class MEFDataQuery(DbQuery[InitParams, ExecParams]):
             }
             for inx in first_iter
         )
-        
 
     @override
     @classmethod
@@ -105,7 +107,7 @@ class MEFDuckDBWriter(QryDBWriter):
         **_params: t.Any,
     ) -> None:
         result_df = DFBuilder.build(in_iter)  # pyright: ignore[reportUnusedVariable]
-        tb_name = f"mef_features"
+        tb_name = "mef_features"
         self.conn.execute(
             f"CREATE OR REPLACE TABLE {tb_name} AS SELECT * FROM result_df"
         )

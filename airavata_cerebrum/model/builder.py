@@ -2,7 +2,6 @@ import typing as t
 import numpy as np
 import numpy.typing as npt
 
-from bmtk.builder import NetworkBuilder
 
 from . import structure
 
@@ -20,30 +19,33 @@ def generate_random_pos(
     return positions
 
 
-def add_network_nodes(net_model: structure.Network, out_file: str) -> NetworkBuilder:
-    net = NetworkBuilder(net_model.name)
-    for location, loc_region in net_model.locations.items():
-        for pop_name, pop_neurons in loc_region.neurons.items():
-            N = pop_neurons.N
-            params = {"location": loc_region.dims,
-                      "population": pop_neurons.dims}
-            positions = generate_random_pos(N, params)
-            ei = pop_neurons.ei
-            node_props = {
-                "N": N,
-                "model_type": "point_process",
-                "ei": ei,
-                "location": location,
-                "pop_name": pop_name,
-                "population": net_model.name,
-                "x": positions[:, 0],
-                "y": positions[:, 1],
-                "z": positions[:, 2],
-                "tuning_angle": np.linspace(0.0, 360.0, N, endpoint=False),
-            }
-            net.add_nodes(**node_props)  # pyright: ignore[reportArgumentType]
-    net.save(out_file)
-    return net
+def add_network_nodes(net_model: structure.Network, out_file: str):
+    #TODO: remove the BMTK dependency and add 
+    pass
+    # from bmtk.builder import NetworkBuilder
+    # net = NetworkBuilder(net_model.name)
+    # for location, loc_region in net_model.locations.items():
+    #     for pop_name, pop_neurons in loc_region.neurons.items():
+    #         N = pop_neurons.N
+    #         params = {"location": loc_region.dims,
+    #                   "population": pop_neurons.dims}
+    #         positions = generate_random_pos(N, params)
+    #         ei = pop_neurons.ei
+    #         node_props = {
+    #             "N": N,
+    #             "model_type": "point_process",
+    #             "ei": ei,
+    #             "location": location,
+    #             "pop_name": pop_name,
+    #             "population": net_model.name,
+    #             "x": positions[:, 0],
+    #             "y": positions[:, 1],
+    #             "z": positions[:, 2],
+    #             "tuning_angle": np.linspace(0.0, 360.0, N, endpoint=False),
+    #         }
+    #         net.add_nodes(**node_props)  # pyright: ignore[reportArgumentType]
+    # net.save(out_file)
+    # return net
 
 
 # TODO: Build Model

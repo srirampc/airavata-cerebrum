@@ -1,0 +1,15 @@
+node_type_id model_type ei pop_name location
+100 virtual e sON_TF1 lgn
+101 virtual e sON_TF2 lgn
+102 virtual e sON_TF4 lgn
+103 virtual e sON_TF8 lgn
+104 virtual e sOFF_TF1 lgn
+105 virtual e sOFF_TF2 lgn
+106 virtual e sOFF_TF4 lgn
+107 virtual e sOFF_TF8 lgn
+108 virtual e sOFF_TF15 lgn
+109 virtual e tOFF_TF4 lgn
+110 virtual e tOFF_TF8 lgn
+111 virtual e tOFF_TF15 lgn
+112 virtual e sONsOFF_001 lgn
+113 virtual e sONtOFF_001 lgn

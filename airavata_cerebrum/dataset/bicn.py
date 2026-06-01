@@ -17,7 +17,7 @@ BICN_DISECT_META = {
 BICN_DB = list(BICN_DATA_DIR.keys())
 
 
-def get_disect_meta(data_base, slice):
+def get_disect_meta(data_base: str, slice: str):
     """
     Load dissection data
     """

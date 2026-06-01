@@ -1,7 +1,8 @@
 [flake8]
-extend-ignore = 
-    E261,  # at least two spaces before inline comment
-    E262,  # inline comment should start with '# '
-    W503,  # line break before binary operator
-    W504   # line break after binary operator
+extend-ignore = F841, E261, E262, W503, W504 
+# F841: local variable name is assigned to but never used         
+# E261: at least two spaces before inline comment                 
+# E262: inline comment should start with '# '                     
+# W503: line break before binary operator                         
+# W504: line break after binary operator                          
 max-line-length = 120
