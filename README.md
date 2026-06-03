@@ -2,22 +2,23 @@
 
 ## Introduction
 
-Airavata Cerebrum aims to simplify building whole brain models via integration
-of cellular-level brain atlases with advanced computational tools.
-Our goal is to create a cohesive, open-source framework that allows for
-accelerated 'data to model' workflows that are flexible to update and
-straight-forward to reproduce.
+Airavata Cerebrum is an  open-source framework that provides 
+tools to simplify building whole brain models via integration
+of data collected from cellular-level brain atlases.
+Cerebrum modules allow for accelerated 'data to model' workflows that are 
+flexible to update, and straight-forward to reproduce.
 
 ## Key Features
 
 - **Integration of Brain Atlases**: Transparently connect to publicly available
-  cellular-level brain atlases into a single, accessible platform.
+  cellular-level brain atlases via a single, accessible platform.
 - **Model Consruction Workflows**: Workflows to collect/filter/combine data from
   different databases and construct whole brain scale models.
+- **Model Editor**: Utilties for simple edits  
 - **Open-Source Framework**: Developing a user-friendly, open-source environment
   for neuroscience research.
-- **Streamlined Environment**: Ensuring a lightweight, efficient framework for
-  both beginners and advanced users alike.
+- **Streamlined Environment**: A lightweight, efficient framework that is 
+  interactively accessible via jupyter/marimo notebooks.
 
 # Install Airavata Cerebrum
 
@@ -43,8 +44,9 @@ pip install airavata-cerebrum
 
 The `examples` directory in our 
 [github repo](https://github.com/apache/airavata-cerebrum/tree/main/examples) 
-contains a set of notebooks to demonstrate Cerebrum, and
-also standalone batch scripts that build/simulate models using cerbrum.
+contains a set of notebooks and scripts that demonstrate the capabilities of 
+Cerebrum. Both the notebooks and standalone batch scripts instruct the use of 
+Cerebrum in building/simulating large-scale neuroscience models.
 Please refer to 
 [examples/README.md](https://github.com/apache/airavata-cerebrum/tree/main/examples/README.md)
 for additional installation requirements to run the notebooks. 
@@ -57,14 +59,15 @@ for additional installation requirements to run the notebooks.
 [abc_atlas_access](https://github.com/srirampc/abc_atlas_access),
 [aisynphys](https://github.com/srirampc/aisynphys) and
 [codetiming](https://github.com/srirampc/codetiming).
-Clone the repo with all submodules  as below.
+Clone the repository along with all submodules as below.
 ```sh
 git clone --recurse-submodules https://github.com/apache/airavata-cerebrum.git
 ```
 
-All the dependencies are included with in the `airavata_cerebrum/ext` namespace.
-To get these python module to work in developement environment, create the following
-links:
+In the wheel file, all the dependencies are included with in
+the `airavata_cerebrum/ext` namespace.
+To get these modules to work in developement environment, create the following
+links to the paths in the _ext_ directory:
 ```sh
 cd airavata-cerebrum/airavata_cerebrum
 ln -s ../../ext/codetiming/codetiming/
