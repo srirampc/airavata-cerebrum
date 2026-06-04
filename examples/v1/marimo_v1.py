@@ -7,6 +7,14 @@ app = marimo.App(width="medium")
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
+    **NOTE:: By Default the cells are not run automatically. Click the play button below to populate the cells**
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
     # V1 Model using Apache Cerebrum
     """)
     return
@@ -265,7 +273,6 @@ def _(BaseTree, dm_motree, dm_panels, mo, tree_view_widths):
         widths=tree_view_widths
     )
 
-
     return
 
 
@@ -288,8 +295,10 @@ def _(mo):
 
 
 @app.cell
-def _(custom_mod_struct):
-    custom_mod_struct.model_dump()
+def _():
+    # Uncomment
+    #
+    # custom_mod_struct.model_dump()
     return
 
 
