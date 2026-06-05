@@ -7,7 +7,7 @@ app = marimo.App(width="medium")
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    **NOTE:: By Default the cells are not run automatically. Click the play button below to populate the cells**
+    **NOTE: By default, the cells are NOT run automatically. Click the play button below to populate the cells**
     """)
     return
 
@@ -23,46 +23,44 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(f"""
-    ## Introduction to Cerebrum
+    This notebook walks through the Cerebrum workflow to construct
+    a simple *V1* model. The notebook 
+    - overviews the data sources configuration,
+    - explore the downloaded data,
+    - build the model from code,
+    - run the simulation, and finally 
+    - visualize the simulation outputs.
 
-    Cerebrum follows a standard workflow when building model with data acquired from large databases
-
-    ### Cerebrum Workflow Structure
+    ## Structure of the Cerebrum Workflow
 
     {mo.image("img/Workflow.png", width=500)}
 
 
+    The workflow steps to construct a model in Cerebrum are as follows (as shown in the figure above): 
 
-    The following are the key workflow steps to construct in Cerebrum follows the following steps (as shown in the figure above):
-
-    1. Query and download the requisite data from public databases. In case of V1, we collect from the following databases:
+    1. Query and download the requisite data from public databases.
+       In case of V1, we acquire data from the following databases:
          - Allen Model Database,
          - Allen Brain Atlas
-         - Synaptic Physiology datasets.
-    2. Map acquired data to the relevant regions relevant of the model to built.
-    3. Fill-in any missing details via an optional user-defined custom mod definitions.
-    5. Realize the final network of neurons in SONATA format.
+         - Synaptic Physiology datasets. 
+    2. Map the acquired data to the relevant regions of the model to be built. 
+    3. Fill-in any missing details via an optional user-defined **custom mod** definitions. 
+    4. Realize the final network of neurons in the SONATA format.
 
 
-    ### Model Recipe
+    ## Model Recipe
 
-    Model Recipe (files in sub-folder `model_recipe/v1`) defines key components for constructing a Network with Cerebrum.
+    Model Recipe (files in sub-folder `recipes/v1`) defines key components for constructing a Network with Cerebrum. 
 
     - **Data Providers:** Links to source database and query parameters
     - **Filter and Transformers:** Data processing workflow such as filtering via selection criteria on the queried data.
     - **Data2Model Mappers:** Mapper methods that map data to model components.
     - **User Modifications:** Descriptions of user additions/removals to the purely data-driven model
 
-    The following figure shows the overall structure a Model recipe is defined for the V1 model:
+    The following figure shows the overall structure of a Model recipe definition.
 
     {mo.image("img/Recipe.png", width=500)}
-    """)
-    return
 
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(r"""
     ## Install dependencies
 
     The Notebook is expected to be run in a `conda` environment with `cerebrum` and other dependcies installed.
@@ -106,26 +104,19 @@ def _():
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
-    # V1 Recipe Description
-    """)
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
     mo.md(r"""
+    # V1 Recipe Description
     ## V1 Model Recipe
 
-    The Cerebrum V1 model recipe includes the following three sections. For V1, the model recipe is defined by a collection of human-readable json files under the recipe directory `recipes/v1`.
+    The Cerebrum V1 model recipe includes the following three sections. For V1, the model recipe is defined by a collection of human-readable json files in the  directory `recipes/v1`.
 
     1. **source_data**
-        - Describes how the source databases are connected
-        - Defines what operations applied to the data such as filters etc.
-        - For V1, the `recipes/v1/recipe_data.json` file -- containing the **source_data** section.
+        - Describes how the source databases are connected.
+        - Defines the operations applied to the downloaded data such as filters etc.
+        - For V1, the `recipes/v1/recipe_data.json` file contains the **source_data** section.
     2. **data2model_map**
-        - Describes mapping between source data and different regions/segments of the model.
-        - For V1, we have five recipe files, one corresponding each layers of the V1 model -- containing the **data2model_map** section, corresponding to each layer.
+        - Describes mapping between source data and different regions of the model.
+        - For V1, we have five recipe files, one corresponding each layers of the V1 model that contains the **data2model_map** section, corresponding to each layer.
             - `recipes/v1/recipe_dm_l1.json`
             - `recipes/v1/recipe_dm_l23.json`
             - `recipes/v1/recipe_dm_l4.json`
@@ -172,17 +163,24 @@ def _(mo):
     mo.md(r"""
     ## Exploring the Source Data Section
 
-    Cerebrum has built-in classes to download data from multiple data provider modules. It includes:
-    1. Methods for defining the querying from the database and filter the data based on specific criteria
-    2. Utilities to visualize the data provider configurations in easy-to-understand explorer view inside Jupyter notebook with the relevant parameters displayed in the side panel.
+    Cerebrum includes modules that can download data from multiple
+    data provider modules. It includes
+    - Methods for defining the querying from the database and
+      filter the data based on specific criteria.
+    - Utilities to visualize the data provider configurations in
+      easy-to-understand explorer view inside Jupyter notebook
+      with the relevant parameters displayed in the side panel.
 
-    Cerebrum Construction of Mouse V1 is enabled by data with three different data providers:
-    1. Allen Cell Types database,
-    2. Allen Brain Cell Atlas,
-    3. AI Synaptic Physiology Database, and
-    4. Gouwens et. al. (2019) neuron classification based on electrophysiolocial data.
+    Cerebrum Construction of Mouse V1 is enabled by data with
+    three different data providers:
+    - Allen Cell Types database,
+    - Allen Brain Cell Atlas,
+    - AI Synaptic Physiology Database, and
+    - Gouwens et. al. (2019) neuron classification based on
+      electrophysiolocial data.
 
-    ***NOTE: Running code below within the  notebook will display the tree structure of the source_data section from the json files***
+    ***NOTE: Running code below within the jupyter notebook will display
+    the structure of the recipe's source_data section***
     """)
     return
 
@@ -190,6 +188,22 @@ def _(mo):
 @app.cell
 def _(md_recipe_setup):
     md_recipe_setup.get_section('source_data')
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ### Visualize Source Data
+
+    Cerebrum also provides a Jupyter Notebook Widgets that
+    aids the visualization of the source data configration.
+    The `DataSourceRecipeView` renders the data source
+    information and query parameters in a user friendly output
+    as compared to the strict names in json file.
+
+    **NOTE: Running the code below with show an interactive explorer-like tree structure**
+    """)
     return
 
 
@@ -221,16 +235,27 @@ def _(mo):
 
     Definitions for data2model_map includes two subsections:
 
-    1. *Locations:*
-        - Locations are defined hiearchially with each section defining the data links.
-        - For V1, data from Cell types database and the MERFISH atlas map to neuron models and the distribution of neuron types, respectively
-        - For V1, we map eight different neuron types to the specific models and the region fractions.
-    2. *Connections:*
-        - Connections are defined as section for each pair to neuron sets, with each section defining the data links.
-        - AI synaptic physiology data is mapped to the connection probabilities between the pairs of neuron classes.
-        - For V1, we map each of the different neuron pairs to the AI Syn. Phys. Data outputs
+    `data2model_map` section of the recipe includes two subsections:
 
-    ***NOTE: Running code below within the  notebook will display the tree structure of the data2model section from the json files***
+    1. *Locations:*
+        - Locations are hiearchially defined and each sub-location
+          declares the links to the acquired data.
+        - For __V1__, (i) acquired cell types information from Cell types
+          database maps to the neuron models, and
+          (ii) the summary information from MERFISH single-cell atlas
+          map to the distribution of neuron types.
+        - For __V1__, we map eight different neuron types to the specific
+          models and the region fractions.
+    2. *Connections:*
+        - Connections are defined as a set of pairs to neurons,
+          with pair defining the data links.
+        - AI synaptic physiology data is mapped to the connection
+          probabilities between the pairs of neuron classes.
+        - For __V1__, we map each of the different neuron pairs to the
+          AI Syn. Phys. Data outputs
+
+
+    ***NOTE: Running code below within the notebook will display the tree structure of the Recipe's data2model section***
     """)
     return
 
@@ -243,13 +268,18 @@ def _(md_recipe_setup):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md(rf"""
+    mo.md(f"""
     ### Visualize Data2Model Mapping
-    Similar to Source Data section, Cerebrum also provides a  Notebook Widget based visualization of the the data2model, which renders with user friendly output compared to the strict names in json file. 
+
+    Similar to Source Data section, Cerebrum also provides a Jupyter Notebook Widget
+    to visualize the data2model section of the recipe.
+    The `Data2ModelRecipeView` renders with a user friendly output compared to
+    the strict names in json file. 
 
     {mo.image('img/Data2Model.png', width=800)}
 
-    ***NOTE: Running the Recipe View code below will display the Tree widget (as shown in the above snapshot), when run inside the notebook***
+    ***NOTE: Running the Recipe View code below will display the Tree widget 
+    (as shown in the above snapshot), when run inside the notebook***
     """)
     return
 
@@ -272,7 +302,6 @@ def _(BaseTree, dm_motree, dm_panels, mo, tree_view_widths):
         ],
         widths=tree_view_widths
     )
-
     return
 
 
@@ -281,7 +310,12 @@ def _(mo):
     mo.md(r"""
     ## Custom Modifications
 
-    Through the custom modification json files,users can provide the necessary details required for network construction that are either (b) not available in the linked databases or (c) not applicable for the model being built and over-ride it.
+    Through the custom modification json files,users can
+    provide additional details required for network
+    construction. They can include information that are either
+    (a) not available in the linked databases or
+    (b) not applicable for the model being built and over-ride it.
+
 
     For the Mouse V1, custom modifications include:
 
@@ -289,7 +323,8 @@ def _(mo):
     2. Connection Parameters not available within the AI Syn. Phys. database.
     3. Details of the networks that are external to V1 : LGN and the background networks.
 
-    ***NOTE: Running code below within the  notebook will display the tree structure of the data2model section from the json files***
+    ***NOTE: Running code below within the  notebook will display
+    the tree structure of the Recipe's custom_mod***
     """)
     return
 
@@ -306,7 +341,7 @@ def _():
 def _(mo):
     mo.md(r"""
     ## Mapper classess for  Network construction
-    To realize model recipe to SONATA Network, we define three python classes
+    To realize model recipe to SONATA Network, three python classes that translate from the model skeleton to neurons and connections.
 
     1. *Region Mapper* : Defined in `mousev1.model.V1RegionMapper`, maps the location data gathered from data sources/user mods to a region in the network.
     2. *Neuron Mapper* : Defined in `mousev1.model.V1NeuronMapps`, maps the neuron information within in a given location data to a neuron class within the region.
@@ -342,36 +377,41 @@ def _(ModelRecipe, custom_mod_struct, md_recipe_setup, params):
 def _(mo):
     mo.md(r"""
     # V1 Network Construction from Recipe
-    """)
-    return
 
-
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(r"""
     ## Data Acquistition
 
-    Data acquisition consists of the following two steps: (a) Data download (b) post download operations that apply data transformers such as filtering data
+    Data acquisition consists of the following two steps:
+    1. Data download and
+    2. Data transformer operations such as filtering and combining
+       that are run after downloaded data.
 
     ### Run Workflow to Download Data
 
-    After the model description is defined and updated with custom user modifications, the download workflow proceeds as follows:
-    1. Query and download the data from different databases of interest.
+    After the model description is defined and updated with
+    custom user modifications, the download workflow proceeds as follows:
+    1. Query and download the data from all the databases of interest.
     2. Apply the filters and transormations.
     3. Save downloaded data to a local database.
 
     ### Run Post-download Operations
 
-    After data is dowloaded, the data obtained from different databases need to processed separately:
+    After data is dowloaded, the data obtained from
+    different databases need to processed separately:
 
-    1.  In case of the Allen Cell Type database, the download step can be restricted only to obtain the metadata related to cell types. After the meta data is downloaded, we need to acquire the models of interest (3 LIF Models). We use the GLIF API from allensdk to download these 3LIF model with a explained variance threshold. Further filter is applied based on the classification by *Gouwens et. al. (2019)*.
-    2.  For data from Allen Brain Cell Atlas, we filter the data specific to only the VISp region.
-    3.  For AI Syn Phys. data, we select only the neuron pairs of our interest.
+    1.  In case of the Allen Cell Type database, the download step can
+        be restricted only to obtain the metadata related to cell types.
+        After the meta data is downloaded, we need to acquire the models
+        of interest (3 LIF Models). We use the GLIF API from allensdk to
+        download these 3LIF model with a explained variance threshold.
+        Further filter is applied based on the classification by
+       *Gouwens et. al. (2019)*.
+    3.  For data from Allen Brain Cell Atlas,
+        we filter the data specific to only the VISp region.
+    5.  For AI Syn Phys. data, we select only the neuron pairs of our interest.
 
-    We accomplish the above two steps by running `recipe.acquire_source_data()` function.
 
-
-    **The following code is commented as the necessary data is already acquired; Uncomment if needed to download again**
+    **The following code is commented as the necessary data is already
+    acquired; Uncomment if needed to download again**
     """)
     return
 
@@ -389,23 +429,20 @@ def _():
     return
 
 
-@app.cell
-def _():
-    return
-
-
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
     ## Explore downloaded data
 
-    Output data are stored in the description directory in json format in `model_data/v1/db_connect_output.json`, which can be examine with json library. Here are examples of Region and Neuron fractions of the Allen Brain Atlas, and connectivity matrix downloaded from AI Syn. Phys. dataset.
+    Output data are stored in json format in the directory
+    `data/v1/db_connect_output.json`, which can be examined
+    with json library. Here are examples of Region and Neuron
+    fractions of the Allen Brain Atlas, and connectivity matrix
+    downloaded from AI Syn. Phys. dataset.
 
-    Output data is also stored as duckdb database `model_data/v1/db_connect_output.db`, which can be used for more detailed queries.
-
-    ### Loading the database as a connection object
-
-    Duckdb database can be connected as a data connection in the notebook. After running the connection below, expand the `Explore variables and data sources` button on the sidebar to see a tree view of the database.
+    Output data is also stored as duckdb database
+    `data/v1/db_connect_output.db`,
+    which can be used for more detailed queries.
     """)
     return
 
@@ -437,9 +474,11 @@ def _(abm_mouse, db_conn, mo):
     return
 
 
-@app.cell
-def _():
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
     ### Cell Types Data from Allen Cell Types Database
+    """)
     return
 
 
@@ -463,7 +502,7 @@ def _(abm_celltypes_ct, db_conn, mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ### Connectivity probability from AI Syn. Phys.
+    ### Connectivity probabilities from AI Syn. Phys.
     """)
     return
 
@@ -485,9 +524,10 @@ def _(mo):
     mo.md(r"""
     ## Source data to Model mapping
 
-    In this step, the data downloaded is mapped to the locations and the connection pairs as mentioned in "Data2Model Map" section above.
+    In this step, the data downloaded is mapped to the locations and
+    the connection pairs as mentioned in "Data2Model Map" section above.
 
-    **Uncomment the logging configuration to get detailed logging**
+    **NOTE: Uncomment the logging configuration to get detailed logging**
     """)
     return
 
@@ -505,9 +545,11 @@ def _(model_recipe):
 def _(mo):
     mo.md(r"""
     ## Apply Custom Modification
-    As mentioned in the "Custom Modifications" section above, user updates for the model are loaded from `./v1/description/custom_mod.json`.
+    As mentioned in the "Custom Modifications" section above,
+    user updates for the model are loaded from the `custom mod` files.
 
-    For V1, the user modification include dimension, additional connection properties, and properties of external netowrks
+    For V1, the user modification include dimension, additional
+    connection properties, and properties of external networks.
     """)
     return
 
@@ -558,15 +600,22 @@ def _(mo):
     mo.md(r"""
     ## Build Network with BMTK
 
-    In this step this configuation is used to initialize the nodes and edges based on the data downloaded and custom modifications applied.
+    ### Skeleton Network → Graph of neurons
+
+    The output of *mapping source data* + *applying custom modifications*
+    is a skeleton representation of the model.
+    In this step this skeletion is used to initialize the nodes and
+    edges of a multi-graph of neurons using BMTK.
 
     ***NOTE:: Building first without saving is useful to first verify any errors***
 
-    ## Save SONATA
+    ### Save SONATA
 
     Save SONATA with BMTK
 
-    ***NOTE:: Skipping Save SONTA as it takes a siginificant amount of time. For a model of 30K cells, it takes about an hour. (Previously built files are made available in "./builds/v1030" folder)***
+    ***NOTE:: Skipping Save SONTA as it takes a siginificant amount of time.
+    For a model of 30K cells, it takes about an hour.
+    (Previously built files are made available in "./builds/v1030" folder)***
     """)
     return
 
@@ -574,8 +623,12 @@ def _(mo):
 @app.cell
 def _():
     #
+    # Convert skeleton to SONATA build
+    #
     # bmtk_net_builder = V1BMTKNetworkBuilder(model_recipe.network_struct)
     # bmtk_net = bmtk_net_builder.build()
+    #
+    # Save SONATA
     #
     # bmtk_net_builder.save(str(md_recipe_setup.network_dir))
     return
@@ -585,12 +638,11 @@ def _():
 def _(mo):
     mo.md(r"""
     # Simulation and Analysis
+    ## Prepare neuron model files for NEST
 
-    ##  Post Processing : Prepare neuron models for NEST
-
-    The format of the glif properties json files downloaded by Cerebrum from the cell types database is different from the format of what NEST expects.
-
-    In this step we convert to the appopriate format.
+    The format of the glif-model description json files downloaded from the
+    cell types database is not compatible with NEST simulator.
+    In this step we convert to the appopriate format that is expected from NEST.
     """)
     return
 
@@ -616,7 +668,10 @@ def _(mo):
     mo.md(r"""
     ## Simulate the SONATA Network in NEST
 
-    ### Load SONATA Network in NEST
+    ### SONATA Network Config
+
+    This NEST config file is manually created, and refers to the network files generated by Cerebrum.
+    We explore the config file below.
     """)
     return
 
@@ -659,7 +714,7 @@ def _(os):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ## Basic Analysis of Output from Simulations
+    ## Analysis of Simulation outputs
     """)
     return
 
@@ -691,7 +746,7 @@ def _(node_types_df, nodes_df, pd, spikes_df):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    ### Spread of Neurons across Layers
+    ### Spiking Neurons across Layers
     """)
     return
 
