@@ -38,28 +38,34 @@ data from Brain Atlases and other databases,  build the model and
 simulate using NEST simulator. See the [v1/README.md](v1/README.md) 
 for a detail discussion on each phase of model construction.
 
-### IPython Notebooks
+### jupyter Notebooks
+
+The notebooks can be viewed and run with jupyter under the above 
+environment.
 
 | Model                             | Notebook                                         |
 | --------------------------------- | ------------------------------------------------ |
 | Complete V1 model                 | [V1 IPython Notebook](v1/V1-Notebook.ipynb)      |
-| Complete V1 model w. Cybershuttle | [V1 IPython Notebook](v1/V1-CS-Notebook.ipynb)   |
-| V1 model restricted to L4         | [V1 L4 IPython Notebook](v1/V1L4-Notebook.ipynb) |
+| V1 model restricted to only L4    | [V1 L4 IPython Notebook](v1/V1L4-Notebook.ipynb) |
 
 ### marimo Notebooks
 
-| Model                      | Notebook                                     |
-| -------------------------- | -------------------------------------------- |
-| Complete V1 model          | [V1 marimo Notebook](v1/marimo_v1.py)        |
-| Data views w.r.t V1        | [V1 db marimo Notebook](v1/marimo_v1l4db.py) |
-| V1 model  resricted to L4  | [V1 L4 marimo Notebook](v1/marimo_v1l4.py)   |
+[marimo](https://marimo.io/) is a reactive notebook that is reusable as a
+module, executable as a script and sharable as an app.
+The following marimo notebooks are the counterparts to the jupyter notebooks.
+By default, the notebooks are not run automatically. 
 
+| Model                          | Notebook                                     |
+| ------------------------------ | -------------------------------------------- |
+| Complete V1 model              | [V1 marimo Notebook](v1/marimo_v1.py)        |
+| V1 model resricted to only L4  | [V1 L4 marimo Notebook](v1/marimo_v1l4.py)   |
+| Data views w.r.t V1            | [V1 db marimo Notebook](v1/marimo_v1l4db.py) |
 
 
 ### Command-line scripts
 
-The following standalone scripts can be used to build/simulate V1 models 
-via command line or as a batch run.
+Standalone python scripts can be run on command line to build/simulate V1 models.
+They can used for cases where they can be only run in non-interactive mode. 
 
 
 | Model                              | Scripts                                       |
@@ -70,27 +76,16 @@ via command line or as a batch run.
 
 ## SONATA Edge Editor
 
-
-These notebooks show a demo of edititng edges in a SONATA file: A specific 
-case of selecting all the edges of a given edge type id and
-replacing it with a random subset of edges. 
+These notebooks listed below show a demo of edititng edges in a SONATA file:
+A specific case where all the edges of a given edge `type id` are
+replaced with a random subset of edges. 
 See [editor/README.md](editor/README.md) for a description of this 
 functionality.
 
-| Model               | Notebook                                          |
-| ------------------- | ------------------------------------------------- |
-| jupyter Editor      | [IPython Notebook](editor/SonataEditorDemo.ipynb) |
-| marimo Editor       | [marimo Notebook](editor/marimo_sonata_editor.py) |
-
-
-## WGN Sleep Model
-
-The notebook demonstrates the use of cerebrum just as an interface to the 
-model builder, with user's own custom data and builders.
-
-| Model                 | Notebook                                  |
-| --------------------- | ----------------------------------------- |
-| WGN Sleep model       | [IPython Notebook](sleep/WGN-Sleep.ipynb) |
+| Source        | Notebook                                   |
+| ------------- | ------------------------------------------ |
+| jupyter       | [Notebook](editor/SonataEditorDemo.ipynb)  |
+| marimo        | [Notebook](editor/marimo_sonata_editor.py) |
 
 
 ## Installation Issues
