@@ -21,10 +21,10 @@ bibliography: paper.bib
 `Airavata Cerebrum` is a flexible and extendable tool in python to construct
 large-scale data-driven computational models of hierarchically-organized
 network of neurons.
-Specifically, `Airavata Cerebrum` can  
-1. acquire datasets by querying different neuroscience databases and brain atlases, 
-2. apply user-customizable transformations on the acquired datasets, and
-3. build a computational model of a whole brain.  
+Specifically, `Airavata Cerebrum` enables  
+1. acquisition of datasets by querying different neuroscience databases and brain atlases, 
+2. application of user-customizable transformations on the acquired datasets, and
+3. construction of a computational model of a whole brain.  
 `Airavata Cerebrum` saves the computational neuroscience models  
 using the standard _SONATA_ format. Simulation software such as _NEST_ and
 _NEURON_ can run the output models in _SONTA_ format without any modification.   
@@ -146,10 +146,10 @@ model graph.
 # Research Impact Statement
 
 As as significant demonstration of `Cerebrum`, we build a 
-a $30,000$-neuron version of `@billeh2020systematic`'s  model of
+a 30,000-neuron version of `@billeh2020systematic`'s  model of
 mouse's the primary visual cortex (V1).
-The  `Cerebrum` workflow:
-- Acquires data from Single-cell Brain Atlas [@yao2023high] and for
+The `Cerebrum` workflow for V1:
+- Acquires data from Single-cell Brain Atlas [@yao2023high] and 
   identies the regional and layer-wise  distributions of the different cell types.
 - Query the connection probabilities from the synaptic physiology 
   database [@campagnola2022local].
