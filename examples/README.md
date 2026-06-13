@@ -21,11 +21,17 @@ V1/V1 L4 notebooks listed below depend upon
 BMTK and NEST inturn depend upon [mpi4py](https://mpi4py.readthedocs.io/),
 the python interface to MPI. 
 All these dependencies can be installed via conda using the given
-`environment.yml` (in this directory) as follows:
+`environment.yml` (in this directory) as follows.
+To create a new `conda` environment, run the following commands.
 
 ```sh
 conda env create -n arv_cbm -f environment.yml
 conda activate arv_cbm
+```
+To update the existing environment `cerebrum`, run the following commands.
+```sh
+conda activate cerebrum
+conda env update --file environment.yml  --prune
 ```
 
 See [below](#installation-issues) for common installation issues.
