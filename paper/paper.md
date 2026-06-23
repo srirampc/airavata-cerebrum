@@ -60,7 +60,17 @@ construction, modification, reuse and revise.
 
 # State of the field
 
-TODO:current state
+Software packages such as NetPyNE [@dura2019netpyne], and
+PyNN [@davison2009pynn], provide tools to describe any large network of neurons
+at an abstract level, and thus enable users to build large-scale models from
+data. BMTK [@dai2020brain] provides a suite of tools to build networks and run with
+different simulators such as NEST and NEURON.
+However, these tools leave the difficult job of describing connections to
+different databases to the users.
+`Cerebrum` provides interfaces that allow collecting data from different
+databases, mapping data to model components, and provide an end-to-end tool 
+to construct brain-scale network of neurons.
+
 
 # Software Design
 
