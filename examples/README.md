@@ -36,6 +36,12 @@ conda env update --file environment.yml  --prune
 
 See [below](#installation-issues) for common installation issues.
 
+## Simple Example
+
+[Simple Notebook](simple/Simple.ipynb) shows a workflow to build a 
+simple one layer model that queries the Mouse Brain Atlas
+to identify the proportions of excitatory and inhibitory neurons.
+No additional dependencies are necessary to run this notebook.
 
 ## V1 Model
 
