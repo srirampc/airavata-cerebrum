@@ -7,12 +7,37 @@ software in building the neuroscience models.
 
 ## Contents
 
-1. [Installation](#install-airavata-cerebrum-and-dependencies)
-2. [V1 Model](#v1-model)
-3. [Sonata Editor](#sonata-edge-editor)
-4. [WGN Sleep Model](#wgn-sleep-model)
-5. [Common Installation Issues](#installation-issues)
-## Install airavata-cerebrum and dependencies
+1. [Simple Model](#simple-model)
+2. [Sonata Editor](#sonata-edge-editor)
+3. [V1 Model](#v1-model)
+
+## Simple Model
+
+[Simple Notebook](simple/Simple.ipynb) shows a workflow to build a 
+simple one layer model. Cerebrum is used query the Mouse Brain Atlas
+to identify the proportions of excitatory and inhibitory neurons.
+No additional dependencies are necessary to run this notebook.
+
+
+## SONATA Edge Editor
+
+These notebooks listed below show a demo of edititng edges in a SONATA file:
+A specific case where all the edges of a given edge `type id` are
+replaced with a random subset of edges. 
+See [editor/README.md](editor/README.md) for a description of this 
+functionality.
+No additional dependencies are necessary to run this notebook.
+
+| Source        | Notebook                                   |
+| ------------- | ------------------------------------------ |
+| jupyter       | [Notebook](editor/SonataEditorDemo.ipynb)  |
+| marimo        | [Notebook](editor/marimo_sonata_editor.py) |
+
+
+
+## V1 Model
+
+### Install cerebrum + additional dependencies
 
 V1/V1 L4 notebooks listed below depend upon 
 [airavata-cerebrum](https://github.com/apache/airavata-cerebrum), 
@@ -22,7 +47,8 @@ BMTK and NEST inturn depend upon [mpi4py](https://mpi4py.readthedocs.io/),
 the python interface to MPI. 
 All these dependencies can be installed via conda using the given
 `environment.yml` (in this directory) as follows.
-To create a new `conda` environment, run the following commands.
+To create a new `conda` environment with all the required dependencies,
+run the following commands.
 
 ```sh
 conda env create -n arv_cbm -f environment.yml
@@ -34,75 +60,7 @@ conda activate cerebrum
 conda env update --file environment.yml  --prune
 ```
 
-See [below](#installation-issues) for common installation issues.
-
-## Simple Example
-
-[Simple Notebook](simple/Simple.ipynb) shows a workflow to build a 
-simple one layer model that queries the Mouse Brain Atlas
-to identify the proportions of excitatory and inhibitory neurons.
-No additional dependencies are necessary to run this notebook.
-
-## V1 Model
-
-The following notebooks demonstrate the use of airavata-cerebrum to gather 
-data from Brain Atlases and other databases,  build the model and 
-simulate using NEST simulator. See the [v1/README.md](v1/README.md) 
-for a detail discussion on each phase of model construction.
-
-### jupyter Notebooks
-
-The notebooks can be viewed and run with jupyter under the above 
-environment.
-
-| Model                             | Notebook                                         |
-| --------------------------------- | ------------------------------------------------ |
-| Complete V1 model                 | [V1 IPython Notebook](v1/V1-Notebook.ipynb)      |
-| V1 model restricted to only L4    | [V1 L4 IPython Notebook](v1/V1L4-Notebook.ipynb) |
-
-### marimo Notebooks
-
-[marimo](https://marimo.io/) is a reactive notebook that is reusable as a
-module, executable as a script and sharable as an app.
-The following marimo notebooks are the counterparts to the jupyter notebooks.
-By default, the notebooks are not run automatically. 
-
-| Model                          | Notebook                                     |
-| ------------------------------ | -------------------------------------------- |
-| Complete V1 model              | [V1 marimo Notebook](v1/marimo_v1.py)        |
-| V1 model resricted to only L4  | [V1 L4 marimo Notebook](v1/marimo_v1l4.py)   |
-| Data views w.r.t V1            | [V1 db marimo Notebook](v1/marimo_v1l4db.py) |
-
-
-### Command-line scripts
-
-Standalone python scripts can be run on command line to build/simulate V1 models.
-They can used for cases where they can be only run in non-interactive mode. 
-
-
-| Model                              | Scripts                                       |
-| ---------------------------------- | --------------------------------------------- |
-| Build/Simulate Cerebrum V1 model   | [V1 script](v1/src/cli.py)                    |
-| Simulate Cerebrum V1 model w. BMTK | [V1 BMTK script](v1/src/simulate_cli.py)      |
-| Simulate Cerebrum V1 model w. NEST | [V1 NEST script](v1/src/nest_simulate_cli.py) |
-
-## SONATA Edge Editor
-
-These notebooks listed below show a demo of edititng edges in a SONATA file:
-A specific case where all the edges of a given edge `type id` are
-replaced with a random subset of edges. 
-See [editor/README.md](editor/README.md) for a description of this 
-functionality.
-
-| Source        | Notebook                                   |
-| ------------- | ------------------------------------------ |
-| jupyter       | [Notebook](editor/SonataEditorDemo.ipynb)  |
-| marimo        | [Notebook](editor/marimo_sonata_editor.py) |
-
-
-## Installation Issues
-
-### MPI Depenency Issues
+#### MPI Depenency Issues during installation
 
 - NEST and BMTK depends upon MPI -- specifically the python mpi4py package.
 - Latest version of mpi4py package is only available in the PyPI and hence need to be
@@ -118,3 +76,48 @@ functionality.
   ```sh
   sudo apt install openmpi-bin  libopenmpi-dev
   ```
+
+### Notebooks/Scripts
+
+The following notebooks demonstrate the use of airavata-cerebrum to gather 
+data from Brain Atlases and other databases,  build the model and 
+simulate using NEST simulator. See the [v1/README.md](v1/README.md) 
+for a detail discussion on each phase of model construction.
+
+#### jupyter Notebooks
+
+The notebooks can be viewed and run with jupyter under the above 
+environment.
+
+| Model                             | Notebook                                         |
+| --------------------------------- | ------------------------------------------------ |
+| Complete V1 model                 | [V1 IPython Notebook](v1/V1-Notebook.ipynb)      |
+| V1 model restricted to only L4    | [V1 L4 IPython Notebook](v1/V1L4-Notebook.ipynb) |
+
+#### marimo Notebooks
+
+[marimo](https://marimo.io/) is a reactive notebook that is reusable as a
+module, executable as a script and sharable as an app.
+The following marimo notebooks are the counterparts to the jupyter notebooks.
+By default, the notebooks are not run automatically. 
+
+| Model                          | Notebook                                     |
+| ------------------------------ | -------------------------------------------- |
+| Complete V1 model              | [V1 marimo Notebook](v1/marimo_v1.py)        |
+| V1 model resricted to only L4  | [V1 L4 marimo Notebook](v1/marimo_v1l4.py)   |
+| Data views w.r.t V1            | [V1 db marimo Notebook](v1/marimo_v1l4db.py) |
+
+
+#### Command-line scripts
+
+Standalone python scripts can be run on command line to build/simulate V1 models.
+They can used for cases where they can be only run in non-interactive mode. 
+
+
+| Model                              | Scripts                                       |
+| ---------------------------------- | --------------------------------------------- |
+| Build/Simulate Cerebrum V1 model   | [V1 script](v1/src/cli.py)                    |
+| Simulate Cerebrum V1 model w. BMTK | [V1 BMTK script](v1/src/simulate_cli.py)      |
+| Simulate Cerebrum V1 model w. NEST | [V1 NEST script](v1/src/nest_simulate_cli.py) |
+
+
