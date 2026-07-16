@@ -4,7 +4,7 @@ print_usage() {
   exit 0
 }
 
-BUILD_DIR=dist
+BUILD_DIR=build
 while getopts "r:b:hu" opt; do
   case $opt in
   r) RELEASE=$OPTARG ;;
@@ -24,11 +24,12 @@ if [ -z "$RELEASE" ]; then
 fi
 
 rm -rf "$BUILD_DIR"
-python3 -m build
+python3 -m build -o "$BUILD_DIR/dist"
 if [ -z ${UPLOAD+x} ]; then
   echo "Skipping uploading to PYPI"
 else
   echo "Uploading to PYPI"
-  python3 -m twine upload --repository pypi $BUILD_DIR/* --verbose
+  python3 -m twine upload --repository pypi $BUILD_DIR/dist/* --verbose
 fi
+mkdir -p "$BUILD_DIR/examples"
 tar cvzf $BUILD_DIR/airavata-cerebrum-$RELEASE-examples.tar.gz examples/
