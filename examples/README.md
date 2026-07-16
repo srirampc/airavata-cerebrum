@@ -10,11 +10,13 @@ software in building the neuroscience models.
 1. [Simple Model](#simple-model)
 2. [Sonata Editor](#sonata-edge-editor)
 3. [V1 Model](#v1-model)
-
 ## Simple Model
 
-The [jupyter notebook][simple/Simple.ipynb] shows a demo of a building 
-a simple model from the data acquired from the Brain Atlas.
+[Simple Notebook](simple/Simple.ipynb) shows a workflow to build a 
+simple one layer model. Cerebrum is used query the Mouse Brain Atlas
+to identify the proportions of excitatory and inhibitory neurons.
+No additional dependencies are necessary to run this notebook.
+
 
 ## SONATA Edge Editor
 
@@ -23,6 +25,7 @@ A specific case where all the edges of a given edge `type id` are
 replaced with a random subset of edges. 
 See [editor/README.md](editor/README.md) for a description of this 
 functionality.
+No additional dependencies are necessary to run this notebook.
 
 | Source        | Notebook                                   |
 | ------------- | ------------------------------------------ |
