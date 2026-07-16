@@ -30,6 +30,12 @@ flexible to update, and straight-forward to reproduce.
 
 ## Install Airavata Cerebrum
 
+*__NOTE:: Some of the example notebooks provided at the
+[github source repo](https://github.com/apache/airavata-cerebrum/tree/main/examples) 
+might require additional dependencies. Please consult the documentation in the 
+[examples/README.md](https://github.com/apache/airavata-cerebrum/tree/main/examples/README.md)
+for the respective examples or the jupyter notebooks.__*
+
 Airavata Cerebrum requires python v3.10 environment.
 It is currently tested only in the Linux operating system.
 To install from the source, we recommend creating a `conda` environment using
@@ -58,8 +64,6 @@ Cerebrum in building/simulating large-scale neuroscience models.
 Please refer to 
 [examples/README.md](https://github.com/apache/airavata-cerebrum/tree/main/examples/README.md)
 for additional installation requirements to run the notebooks. 
-
-
 
 ## Contributing
 
