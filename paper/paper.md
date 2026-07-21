@@ -60,16 +60,16 @@ construction, modification, reuse and revise.
 
 # State of the field
 
-Software packages such as NetPyNE [@dura2019netpyne], and
-PyNN [@davison2009pynn], provide tools to describe any large network of neurons
-at an abstract level, and thus enable users to build large-scale models from
-data. BMTK [@dai2020brain] provides a suite of tools to build networks and run with
-different simulators such as NEST and NEURON.
-However, these tools leave the difficult job of describing connections to
-different databases to the users.
-`Cerebrum` provides interfaces that allow collecting data from different
-databases, mapping data to model components, and provide an end-to-end tool 
+As far as we know, `Cerebrum` is the only software that provides interfaces 
+that allow collecting data from different databases, 
+mapping data to model components, and provide an end-to-end tool 
 to construct brain-scale network of neurons.
+Other software packages such as NetPyNE [@dura2019netpyne], and
+PyNN [@davison2009pynn] and BMTK [@dai2020brain] provide tools to describe 
+any large network of neurons at an abstract level and run with different
+simulators, but these tools doesn't provide `Cerebrum`'s
+emphasis on data-driven modeling and the ease of 
+describing connections to different databases and collecting from the databases.
 
 
 # Software Design
@@ -99,10 +99,10 @@ data specimens.
 - Re-organize data so as to enable combining multiple datasets from the same 
 or different database.
 
-Currently, `Cerebrum` provides classes to query/filter (i)
-transcriptomic data from the whole-brain atlas by `@yao2023high`,
-(ii) connection probabilities from the database by `@campagnola2022local`,
-and (iii) neuron models from Allen Cell Types Database.
+Currently, `Cerebrum` provides classes to query/filter:
+1. transcriptomic data from the whole-brain atlas by `@yao2023high`,
+2. connection probabilities from the database by `@campagnola2022local`,
+3. neuron models from Allen Cell Types Database.
 Users can extended thesee functionalities via custom classes 
 to acquire data from their own database of interest.
 
@@ -174,7 +174,7 @@ repository.
 
 # AI usage disclosure
 
-AI tools were used only in the development of the SONATA editor module of the
+AI tools were used in the development of the SONATA editor module of the
 cerebrum software. No AI tools were used in the writing
 of this manuscript, or the preparation of supporting materials.
 
